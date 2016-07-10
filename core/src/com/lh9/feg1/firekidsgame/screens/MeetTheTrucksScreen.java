@@ -13,8 +13,10 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
-public class MenuScreen implements Screen {
-	
+public class MeetTheTrucksScreen implements Screen {
+
+	Button pause;
+
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -22,15 +24,10 @@ public class MenuScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	Button meetTheTrucks;
-	Button fireStation;
-	Button[] levelButtons;
 
-	boolean madeShakeScreen;
-	
 	final Starter game;
 
-	public MenuScreen(final Starter gam) {
+	public MeetTheTrucksScreen(final Starter gam) {
 
 		this.game = gam;
 
@@ -40,38 +37,22 @@ public class MenuScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		fireStation = new Button(356,-100,assetsManager.fireStation);
-		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
-		meetTheTrucks.goUp(0);
-
-		levelButtons = new Button[7];
-
-		for (int a = 0; a < 7; a++) {
-			levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
-					assetsManager.button);
-			levelButtons[a].goUp(0);
-		}
-
+		pause = new Button(710, 120, assetsManager.pause);
+		pause.goUp(350);
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
-		inputInterpreter.setMeetTheTrucks(meetTheTrucks);
-		inputInterpreter.setLevelButtons(levelButtons);
 		inputInterpreter.setCloudManager(cloudManager);
-		inputInterpreter.setFireStation(fireStation);
+		inputInterpreter.setPauseButton(pause);
 		cloudManager.stop();
-	
-		fireStation.goUp(346);
-		
-		camera.zoom = 1;
-		camera.zoomOut(1);
-		camera.moveY(camera.position.y, 10, 10);
+
+		camera.zoom = 0.5f;
+		camera.position.y += 60;
+		camera.zoomOut(1f);
+		camera.moveY(camera.position.y - 60, 10, 10);
 	}
 
 	@Override
 	public void render(float delta) {
-		
-		updateLogics(delta);
-		
 		camera.update(delta);
 		guiCamera.update();
 
@@ -80,17 +61,14 @@ public class MenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(assetsManager.mainBackground, 0, 0);
-		drawButtons(delta);
+		batch.draw(assetsManager.levelBackgrounds[0], 0, 0);
 		batch.end();
 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+		drawButtons(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
-
-		manageSelectingScreen();
-
 	}
 
 	@Override
@@ -130,26 +108,6 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawButtons(double delta) {
-		fireStation.render(batch, (float)delta);
-		meetTheTrucks.render(batch, (float) delta);
-		for (int a = 0; a < 7; a++) {
-			levelButtons[a].render(batch, (float) delta);
-		}
-
-	}
-	void updateLogics(double delta){
-		if(fireStation.notMoving() == true && madeShakeScreen == false){
-			madeShakeScreen = true;
-			camera.shakeScreen();
-		}
-	}
-	
-	void manageSelectingScreen() {
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMeetTheTrucks()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setScreen(new MeetTheTrucksScreen(game));
-			}
-		}
+		pause.render(batch, (float) delta);
 	}
 }

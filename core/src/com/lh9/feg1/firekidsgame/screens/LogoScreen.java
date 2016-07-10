@@ -7,16 +7,17 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
+import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
-import com.lh9.feg1.firekidsgame.graphics.ScreenTransition;
+import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class LogoScreen implements Screen {
 
-	ScreenTransition screenTransition;
+	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
-	OrthographicCamera camera;
+	Camera camera;
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	Sprite logoSprite;
@@ -29,18 +30,16 @@ public class LogoScreen implements Screen {
 
 		this.game = gam;
 
+		cloudManager = game.getCloudManager();
 		variables = new Variables();
-
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		logoSprite = game.getLogoSprite();
-		screenTransition = game.getScreenTransition();
 		logoSprite.setScale(0);
 		logoSprite.setPosition(variables.getLogoPosition().x,
 				variables.getLogoPosition().y);
-		screenTransition.setAlphaOne();
 	}
 
 	@Override
@@ -59,11 +58,11 @@ public class LogoScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 		logoSprite.draw(batch);
+		cloudManager.render(batch, delta);
 		batch.end();
 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
-		drawScreenTransition(delta);
 		batch.end();
 
 		manageChangingScreen();
@@ -132,20 +131,18 @@ public class LogoScreen implements Screen {
 	void manageChangingScreens(double delta) {
 		if (assetsManager.getAssetsLoaded() == true)
 			changingScreenTimer += delta;
+		if (assetsManager.getAssetsLoaded() == true
+				&& cloudManager.isLoaded() == false) {
+			cloudManager.load(assetsManager.clouds);
+			cloudManager.start();
+		}
 		if (changingScreenTimer > variables.getDelayChangingScreens())
 			changeScreen = true;
 	}
 
 	void manageChangingScreen() {
-		if (changeScreen == true && screenTransition.getAlpha() == 1) {
+		if (changeScreen == true) {
 			game.setScreen(new MenuScreen(game));
 		}
-	}
-
-	void drawScreenTransition(double delta) {
-		if (changeScreen == false)
-			screenTransition.renderBrighten(batch, delta);
-		else
-			screenTransition.renderDarken(batch, delta);
 	}
 }

@@ -1,8 +1,8 @@
 package com.lh9.feg1.firekidsgame.ui;
 
 import com.badlogic.gdx.graphics.Texture;
-import com.badlogic.gdx.graphics.g2d.Batch;
 import com.badlogic.gdx.graphics.g2d.Sprite;
+import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Button {
@@ -12,8 +12,8 @@ public class Button {
 	boolean wentUp;
 	float blinkTimer = 0;
 	boolean blinking = false;
-	float alphaMinimum = 0.5f;
-	float multiplier = 1;
+	float alphaMinimum = 1f;
+	float multiplier = 3;
 	boolean selected = false;
 	float alpha = 1;
 	Sprite image;
@@ -21,23 +21,20 @@ public class Button {
 	Rectangle bounds;
 
 	public Button(int x, int y, Texture texture) {
-
 		image = new Sprite(texture);
 		image.setPosition(x, y);
-
 		mouse = new Rectangle();
 		mouse.setSize(1, 1);
-
 		bounds = new Rectangle();
 		bounds.setSize(image.getWidth(), image.getHeight());
 		bounds.setPosition(x, y);
 	}
 
-	public void render(Batch batch, float delta) {
+	public void render(SpriteBatch batch, float delta) {
 		updateTimers(delta);
 		if (alpha != 0) {
 			if(alpha != image.getColor().a)
-			image.setAlpha(alpha);
+			image.setScale(alpha);
 			image.draw(batch);
 		}
 	}
@@ -92,7 +89,7 @@ public class Button {
 		if (blinking == true) {
 			if (blinkTimer < 0.5f) {
 				select();
-				blinkTimer += delta;
+				blinkTimer += delta*2*multiplier;
 				if (blinkTimer > 0.5f) {
 					blinkTimer = 0;
 					deselect();
@@ -103,10 +100,10 @@ public class Button {
 
 		if (selected == true) {
 
-			if (alpha < 1)
+			if (alpha < 1.2f)
 				alpha += delta * multiplier;
-			if (alpha > 1)
-				alpha = 1;
+			if (alpha > 1.2f)
+				alpha = 1.2f;
 		}
 		if (selected == false) {
 			if (alpha > alphaMinimum)
@@ -126,6 +123,8 @@ public class Button {
 		this.destination = destination;
 		wentUp = false;
 	}
+	
+	
 
 	public void setAlphaMinimum(float alphaMinimum) {
 		this.alphaMinimum = alphaMinimum;
@@ -141,5 +140,11 @@ public class Button {
 
 	public void reverseSelection() {
 		selected = !selected;
+	}
+	public boolean notMoving(){
+		if(destination == image.getY() && wentUp == true)
+			return true;
+		else
+			return false;
 	}
 }

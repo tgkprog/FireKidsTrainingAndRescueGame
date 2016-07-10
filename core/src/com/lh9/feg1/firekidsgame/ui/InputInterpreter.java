@@ -6,16 +6,21 @@ import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
-import com.lh9.feg1.firekidsgame.graphics.ScreenTransition;
+import com.lh9.feg1.firekidsgame.camera.Camera;
+import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class InputInterpreter implements GestureListener {
 
-	ScreenTransition levelTransitions[];
+	String selectedScreen = "No button clicked";
 
-	OrthographicCamera camera;
+	CloudManager cloudManager;
+
+	Camera camera;
 	OrthographicCamera guiCamera;
 
+	Button fireStation;
+	Button pause;
 	Button meetTheTrucks;
 	Button levelButtons[];
 
@@ -220,33 +225,25 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	void manageButtonsCollisions(double x, double y) {
+
+		if (pause != null)
+			if (pause.checkCollision((int) x, (int) y) == true) {
+				pause.blink();
+			}
 		if (meetTheTrucks != null) {
+			if (fireStation.checkCollision((int) x, (int) y) == true) {
+				fireStation.blink();
+			}
 			if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
-				meetTheTrucks.select();
-				for (int a = 0; a < 8; a++)
-					levelTransitions[a].brighten();
-
-				levelTransitions[0].darken();
-
-				for (int a = 0; a < 7; a++)
-					levelButtons[a].deselect();
-
+				meetTheTrucks.blink();
+				selectedScreen = variables.getMeetTheTrucks();
+				cloudManager.start();
 			}
 
 			for (int a = 0; a < 7; a++) {
 				if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
-					levelButtons[a].select();
-					for (int b = 0; b < 8; b++) {
-						levelTransitions[b].brighten();
-					}
-					levelTransitions[a + 1].darken();
-					meetTheTrucks.deselect();
-
-					for (int b = 0; b < 7; b++)
-						if (b != a)
-							levelButtons[b].deselect();
+					levelButtons[a].blink();
 				}
-
 			}
 		}
 	}
@@ -259,20 +256,31 @@ public class InputInterpreter implements GestureListener {
 		this.meetTheTrucks = meetTheTrucks;
 	}
 
-	public void setCameras(OrthographicCamera camera,
-			OrthographicCamera guiCamera) {
+	public void setCameras(Camera camera, OrthographicCamera guiCamera) {
 		this.camera = camera;
-		this.guiCamera = camera;
+		this.guiCamera = guiCamera;
 	}
 
-	public void setLevelTransitions(ScreenTransition[] levelTransitions) {
-		this.levelTransitions = levelTransitions;
+	public void setCloudManager(CloudManager cloudManager) {
+		this.cloudManager = cloudManager;
+	}
+
+	public void setPauseButton(Button pause) {
+		this.pause = pause;
+	}
+
+	public String getSelectedScreenName() {
+		return selectedScreen;
 	}
 
 	@Override
 	public void pinchStop() {
 		// TODO Auto-generated method stub
-		
+
+	}
+
+	public void setFireStation(Button fireStation) {
+		this.fireStation = fireStation;
 	}
 }
 /*

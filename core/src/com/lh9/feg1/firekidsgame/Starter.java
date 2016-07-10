@@ -8,27 +8,29 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
+import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
-import com.lh9.feg1.firekidsgame.graphics.ScreenTransition;
+import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.screens.LogoScreen;
 
 public class Starter extends Game {
 
-	ScreenTransition screenTransition;
-	Texture blackScreen;
 	Texture logo;
 	Sprite logoSprite;
-	OrthographicCamera camera;
+	Camera camera;
 	OrthographicCamera guiCamera;
 	Viewport viewport;
 	Viewport guiViewport;
 	AssetsManager assetsManager;
 	SpriteBatch batch;
+	CloudManager cloudManager;
 
 	@Override
 	public void create() {
+
+		cloudManager = new CloudManager();
 		assetsManager = new AssetsManager();
-		camera = new OrthographicCamera(800, 480);
+		camera = new Camera(800, 480);
 		guiCamera = new OrthographicCamera(800, 480);
 
 		camera.position.x = 400;
@@ -51,14 +53,12 @@ public class Starter extends Game {
 	}
 
 	void loadBasicTextures() {
-		blackScreen = new Texture("backgrounds/blackScreen.png");
-		screenTransition = new ScreenTransition(blackScreen);
 		logo = new Texture("station/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
 	}
 
-	public OrthographicCamera getCamera() {
+	public Camera getCamera() {
 		return camera;
 	}
 
@@ -78,7 +78,7 @@ public class Starter extends Game {
 		return logoSprite;
 	}
 
-	public ScreenTransition getScreenTransition() {
-		return screenTransition;
+	public CloudManager getCloudManager() {
+		return cloudManager;
 	}
 }

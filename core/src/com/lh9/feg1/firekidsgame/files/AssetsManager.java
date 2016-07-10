@@ -9,7 +9,10 @@ public class AssetsManager extends Thread {
 	public Texture mainBackground;
 	public Texture longButton;
 	public Texture button;
+	public Texture fireStation;
+	public Texture pause;
 	public Texture levelBackgrounds[];
+	public Texture clouds[];
 
 	boolean assetsLoaded = false;
 
@@ -19,6 +22,8 @@ public class AssetsManager extends Thread {
 		if (new Variables().getDebugMode() == true)
 			System.out.println("Started loading assets.");
 
+		fireStation = new Texture("buttons/fireStation.png");
+		pause = new Texture("buttons/Pause.png");
 		mainBackground = new Texture("backgrounds/Marketing-1.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		button = new Texture("buttons/greenButton.png");
@@ -34,13 +39,22 @@ public class AssetsManager extends Thread {
 				"backgrounds/Rescue-metro-people-2.png");
 		levelBackgrounds[7] = new Texture("backgrounds/8 Big Road Rescue.png");
 
+		clouds = new Texture[3];
+		clouds[0] = new Texture("others/cartoonCloud.png");
+		clouds[1] = new Texture("others/cartoonCloud.png");
+		clouds[2] = new Texture("others/cartoonCloud.png");
+
 		for (int a = 0; a < 8; a++) {
 			levelBackgrounds[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
 		}
-		mainBackground.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		for (int a = 0; a < 3; a++) {
+			clouds[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}
