@@ -8,6 +8,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
+import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
@@ -16,6 +17,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class MeetTheTrucksScreen implements Screen {
 
 	Button pause;
+	Dialogue dialogueWindow;
 
 	CloudManager cloudManager;
 	Variables variables;
@@ -24,6 +26,14 @@ public class MeetTheTrucksScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+
+	boolean zoomedOut = false;
+	boolean firstDialogueClicked = false;
+	boolean secondDialogueClicked = false;
+	boolean thirdDialogueClicked = false;
+	boolean firstTruckZoomedIn = false;
+	boolean secondTruckZoomedIn = false;
+	boolean thirdTruckZoomedIn = false;
 
 	final Starter game;
 
@@ -43,16 +53,21 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow, 250f, 100f,
+				assetsManager.button);
+		inputInterpreter.setDialogueWindow(dialogueWindow);
 		cloudManager.stop();
-
 		camera.zoom = 0.5f;
 		camera.position.y += 60;
-		camera.zoomOut(1f);
-		camera.moveY(camera.position.y - 60, 10, 10);
+		camera.zoom(1f, 1.3f);
+		camera.moveY(camera.position.y - 60, 10, 10, 10f);
 	}
 
 	@Override
 	public void render(float delta) {
+
+		updateLogics(delta);
+
 		camera.update(delta);
 		guiCamera.update();
 
@@ -66,6 +81,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+		drawWindows(delta);
 		drawButtons(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
@@ -109,5 +125,47 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawButtons(double delta) {
 		pause.render(batch, (float) delta);
+	}
+
+	void drawWindows(double delta) {
+		dialogueWindow.draw(batch, delta);
+	}
+
+	void updateLogics(double delta) {
+		if (camera.zoom == 1 && zoomedOut == false) {
+			dialogueWindow.popUp();
+			zoomedOut = true;
+		}
+		if (zoomedOut == true && dialogueWindow.isVisibile() == false
+				&& firstDialogueClicked == false) {
+			camera.zoom(0.45f, 6f);
+			camera.moveX(camera.position.x - 290, 10, 2, 4f);
+			camera.moveY(camera.position.y - 180, 10f, 10, 2f);
+			firstDialogueClicked = true;
+		}
+		if (camera.zoom == 0.45f && firstDialogueClicked == true
+				&& firstTruckZoomedIn == false) {
+			firstTruckZoomedIn = true;
+			dialogueWindow.popUp();
+		}
+		if (firstTruckZoomedIn == true && dialogueWindow.isVisibile() == false
+				&& secondDialogueClicked == false) {
+			secondDialogueClicked = true;
+			camera.moveX(camera.position.x + 280, 10, 2, 5f);
+		}
+		if (camera.position.x > 390 && secondTruckZoomedIn == false
+				&& secondDialogueClicked == true) {
+			dialogueWindow.popUp();
+			secondTruckZoomedIn = true;
+		}
+		if (dialogueWindow.isVisibile() == false && thirdTruckZoomedIn == false
+				&& secondTruckZoomedIn == true) {
+			cloudManager.start();
+			thirdTruckZoomedIn = true;
+		}
+
+		if (cloudManager.getAllScalesEqualOne() == true && thirdTruckZoomedIn == true) {
+			game.setScreen(new FitnessScreenOne(game));
+		}
 	}
 }

@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Rectangle;
 
 public class Button {
 
+	boolean dontRespond;
 	int destination;
 	double acceleration = 1;
 	boolean wentUp;
@@ -33,19 +34,21 @@ public class Button {
 	public void render(SpriteBatch batch, float delta) {
 		updateTimers(delta);
 		if (alpha != 0) {
-			if(alpha != image.getColor().a)
-			image.setScale(alpha);
+			if (alpha != image.getColor().a)
+				image.setScale(alpha);
 			image.draw(batch);
 		}
 	}
 
 	public boolean checkCollision(int x, int y) {
+		if (dontRespond == false) {
+			mouse.setPosition(x, y);
 
-		mouse.setPosition(x, y);
-
-		if (mouse.overlaps(bounds))
-			return true;
-		else
+			if (mouse.overlaps(bounds))
+				return true;
+			else
+				return false;
+		} else
 			return false;
 	}
 
@@ -89,7 +92,7 @@ public class Button {
 		if (blinking == true) {
 			if (blinkTimer < 0.5f) {
 				select();
-				blinkTimer += delta*2*multiplier;
+				blinkTimer += delta * 2 * multiplier;
 				if (blinkTimer > 0.5f) {
 					blinkTimer = 0;
 					deselect();
@@ -123,8 +126,6 @@ public class Button {
 		this.destination = destination;
 		wentUp = false;
 	}
-	
-	
 
 	public void setAlphaMinimum(float alphaMinimum) {
 		this.alphaMinimum = alphaMinimum;
@@ -141,10 +142,14 @@ public class Button {
 	public void reverseSelection() {
 		selected = !selected;
 	}
-	public boolean notMoving(){
-		if(destination == image.getY() && wentUp == true)
+
+	public boolean notMoving() {
+		if (destination == image.getY() && wentUp == true)
 			return true;
 		else
 			return false;
+	}
+	public void setDontRespond(boolean dontRespond){
+		this.dontRespond = dontRespond;
 	}
 }

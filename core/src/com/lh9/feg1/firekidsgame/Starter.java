@@ -53,7 +53,7 @@ public class Starter extends Game {
 	}
 
 	void loadBasicTextures() {
-		logo = new Texture("station/Pink-Engine-Front.png");
+		logo = new Texture("others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
 	}

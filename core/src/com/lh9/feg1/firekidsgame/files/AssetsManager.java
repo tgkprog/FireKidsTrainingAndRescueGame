@@ -1,7 +1,9 @@
 package com.lh9.feg1.firekidsgame.files;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class AssetsManager extends Thread {
@@ -13,6 +15,21 @@ public class AssetsManager extends Thread {
 	public Texture pause;
 	public Texture levelBackgrounds[];
 	public Texture clouds[];
+	public Texture dialogueWindow;
+	public Texture parkBackgrounds[];
+	public Texture runButton;
+	public Texture spritesheetBoyRunning;
+	public Texture spritesheetBoyWeights;	
+	public Texture spritesheetGirlRunning;
+	public Texture spritesheetGirlWeights;	
+	public Texture pointer;
+	public Texture bar;
+	public Texture girlHead;
+	public Texture boyHead;
+	public Texture speedBar;
+
+	public ParticleEffect stars;
+	public ParticleEffect leaf;
 
 	boolean assetsLoaded = false;
 
@@ -22,11 +39,29 @@ public class AssetsManager extends Thread {
 		if (new Variables().getDebugMode() == true)
 			System.out.println("Started loading assets.");
 
+		 stars = new ParticleEffect();
+	     stars.load(Gdx.files.internal("particles/starsGoodYellow180"),Gdx.files.internal("particles/"));
+	     leaf = new ParticleEffect();
+	     leaf.load(Gdx.files.internal("particles/leaf"),Gdx.files.internal("particles/"));
+	  
+		spritesheetBoyRunning = new Texture(
+				"spritesheets/spritesheetBoyRunning.png");
+		spritesheetGirlRunning = new Texture(
+				"spritesheets/spritesheetGirlRunning.png");
+		runButton = new Texture("buttons/runButton.png");
+		pointer = new Texture("others/this.png");
+		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
 		pause = new Texture("buttons/Pause.png");
 		mainBackground = new Texture("backgrounds/Marketing-1.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		button = new Texture("buttons/greenButton.png");
+		girlHead = new Texture("girl/girlHead.png");
+		boyHead = new Texture("boy/boyHead.png");
+		speedBar = new Texture("others/speedBar.png");
+		spritesheetGirlWeights = new Texture("girl/spritesheetGirlWeights.png");
+		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
+		bar = new Texture("others/bar.png");
 		levelBackgrounds = new Texture[8];
 		levelBackgrounds[0] = new Texture(
 				"backgrounds/Station-meet-trucks_0.png");
@@ -38,6 +73,13 @@ public class AssetsManager extends Thread {
 		levelBackgrounds[6] = new Texture(
 				"backgrounds/Rescue-metro-people-2.png");
 		levelBackgrounds[7] = new Texture("backgrounds/8 Big Road Rescue.png");
+		parkBackgrounds = new Texture[6];
+		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
+		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
+		parkBackgrounds[2] = new Texture("backgrounds/park3.png");
+		parkBackgrounds[3] = new Texture("backgrounds/park1reversed.png");
+		parkBackgrounds[4] = new Texture("backgrounds/park2reversed.png");
+		parkBackgrounds[5] = new Texture("backgrounds/park3reversed.png");
 
 		clouds = new Texture[3];
 		clouds[0] = new Texture("others/cartoonCloud.png");
@@ -48,13 +90,27 @@ public class AssetsManager extends Thread {
 			levelBackgrounds[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
 		}
+		for (int a = 0; a < 6; a++) {
+			parkBackgrounds[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
 		for (int a = 0; a < 3; a++) {
 			clouds[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
+
+		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
+				TextureFilter.Linear);
+		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
+				TextureFilter.Linear);
 		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		pointer.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		spritesheetGirlWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		spritesheetBoyWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

@@ -63,8 +63,8 @@ public class MenuScreen implements Screen {
 		fireStation.goUp(346);
 		
 		camera.zoom = 1;
-		camera.zoomOut(1);
-		camera.moveY(camera.position.y, 10, 10);
+		camera.zoom(1,1.3f);
+		camera.moveY(camera.position.y, 10, 10,100);
 	}
 
 	@Override
@@ -143,12 +143,17 @@ public class MenuScreen implements Screen {
 			camera.shakeScreen();
 		}
 	}
-	
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMeetTheTrucks()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new MeetTheTrucksScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getFitnessScreenOne()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new FitnessScreenTwo(game));
 			}
 		}
 	}

@@ -45,8 +45,7 @@ public class CloudManager {
 		loaded = true;
 	}
 
-	public void render(SpriteBatch batch, double delta) {
-
+	public void render(SpriteBatch batch, double delta) {		
 		if (allScalesEqualZero == false && loaded == true) {
 
 			for (int a = 0; a < 13; a++)
