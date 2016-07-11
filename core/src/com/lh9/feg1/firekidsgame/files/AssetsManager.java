@@ -1,9 +1,13 @@
 package com.lh9.feg1.firekidsgame.files;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
+import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
+import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class AssetsManager extends Thread {
@@ -20,22 +24,39 @@ public class AssetsManager extends Thread {
 	public Texture runButton;
 	public Texture spritesheetBoyRunning;
 	public Texture spritesheetBoyWeights;	
+	public Texture spritesheetBoyElliptical;	
 	public Texture spritesheetGirlRunning;
+	public Texture spritesheetGirlElliptical;
 	public Texture spritesheetGirlWeights;	
 	public Texture pointer;
 	public Texture bar;
 	public Texture girlHead;
 	public Texture boyHead;
 	public Texture speedBar;
-
+	public Texture darkScreen;
+	
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
-
+	
+	public BitmapFont font;
+	
 	boolean assetsLoaded = false;
 
 	public void run() {
-		this.setPriority(MAX_PRIORITY);
 
+		this.setPriority(MAX_PRIORITY);
+		
+		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
+				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
+		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
+		parameter.size = 90;
+		parameter.minFilter = TextureFilter.Linear;
+		parameter.magFilter = TextureFilter.Linear;
+
+		font = generator.generateFont(parameter);
+		font.setColor(Color.BLACK);
+
+		
 		if (new Variables().getDebugMode() == true)
 			System.out.println("Started loading assets.");
 
@@ -48,6 +69,7 @@ public class AssetsManager extends Thread {
 				"spritesheets/spritesheetBoyRunning.png");
 		spritesheetGirlRunning = new Texture(
 				"spritesheets/spritesheetGirlRunning.png");
+		darkScreen = new Texture("backgrounds/blackScreen.png");
 		runButton = new Texture("buttons/runButton.png");
 		pointer = new Texture("others/this.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
@@ -60,6 +82,8 @@ public class AssetsManager extends Thread {
 		boyHead = new Texture("boy/boyHead.png");
 		speedBar = new Texture("others/speedBar.png");
 		spritesheetGirlWeights = new Texture("girl/spritesheetGirlWeights.png");
+		spritesheetGirlElliptical = new Texture("girl/spritesheetEllipticalGirl.png");
+		spritesheetBoyElliptical = new Texture("boy/spritesheetEllipticalBoy.png");
 		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
 		bar = new Texture("others/bar.png");
 		levelBackgrounds = new Texture[8];

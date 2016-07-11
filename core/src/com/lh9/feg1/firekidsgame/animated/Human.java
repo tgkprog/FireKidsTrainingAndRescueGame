@@ -6,12 +6,16 @@ public class Human extends Animated {
 
 	float speed;
 	float stateTime = 0.05f;
+	float maxSpeed = 8;
+	boolean animationOnly;
 
+	int counter;
+	
 	public void render(SpriteBatch batch, float delta) {
 		stateTime += delta * speed * 0.1f;
 		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		batch.draw(currentFrame, x, y);
-		if (speed >= 5) {
+		if (speed >= 5 && animationOnly == false) {
 			batch.setColor(1, 1, 1, 0.3f);
 			batch.draw(currentFrame, x - 3, y);
 			batch.setColor(1, 1, 1, 0.25f);
@@ -30,8 +34,10 @@ public class Human extends Animated {
 
 	public void move() {
 		speed += 0.5f;
-		if (speed > 8)
-			speed = 8;
+		if (speed > maxSpeed)
+			speed = maxSpeed;
+	
+	counter++;
 	}
 
 	public void setSpeed(float s) {
@@ -40,7 +46,8 @@ public class Human extends Animated {
 
 	void updateSpeed(float delta) {
 
-		this.x += speed;
+		if (animationOnly == false)
+			this.x += speed;
 
 		if (speed > 0)
 			speed -= delta;
@@ -54,5 +61,16 @@ public class Human extends Animated {
 
 	public float getSpeed() {
 		return speed;
+	}
+
+	public void setAnimationOnly(boolean animationOnly) {
+		this.animationOnly = animationOnly;
+	}
+
+	public void setMaxSpeed(float maxSpeed) {
+		this.maxSpeed = maxSpeed;
+	}
+	public int getCounter(){
+		return counter;
 	}
 }

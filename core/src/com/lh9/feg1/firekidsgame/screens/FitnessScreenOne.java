@@ -28,6 +28,8 @@ public class FitnessScreenOne implements Screen {
 
 	Dialogue dialogueWindow;
 
+	
+	
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -64,7 +66,7 @@ public class FitnessScreenOne implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow, 250f, 100f,
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,assetsManager.darkScreen, 250f, 150f,
 				assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
@@ -84,7 +86,6 @@ public class FitnessScreenOne implements Screen {
 
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-		girl.setSpeed(4f);
 
 		inputInterpreter.setControlledHuman(boy);
 
@@ -114,8 +115,8 @@ public class FitnessScreenOne implements Screen {
 		batch.begin();
 		drawParticles(delta);
 		drawBar();
-		drawWindows(delta);
 		drawButtons(delta);
+		drawWindows(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
@@ -172,11 +173,14 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void updateLogics(double delta) {
+		
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
+			girl.setSpeed(4f);
 		}
 		if (boy.getX() > 4000 && finish == false) {
+
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
@@ -197,7 +201,7 @@ public class FitnessScreenOne implements Screen {
 			exit = true;
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setScreen(new FitnessScreenOne(game));
+			game.setScreen(new FitnessScreenTwo(game));
 		}
 		
 		updateCameraLogics(delta);

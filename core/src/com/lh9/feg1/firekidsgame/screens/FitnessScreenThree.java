@@ -16,7 +16,7 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
-public class FitnessScreenTwo implements Screen {
+public class FitnessScreenThree implements Screen {
 
 	double timerSpeedGirl;
 
@@ -37,14 +37,13 @@ public class FitnessScreenTwo implements Screen {
 	InputInterpreter inputInterpreter;
 	SpeedBar speedBar;
 
-	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
 	boolean finish = false;
 
 	final Starter game;
 
-	public FitnessScreenTwo(final Starter gam) {
+	public FitnessScreenThree(final Starter gam) {
 
 		this.game = gam;
 
@@ -80,10 +79,10 @@ public class FitnessScreenTwo implements Screen {
 		dialogueWindow.popUp();
 
 		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 400, 50);
+		boy.create(assetsManager.spritesheetBoyElliptical,4, 2, 7, 400, 50);
 
 		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 100, 50);
+		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 100, 50);
 
 		boy.setMaxSpeed(4f);
 		girl.setMaxSpeed(4f);
@@ -195,13 +194,6 @@ public class FitnessScreenTwo implements Screen {
 			girl.setSpeed(0);
 			boy.setSpeed(0);
 		}
-		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
-			cloudManager.start();
-			exit = true;
-		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setScreen(new FitnessScreenThree(game));
-		}
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
 
@@ -242,9 +234,9 @@ public class FitnessScreenTwo implements Screen {
 
 	void drawCounters() {
 		assetsManager.font.draw(batch, Integer.toString(boy.getCounter()) + " - 60",
-				boy.getX() + 80, 270);
+				boy.getX() + 80, 350);
 		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())+" - 60",
-				girl.getX() + 80, 270);
+				girl.getX() + 80, 350);
 	
 	}
 }

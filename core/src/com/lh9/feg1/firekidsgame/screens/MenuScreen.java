@@ -153,7 +153,7 @@ public class MenuScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getFitnessScreenOne()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setScreen(new FitnessScreenTwo(game));
+				game.setScreen(new FitnessScreenOne(game));
 			}
 		}
 	}

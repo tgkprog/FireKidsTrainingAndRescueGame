@@ -53,7 +53,7 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow, 250f, 100f,
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow, assetsManager.darkScreen,250f, 100f,
 				assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		cloudManager.stop();
@@ -81,8 +81,8 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
-		drawWindows(delta);
 		drawButtons(delta);
+		drawWindows(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
