@@ -45,7 +45,7 @@ public class CloudManager {
 		loaded = true;
 	}
 
-	public void render(SpriteBatch batch, double delta) {		
+	public void render(SpriteBatch batch, double delta) {
 		if (allScalesEqualZero == false && loaded == true) {
 
 			for (int a = 0; a < 13; a++)
@@ -74,7 +74,6 @@ public class CloudManager {
 	public void start() {
 		for (int a = 0; a < 13; a++)
 			clouds[a].popUp();
-
 		allScalesEqualZero = false;
 	}
 
