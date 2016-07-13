@@ -124,9 +124,9 @@ public class TrainingScreen implements Screen {
 		middleLeds = new LedManager(assetsManager.ledCockpit);
 		runButton.setAlpha(0);
 		hand = new StaticAnimation();
-		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, 0);
+		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, 0,0.2f);
 		hand.setContinous(false);
-		hand.setAnimationTime(0.3f);
+		
 	}
 
 	@Override
