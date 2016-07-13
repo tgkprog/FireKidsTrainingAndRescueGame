@@ -12,7 +12,8 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class AssetsManager extends Thread {
 
-	public Texture mainBackground;
+	public Texture lane;
+	public Texture arrow;
 	public Texture longButton;
 	public Texture button;
 	public Texture fireStation;
@@ -34,6 +35,14 @@ public class AssetsManager extends Thread {
 	public Texture boyHead;
 	public Texture speedBar;
 	public Texture darkScreen;
+	public Texture truckCockpit[];
+	public Texture truckFront[];
+	public Texture cockpitPart;
+	public Texture ledCockpit;
+	public Texture handSpritesheet;
+	
+	public Texture mainBackground[];
+	
 	
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
@@ -44,7 +53,7 @@ public class AssetsManager extends Thread {
 
 	public void run() {
 
-		this.setPriority(MAX_PRIORITY);
+		this.setPriority(NORM_PRIORITY);
 		
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
@@ -75,17 +84,38 @@ public class AssetsManager extends Thread {
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
 		pause = new Texture("buttons/Pause.png");
-		mainBackground = new Texture("backgrounds/Marketing-1.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
+		arrow = new Texture("others/arrow.png");
 		button = new Texture("buttons/greenButton.png");
 		girlHead = new Texture("girl/girlHead.png");
 		boyHead = new Texture("boy/boyHead.png");
 		speedBar = new Texture("others/speedBar.png");
+		lane = new Texture("others/lane.png");
+		cockpitPart = new Texture("backgrounds/cockpitPart.png");
+		ledCockpit = new Texture("others/ledCockpit.png");
+		handSpritesheet = new Texture("others/spritesheetPress.png");	
 		spritesheetGirlWeights = new Texture("girl/spritesheetGirlWeights.png");
 		spritesheetGirlElliptical = new Texture("girl/spritesheetEllipticalGirl.png");
 		spritesheetBoyElliptical = new Texture("boy/spritesheetEllipticalBoy.png");
 		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
 		bar = new Texture("others/bar.png");
+
+		truckFront = new Texture[4];
+		
+		truckFront[0] = new Texture("backgrounds/truckFront1.png");
+		truckFront[1] = new Texture("backgrounds/truckFront2.png");
+		truckFront[2] = new Texture("backgrounds/truckFront3.png");
+		truckFront[3] = new Texture("backgrounds/truckFront4.png");
+		
+		
+		truckCockpit = new Texture[4];
+		
+		truckCockpit[0] = new Texture("backgrounds/truckCockpit1.png");
+		truckCockpit[1] = new Texture("backgrounds/truckCockpit2.png");
+		truckCockpit[2] = new Texture("backgrounds/truckCockpit3.png");
+		truckCockpit[3] = new Texture("backgrounds/truckCockpit4.png");
+		
+		
 		levelBackgrounds = new Texture[8];
 		levelBackgrounds[0] = new Texture(
 				"backgrounds/Station-meet-trucks_0.png");
@@ -110,6 +140,13 @@ public class AssetsManager extends Thread {
 		clouds[1] = new Texture("others/cartoonCloud.png");
 		clouds[2] = new Texture("others/cartoonCloud.png");
 
+		mainBackground = new Texture[4];
+		mainBackground[0] = new Texture("backgrounds/mainBackground1.png");
+		mainBackground[1] = new Texture("backgrounds/mainBackground2.png");
+		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
+		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
+
+		
 		for (int a = 0; a < 8; a++) {
 			levelBackgrounds[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
@@ -121,13 +158,22 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 3; a++) {
 			clouds[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
-
+		for (int a = 0; a < 4; a++) {
+			mainBackground[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		for (int a = 0; a < 4; a++) {
+			truckCockpit[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		for (int a = 0; a < 4; a++) {
+			truckFront[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
 		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		arrow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -135,6 +181,10 @@ public class AssetsManager extends Thread {
 		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		spritesheetGirlWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		spritesheetBoyWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		lane.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		cockpitPart.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		ledCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		handSpritesheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

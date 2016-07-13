@@ -46,7 +46,7 @@ public class Camera extends OrthographicCamera {
 
 			if (screenShakeFrequency > 0.05f) {
 				screenShakeFrequency = 0;
-				zoom = MathUtils.random(0.99f, 1f);
+				zoom = MathUtils.random((float)previousZoom - (float)previousZoom*0.01f, (float)previousZoom);
 				update();
 			}
 			if (screenShakeTimer >= 0.3f) {

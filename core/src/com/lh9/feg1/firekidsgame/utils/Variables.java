@@ -6,6 +6,8 @@ public class Variables {
 
 	static final String meetTheTrucks = "Meet The Trucks";
 	static final String fitnessScreenOne = "Fitness Screen One";
+	static final String trainingScreen = "Training Screen";
+
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
 	static final Vector2 logoPosition = new Vector2(130, -150);
@@ -27,9 +29,17 @@ public class Variables {
 	public Vector2 getLogoPosition() {
 		return logoPosition;
 	}
-	public String getMeetTheTrucks(){
+
+	public String getMeetTheTrucks() {
 		return meetTheTrucks;
 	}
-	public String getFitnessScreenOne(){
+
+	public String getFitnessScreenOne() {
 		return fitnessScreenOne;
-	}}
+	}
+
+	public String getTrainingScreen() {
+		return trainingScreen;
+	}
+
+}

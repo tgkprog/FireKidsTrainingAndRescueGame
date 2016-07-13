@@ -111,11 +111,12 @@ public class LogoScreen implements Screen {
 			if (logoScale > variables.getMaxLogoScale())
 				logoScale = variables.getMaxLogoScale();
 		} else if (changeScreen == true) {
-			if (logoScale > 0)
+			if (logoScale > 0 && Gdx.graphics.getRawDeltaTime() < 0.05f)
 				logoScale -= delta;
 			if (logoScale < 0)
 				logoScale = 0;
 		}
+		if(logoScale <= 1)
 		logoSprite.setScale((float) logoScale);
 	}
 
@@ -129,7 +130,7 @@ public class LogoScreen implements Screen {
 	}
 
 	void manageChangingScreens(double delta) {
-		if (assetsManager.getAssetsLoaded() == true)
+		if (assetsManager.getAssetsLoaded() == true && Gdx.graphics.getRawDeltaTime() < 0.05f)
 			changingScreenTimer += delta;
 		if (assetsManager.getAssetsLoaded() == true
 				&& cloudManager.isLoaded() == false) {
@@ -141,7 +142,7 @@ public class LogoScreen implements Screen {
 	}
 
 	void manageChangingScreen() {
-		if (changeScreen == true) {
+		if (changeScreen == true && Gdx.graphics.getRawDeltaTime() < 0.05f && logoScale == 0 && cloudManager.getAllScalesEqualOne() == true)  {
 			game.setScreen(new MenuScreen(game));
 		}
 	}

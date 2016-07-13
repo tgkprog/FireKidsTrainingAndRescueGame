@@ -60,6 +60,7 @@ public class CloudManager {
 			}
 
 			for (int a = 0; a < 13; a++) {
+				allScalesEqualZero =true;
 				if (clouds[a].getScale() > 0f) {
 					{
 						allScalesEqualZero = false;
@@ -74,6 +75,9 @@ public class CloudManager {
 	public void start() {
 		for (int a = 0; a < 13; a++)
 			clouds[a].popUp();
+		for (int a = 0; a < 13; a++)
+			clouds[a].scale = 0.01f;
+		
 		allScalesEqualZero = false;
 	}
 
@@ -87,6 +91,9 @@ public class CloudManager {
 		return allScalesEqualOne;
 	}
 
+	public boolean getAllScalesEqualZero() {
+		return allScalesEqualZero;
+	}
 	public boolean isLoaded() {
 		return loaded;
 	}

@@ -13,15 +13,16 @@ public class Animated {
 	Texture walkSheet;
 	TextureRegion[] walkFrames;
 	TextureRegion currentFrame;
+	
 	int x;
 	int y;
 
 	float stateTime;
-	
+	int frameNumber;
 	float animationTime = 0.025f;
 	
 	public void create(Texture walkSheet, int FRAME_COLS, int FRAME_ROWS, int frameNumber,int x, int y) {
-		
+		this.frameNumber = frameNumber;
 		this.x = x;
 		this.y = y;
 		this.FRAME_COLS = FRAME_COLS;

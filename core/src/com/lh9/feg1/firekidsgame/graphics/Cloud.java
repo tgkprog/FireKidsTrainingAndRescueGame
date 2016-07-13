@@ -33,7 +33,7 @@ public class Cloud {
 		randomlyMove(delta);
 
 		if (visible == true) {
-			if(Gdx.graphics.getRawDeltaTime() < 0.5f)
+			if(Gdx.graphics.getRawDeltaTime() < 0.05f && Gdx.graphics.getDeltaTime() < 0.05f)
 			if (popUpTimer < popUpDelayTime) {
 				popUpTimer += delta;
 			}
@@ -46,7 +46,7 @@ public class Cloud {
 				popUpTimer = 0;
 		}
 
-		if (visible == true && popUpTimer == popUpDelayTime) {
+		if (visible == true && popUpTimer == popUpDelayTime && Gdx.graphics.getRawDeltaTime() < 0.05f) {
 			if (scale < 1)
 				scale += delta;
 			if (scale > 1)

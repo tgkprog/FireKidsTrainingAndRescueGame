@@ -33,9 +33,13 @@ public class Human extends Animated {
 	}
 
 	public void move() {
+		if(speed < maxSpeed)
 		speed += 0.5f;
-		if (speed > maxSpeed)
-			speed = maxSpeed;
+		else
+			speed += (1/speed);
+			
+		if (speed > maxSpeed + 5)
+			speed = maxSpeed + 5;
 	
 	counter++;
 	}

@@ -57,10 +57,15 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		cloudManager.stop();
+	
+		camera.position.x = 400;
+		camera.position.y = 240;
+		
 		camera.zoom = 0.5f;
 		camera.position.y += 60;
 		camera.zoom(1f, 1.3f);
 		camera.moveY(camera.position.y - 60, 10, 10, 10f);
+		camera.moveX(400, 100, 0, 100);
 	}
 
 	@Override

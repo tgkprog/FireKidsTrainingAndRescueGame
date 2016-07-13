@@ -37,6 +37,7 @@ public class FitnessScreenThree implements Screen {
 	InputInterpreter inputInterpreter;
 	SpeedBar speedBar;
 
+	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
 	boolean finish = false;
@@ -196,7 +197,15 @@ public class FitnessScreenThree implements Screen {
 		}
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
-
+	
+		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
+			cloudManager.start();
+			exit = true;
+		}
+		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+			game.setScreen(new MenuScreen(game));
+		}
+	
 	}
 
 	void updateCameraLogics(double delta) {

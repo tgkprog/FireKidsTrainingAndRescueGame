@@ -15,7 +15,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class InputInterpreter implements GestureListener {
 
 	Human controlledHuman;
-	
+
 	String selectedScreen = "No button clicked";
 
 	CloudManager cloudManager;
@@ -100,8 +100,6 @@ public class InputInterpreter implements GestureListener {
 		touchDownX = x;
 		touchDownY = y;
 
-
-		
 		if (variables.getDebugMode() == true)
 			System.out.println("touchDown");
 
@@ -122,7 +120,6 @@ public class InputInterpreter implements GestureListener {
 	@Override
 	public boolean tap(float x, float y, int count, int button) {
 		// TODO Auto-generated method stub
-
 
 		if (variables.getDebugMode() == true)
 			System.out.println("tap");
@@ -235,41 +232,49 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	void manageButtonsCollisions(double x, double y) {
-		if (runButton != null)
-			if (runButton.checkCollision((int) x, (int) y) == true) {
-				runButton.blink();
-				controlledHuman.move();
-			if(camera.zoom == 0.98f)camera.zoom(0.96f, 1);
-			if(camera.zoom <= 0.96f)camera.zoom(0.98f, 1);
-			if(runButton.dontRespond == true){
-				camera.zoom(0.98f, 1);
-			}
-			}
-		if (pause != null)
-			if (pause.checkCollision((int) x, (int) y) == true) {
-				pause.blink();
-			}
-		if (meetTheTrucks != null) {
-			if (fireStation.checkCollision((int) x, (int) y) == true) {
-				fireStation.blink();
-			}
-			if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
-				meetTheTrucks.blink();
-				selectedScreen = variables.getMeetTheTrucks();
-				cloudManager.start();
-			}
-
-			for (int a = 0; a < 7; a++) {
-				if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
-					levelButtons[a].blink();
-			
-				if(a == 0){
-					selectedScreen = variables.getFitnessScreenOne();
+		if (cloudManager.getAllScalesEqualZero() == true){
+			if (runButton != null)
+				if (runButton.checkCollision((int) x, (int) y) == true) {
+					runButton.blink();
+					controlledHuman.move();
+					if (camera.zoom == 0.98f)
+						camera.zoom(0.96f, 1);
+					if (camera.zoom <= 0.96f)
+						camera.zoom(0.98f, 1);
+					if (runButton.dontRespond == true) {
+						camera.zoom(0.98f, 1);
+					}
+				}
+			if (pause != null)
+				if (pause.checkCollision((int) x, (int) y) == true) {
+					pause.blink();
+				}
+			if (meetTheTrucks != null) {
+				if (fireStation.checkCollision((int) x, (int) y) == true) {
+					fireStation.blink();
+				}
+				if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
+					meetTheTrucks.blink();
+					selectedScreen = variables.getMeetTheTrucks();
 					cloudManager.start();
 				}
+
+				for (int a = 0; a < 7; a++) {
+					if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
+						levelButtons[a].blink();
+
+						if (a == 0) {
+							selectedScreen = variables.getFitnessScreenOne();
+							cloudManager.start();
+						}
+						if (a == 1) {
+							selectedScreen = variables.getTrainingScreen();
+							cloudManager.start();
+						}
+					}
 				}
+
 			}
-			
 		}
 	}
 
@@ -313,15 +318,17 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	void manageDialogues(float x, float y) {
-		if(dialogueWindow != null)
-		if(dialogueWindow.isVisibile() == true){
-			dialogueWindow.hide();
-		}
+		if (dialogueWindow != null)
+			if (dialogueWindow.isVisibile() == true) {
+				dialogueWindow.hide();
+			}
 	}
-	public void setRunButton(Button runButton){
+
+	public void setRunButton(Button runButton) {
 		this.runButton = runButton;
 	}
-	public void setControlledHuman(Human controlledHuman){
+
+	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
 	}
 }

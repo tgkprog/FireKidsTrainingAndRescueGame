@@ -76,8 +76,9 @@ public class FitnessScreenOne implements Screen {
 		camera.zoom = 0.98f;
 		camera.position.x = 400;
 		camera.position.y = 240;
-		camera.moveX(240, 0, 0, 0);
-		camera.zoom(0.98f, 1.3f);
+		camera.moveX(390, 0, 0, 100);
+		camera.moveY(240, 0, 0, 100);		
+		camera.zoom(0.98f, 100f);
 
 		dialogueWindow.popUp();
 

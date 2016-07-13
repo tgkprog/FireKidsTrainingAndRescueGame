@@ -149,7 +149,12 @@ public class Button {
 		else
 			return false;
 	}
-	public void setDontRespond(boolean dontRespond){
+
+	public void setDontRespond(boolean dontRespond) {
 		this.dontRespond = dontRespond;
+	}
+
+	public void setAlpha(float alpha) {
+		image.setAlpha(alpha);
 	}
 }
