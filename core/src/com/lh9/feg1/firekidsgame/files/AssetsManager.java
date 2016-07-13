@@ -31,6 +31,8 @@ public class AssetsManager extends Thread {
 	public Texture spritesheetGirlWeights;	
 	public Texture pointer;
 	public Texture bar;
+	public Texture boyHeadBig;
+	public Texture girlHeadBig;
 	public Texture girlHead;
 	public Texture boyHead;
 	public Texture speedBar;
@@ -40,6 +42,8 @@ public class AssetsManager extends Thread {
 	public Texture cockpitPart;
 	public Texture ledCockpit;
 	public Texture handSpritesheet;
+	public Texture glass;
+	public Texture handwheelBig;
 	
 	public Texture mainBackground[];
 	
@@ -91,6 +95,8 @@ public class AssetsManager extends Thread {
 		boyHead = new Texture("boy/boyHead.png");
 		speedBar = new Texture("others/speedBar.png");
 		lane = new Texture("others/lane.png");
+		boyHeadBig = new Texture("boy/boyHeadBig.png");
+		girlHeadBig = new Texture("girl/girlHeadBig.png");
 		cockpitPart = new Texture("backgrounds/cockpitPart.png");
 		ledCockpit = new Texture("others/ledCockpit.png");
 		handSpritesheet = new Texture("others/spritesheetPress.png");	
@@ -99,13 +105,16 @@ public class AssetsManager extends Thread {
 		spritesheetBoyElliptical = new Texture("boy/spritesheetEllipticalBoy.png");
 		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
 		bar = new Texture("others/bar.png");
+		glass = new Texture("backgrounds/glass.png");
+		handwheelBig = new Texture("others/handwheelBig.png");
 
-		truckFront = new Texture[4];
+		truckFront = new Texture[5];
 		
 		truckFront[0] = new Texture("backgrounds/truckFront1.png");
 		truckFront[1] = new Texture("backgrounds/truckFront2.png");
 		truckFront[2] = new Texture("backgrounds/truckFront3.png");
 		truckFront[3] = new Texture("backgrounds/truckFront4.png");
+		truckFront[4] = new Texture("backgrounds/truckFront5.png");
 		
 		
 		truckCockpit = new Texture[4];
@@ -164,7 +173,7 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 4; a++) {
 			truckCockpit[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
-		for (int a = 0; a < 4; a++) {
+		for (int a = 0; a < 5; a++) {
 			truckFront[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
 		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
@@ -185,6 +194,10 @@ public class AssetsManager extends Thread {
 		cockpitPart.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		ledCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		handSpritesheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		boyHeadBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		girlHeadBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		glass.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		handwheelBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

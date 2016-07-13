@@ -14,6 +14,7 @@ public class Animated {
 	Texture walkSheet;
 	TextureRegion[] walkFrames;
 	TextureRegion currentFrame;
+	TextureRegion frameBefore;
 	
 	int x;
 	int y;

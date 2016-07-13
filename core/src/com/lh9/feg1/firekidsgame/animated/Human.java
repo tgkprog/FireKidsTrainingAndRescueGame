@@ -14,7 +14,16 @@ public class Human extends Animated {
 	public void render(SpriteBatch batch, float delta) {
 		stateTime += delta * speed * 0.1f;
 		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+		
 		batch.draw(currentFrame, x, y);
+		
+		if(stateTime > animationTime && speed > 1.5f){
+			frameBefore = walkAnimation.getKeyFrame(stateTime - animationTime, true);
+			batch.setColor(1, 1, 1, 0.3f);
+			batch.draw(frameBefore, x, y);
+			batch.setColor(1, 1, 1, 1f);
+		}
+		
 		if (speed >= 5 && animationOnly == false) {
 			batch.setColor(1, 1, 1, 0.3f);
 			batch.draw(currentFrame, x - 3, y);
@@ -26,9 +35,10 @@ public class Human extends Animated {
 			batch.draw(currentFrame, x - 15, y);
 			batch.setColor(1, 1, 1, 0.1f);
 			batch.draw(currentFrame, x - 21, y);
-
 			batch.setColor(1, 1, 1, 1);
 		}
+		
+		
 		updateSpeed(delta);
 	}
 

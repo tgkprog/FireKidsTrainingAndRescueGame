@@ -11,33 +11,35 @@ public class Arrow {
 	double rotationMin;
 	double rotationMax;
 
-	double acceleration = 12;
+	double acceleration = -20;
 
 	boolean changeRotation;
 
-	public Arrow(int x, int y, Texture arrow, double arrowRotationMin,
-			double arrowRotationMax) {
+	public Arrow(int x, int y, Texture arrow, float rotationMin,
+			float rotationMax) {
 		this.arrow = new Sprite(arrow);
 		this.arrow.setScale(1.8f);
 		this.arrow.setPosition(x, y);
-		this.rotationMin = arrowRotationMin;
-		this.rotationMax = arrowRotationMax;
+		this.rotationMin = rotationMin;
+		this.rotationMax = rotationMax;
 		this.setAlpha(0);
+		this.arrow.setRotation(0f);
+		rotation = 0f;
 	}
 
 	public void render(SpriteBatch batch, float delta) {
 		arrow.setRotation((float) rotation);
 		arrow.draw(batch);
-		updateRotation(delta);		
+		updateRotation(delta);
 	}
 
 	void updateRotation(float delta) {
 		if (changeRotation == false) {
 			if (acceleration < 12)
-				acceleration += delta*20;
-			if(acceleration > 0)
-			if (rotation < rotationMax)
-				rotation += delta * acceleration*10;
+				acceleration += delta * 20;
+			if (acceleration > 0)
+				if (rotation < rotationMax)
+					rotation += delta * acceleration * 10;
 			if (rotation > rotationMax) {
 				rotation = rotationMax;
 				changeRotation = true;
@@ -45,9 +47,9 @@ public class Arrow {
 		} else {
 			if (changeRotation == true) {
 				if (acceleration > -12)
-					acceleration -= delta*20;
+					acceleration -= delta * 20;
 				if (rotation > rotationMin)
-					rotation += delta * acceleration*10;
+					rotation += delta * acceleration * 10;
 				if (rotation < rotationMin) {
 					rotation = rotationMin;
 					changeRotation = false;
@@ -55,15 +57,22 @@ public class Arrow {
 			}
 
 		}
+		
 	}
-	public void setAlpha(float alpha){
+
+	public void setAlpha(float alpha) {
 		arrow.setAlpha(alpha);
 	}
+
 	public void normal() {
 		arrow.setColor(1, 1, 1, 1);
 	}
 
 	public void red() {
 		arrow.setColor(1, 0, 0, 1);
+	}
+
+	public void setScale(float scale) {
+		arrow.setScale(scale);
 	}
 }

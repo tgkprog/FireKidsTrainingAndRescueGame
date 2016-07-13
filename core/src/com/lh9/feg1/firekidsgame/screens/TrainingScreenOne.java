@@ -4,7 +4,9 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.StaticAnimation;
@@ -12,6 +14,7 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.Arrow;
+import com.lh9.feg1.firekidsgame.graphics.Background;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.LaneManager;
 import com.lh9.feg1.firekidsgame.graphics.LedManager;
@@ -20,8 +23,16 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
-public class TrainingScreen implements Screen {
+public class TrainingScreenOne implements Screen {
 
+	Background truckFront;
+	Background cockpit;
+
+	Vector3 normalColor;
+	Vector3 redColor;
+
+	Sprite glassSprite;
+	
 	double timerSpeedGirl;
 	double timerFrontTruck;
 	double shakeScreenTimer;
@@ -56,6 +67,9 @@ public class TrainingScreen implements Screen {
 
 	Arrow firstArrow;
 	Arrow secondArrow;
+	Arrow boyHead;
+	Arrow girlHead;
+	Arrow handwheel;
 
 	boolean sirene;
 
@@ -65,7 +79,10 @@ public class TrainingScreen implements Screen {
 
 	final Starter game;
 
-	public TrainingScreen(final Starter gam) {
+	public TrainingScreenOne(final Starter gam) {
+
+		normalColor = new Vector3(1, 1, 1);
+		redColor = new Vector3(1, 0, 0);
 
 		this.game = gam;
 
@@ -78,7 +95,18 @@ public class TrainingScreen implements Screen {
 
 		firstArrow = new Arrow(440, 790, assetsManager.arrow, 90, 120);
 		secondArrow = new Arrow(705, 780, assetsManager.arrow, 20, 120);
+		firstArrow.setAlpha(0);
+		secondArrow.setAlpha(0);
 
+		handwheel = new Arrow(1490, 370, assetsManager.handwheelBig, -13f, 2f);
+		handwheel.setAlpha(1);
+		handwheel.setScale(0.8f);
+		boyHead = new Arrow(280, 675, assetsManager.boyHeadBig, -0.7f, 0.7f);
+		boyHead.setAlpha(1);
+		boyHead.setScale(0.8f);
+		girlHead = new Arrow(1490, 420, assetsManager.girlHeadBig, -0.5f, 0.5f);
+		girlHead.setAlpha(1);
+		girlHead.setScale(0.8f);
 		pause = new Button(710, 120, assetsManager.pause);
 		pause.goUp(350);
 
@@ -122,16 +150,43 @@ public class TrainingScreen implements Screen {
 
 		laneManager = new LaneManager(assetsManager.lane, 1320, 1450);
 		middleLeds = new LedManager(assetsManager.ledCockpit);
+		middleLeds.setAlpha(1);
 		runButton.setAlpha(0);
 		hand = new StaticAnimation();
-		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, 0,0.2f);
+		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, -5, 0.1f);
 		hand.setContinous(false);
-		
+
+		truckFront = new Background();
+		truckFront.add(assetsManager.truckFront[0], 0, 765);
+		truckFront.add(assetsManager.truckFront[1], 1275, 765);
+		truckFront.add(assetsManager.truckFront[2], 0, 0);
+		truckFront.add(assetsManager.truckFront[3], 1275, 485);
+		truckFront.add(girlHead);
+		truckFront.add(boyHead);
+		truckFront.add(handwheel);
+		truckFront.add(assetsManager.truckFront[4], 1275, 0);
+		glassSprite = new Sprite(assetsManager.glass);
+		glassSprite.setScale(2f,1.5f);
+		glassSprite.setPosition(630, 565);
+		truckFront.add(glassSprite);
+
+		laneManager.setAlpha(1);
+
+		cockpit = new Background();
+		cockpit.add(assetsManager.truckCockpit[0], 0, 765);
+		cockpit.add(assetsManager.truckCockpit[1], 1275, 765);
+		cockpit.add(assetsManager.truckCockpit[2], 0, 0);
+		cockpit.add(assetsManager.truckCockpit[3], 1275, 0);
+		cockpit.add(firstArrow);
+		cockpit.add(secondArrow);
+		cockpit.addLaneManager(laneManager);
+		cockpit.addLedManager(middleLeds);
+		//cockpit.add(assetsManager.cockpitPart, 950, 0);
 	}
 
 	@Override
 	public void render(float delta) {
-
+		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -237,11 +292,13 @@ public class TrainingScreen implements Screen {
 
 	void updateCameraLogics(double delta) {
 		shakeScreenTimer += delta;
-		if (shakeScreenTimer > 0.3f) {
+		if (shakeScreenTimer > 0.5f) {
 			shakeScreenTimer = 0;
-			camera.shakeScreen();
+			// camera.shakeScreen();
+			// It's annoying
 		}
 	}
+
 
 	void drawBackground(float delta) {
 		if (sirene == true) {
@@ -304,13 +361,28 @@ public class TrainingScreen implements Screen {
 			batch.draw(assetsManager.truckFront[0], 0, 765);
 			batch.draw(assetsManager.truckFront[1], 1275, 765);
 			batch.draw(assetsManager.truckFront[2], 0, 0);
-			batch.draw(assetsManager.truckFront[3], 1275, 0);
+			batch.draw(assetsManager.truckFront[3], 1275, 485);
+			girlHead.render(batch, delta);
+			boyHead.render(batch, delta);
+			handwheel.render(batch, delta);
+			batch.draw(assetsManager.truckFront[4], 1275, 0);
+			glassSprite.draw(batch);
 		} else if (timerFrontTruck <= 2.5f) {
+			handwheel.setAlpha(2.5f - (float) timerFrontTruck);
+			girlHead.setAlpha(2.5f - (float) timerFrontTruck);
+			boyHead.setAlpha(2.5f - (float) timerFrontTruck);
+			glassSprite.setAlpha(2.5f - (float) timerFrontTruck);
 			batch.setColor(1f, 1f, 1f, 2.5f - (float) timerFrontTruck);
 			batch.draw(assetsManager.truckFront[0], 0, 765);
 			batch.draw(assetsManager.truckFront[1], 1275, 765);
 			batch.draw(assetsManager.truckFront[2], 0, 0);
-			batch.draw(assetsManager.truckFront[3], 1275, 0);
+			batch.draw(assetsManager.truckFront[3], 1275, 485);
+			girlHead.render(batch, delta);
+			boyHead.render(batch, delta);
+			handwheel.render(batch, delta);
+			//batch.draw(assetsManager.glass,0,0);
+			batch.draw(assetsManager.truckFront[4], 1275, 0);
+			glassSprite.draw(batch);
 			batch.setColor(1, 1, 1, 1);
 		}
 

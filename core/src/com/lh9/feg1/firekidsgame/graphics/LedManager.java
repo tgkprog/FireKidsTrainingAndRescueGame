@@ -18,6 +18,7 @@ public class LedManager {
 		for (int a = 0; a < 3; a++) {
 			leds[a].render(batch, delta);
 		}
+		
 	}
 	public void setAlpha(float alpha){
 		for (int a = 0; a < 1; a++) {

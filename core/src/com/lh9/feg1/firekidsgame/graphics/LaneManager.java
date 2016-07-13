@@ -18,6 +18,7 @@ public class LaneManager {
 		for (int a = 0; a < 1; a++) {
 			lanes[a].render(batch, delta);
 		}
+	
 	}
 	public void setAlpha(float alpha){
 		for (int a = 0; a < 1; a++) {
