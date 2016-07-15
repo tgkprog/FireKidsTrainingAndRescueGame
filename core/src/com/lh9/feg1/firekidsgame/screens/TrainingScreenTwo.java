@@ -6,7 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
-import com.lh9.feg1.firekidsgame.animated.Human;
+import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
@@ -20,16 +20,15 @@ public class TrainingScreenTwo implements Screen {
 
 	double timerSpeedGirl;
 
-	Human boy;
-	Human girl;
+	Truck truck;
 
+	Button up;
+	Button down;
 	Button pause;
 	Button runButton;
 
 	Dialogue dialogueWindow;
 
-	
-	
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -59,6 +58,10 @@ public class TrainingScreenTwo implements Screen {
 		pause = new Button(710, 120, assetsManager.pause);
 		pause.goUp(350);
 
+		up = new Button(30, -100, assetsManager.arrowUp);
+		up.goUp(380);
+		down = new Button(30, -100, assetsManager.arrowDown);
+		down.goUp(310);
 		runButton = new Button(710, 0, assetsManager.runButton);
 		runButton.goUp(150);
 
@@ -66,33 +69,39 @@ public class TrainingScreenTwo implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,assetsManager.darkScreen, 250f, 150f,
-				assetsManager.button);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
 		cloudManager.stop();
 
-		camera.zoom = 0.98f;
-		camera.position.x = 400;
-		camera.position.y = 240;
-		camera.moveX(390, 0, 0, 100);
-		camera.moveY(240, 0, 0, 100);		
-		camera.zoom(0.98f, 100f);
+		camera.zoom = 1.9f;
+		camera.position.x = 800;
+		camera.position.y = 470;
+
+		camera.moveX(800, 0, 0, 100);
+		camera.moveY(470, 0, 0, 100);
+		camera.zoom(1.9f, 100f);
 
 		dialogueWindow.popUp();
 
-		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
+		truck = new Truck();
+		truck.create(assetsManager.spritesheetTruck, 3, 3, 9, 1000, 135);
+		truck.setMaxSpeed(20);
+		truck.setMaxPositions(-14350, 1000);
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
+		truck.loadWheel(assetsManager.wheel);
+		truck.goLeft();
 
-		inputInterpreter.setControlledHuman(boy);
+		inputInterpreter.setControlledHuman(truck);
 
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
+		inputInterpreter.loadDown(down);
+		inputInterpreter.loadUp(up);
+		inputInterpreter.setControlledTruck(truck);
 	}
 
 	@Override
@@ -110,12 +119,10 @@ public class TrainingScreenTwo implements Screen {
 		batch.begin();
 		drawBackground();
 		drawCharacters(delta);
-		drawPointer(delta);
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
-		drawParticles(delta);
-		drawBar();
+		// drawBar();
 		drawButtons(delta);
 		drawWindows(delta);
 		cloudManager.render(batch, delta);
@@ -159,14 +166,14 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		boy.render(batch, delta);
-		girl.render(batch, delta);
+		truck.render(batch, delta);
 	}
 
-	
 	void drawButtons(double delta) {
 		pause.render(batch, (float) delta);
 		runButton.render(batch, (float) delta);
+		up.render(batch, (float) delta);
+		down.render(batch, (float) delta);
 	}
 
 	void drawWindows(double delta) {
@@ -175,108 +182,42 @@ public class TrainingScreenTwo implements Screen {
 
 	void updateLogics(double delta) {
 		
+		if (truck.getX() <= -14350) {
+			truck.runAnimation();
+			truck.animationLane();
+			runButton.setDontRespond(true);
+		}
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
-			girl.setSpeed(4f);
 		}
-		if (boy.getX() > 4000 && finish == false) {
-
-			dialogueWindow.popUp();
-			runButton.setDontRespond(true);
-			finish = true;
-			assetsManager.stars.start();
-		}
-		if (girl.getX() > 4000 && finish == false) {
-			dialogueWindow.popUp();
-			finish = true;
-			runButton.setDontRespond(true);
-		}
-		if (girl.getX() > 4000)
-			girl.setSpeed(0);
-		if (boy.getX() > 4000)
-			boy.setSpeed(0);
-
-		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
-			cloudManager.start();
-			exit = true;
-		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setScreen(new FitnessScreenTwo(game));
-		}
-		
 		updateCameraLogics(delta);
-		updateGirlAction(delta);
 
 	}
 
 	void updateCameraLogics(double delta) {
-		if (boy.getX() >= 400 && boy.getX() < 3600) {
-			camera.position.x = (boy.getX());
-		}
+		if (truck.getX() <= 500 && truck.getX() > -14200)
+			camera.position.x = truck.getX() + 300;
 	}
 
 	void drawBackground() {
-		System.out.println(boy.getX());
-		if (boy.getX() <= 1200)
-			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
-		if (boy.getX() >= 400)
-			batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
-		if (boy.getX() >= 1200 && boy.getX() < 2600)
-			batch.draw(assetsManager.parkBackgrounds[2], 1590, 0);
-
-		if (boy.getX() >= 1600 && boy.getX() < 3100)
-			batch.draw(assetsManager.parkBackgrounds[5], 2050, 0);
-		if (boy.getX() >= 2100)
-			batch.draw(assetsManager.parkBackgrounds[4], 2515, 0);
-		if (boy.getX() >= 2600)
-			batch.draw(assetsManager.parkBackgrounds[3], 3315, 0);
-
-	}
-
-	void updateGirlAction(double delta) {
-		if (girl.getX() < boy.getX() - 100)
-			timerSpeedGirl += delta * 10;
-		if (firstDialogueClicked == true)
-			timerSpeedGirl += delta;
-		if (timerSpeedGirl > 0.4) {
-			timerSpeedGirl = 0;
-			girl.move();
-		}
-	}
-
-	void drawParticles(float delta) {
-		assetsManager.stars.update(delta);
-		assetsManager.stars.draw(batch);
-
-		assetsManager.leaf.update(delta);
-		assetsManager.leaf.draw(batch);
-
-		if (boy.getSpeed() > 7) {
-			// assetsManager.leaf.setPosition(boy.getX(),0);
-			// assetsManager.leaf.start();
-			// Particle effect not finished
-		}
-	}
-
-	void drawParticlesNonGui(float delta) {
-	}
-
-	void drawPointer(float delta) {
-		if (boy.getX() >= girl.getX())
-			batch.draw(assetsManager.pointer, boy.getX() + 25, 180);
-		if (girl.getX() > boy.getX())
-			batch.draw(assetsManager.pointer, girl.getX() + 25, 180);
+		batch.draw(assetsManager.bigRoad[0], 0, 0);
+		batch.draw(assetsManager.bigRoad[1], -1600, 0);
+		batch.draw(assetsManager.bigRoad[2], -3200, 0);
+		batch.draw(assetsManager.bigRoad[3], -4800, 0);
+		batch.draw(assetsManager.bigRoad[4], -6400, 0);
+		batch.draw(assetsManager.bigRoad[5], -8000, 0);
+		batch.draw(assetsManager.bigRoad[6], -9600, 0);
+		batch.draw(assetsManager.bigRoad[7], -11200, 0);
+		batch.draw(assetsManager.bigRoad[8], -12800, 0);
+		batch.draw(assetsManager.bigRoad[9], -14400, 0);
+		batch.draw(assetsManager.bigRoad[10], -16000, 0);
+		batch.draw(assetsManager.bigRoad[11], -18600, 0);
 	}
 
 	void drawBar() {
 		batch.draw(assetsManager.bar, 260, 410);
-		batch.draw(assetsManager.boyHead, 270 + boy.getX() * 0.067f, 410);
-		batch.draw(assetsManager.girlHead, 270 + girl.getX() * 0.067f, 410);
-
-		// speedBar.setSpeed(boy.getSpeed());
-		// speedBar.render(batch);
-		// Works on a placeholder, but having no actual asset
-
+		batch.draw(assetsManager.boyHead, 270 + truck.getX() * 0.067f, 410);
 	}
 }

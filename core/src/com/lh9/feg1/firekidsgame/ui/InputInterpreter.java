@@ -7,6 +7,7 @@ import com.badlogic.gdx.input.GestureDetector.GestureListener;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.animated.Human;
+import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
@@ -15,7 +16,8 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class InputInterpreter implements GestureListener {
 
 	Human controlledHuman;
-
+	Truck controlledTruck;
+	
 	String selectedScreen = "No button clicked";
 
 	CloudManager cloudManager;
@@ -23,6 +25,9 @@ public class InputInterpreter implements GestureListener {
 
 	Camera camera;
 	OrthographicCamera guiCamera;
+
+	Button up;
+	Button down;
 
 	Button fireStation;
 	Button pause;
@@ -232,7 +237,20 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	void manageButtonsCollisions(double x, double y) {
-		if (cloudManager.getAllScalesEqualZero() == true){
+		if (cloudManager.getAllScalesEqualZero() == true) {
+
+			if (up != null) {
+				if (up.checkCollision((int) x, (int) y) == true) {
+					controlledTruck.upLane();
+					up.blink();
+				}
+			}
+			if (down != null) {
+				if (down.checkCollision((int) x, (int) y) == true) {
+					down.blink();
+					controlledTruck.downLane();
+				}
+			}
 			if (runButton != null)
 				if (runButton.checkCollision((int) x, (int) y) == true) {
 					runButton.blink();
@@ -330,6 +348,16 @@ public class InputInterpreter implements GestureListener {
 
 	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
+	}
+	public void setControlledTruck(Truck controlledTruck) {
+		this.controlledTruck = controlledTruck;
+	}
+	public void loadUp(Button up) {
+		this.up = up;
+	}
+
+	public void loadDown(Button down) {
+		this.down = down;
 	}
 }
 /*

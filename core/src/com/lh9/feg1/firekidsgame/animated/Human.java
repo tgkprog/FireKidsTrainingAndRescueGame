@@ -8,10 +8,11 @@ public class Human extends Animated {
 	float stateTime = 0.05f;
 	float maxSpeed = 8;
 	boolean animationOnly;
-
+	boolean left;
 	int counter;
 	
 	public void render(SpriteBatch batch, float delta) {
+		
 		stateTime += delta * speed * 0.1f;
 		currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 		
@@ -60,9 +61,12 @@ public class Human extends Animated {
 
 	void updateSpeed(float delta) {
 
-		if (animationOnly == false)
+		if (animationOnly == false){
+		if(left == false)
 			this.x += speed;
-
+		else
+			this.x -= speed;
+			}
 		if (speed > 0)
 			speed -= delta;
 		if (speed < 0)
@@ -86,5 +90,11 @@ public class Human extends Animated {
 	}
 	public int getCounter(){
 		return counter;
+	}
+	public void goLeft(){
+		left = true;
+	}
+	public void goRight(){
+		left = false;
 	}
 }

@@ -186,6 +186,8 @@ public class TrainingScreenOne implements Screen {
 
 	@Override
 	public void render(float delta) {
+
+		
 		
 		updateLogics(delta);
 
@@ -333,7 +335,6 @@ public class TrainingScreenOne implements Screen {
 		}
 
 		if (timerFrontTruck >= 1.5f) {
-
 			batch.draw(assetsManager.truckCockpit[0], 0, 765);
 			batch.draw(assetsManager.truckCockpit[1], 1275, 765);
 			batch.draw(assetsManager.truckCockpit[2], 0, 0);

@@ -19,12 +19,14 @@ public class AssetsManager extends Thread {
 	public Texture fireStation;
 	public Texture pause;
 	public Texture levelBackgrounds[];
+	public Texture bigRoad[];	
 	public Texture clouds[];
 	public Texture dialogueWindow;
 	public Texture parkBackgrounds[];
 	public Texture runButton;
 	public Texture spritesheetBoyRunning;
 	public Texture spritesheetBoyWeights;	
+	public Texture wheel;
 	public Texture spritesheetBoyElliptical;	
 	public Texture spritesheetGirlRunning;
 	public Texture spritesheetGirlElliptical;
@@ -44,9 +46,10 @@ public class AssetsManager extends Thread {
 	public Texture handSpritesheet;
 	public Texture glass;
 	public Texture handwheelBig;
-	
+	public Texture spritesheetTruck;
 	public Texture mainBackground[];
-	
+	public Texture arrowUp;
+	public Texture arrowDown;
 	
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
@@ -83,6 +86,8 @@ public class AssetsManager extends Thread {
 		spritesheetGirlRunning = new Texture(
 				"spritesheets/spritesheetGirlRunning.png");
 		darkScreen = new Texture("backgrounds/blackScreen.png");
+		arrowUp = new Texture("buttons/arrow-up.png");
+		arrowDown = new Texture("buttons/arrow-down.png");
 		runButton = new Texture("buttons/runButton.png");
 		pointer = new Texture("others/this.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
@@ -91,8 +96,10 @@ public class AssetsManager extends Thread {
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
 		button = new Texture("buttons/greenButton.png");
+		wheel = new Texture("others/wheel.png");
 		girlHead = new Texture("girl/girlHead.png");
-		boyHead = new Texture("boy/boyHead.png");
+		boyHead = new Texture("boy/boyHea"
+				+ "d.png");
 		speedBar = new Texture("others/speedBar.png");
 		lane = new Texture("others/lane.png");
 		boyHeadBig = new Texture("boy/boyHeadBig.png");
@@ -107,14 +114,28 @@ public class AssetsManager extends Thread {
 		bar = new Texture("others/bar.png");
 		glass = new Texture("backgrounds/glass.png");
 		handwheelBig = new Texture("others/handwheelBig.png");
+		spritesheetTruck = new Texture("spritesheets/spritesheetTruck.png");
 
 		truckFront = new Texture[5];
-		
 		truckFront[0] = new Texture("backgrounds/truckFront1.png");
 		truckFront[1] = new Texture("backgrounds/truckFront2.png");
 		truckFront[2] = new Texture("backgrounds/truckFront3.png");
 		truckFront[3] = new Texture("backgrounds/truckFront4.png");
 		truckFront[4] = new Texture("backgrounds/truckFront5.png");
+
+		bigRoad = new Texture[12];
+		bigRoad[0] = new Texture("backgrounds/bigRoad/bigRoad1.png");
+		bigRoad[1] = new Texture("backgrounds/bigRoad/bigRoad2.png");
+		bigRoad[2] = new Texture("backgrounds/bigRoad/bigRoad3.png");
+		bigRoad[3] = new Texture("backgrounds/bigRoad/bigRoad4.png");
+		bigRoad[4] = new Texture("backgrounds/bigRoad/bigRoad5.png");
+		bigRoad[5] = new Texture("backgrounds/bigRoad/bigRoad6.png");
+		bigRoad[6] = new Texture("backgrounds/bigRoad/bigRoad7.png");
+		bigRoad[7] = new Texture("backgrounds/bigRoad/bigRoad8.png");
+		bigRoad[8] = new Texture("backgrounds/bigRoad/bigRoad9.png");
+		bigRoad[9] = new Texture("backgrounds/bigRoad/bigRoad10.png");
+		bigRoad[10] = new Texture("backgrounds/bigRoad/bigRoad11.png");
+		bigRoad[11] = new Texture("backgrounds/bigRoad/bigRoad12.png");
 		
 		
 		truckCockpit = new Texture[4];
@@ -176,6 +197,10 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 5; a++) {
 			truckFront[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
+		for (int a = 0; a < 12; a++) {
+			bigRoad[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		
 		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
@@ -198,6 +223,10 @@ public class AssetsManager extends Thread {
 		girlHeadBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		glass.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		handwheelBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		spritesheetTruck.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		wheel.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		arrowUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		arrowDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

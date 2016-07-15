@@ -64,8 +64,8 @@ public class FitnessScreenTwo implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,assetsManager.darkScreen, 250f, 150f,
+				assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
@@ -191,12 +191,11 @@ public class FitnessScreenTwo implements Screen {
 			finish = true;
 			runButton.setDontRespond(true);
 		}
-		if (finish == true) {
+		if (finish == true){
 			girl.setSpeed(0);
 			boy.setSpeed(0);
 		}
-		if (finish == true && dialogueWindow.isVisibile() == false
-				&& exit == false) {
+		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
 			cloudManager.start();
 			exit = true;
 		}
@@ -242,10 +241,10 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void drawCounters() {
-		assetsManager.font.draw(batch, Integer.toString(boy.getCounter())
-				+ " - 60", boy.getX() + 80, 270);
-		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())
-				+ " - 60", girl.getX() + 80, 270);
-
+		assetsManager.font.draw(batch, Integer.toString(boy.getCounter()) + " - 60",
+				boy.getX() + 80, 270);
+		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())+" - 60",
+				girl.getX() + 80, 270);
+	
 	}
 }

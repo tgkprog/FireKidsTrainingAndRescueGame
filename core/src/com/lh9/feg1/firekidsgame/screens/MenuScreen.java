@@ -167,7 +167,7 @@ public class MenuScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTrainingScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setScreen(new TrainingScreenOne(game));
+				game.setScreen(new TrainingScreenTwo(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
