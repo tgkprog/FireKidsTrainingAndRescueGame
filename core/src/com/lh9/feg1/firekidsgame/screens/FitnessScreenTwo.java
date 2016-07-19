@@ -54,7 +54,7 @@ public class FitnessScreenTwo implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button(710, 120, assetsManager.pause);
+		pause = new Button(715, 120, assetsManager.pause);
 		pause.goUp(350);
 
 		runButton = new Button(710, 0, assetsManager.runButton);
@@ -71,12 +71,12 @@ public class FitnessScreenTwo implements Screen {
 		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
 		cloudManager.stop();
 
-		camera.zoom = 0.98f;
-		camera.position.x = 400;
-		camera.position.y = 240;
-		camera.moveX(240, 0, 0, 0);
-		camera.zoom(0.98f, 1.3f);
-
+		camera.zoom = 3.0f;
+		camera.position.x = 1275;
+		camera.position.y = 720;
+	
+		camera.reset();
+		
 		dialogueWindow.popUp();
 
 		boy = new Human();
@@ -100,6 +100,7 @@ public class FitnessScreenTwo implements Screen {
 
 	@Override
 	public void render(float delta) {
+		
 
 		updateLogics(delta);
 
@@ -208,9 +209,6 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (boy.getX() >= 400 && boy.getX() < 3600) {
-			camera.position.x = (boy.getX());
-		}
 	}
 
 	void drawBackground() {

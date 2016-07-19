@@ -8,7 +8,6 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class Camera extends OrthographicCamera {
 
 	double destinationZoom;
-
 	double zoomSpeed;
 
 	Variables variables = new Variables();
@@ -23,7 +22,7 @@ public class Camera extends OrthographicCamera {
 	float accumulateIncreaseSpeedY = 5.4f;
 
 	Vector2 destination;
-	
+
 	float accumulatePlusX = 1f;
 	float accumulateMinusX = -1f;
 
@@ -37,8 +36,21 @@ public class Camera extends OrthographicCamera {
 	double screenShakeFrequency;
 	double previousZoom;
 
-	void manageShakingScreen(float delta) {
+	public void reset(){
+		this.destination.x = this.position.x;
+		this.destination.y = this.position.y;
+		this.destinationZoom = this.zoom;
+
+		 accumulatePlusX = 1f;
+		 accumulateMinusX = -1f;
+
+		 accumulatePlusY = 1f;
+		 accumulateMinusY = -1f;
+
+	}
 	
+	void manageShakingScreen(float delta) {
+
 		if (screenShake == true) {
 
 			screenShakeFrequency += delta;
@@ -46,7 +58,8 @@ public class Camera extends OrthographicCamera {
 
 			if (screenShakeFrequency > 0.05f) {
 				screenShakeFrequency = 0;
-				zoom = MathUtils.random((float)previousZoom - (float)previousZoom*0.01f, (float)previousZoom);
+				zoom = MathUtils.random((float) previousZoom
+						- (float) previousZoom * 0.01f, (float) previousZoom);
 				update();
 			}
 			if (screenShakeTimer >= 0.3f) {

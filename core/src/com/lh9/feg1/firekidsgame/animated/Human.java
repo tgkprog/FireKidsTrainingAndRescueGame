@@ -67,16 +67,20 @@ public class Human extends Animated {
 		else
 			this.x -= speed;
 			}
+		
 		if (speed > 0)
 			speed -= delta;
-		if (speed < 0)
-			speed = 0;
+//		if (speed < 0)
+//			speed = 0;
+
 	}
 
 	public float getX() {
 		return x;
 	}
-
+	public float getY() {
+		return y;
+	}
 	public float getSpeed() {
 		return speed;
 	}

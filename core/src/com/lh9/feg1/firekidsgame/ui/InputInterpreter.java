@@ -289,6 +289,11 @@ public class InputInterpreter implements GestureListener {
 							selectedScreen = variables.getTrainingScreen();
 							cloudManager.start();
 						}
+
+						if (a == 2) {
+							selectedScreen = variables.getTrainingScreenTwo();
+							cloudManager.start();
+						}
 					}
 				}
 

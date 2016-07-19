@@ -56,7 +56,7 @@ public class FitnessScreenOne implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button(710, 120, assetsManager.pause);
+		pause = new Button(715, 120, assetsManager.pause);
 		pause.goUp(350);
 
 		runButton = new Button(710, 0, assetsManager.runButton);
@@ -76,6 +76,7 @@ public class FitnessScreenOne implements Screen {
 		camera.zoom = 0.98f;
 		camera.position.x = 400;
 		camera.position.y = 240;
+
 		camera.moveX(390, 0, 0, 100);
 		camera.moveY(240, 0, 0, 100);		
 		camera.zoom(0.98f, 100f);

@@ -40,14 +40,35 @@ public class MenuScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		fireStation = new Button(855, 100, assetsManager.fireStation);
+
+		fireStation = new Button(700, 100, assetsManager.fireStation);
 		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
 
 		levelButtons = new Button[7];
 
 		for (int a = 0; a < 7; a++) {
-			levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
-					assetsManager.button);
+			if (a == 0)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.fitness);
+			if (a == 1)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.training);
+			if (a == 2)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.rescueBuilding);
+			if (a == 3)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.rescueCat);
+			if (a == 4)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.rescueTrain);
+			if (a == 5)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.button);
+			if (a == 6)
+				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+						assetsManager.bigRoadRescue);
+
 			levelButtons[a].goUp(0);
 		}
 
@@ -165,9 +186,15 @@ public class MenuScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreen()) {
+				.getTrainingScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new TrainingScreenTwo(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new TrainingScreenOne(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables

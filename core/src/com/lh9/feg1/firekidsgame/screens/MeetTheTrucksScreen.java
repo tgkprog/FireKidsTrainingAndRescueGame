@@ -53,18 +53,16 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow, assetsManager.darkScreen,250f, 100f,
-				assetsManager.button);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250f, 100f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		cloudManager.stop();
-	
+
 		camera.position.x = 400;
 		camera.position.y = 240;
-		
 		camera.zoom = 0.5f;
-		camera.position.y += 60;
 		camera.zoom(1f, 1.3f);
-		camera.moveY(camera.position.y - 60, 10, 10, 10f);
+		camera.moveY(camera.position.y - 65, 10, 10, 10f);
 		camera.moveX(400, 100, 0, 100);
 	}
 
@@ -137,39 +135,18 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
+
 		if (camera.zoom == 1 && zoomedOut == false) {
 			dialogueWindow.popUp();
 			zoomedOut = true;
 		}
-		if (zoomedOut == true && dialogueWindow.isVisibile() == false
-				&& firstDialogueClicked == false) {
-			camera.zoom(0.45f, 6f);
-			camera.moveX(camera.position.x - 290, 10, 2, 4f);
-			camera.moveY(camera.position.y - 180, 10f, 10, 2f);
+		if(zoomedOut == true && dialogueWindow.isVisibile() == false && firstDialogueClicked == false){
+			camera.changePosition(100);
 			firstDialogueClicked = true;
 		}
-		if (camera.zoom == 0.45f && firstDialogueClicked == true
-				&& firstTruckZoomedIn == false) {
-			firstTruckZoomedIn = true;
-			dialogueWindow.popUp();
-		}
-		if (firstTruckZoomedIn == true && dialogueWindow.isVisibile() == false
-				&& secondDialogueClicked == false) {
-			secondDialogueClicked = true;
-			camera.moveX(camera.position.x + 280, 10, 2, 5f);
-		}
-		if (camera.position.x > 390 && secondTruckZoomedIn == false
-				&& secondDialogueClicked == true) {
-			dialogueWindow.popUp();
-			secondTruckZoomedIn = true;
-		}
-		if (dialogueWindow.isVisibile() == false && thirdTruckZoomedIn == false
-				&& secondTruckZoomedIn == true) {
-			cloudManager.start();
-			thirdTruckZoomedIn = true;
-		}
-
-		if (cloudManager.getAllScalesEqualOne() == true && thirdTruckZoomedIn == true) {
+		
+		if (cloudManager.getAllScalesEqualOne() == true
+				&& thirdTruckZoomedIn == true) {
 			game.setScreen(new FitnessScreenOne(game));
 		}
 	}

@@ -116,8 +116,10 @@ public class LogoScreen implements Screen {
 			if (logoScale < 0)
 				logoScale = 0;
 		}
-		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f)
+		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f && changeScreen == false)
+			{
 			logoSprite.setScale((float) logoScale);
+			}
 	}
 
 	void manageLoadingAssets() {
@@ -138,7 +140,7 @@ public class LogoScreen implements Screen {
 			cloudManager.load(assetsManager.clouds);
 			cloudManager.start();
 		}
-		if (changingScreenTimer > variables.getDelayChangingScreens())
+		if (changingScreenTimer > variables.getDelayChangingScreens() && Gdx.graphics.getRawDeltaTime() < 0.05f)
 			changeScreen = true;
 	}
 

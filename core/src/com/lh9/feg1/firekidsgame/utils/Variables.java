@@ -7,6 +7,7 @@ public class Variables {
 	static final String meetTheTrucks = "Meet The Trucks";
 	static final String fitnessScreenOne = "Fitness Screen One";
 	static final String trainingScreen = "Training Screen";
+	static final String trainingScreenTwo = "Training Screen Two";
 
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
@@ -40,6 +41,10 @@ public class Variables {
 
 	public String getTrainingScreen() {
 		return trainingScreen;
+	}
+	
+	public String getTrainingScreenTwo() {
+		return trainingScreenTwo;
 	}
 
 }

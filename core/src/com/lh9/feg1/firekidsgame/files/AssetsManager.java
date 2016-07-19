@@ -18,19 +18,27 @@ public class AssetsManager extends Thread {
 	public Texture button;
 	public Texture fireStation;
 	public Texture pause;
+	public Texture carRed;
+	public Texture carYellow;
+	public Texture carPink;
+	public Texture carBlue;
+	public Texture carGreen;
+	public Texture handTruckFront;
 	public Texture levelBackgrounds[];
-	public Texture bigRoad[];	
+	public Texture bigRoad[];
 	public Texture clouds[];
+	public Texture trainBasketAnimation[];
 	public Texture dialogueWindow;
 	public Texture parkBackgrounds[];
 	public Texture runButton;
+	public Texture handwheelNoHand;
 	public Texture spritesheetBoyRunning;
-	public Texture spritesheetBoyWeights;	
+	public Texture spritesheetBoyWeights;
 	public Texture wheel;
-	public Texture spritesheetBoyElliptical;	
+	public Texture spritesheetBoyElliptical;
 	public Texture spritesheetGirlRunning;
 	public Texture spritesheetGirlElliptical;
-	public Texture spritesheetGirlWeights;	
+	public Texture spritesheetGirlWeights;
 	public Texture pointer;
 	public Texture bar;
 	public Texture boyHeadBig;
@@ -45,23 +53,41 @@ public class AssetsManager extends Thread {
 	public Texture ledCockpit;
 	public Texture handSpritesheet;
 	public Texture glass;
+	// Spritesheets
+	public Texture fireBig;
+	public Texture peopleGround;
+	public Texture peopleBuilding;
+
 	public Texture handwheelBig;
 	public Texture spritesheetTruck;
 	public Texture mainBackground[];
 	public Texture arrowUp;
 	public Texture arrowDown;
-	
+	public Texture boyHeadCockpit;
+	public Texture girlHeadCockpit;
+	public Texture girlHandCockpit;
+	// Buttons
+	public Texture bigRoadRescue;
+	public Texture training;
+	public Texture meetTheTrucks;
+	public Texture rescueBuilding;
+	public Texture rescueCat;
+	public Texture fitness;
+	public Texture rescueTrain;
+	// Particles
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
-	
+	public ParticleEffect truckEmissions;
+	public ParticleEffect buttonEffect;
+
 	public BitmapFont font;
-	
+
 	boolean assetsLoaded = false;
 
 	public void run() {
 
 		this.setPriority(NORM_PRIORITY);
-		
+
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -72,15 +98,24 @@ public class AssetsManager extends Thread {
 		font = generator.generateFont(parameter);
 		font.setColor(Color.BLACK);
 
-		
 		if (new Variables().getDebugMode() == true)
 			System.out.println("Started loading assets.");
 
-		 stars = new ParticleEffect();
-	     stars.load(Gdx.files.internal("particles/starsGoodYellow180"),Gdx.files.internal("particles/"));
-	     leaf = new ParticleEffect();
-	     leaf.load(Gdx.files.internal("particles/leaf"),Gdx.files.internal("particles/"));
-	  
+		stars = new ParticleEffect();
+		stars.load(Gdx.files.internal("particles/starsGoodYellow180"),
+				Gdx.files.internal("particles/"));
+		leaf = new ParticleEffect();
+		leaf.load(Gdx.files.internal("particles/leaf"),
+				Gdx.files.internal("particles/"));
+		truckEmissions = new ParticleEffect();
+		truckEmissions.load(Gdx.files.internal("particles/truckEmissions"),
+				Gdx.files.internal("particles/"));
+		buttonEffect = new ParticleEffect();
+		buttonEffect.load(Gdx.files.internal("particles/buttonEffect"),
+				Gdx.files.internal("particles/"));
+		buttonEffect.setPosition(730, 310);
+		buttonEffect.allowCompletion();
+
 		spritesheetBoyRunning = new Texture(
 				"spritesheets/spritesheetBoyRunning.png");
 		spritesheetGirlRunning = new Texture(
@@ -95,26 +130,49 @@ public class AssetsManager extends Thread {
 		pause = new Texture("buttons/Pause.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
+		handwheelNoHand = new Texture("others/handwheelNoHand.png");
 		button = new Texture("buttons/greenButton.png");
 		wheel = new Texture("others/wheel.png");
 		girlHead = new Texture("girl/girlHead.png");
-		boyHead = new Texture("boy/boyHea"
-				+ "d.png");
+		boyHead = new Texture("boy/boyHea" + "d.png");
 		speedBar = new Texture("others/speedBar.png");
 		lane = new Texture("others/lane.png");
+		carRed = new Texture("spritesheets/carRed.png");
+		carYellow = new Texture("spritesheets/carYellow.png");
+		carPink = new Texture("spritesheets/carPink.png");
+		carBlue = new Texture("spritesheets/carBlue.png");
+		carGreen = new Texture("spritesheets/carGreen.png");
+		handTruckFront = new Texture("boy/handTruckFront.png");
 		boyHeadBig = new Texture("boy/boyHeadBig.png");
 		girlHeadBig = new Texture("girl/girlHeadBig.png");
 		cockpitPart = new Texture("backgrounds/cockpitPart.png");
 		ledCockpit = new Texture("others/ledCockpit.png");
-		handSpritesheet = new Texture("others/spritesheetPress.png");	
+		fireBig = new Texture("spritesheets/fireBig.png");
+		peopleGround = new Texture("spritesheets/peopleGround.png");
+		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
+
+		handSpritesheet = new Texture("others/spritesheetPress.png");
+		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
+		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
+		girlHandCockpit = new Texture("girl/handCockpit.png");
 		spritesheetGirlWeights = new Texture("girl/spritesheetGirlWeights.png");
-		spritesheetGirlElliptical = new Texture("girl/spritesheetEllipticalGirl.png");
-		spritesheetBoyElliptical = new Texture("boy/spritesheetEllipticalBoy.png");
+		spritesheetGirlElliptical = new Texture(
+				"girl/spritesheetEllipticalGirl.png");
+		spritesheetBoyElliptical = new Texture(
+				"boy/spritesheetEllipticalBoy.png");
 		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
 		bar = new Texture("others/bar.png");
 		glass = new Texture("backgrounds/glass.png");
 		handwheelBig = new Texture("others/handwheelBig.png");
 		spritesheetTruck = new Texture("spritesheets/spritesheetTruck.png");
+
+		bigRoadRescue = new Texture("buttons/bigRoadRescue.png");
+		training = new Texture("buttons/training.png");
+		meetTheTrucks = new Texture("buttons/meetTheTrucks.png");
+		rescueBuilding = new Texture("buttons/rescueBuilding.png");
+		rescueCat = new Texture("buttons/rescueCat.png");
+		fitness = new Texture("buttons/fitness.png");
+		rescueTrain = new Texture("buttons/rescueTrain.png");
 
 		truckFront = new Texture[5];
 		truckFront[0] = new Texture("backgrounds/truckFront1.png");
@@ -123,40 +181,73 @@ public class AssetsManager extends Thread {
 		truckFront[3] = new Texture("backgrounds/truckFront4.png");
 		truckFront[4] = new Texture("backgrounds/truckFront5.png");
 
-		bigRoad = new Texture[12];
-		bigRoad[0] = new Texture("backgrounds/bigRoad/bigRoad1.png");
-		bigRoad[1] = new Texture("backgrounds/bigRoad/bigRoad2.png");
-		bigRoad[2] = new Texture("backgrounds/bigRoad/bigRoad3.png");
-		bigRoad[3] = new Texture("backgrounds/bigRoad/bigRoad4.png");
-		bigRoad[4] = new Texture("backgrounds/bigRoad/bigRoad5.png");
-		bigRoad[5] = new Texture("backgrounds/bigRoad/bigRoad6.png");
-		bigRoad[6] = new Texture("backgrounds/bigRoad/bigRoad7.png");
-		bigRoad[7] = new Texture("backgrounds/bigRoad/bigRoad8.png");
-		bigRoad[8] = new Texture("backgrounds/bigRoad/bigRoad9.png");
-		bigRoad[9] = new Texture("backgrounds/bigRoad/bigRoad10.png");
-		bigRoad[10] = new Texture("backgrounds/bigRoad/bigRoad11.png");
-		bigRoad[11] = new Texture("backgrounds/bigRoad/bigRoad12.png");
-		
-		
+		trainBasketAnimation = new Texture[14];
+		trainBasketAnimation[0] = new Texture(
+				"spritesheets/trainBasket/Train-basket-1.png");
+		trainBasketAnimation[1] = new Texture(
+				"spritesheets/trainBasket/Train-basket-2.png");
+		trainBasketAnimation[2] = new Texture(
+				"spritesheets/trainBasket/Train-basket-3.png");
+		trainBasketAnimation[3] = new Texture(
+				"spritesheets/trainBasket/Train-basket-4.png");
+		trainBasketAnimation[4] = new Texture(
+				"spritesheets/trainBasket/Train-basket-5.png");
+		trainBasketAnimation[5] = new Texture(
+				"spritesheets/trainBasket/Train-basket-6.png");
+		trainBasketAnimation[6] = new Texture(
+				"spritesheets/trainBasket/Train-basket-7.png");
+		trainBasketAnimation[7] = new Texture(
+				"spritesheets/trainBasket/Train-basket-8.png");
+		trainBasketAnimation[8] = new Texture(
+				"spritesheets/trainBasket/Train-basket-9.png");
+		trainBasketAnimation[9] = new Texture(
+				"spritesheets/trainBasket/Train-basket-10.png");
+		trainBasketAnimation[10] = new Texture(
+				"spritesheets/trainBasket/Train-basket-11.png");
+		trainBasketAnimation[11] = new Texture(
+				"spritesheets/trainBasket/Train-basket-12.png");
+		trainBasketAnimation[12] = new Texture(
+				"spritesheets/trainBasket/Train-basket-13.png");
+		trainBasketAnimation[13] = new Texture(
+				"spritesheets/trainBasket/Train-basket-14.png");
+
+		bigRoad = new Texture[24];
+		bigRoad[0] = new Texture("backgrounds/bigRoad/bigRoad1B.png");
+		bigRoad[1] = new Texture("backgrounds/bigRoad/bigRoad1A.png");
+		bigRoad[2] = new Texture("backgrounds/bigRoad/bigRoad2B.png");
+		bigRoad[3] = new Texture("backgrounds/bigRoad/bigRoad2A.png");
+		bigRoad[4] = new Texture("backgrounds/bigRoad/bigRoad3B.png");
+		bigRoad[5] = new Texture("backgrounds/bigRoad/bigRoad3A.png");
+		bigRoad[6] = new Texture("backgrounds/bigRoad/bigRoad4B.png");
+		bigRoad[7] = new Texture("backgrounds/bigRoad/bigRoad4A.png");
+		bigRoad[8] = new Texture("backgrounds/bigRoad/bigRoad5B.png");
+		bigRoad[9] = new Texture("backgrounds/bigRoad/bigRoad5A.png");
+		bigRoad[10] = new Texture("backgrounds/bigRoad/bigRoad6B.png");
+		bigRoad[11] = new Texture("backgrounds/bigRoad/bigRoad6A.png");
+		bigRoad[12] = new Texture("backgrounds/bigRoad/bigRoad7B.png");
+		bigRoad[13] = new Texture("backgrounds/bigRoad/bigRoad7A.png");
+		bigRoad[14] = new Texture("backgrounds/bigRoad/bigRoad8B.png");
+		bigRoad[15] = new Texture("backgrounds/bigRoad/bigRoad8A.png");
+		bigRoad[16] = new Texture("backgrounds/bigRoad/bigRoad9B.png");
+		bigRoad[17] = new Texture("backgrounds/bigRoad/bigRoad9A.png");
+		bigRoad[18] = new Texture("backgrounds/bigRoad/bigRoad10B.png");
+		bigRoad[19] = new Texture("backgrounds/bigRoad/bigRoad10A.png");
+		bigRoad[20] = new Texture("backgrounds/bigRoad/bigRoad11B.png");
+		bigRoad[21] = new Texture("backgrounds/bigRoad/bigRoad11A.png");
+		bigRoad[22] = new Texture("backgrounds/bigRoad/bigRoad12B.png");
+		bigRoad[23] = new Texture("backgrounds/bigRoad/bigRoad12A.png");
+
 		truckCockpit = new Texture[4];
-		
+
 		truckCockpit[0] = new Texture("backgrounds/truckCockpit1.png");
 		truckCockpit[1] = new Texture("backgrounds/truckCockpit2.png");
 		truckCockpit[2] = new Texture("backgrounds/truckCockpit3.png");
 		truckCockpit[3] = new Texture("backgrounds/truckCockpit4.png");
-		
-		
-		levelBackgrounds = new Texture[8];
+
+		levelBackgrounds = new Texture[1];
 		levelBackgrounds[0] = new Texture(
 				"backgrounds/Station-meet-trucks_0.png");
-		levelBackgrounds[1] = new Texture("backgrounds/Fitness-bk-2.jpg");
-		levelBackgrounds[2] = new Texture("backgrounds/fitness-park-bk.png");
-		levelBackgrounds[3] = new Texture("backgrounds/rescue-tree-bk.png");
-		levelBackgrounds[4] = new Texture("backgrounds/Rescue-building-bk.png");
-		levelBackgrounds[5] = new Texture("backgrounds/Rescue-metro-bk.png");
-		levelBackgrounds[6] = new Texture(
-				"backgrounds/Rescue-metro-people-2.png");
-		levelBackgrounds[7] = new Texture("backgrounds/8 Big Road Rescue.png");
+
 		parkBackgrounds = new Texture[6];
 		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
 		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
@@ -176,8 +267,11 @@ public class AssetsManager extends Thread {
 		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
 		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
 
-		
-		for (int a = 0; a < 8; a++) {
+		for (int a = 0; a < 9; a++) {
+			trainBasketAnimation[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
+		for (int a = 0; a < 1; a++) {
 			levelBackgrounds[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
 		}
@@ -189,18 +283,20 @@ public class AssetsManager extends Thread {
 			clouds[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
 		for (int a = 0; a < 4; a++) {
-			mainBackground[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			mainBackground[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 4; a++) {
-			truckCockpit[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			truckCockpit[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 5; a++) {
 			truckFront[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
-		for (int a = 0; a < 12; a++) {
+		for (int a = 0; a < 24; a++) {
 			bigRoad[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
-		
+
 		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
@@ -213,9 +309,16 @@ public class AssetsManager extends Thread {
 		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		pointer.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		spritesheetGirlWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		spritesheetBoyWeights.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		spritesheetGirlWeights.setFilter(TextureFilter.Linear,
+				TextureFilter.Linear);
+		spritesheetBoyWeights.setFilter(TextureFilter.Linear,
+				TextureFilter.Linear);
 		lane.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		carRed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		carYellow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		carPink.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		carBlue.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		carGreen.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		cockpitPart.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		ledCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		handSpritesheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -227,6 +330,21 @@ public class AssetsManager extends Thread {
 		wheel.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		arrowUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		arrowDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		handTruckFront.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		handwheelNoHand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		boyHeadCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		girlHeadCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		girlHandCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		fireBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		peopleGround.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		peopleBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		bigRoadRescue.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		training.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		meetTheTrucks.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		rescueBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		rescueCat.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		fitness.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		rescueTrain.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}
