@@ -54,11 +54,11 @@ public class FitnessScreenThree implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button(710, 120, assetsManager.pause);
-		pause.goUp(350);
-
-		runButton = new Button(710, 0, assetsManager.runButton);
-		runButton.goUp(150);
+		
+		pause = new Button((int)variables.getPauseButtonPosition().x, 120, assetsManager.pause);
+		pause.goUp((int)variables.getPauseButtonPosition().y);
+		runButton = new Button((int)variables.getRunButtonPosition().x, 0, assetsManager.runButton);
+		runButton.goUp((int)variables.getRunButtonPosition().y);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -71,19 +71,20 @@ public class FitnessScreenThree implements Screen {
 		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
 		cloudManager.stop();
 
-		camera.zoom = 0.98f;
-		camera.position.x = 400;
-		camera.position.y = 240;
-		camera.moveX(240, 0, 0, 0);
-		camera.zoom(0.98f, 1.3f);
+		camera.zoom = 3.0f;
+		camera.position.x = 1200;
+		camera.position.y = 720;
+	
+		camera.reset();
+		
 
 		dialogueWindow.popUp();
 
 		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyElliptical,4, 2, 7, 400, 50);
+		boy.create(assetsManager.spritesheetBoyElliptical,4, 2, 7, 1200, 50);
 
 		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 100, 50);
+		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 300, 50);
 
 		boy.setMaxSpeed(4f);
 		girl.setMaxSpeed(4f);
@@ -100,7 +101,8 @@ public class FitnessScreenThree implements Screen {
 
 	@Override
 	public void render(float delta) {
-
+		
+		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -209,13 +211,14 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (boy.getX() >= 400 && boy.getX() < 3600) {
-			camera.position.x = (boy.getX());
-		}
+		
 	}
 
 	void drawBackground() {
-		batch.draw(assetsManager.levelBackgrounds[1], 0, 0);
+		batch.draw(assetsManager.fitnessBackground[0], 0, 765);
+		batch.draw(assetsManager.fitnessBackground[1], 1275, 765);
+		batch.draw(assetsManager.fitnessBackground[2], 0, 0);
+		batch.draw(assetsManager.fitnessBackground[3], 1275, 0);
 	}
 
 	void updateGirlAction(double delta) {
@@ -243,9 +246,9 @@ public class FitnessScreenThree implements Screen {
 
 	void drawCounters() {
 		assetsManager.font.draw(batch, Integer.toString(boy.getCounter()) + " - 60",
-				boy.getX() + 80, 350);
+				440, 350);
 		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())+" - 60",
-				girl.getX() + 80, 350);
+				120, 350);
 	
 	}
 }

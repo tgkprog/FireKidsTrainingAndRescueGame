@@ -55,6 +55,9 @@ public class Animated {
 	public void create(Texture walkSheet[], int FRAME_COLS, int FRAME_ROWS,
 			int frameNumber, int x, int y) {
 
+		this.x = x;
+		this.y = y;
+		
 		fromTextureRegion = false;
 		this.frameNumber = frameNumber;
 		frames = walkSheet;

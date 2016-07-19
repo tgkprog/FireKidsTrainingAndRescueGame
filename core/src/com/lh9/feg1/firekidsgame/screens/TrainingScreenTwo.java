@@ -222,6 +222,7 @@ public class TrainingScreenTwo implements Screen {
 		// drawBar();
 		drawButtons(delta);
 		drawWindows(delta);
+		drawBar();
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
@@ -515,8 +516,8 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void drawBar() {
-		batch.draw(assetsManager.bar, 260, 410);
-		batch.draw(assetsManager.boyHead, 270 + truck.getX() * 0.067f, 410);
+		batch.draw(assetsManager.speedBar, 160, 410);
+		batch.draw(assetsManager.boyHead, 570 - Math.abs(truck.getX() * 0.0285f), 410);
 	}
 
 	void drawParticles(float delta) {

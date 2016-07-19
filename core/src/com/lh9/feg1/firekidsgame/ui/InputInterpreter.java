@@ -255,10 +255,18 @@ public class InputInterpreter implements GestureListener {
 				if (runButton.checkCollision((int) x, (int) y) == true) {
 					runButton.blink();
 					controlledHuman.move();
+					
+					if (camera.zoom == 3.0f)
+						camera.zoom(2.96f, 3);
+					if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+						camera.zoom(3.0f, 3);
+					
+		
 					if (camera.zoom == 0.98f)
 						camera.zoom(0.96f, 1);
 					if (camera.zoom <= 0.96f)
 						camera.zoom(0.98f, 1);
+					
 					if (runButton.dontRespond == true) {
 						camera.zoom(0.98f, 1);
 					}

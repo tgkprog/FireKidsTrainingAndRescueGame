@@ -25,6 +25,7 @@ public class AssetsManager extends Thread {
 	public Texture carGreen;
 	public Texture handTruckFront;
 	public Texture levelBackgrounds[];
+	public Texture fitnessBackground[];
 	public Texture bigRoad[];
 	public Texture clouds[];
 	public Texture trainBasketAnimation[];
@@ -32,13 +33,16 @@ public class AssetsManager extends Thread {
 	public Texture parkBackgrounds[];
 	public Texture runButton;
 	public Texture handwheelNoHand;
-	public Texture spritesheetBoyRunning;
-	public Texture spritesheetBoyWeights;
 	public Texture wheel;
-	public Texture spritesheetBoyElliptical;
+	
 	public Texture spritesheetGirlRunning;
-	public Texture spritesheetGirlElliptical;
-	public Texture spritesheetGirlWeights;
+	public Texture spritesheetBoyRunning;
+	
+	public Texture spritesheetBoyElliptical[];
+	public Texture spritesheetGirlElliptical[];
+	public Texture spritesheetGirlWeights[];
+	public Texture spritesheetBoyWeights[];
+	
 	public Texture pointer;
 	public Texture bar;
 	public Texture boyHeadBig;
@@ -86,7 +90,7 @@ public class AssetsManager extends Thread {
 
 	public void run() {
 
-		this.setPriority(NORM_PRIORITY);
+		this.setPriority(MAX_PRIORITY);
 
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
@@ -155,12 +159,36 @@ public class AssetsManager extends Thread {
 		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
 		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
 		girlHandCockpit = new Texture("girl/handCockpit.png");
-		spritesheetGirlWeights = new Texture("girl/spritesheetGirlWeights.png");
-		spritesheetGirlElliptical = new Texture(
-				"girl/spritesheetEllipticalGirl.png");
-		spritesheetBoyElliptical = new Texture(
-				"boy/spritesheetEllipticalBoy.png");
-		spritesheetBoyWeights = new Texture("boy/spritesheetBoyWeights.png");
+		
+		spritesheetGirlWeights = new Texture[3];
+		spritesheetGirlElliptical = new Texture[7];
+		spritesheetBoyElliptical = new Texture[7];
+		spritesheetBoyWeights = new Texture[3];
+		
+		spritesheetGirlWeights[0] = new Texture("girl/fitnessBenchGirl/Fitness-bench-press-Girl-1.png");
+		spritesheetGirlWeights[1] = new Texture("girl/fitnessBenchGirl/Fitness-bench-press-Girl-2.png");
+		spritesheetGirlWeights[2] = new Texture("girl/fitnessBenchGirl/Fitness-bench-press-Girl-3.png");
+	
+		spritesheetBoyWeights[0] = new Texture("boy/fitnessBenchBoy/Fitness-bench-press-boy-1.png");
+		spritesheetBoyWeights[1] = new Texture("boy/fitnessBenchBoy/Fitness-bench-press-boy-2.png");
+		spritesheetBoyWeights[2] = new Texture("boy/fitnessBenchBoy/Fitness-bench-press-boy-3.png");
+		
+		spritesheetGirlElliptical[0] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-1.png");
+		spritesheetGirlElliptical[1] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-2.png");
+		spritesheetGirlElliptical[2] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-3.png");
+		spritesheetGirlElliptical[3] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-4.png");
+		spritesheetGirlElliptical[4] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-5.png");
+		spritesheetGirlElliptical[5] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-6.png");
+		spritesheetGirlElliptical[6] = new Texture("girl/fitnessEllipticalGirl/Eliptical-Girl-7.png");
+		
+		spritesheetBoyElliptical[0] = new Texture("boy/fitnessEllipticalBoy/Eliptical-1.png");
+		spritesheetBoyElliptical[1] = new Texture("boy/fitnessEllipticalBoy/Eliptical-2.png");
+		spritesheetBoyElliptical[2] = new Texture("boy/fitnessEllipticalBoy/Eliptical-3.png");
+		spritesheetBoyElliptical[3] = new Texture("boy/fitnessEllipticalBoy/Eliptical-4.png");
+		spritesheetBoyElliptical[4] = new Texture("boy/fitnessEllipticalBoy/Eliptical-5.png");
+		spritesheetBoyElliptical[5] = new Texture("boy/fitnessEllipticalBoy/Eliptical-6.png");
+		spritesheetBoyElliptical[6] = new Texture("boy/fitnessEllipticalBoy/Eliptical-7.png");
+		
 		bar = new Texture("others/bar.png");
 		glass = new Texture("backgrounds/glass.png");
 		handwheelBig = new Texture("others/handwheelBig.png");
@@ -248,6 +276,16 @@ public class AssetsManager extends Thread {
 		levelBackgrounds[0] = new Texture(
 				"backgrounds/Station-meet-trucks_0.png");
 
+		fitnessBackground = new Texture[4];
+		fitnessBackground[0] = new Texture(
+				"backgrounds/fitness/fitness1.png");
+		fitnessBackground[1] = new Texture(
+				"backgrounds/fitness/fitness2.png");
+		fitnessBackground[2] = new Texture(
+				"backgrounds/fitness/fitness3.png");
+		fitnessBackground[3] = new Texture(
+				"backgrounds/fitness/fitness4.png");
+
 		parkBackgrounds = new Texture[6];
 		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
 		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
@@ -266,13 +304,33 @@ public class AssetsManager extends Thread {
 		mainBackground[1] = new Texture("backgrounds/mainBackground2.png");
 		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
 		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
-
+		
+		for (int a = 0; a < 7; a++) {
+			spritesheetBoyElliptical[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
+		for (int a = 0; a < 7; a++) {
+			spritesheetGirlElliptical[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
+		for (int a = 0; a < 3; a++) {
+			spritesheetGirlWeights[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
+		for (int a = 0; a < 3; a++) {
+			spritesheetBoyWeights[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
 		for (int a = 0; a < 9; a++) {
 			trainBasketAnimation[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 1; a++) {
 			levelBackgrounds[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
+		for (int a = 0; a < 4; a++) {
+			fitnessBackground[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 6; a++) {
@@ -309,10 +367,6 @@ public class AssetsManager extends Thread {
 		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		pointer.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		spritesheetGirlWeights.setFilter(TextureFilter.Linear,
-				TextureFilter.Linear);
-		spritesheetBoyWeights.setFilter(TextureFilter.Linear,
-				TextureFilter.Linear);
 		lane.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		carRed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		carYellow.setFilter(TextureFilter.Linear, TextureFilter.Linear);

@@ -56,11 +56,10 @@ public class FitnessScreenOne implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button(715, 120, assetsManager.pause);
-		pause.goUp(350);
-
-		runButton = new Button(710, 0, assetsManager.runButton);
-		runButton.goUp(150);
+		pause = new Button((int)variables.getPauseButtonPosition().x, 120, assetsManager.pause);
+		pause.goUp((int)variables.getPauseButtonPosition().y);
+		runButton = new Button((int)variables.getRunButtonPosition().x, 0, assetsManager.runButton);
+		runButton.goUp((int)variables.getRunButtonPosition().y);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
