@@ -4,19 +4,22 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
-import com.lh9.feg1.firekidsgame.graphics.SpeedBar;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class FitnessScreenTwo implements Screen {
+
+	Sprite windowCounter;
 
 	double timerSpeedGirl;
 
@@ -25,7 +28,8 @@ public class FitnessScreenTwo implements Screen {
 
 	Button pause;
 	Button runButton;
-
+	Bar boyBar;
+	Bar girlBar;
 	Dialogue dialogueWindow;
 
 	CloudManager cloudManager;
@@ -35,7 +39,6 @@ public class FitnessScreenTwo implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	SpeedBar speedBar;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -54,29 +57,29 @@ public class FitnessScreenTwo implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button((int)variables.getPauseButtonPosition().x, 120, assetsManager.pause);
-		pause.goUp((int)variables.getPauseButtonPosition().y);
-		runButton = new Button((int)variables.getRunButtonPosition().x, 0, assetsManager.runButton);
-		runButton.goUp((int)variables.getRunButtonPosition().y);
-
+		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+				assetsManager.pause);
+		pause.goUp((int) variables.getPauseButtonPosition().y);
+		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
+				assetsManager.runButton);
+		runButton.goUp((int) variables.getRunButtonPosition().y);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,assetsManager.darkScreen, 250f, 150f,
-				assetsManager.button);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
 		cloudManager.stop();
 
 		camera.zoom = 3.0f;
 		camera.position.x = 1275;
 		camera.position.y = 720;
-	
+
 		camera.reset();
-		
+
 		dialogueWindow.popUp();
 
 		boy = new Human();
@@ -96,11 +99,20 @@ public class FitnessScreenTwo implements Screen {
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
+		windowCounter = new Sprite(assetsManager.longButton);
+		windowCounter.setScale(0);
+
+		boyBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				340, 430, 60);
+		girlBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				10, 430, 60);
+		boyBar.setVisibility(true);
+		girlBar.setVisibility(true);
+
 	}
 
 	@Override
 	public void render(float delta) {
-		
 
 		updateLogics(delta);
 
@@ -119,7 +131,7 @@ public class FitnessScreenTwo implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		drawParticles(delta);
-		drawCounters();
+		drawCounters(delta);
 		drawButtons(delta);
 		drawWindows(delta);
 		cloudManager.render(batch, delta);
@@ -173,6 +185,7 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void drawWindows(double delta) {
+
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -192,11 +205,14 @@ public class FitnessScreenTwo implements Screen {
 			finish = true;
 			runButton.setDontRespond(true);
 		}
-		if (finish == true){
+		if (finish == true) {
 			girl.setSpeed(0);
 			boy.setSpeed(0);
+			boyBar.setVisibility(false);
+			girlBar.setVisibility(false);	
 		}
-		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
+		if (finish == true && dialogueWindow.isVisibile() == false
+				&& exit == false) {
 			cloudManager.start();
 			exit = true;
 		}
@@ -241,11 +257,8 @@ public class FitnessScreenTwo implements Screen {
 	void drawParticlesNonGui(float delta) {
 	}
 
-	void drawCounters() {
-		assetsManager.font.draw(batch, Integer.toString(boy.getCounter()) + " - 60",
-				440, 350);
-		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())+" - 60",
-				120, 350);
-	
+	void drawCounters(float delta) {
+		boyBar.render(batch, delta, boy.getCounter());
+		girlBar.render(batch, delta, girl.getCounter());
 	}
 }

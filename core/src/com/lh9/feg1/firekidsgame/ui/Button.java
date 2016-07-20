@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.Rectangle;
+import com.badlogic.gdx.math.Vector3;
 
 public class Button {
 
@@ -20,6 +21,7 @@ public class Button {
 	Sprite image;
 	Rectangle mouse;
 	Rectangle bounds;
+	Vector3 color = new Vector3(1,1,1);
 
 	public Button(int x, int y, Texture texture) {
 		image = new Sprite(texture);
@@ -36,6 +38,7 @@ public class Button {
 		if (alpha != 0) {
 			if (alpha != image.getColor().a)
 				image.setScale(alpha);
+			image.setColor(color.x, color.y, color.z, image.getColor().a);
 			image.draw(batch);
 		}
 	}
@@ -157,4 +160,11 @@ public class Button {
 	public void setAlpha(float alpha) {
 		image.setAlpha(alpha);
 	}
+	public void normal() {
+		color = new Vector3(1, 1, 1);
+}
+
+public void red() {
+	color = new Vector3(1, 0, 0);
+		}
 }

@@ -9,9 +9,9 @@ public class LedManager {
 
 	public LedManager(Texture led) {
 		leds = new Led[3];
-		leds[0] = new Led(led, 1180, 670);
-		leds[1] = new Led(led, 1330, 670);
-		leds[2] = new Led(led, 1480, 670);
+		leds[0] = new Led(led, 1170, 670);
+		leds[1] = new Led(led, 1320, 670);
+		leds[2] = new Led(led, 1470, 670);
 	}
 
 	public void render(SpriteBatch batch, float delta) {

@@ -4,22 +4,28 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
-import com.lh9.feg1.firekidsgame.graphics.SpeedBar;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class FitnessScreenThree implements Screen {
 
+	Bar girlBar;
+	Bar boyBar;
+	
 	double timerSpeedGirl;
 
+	Sprite windowCounter;
+	
 	Human boy;
 	Human girl;
 
@@ -35,7 +41,6 @@ public class FitnessScreenThree implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	SpeedBar speedBar;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -68,7 +73,7 @@ public class FitnessScreenThree implements Screen {
 				assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
+
 		cloudManager.stop();
 
 		camera.zoom = 3.0f;
@@ -97,6 +102,13 @@ public class FitnessScreenThree implements Screen {
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
+		windowCounter = new Sprite(assetsManager.longButton);
+		windowCounter.setScale(0);
+
+		boyBar = new Bar(assetsManager.barFilled,assetsManager.barNotFilled,340,430,60);
+		girlBar = new Bar(assetsManager.barFilled,assetsManager.barNotFilled,10,430,60);
+		boyBar.setVisibility(true);
+		girlBar.setVisibility(true);
 	}
 
 	@Override
@@ -120,7 +132,7 @@ public class FitnessScreenThree implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		drawParticles(delta);
-		drawCounters();
+		drawCounters(delta);
 		drawButtons(delta);
 		drawWindows(delta);
 		cloudManager.render(batch, delta);
@@ -174,6 +186,7 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void drawWindows(double delta) {
+
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -196,6 +209,9 @@ public class FitnessScreenThree implements Screen {
 		if (finish == true){
 			girl.setSpeed(0);
 			boy.setSpeed(0);
+			boyBar.setVisibility(false);
+			girlBar.setVisibility(false);
+			
 		}
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
@@ -244,11 +260,8 @@ public class FitnessScreenThree implements Screen {
 	void drawParticlesNonGui(float delta) {
 	}
 
-	void drawCounters() {
-		assetsManager.font.draw(batch, Integer.toString(boy.getCounter()) + " - 60",
-				440, 350);
-		assetsManager.font.draw(batch, Integer.toString(girl.getCounter())+" - 60",
-				120, 350);
-	
+	void drawCounters(float delta) {
+			boyBar.render(batch, delta, boy.getCounter());
+			girlBar.render(batch, delta, girl.getCounter());
 	}
 }

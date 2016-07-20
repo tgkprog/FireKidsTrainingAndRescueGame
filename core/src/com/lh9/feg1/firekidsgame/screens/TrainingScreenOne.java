@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
@@ -14,15 +16,43 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.Arrow;
+import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.LaneManager;
 import com.lh9.feg1.firekidsgame.graphics.LedManager;
-import com.lh9.feg1.firekidsgame.graphics.SpeedBar;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class TrainingScreenOne implements Screen {
+
+	boolean minigameRunning;
+	boolean afterMinigameWindow;
+	boolean drawTime;
+
+	Bar timeLeftBar;
+
+	static final Vector2 yellowSectionMiddlePosition = new Vector2(355, 220);
+	static final Vector2 yellowSectionLeftPosition = new Vector2(5, 240);
+	static final Vector2 yellowSectionUpLeftPosition = new Vector2(0, 390);
+	static final Vector2 yellowSectionUpRightPosition = new Vector2(770, 390);
+
+	boolean[] yellowButtons;
+
+	float minigameTimeLeft = 3;
+	int minigameCounter = 10;
+
+	Sprite windowCounter;
+
+	Sprite yellowSectionMiddlePointer;
+	Sprite yellowSectionLeftPointer;
+	Sprite yellowSectionUpLeftPointer;
+	Sprite yellowSectionUpRightPointer;
+
+	Button yellowSectionMiddle;
+	Button yellowSectionLeft;
+	Button yellowSectionUpLeft;
+	Button yellowSectionUpRight;
 
 	Vector3 normalColor;
 	Vector3 redColor;
@@ -59,7 +89,6 @@ public class TrainingScreenOne implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	SpeedBar speedBar;
 
 	Arrow firstArrow;
 	Arrow secondArrow;
@@ -70,7 +99,7 @@ public class TrainingScreenOne implements Screen {
 	Arrow boyHeadCockpit;
 	Arrow girlHeadCockpit;
 	Arrow girlHandCockpit;
-	
+
 	Arrow truckFrontHand;
 
 	boolean sirene;
@@ -99,31 +128,35 @@ public class TrainingScreenOne implements Screen {
 		secondArrow = new Arrow(705, 780, assetsManager.arrow, 20, 120);
 		firstArrow.setAlpha(0);
 		secondArrow.setAlpha(0);
-		
+
 		handwheel = new Arrow(1490, 200, assetsManager.handwheelBig, -13f, 2f);
 		handwheel.setAlpha(1);
 		handwheel.setScale(0.8f);
 
-		handwheelCockpit = new Arrow(50, -300, assetsManager.handwheelNoHand, -10f, 5f);
+		handwheelCockpit = new Arrow(50, -300, assetsManager.handwheelNoHand,
+				-10f, 5f);
 		handwheelCockpit.setAlpha(1);
 		handwheelCockpit.setScale(0.8f);
 		handwheelCockpit.setAlpha(0);
 
-		boyHeadCockpit = new Arrow(1650, -100, assetsManager.boyHeadCockpit, -0.3f, 0.3f);
+		boyHeadCockpit = new Arrow(1650, -100, assetsManager.boyHeadCockpit,
+				-0.3f, 0.3f);
 		boyHeadCockpit.setAlpha(1);
 		boyHeadCockpit.setScale(1f);
 		boyHeadCockpit.setAlpha(0);
-		
-		girlHeadCockpit = new Arrow(100, -100, assetsManager.girlHeadCockpit, -0.3f, 0.3f);
+
+		girlHeadCockpit = new Arrow(100, -100, assetsManager.girlHeadCockpit,
+				-0.3f, 0.3f);
 		girlHeadCockpit.setAlpha(1);
 		girlHeadCockpit.setScale(1f);
 		girlHeadCockpit.setAlpha(0);
-		
-		girlHandCockpit = new Arrow(100, -100, assetsManager.girlHandCockpit, -0.3f, 1.5f);
+
+		girlHandCockpit = new Arrow(100, -100, assetsManager.girlHandCockpit,
+				-0.3f, 1.5f);
 		girlHandCockpit.setAlpha(1);
 		girlHandCockpit.setScale(1f);
 		girlHandCockpit.setAlpha(0);
-		
+
 		truckFrontHand = new Arrow(205, 520, assetsManager.handTruckFront,
 				-0.5f, 0.5f);
 		truckFrontHand.setAlpha(1);
@@ -138,8 +171,25 @@ public class TrainingScreenOne implements Screen {
 		pause = new Button(710, 120, assetsManager.pause);
 		pause.goUp(400);
 
-		runButton = new Button(390, -100, assetsManager.runButton);
+		runButton = new Button(390, -100, assetsManager.runButtonLittle);
 		runButton.goUp(110);
+		runButton.setDontRespond(true);
+
+		yellowSectionMiddle = new Button((int) yellowSectionMiddlePosition.x,
+				-100, assetsManager.yellowSectionMiddle);
+		yellowSectionMiddle.goUp((int) yellowSectionMiddlePosition.y);
+
+		yellowSectionLeft = new Button((int) yellowSectionLeftPosition.x, -100,
+				assetsManager.yellowSectionLeft);
+		yellowSectionLeft.goUp((int) yellowSectionLeftPosition.y);
+
+		yellowSectionUpLeft = new Button((int) yellowSectionUpLeftPosition.x,
+				-100, assetsManager.yellowSectionUp);
+		yellowSectionUpLeft.goUp((int) yellowSectionUpLeftPosition.y);
+
+		yellowSectionUpRight = new Button((int) yellowSectionUpRightPosition.x,
+				-100, assetsManager.yellowSectionUp);
+		yellowSectionUpRight.goUp((int) yellowSectionUpRightPosition.y);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -149,7 +199,7 @@ public class TrainingScreenOne implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
+
 		cloudManager.stop();
 
 		camera.position.x = 1270;
@@ -175,11 +225,19 @@ public class TrainingScreenOne implements Screen {
 		girl.setAnimationOnly(true);
 
 		inputInterpreter.setControlledHuman(boy);
+		windowCounter = new Sprite(assetsManager.longButton);
+		windowCounter.setScale(0);
 
 		laneManager = new LaneManager(assetsManager.lane, 1320, 1450);
 		middleLeds = new LedManager(assetsManager.ledCockpit);
 		middleLeds.setAlpha(1);
 		runButton.setAlpha(0);
+
+		yellowSectionMiddle.setAlpha(0);
+		yellowSectionLeft.setAlpha(0);
+		yellowSectionUpLeft.setAlpha(0);
+		yellowSectionUpRight.setAlpha(0);
+
 		hand = new StaticAnimation();
 		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, -5, 0.1f);
 		hand.setContinous(false);
@@ -188,6 +246,38 @@ public class TrainingScreenOne implements Screen {
 		glassSprite.setPosition(630, 565);
 
 		laneManager.setAlpha(1);
+
+		yellowSectionMiddlePointer = new Sprite(assetsManager.pointer);
+		yellowSectionLeftPointer = new Sprite(assetsManager.pointer);
+		yellowSectionUpLeftPointer = new Sprite(assetsManager.pointer);
+		yellowSectionUpRightPointer = new Sprite(assetsManager.pointer);
+		yellowSectionUpLeftPointer.setRotation(270);
+		yellowSectionUpRightPointer.setRotation(90);
+
+		yellowSectionMiddlePointer.setPosition(410, 270);
+		yellowSectionLeftPointer.setPosition(35, 310);
+		yellowSectionUpLeftPointer.setPosition(60, 385);
+		yellowSectionUpRightPointer.setPosition(700, 385);
+
+		yellowSectionMiddlePointer.setAlpha(0);
+		yellowSectionLeftPointer.setAlpha(0);
+		yellowSectionUpLeftPointer.setAlpha(0);
+		yellowSectionUpRightPointer.setAlpha(0);
+
+		yellowSectionMiddlePointer.setScale(0);
+		yellowSectionLeftPointer.setScale(0);
+		yellowSectionUpLeftPointer.setScale(0);
+		yellowSectionUpRightPointer.setScale(0);
+
+		inputInterpreter.setYellowSectionButtons(yellowSectionMiddle,
+				yellowSectionLeft, yellowSectionUpLeft, yellowSectionUpRight);
+
+		yellowButtons = new boolean[4];
+
+		timeLeftBar = new Bar(assetsManager.barFilled,
+				assetsManager.barNotFilled, 250, 450,3);
+	
+
 	}
 
 	@Override
@@ -212,6 +302,7 @@ public class TrainingScreenOne implements Screen {
 		batch.begin();
 		drawButtons(delta);
 		drawWindows(delta);
+		drawTime(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
@@ -255,21 +346,40 @@ public class TrainingScreenOne implements Screen {
 	void drawCharacters(float delta) {
 	}
 
-	void drawButtons(double delta) {
+	void drawButtons(float delta) {
 		// pause.render(batch, (float) delta);
-		runButton.render(batch, (float) delta);
+		runButton.render(batch, delta);
+		yellowSectionMiddle.render(batch, delta);
+		yellowSectionLeft.render(batch, delta);
+		yellowSectionUpLeft.render(batch, delta);
+		yellowSectionUpRight.render(batch, delta);
+
+		yellowSectionMiddlePointer.draw(batch);
+		yellowSectionLeftPointer.draw(batch);
+		yellowSectionUpLeftPointer.draw(batch);
+		yellowSectionUpRightPointer.draw(batch);
+
 	}
 
 	void drawWindows(double delta) {
 		dialogueWindow.draw(batch, delta);
 	}
 
-	void updateLogics(double delta) {
-		
-		if(secondDialogueClicked == true){
-			
+	void updateLogics(float delta) {
+
+		managePointers(delta);
+
+		if (afterMinigameWindow == true && dialogueWindow.isVisibile() == false) {
+			runButton.setDontRespond(false);
 		}
-		
+
+		if (secondDialogueClicked == true
+				&& dialogueWindow.isVisibile() == false) {
+			minigameTimeLeft -= delta;
+			randomizeMinigame();
+			drawTime = true;
+		}
+
 		if (firstDialogueClicked == true)
 			timerFrontTruck += delta;
 
@@ -323,7 +433,11 @@ public class TrainingScreenOne implements Screen {
 				handwheelCockpit.red();
 				boyHeadCockpit.red();
 				girlHeadCockpit.red();
-				girlHandCockpit.red();	
+				girlHandCockpit.red();
+				yellowSectionMiddle.red();
+				yellowSectionLeft.red();
+				yellowSectionUpLeft.red();
+				yellowSectionUpRight.red();
 			} else {
 				batch.setColor(1, 1, 1, 1);
 				laneManager.normal();
@@ -335,6 +449,10 @@ public class TrainingScreenOne implements Screen {
 				girlHeadCockpit.normal();
 				girlHandCockpit.normal();
 				hand.normal();
+				yellowSectionMiddle.normal();
+				yellowSectionLeft.normal();
+				yellowSectionUpLeft.normal();
+				yellowSectionUpRight.normal();
 			}
 
 			if (goRed == true) {
@@ -361,8 +479,7 @@ public class TrainingScreenOne implements Screen {
 			laneManager.render(batch, delta);
 			batch.draw(assetsManager.cockpitPart, 1100, 0);
 			middleLeds.render(batch, delta);
-			if (sirene == true)
-			{	
+			if (sirene == true) {
 				hand.render(batch, delta);
 				hand.start();
 			}
@@ -376,6 +493,18 @@ public class TrainingScreenOne implements Screen {
 				laneManager.setAlpha((float) timerFrontTruck - 1.5f);
 				middleLeds.setAlpha((float) timerFrontTruck - 1.5f);
 				runButton.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionMiddle.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionLeft.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionUpLeft.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionUpRight.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionMiddlePointer
+						.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionLeftPointer
+						.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionUpLeftPointer
+						.setAlpha((float) timerFrontTruck - 1.5f);
+				yellowSectionUpRightPointer
+						.setAlpha((float) timerFrontTruck - 1.5f);
 			}
 			if (timerFrontTruck > 2.5f && secondDialogueClicked == false) {
 				dialogueWindow.popUp();
@@ -424,4 +553,132 @@ public class TrainingScreenOne implements Screen {
 		firstArrow.render(batch, delta);
 		secondArrow.render(batch, delta);
 	}
+
+	void drawTime(float delta) {
+
+		if (drawTime == true) {
+
+			timeLeftBar.render(batch, delta, minigameTimeLeft);
+			
+			if (afterMinigameWindow == false) {
+				timeLeftBar.setVisibility(true);
+			} else {
+				timeLeftBar.setVisibility(false);
+			}
+
+		}
+	}
+
+	void randomizeMinigame() {
+		if (minigameRunning == false && minigameCounter > 0) {
+			minigameCounter--;
+			minigameRunning = true;
+
+			if (minigameCounter != 0) {
+				for (int a = 0; a < 4; a++)
+					yellowButtons[a] = false;
+				yellowButtons[MathUtils.random(0, 3)] = true;
+			}
+
+			if (minigameCounter == 0) {
+				if (minigameCounter == 0 && afterMinigameWindow == false) {
+					dialogueWindow.popUp();
+					afterMinigameWindow = true;
+				}
+			}
+
+		}
+	}
+
+	void managePointers(float delta) {
+
+		boolean allPointersScaleZero = false;
+		if (yellowSectionMiddlePointer.getScaleX() == 0
+				&& yellowSectionLeftPointer.getScaleX() == 0
+				&& yellowSectionUpLeftPointer.getScaleX() == 0
+				&& yellowSectionUpRightPointer.getScaleX() == 0)
+			allPointersScaleZero = true;
+
+		for (int a = 0; a < 4; a++) {
+			if (yellowButtons[a] == true) {
+				allPointersScaleZero = false;
+				break;
+			} else
+				allPointersScaleZero = true;
+		}
+
+		if (allPointersScaleZero == true && minigameRunning == true) {
+			minigameTimeLeft = 3;
+			minigameRunning = false;
+		}
+
+		if (yellowButtons[0] == true) {
+			if (yellowSectionMiddlePointer.getScaleX() < 1) {
+				yellowSectionMiddlePointer.setScale(yellowSectionMiddlePointer
+						.getScaleX() + delta * 3);
+				if (yellowSectionMiddlePointer.getScaleX() > 1)
+					yellowSectionMiddlePointer.setScale(1);
+			}
+			if (yellowSectionMiddle.getSelection() == true) {
+				yellowButtons[0] = false;
+
+			}
+		} else if (yellowSectionMiddlePointer.getScaleX() > 0) {
+			yellowSectionMiddlePointer.setScale(yellowSectionMiddlePointer
+					.getScaleX() - delta * 3);
+			if (yellowSectionMiddlePointer.getScaleX() < 0)
+				yellowSectionMiddlePointer.setScale(0);
+		}
+		if (yellowButtons[1] == true) {
+			if (yellowSectionLeftPointer.getScaleX() < 1) {
+				yellowSectionLeftPointer.setScale(yellowSectionLeftPointer
+						.getScaleX() + delta * 3);
+				if (yellowSectionLeftPointer.getScaleX() > 1)
+					yellowSectionLeftPointer.setScale(1);
+			}
+			if (yellowSectionLeft.getSelection() == true) {
+				yellowButtons[1] = false;
+			}
+		} else if (yellowSectionLeftPointer.getScaleX() > 0) {
+			yellowSectionLeftPointer.setScale(yellowSectionLeftPointer
+					.getScaleX() - delta * 3);
+			if (yellowSectionLeftPointer.getScaleX() < 0)
+				yellowSectionLeftPointer.setScale(0);
+		}
+		if (yellowButtons[2] == true) {
+			if (yellowSectionUpLeftPointer.getScaleX() < 1) {
+				yellowSectionUpLeftPointer.setScale(yellowSectionUpLeftPointer
+						.getScaleX() + delta * 3);
+				if (yellowSectionUpLeftPointer.getScaleX() > 1)
+					yellowSectionUpLeftPointer.setScale(1);
+			}
+			if (yellowSectionUpLeft.getSelection() == true) {
+				yellowButtons[2] = false;
+			}
+		} else if (yellowSectionUpLeftPointer.getScaleX() > 0) {
+			yellowSectionUpLeftPointer.setScale(yellowSectionUpLeftPointer
+					.getScaleX() - delta * 3);
+			if (yellowSectionUpLeftPointer.getScaleX() < 0)
+				yellowSectionUpLeftPointer.setScale(0);
+		}
+		if (yellowButtons[3] == true) {
+			if (yellowSectionUpRightPointer.getScaleX() < 1) {
+				yellowSectionUpRightPointer
+						.setScale(yellowSectionUpRightPointer.getScaleX()
+								+ delta * 3);
+				if (yellowSectionUpRightPointer.getScaleX() > 1)
+					yellowSectionUpRightPointer.setScale(1);
+			}
+			if (yellowSectionUpRight.getSelection() == true) {
+				yellowButtons[3] = false;
+			}
+		} else if (yellowSectionUpRightPointer.getScaleX() > 0) {
+			yellowSectionUpRightPointer.setScale(yellowSectionUpRightPointer
+					.getScaleX() - delta * 3);
+			if (yellowSectionUpRightPointer.getScaleX() < 0)
+				yellowSectionUpRightPointer.setScale(0);
+		}
+
+	}
+
 }

@@ -17,7 +17,7 @@ public class InputInterpreter implements GestureListener {
 
 	Human controlledHuman;
 	Truck controlledTruck;
-	
+
 	String selectedScreen = "No button clicked";
 
 	CloudManager cloudManager;
@@ -34,6 +34,10 @@ public class InputInterpreter implements GestureListener {
 	Button meetTheTrucks;
 	Button levelButtons[];
 	Button runButton;
+	Button yellowSectionMiddle;
+	Button yellowSectionLeft;
+	Button yellowSectionUpLeft;
+	Button yellowSectionUpRight;
 
 	Variables variables = new Variables();
 
@@ -239,6 +243,26 @@ public class InputInterpreter implements GestureListener {
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
 
+			if (yellowSectionUpRight != null) {
+
+				if (yellowSectionMiddle.checkCollision((int) x, (int) y) == true) {
+					yellowSectionMiddle.blink();
+				}
+				if (yellowSectionLeft.checkCollision((int) x, (int) y) == true) {
+
+					yellowSectionLeft.blink();
+				}
+				if (yellowSectionUpLeft.checkCollision((int) x, (int) y) == true) {
+
+					yellowSectionUpLeft.blink();
+				}
+				if (yellowSectionUpRight.checkCollision((int) x, (int) y) == true) {
+
+					yellowSectionUpRight.blink();
+				}
+
+			}
+
 			if (up != null) {
 				if (up.checkCollision((int) x, (int) y) == true) {
 					controlledTruck.upLane();
@@ -255,18 +279,17 @@ public class InputInterpreter implements GestureListener {
 				if (runButton.checkCollision((int) x, (int) y) == true) {
 					runButton.blink();
 					controlledHuman.move();
-					
+
 					if (camera.zoom == 3.0f)
 						camera.zoom(2.96f, 3);
 					if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
 						camera.zoom(3.0f, 3);
-					
-		
+
 					if (camera.zoom == 0.98f)
 						camera.zoom(0.96f, 1);
 					if (camera.zoom <= 0.96f)
 						camera.zoom(0.98f, 1);
-					
+
 					if (runButton.dontRespond == true) {
 						camera.zoom(0.98f, 1);
 					}
@@ -362,15 +385,26 @@ public class InputInterpreter implements GestureListener {
 	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
 	}
+
 	public void setControlledTruck(Truck controlledTruck) {
 		this.controlledTruck = controlledTruck;
 	}
+
 	public void loadUp(Button up) {
 		this.up = up;
 	}
 
 	public void loadDown(Button down) {
 		this.down = down;
+	}
+
+	public void setYellowSectionButtons(Button yellowSectionMiddle,
+			Button yellowSectionLeft, Button yellowSectionUpLeft,
+			Button yellowSectionUpRight) {
+		this.yellowSectionMiddle = yellowSectionMiddle;
+		this.yellowSectionLeft = yellowSectionLeft;
+		this.yellowSectionUpLeft = yellowSectionUpLeft;
+		this.yellowSectionUpRight = yellowSectionUpRight;
 	}
 }
 /*

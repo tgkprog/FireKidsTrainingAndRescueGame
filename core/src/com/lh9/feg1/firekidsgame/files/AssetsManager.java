@@ -32,6 +32,7 @@ public class AssetsManager extends Thread {
 	public Texture dialogueWindow;
 	public Texture parkBackgrounds[];
 	public Texture runButton;
+	public Texture runButtonLittle;
 	public Texture handwheelNoHand;
 	public Texture wheel;
 	
@@ -57,6 +58,8 @@ public class AssetsManager extends Thread {
 	public Texture ledCockpit;
 	public Texture handSpritesheet;
 	public Texture glass;
+	public Texture barFilled;
+	public Texture barNotFilled;
 	// Spritesheets
 	public Texture fireBig;
 	public Texture peopleGround;
@@ -78,6 +81,11 @@ public class AssetsManager extends Thread {
 	public Texture rescueCat;
 	public Texture fitness;
 	public Texture rescueTrain;
+	public Texture yellowSectionLeft;
+	public Texture yellowSectionMiddle;
+	public Texture yellowSectionUp;
+	
+	
 	// Particles
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
@@ -128,6 +136,7 @@ public class AssetsManager extends Thread {
 		arrowUp = new Texture("buttons/arrow-up.png");
 		arrowDown = new Texture("buttons/arrow-down.png");
 		runButton = new Texture("buttons/runButton.png");
+		runButtonLittle = new Texture("buttons/Button-2.png");
 		pointer = new Texture("others/this.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
@@ -154,6 +163,11 @@ public class AssetsManager extends Thread {
 		fireBig = new Texture("spritesheets/fireBig.png");
 		peopleGround = new Texture("spritesheets/peopleGround.png");
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
+		barFilled = new Texture("others/barFilled.png");
+		barNotFilled = new Texture("others/barNotFilled.png");
+		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
+		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
+		yellowSectionLeft = new Texture("buttons/yellowSection2.png");
 
 		handSpritesheet = new Texture("others/spritesheetPress.png");
 		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
@@ -360,11 +374,14 @@ public class AssetsManager extends Thread {
 		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		barFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		barNotFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		arrow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		runButtonLittle.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		pointer.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		lane.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -399,6 +416,9 @@ public class AssetsManager extends Thread {
 		rescueCat.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fitness.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		rescueTrain.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		yellowSectionUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		yellowSectionLeft.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		yellowSectionMiddle.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

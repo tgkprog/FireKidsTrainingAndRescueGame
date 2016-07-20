@@ -10,8 +10,8 @@ import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
-import com.lh9.feg1.firekidsgame.graphics.SpeedBar;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
@@ -19,6 +19,8 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class FitnessScreenOne implements Screen {
 
 	double timerSpeedGirl;
+
+	Bar speedBar;
 
 	Human boy;
 	Human girl;
@@ -28,8 +30,6 @@ public class FitnessScreenOne implements Screen {
 
 	Dialogue dialogueWindow;
 
-	
-	
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -37,7 +37,6 @@ public class FitnessScreenOne implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	SpeedBar speedBar;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -56,20 +55,21 @@ public class FitnessScreenOne implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		pause = new Button((int)variables.getPauseButtonPosition().x, 120, assetsManager.pause);
-		pause.goUp((int)variables.getPauseButtonPosition().y);
-		runButton = new Button((int)variables.getRunButtonPosition().x, 0, assetsManager.runButton);
-		runButton.goUp((int)variables.getRunButtonPosition().y);
+		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+				assetsManager.pause);
+		pause.goUp((int) variables.getPauseButtonPosition().y);
+		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
+				assetsManager.runButton);
+		runButton.goUp((int) variables.getRunButtonPosition().y);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,assetsManager.darkScreen, 250f, 150f,
-				assetsManager.button);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
 		cloudManager.stop();
 
 		camera.zoom = 0.98f;
@@ -77,7 +77,7 @@ public class FitnessScreenOne implements Screen {
 		camera.position.y = 240;
 
 		camera.moveX(390, 0, 0, 100);
-		camera.moveY(240, 0, 0, 100);		
+		camera.moveY(240, 0, 0, 100);
 		camera.zoom(0.98f, 100f);
 
 		dialogueWindow.popUp();
@@ -93,6 +93,9 @@ public class FitnessScreenOne implements Screen {
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
+		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				260, 10, 8);
+		speedBar.setVisibility(true);
 	}
 
 	@Override
@@ -115,7 +118,7 @@ public class FitnessScreenOne implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		drawParticles(delta);
-		drawBar();
+		drawBar(delta);
 		drawButtons(delta);
 		drawWindows(delta);
 		cloudManager.render(batch, delta);
@@ -163,7 +166,6 @@ public class FitnessScreenOne implements Screen {
 		girl.render(batch, delta);
 	}
 
-	
 	void drawButtons(double delta) {
 		pause.render(batch, (float) delta);
 		runButton.render(batch, (float) delta);
@@ -174,7 +176,10 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void updateLogics(double delta) {
-		
+
+		if (boy.getSpeed() < 0)
+			boy.setSpeed(0);
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
@@ -192,19 +197,24 @@ public class FitnessScreenOne implements Screen {
 			finish = true;
 			runButton.setDontRespond(true);
 		}
-		if (girl.getX() > 4000)
+		if (girl.getX() > 4000) {
 			girl.setSpeed(0);
-		if (boy.getX() > 4000)
-			boy.setSpeed(0);
 
-		if(finish == true && dialogueWindow.isVisibile() == false && exit == false){
+			speedBar.setVisibility(false);
+		}
+		if (boy.getX() > 4000) {
+			boy.setSpeed(0);
+			speedBar.setVisibility(false);
+		}
+		if (finish == true && dialogueWindow.isVisibile() == false
+				&& exit == false) {
 			cloudManager.start();
 			exit = true;
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			game.setScreen(new FitnessScreenTwo(game));
 		}
-		
+
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
 
@@ -217,11 +227,12 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void drawBackground() {
-		System.out.println(boy.getX());
-		if (boy.getX() <= 1200)
+		if (boy.getX() <= 1200) 
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
-		if (boy.getX() >= 400)
-			batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
+		if (boy.getX() <= 2000) 
+		batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
+		
+		
 		if (boy.getX() >= 1200 && boy.getX() < 2600)
 			batch.draw(assetsManager.parkBackgrounds[2], 1590, 0);
 
@@ -269,10 +280,13 @@ public class FitnessScreenOne implements Screen {
 			batch.draw(assetsManager.pointer, girl.getX() + 25, 180);
 	}
 
-	void drawBar() {
-		batch.draw(assetsManager.bar, 260, 410);
-		batch.draw(assetsManager.boyHead, 270 + boy.getX() * 0.067f, 410);
-		batch.draw(assetsManager.girlHead, 270 + girl.getX() * 0.067f, 410);
+	void drawBar(float delta) {
+
+		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.boyHead, 165 + boy.getX() * 0.1f, 435);
+		batch.draw(assetsManager.girlHead, 165 + girl.getX() * 0.1f, 435);
+
+		speedBar.render(batch, delta, boy.getSpeed());
 
 		// speedBar.setSpeed(boy.getSpeed());
 		// speedBar.render(batch);

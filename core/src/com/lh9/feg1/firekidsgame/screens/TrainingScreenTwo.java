@@ -17,14 +17,16 @@ import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
-import com.lh9.feg1.firekidsgame.graphics.SpeedBar;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class TrainingScreenTwo implements Screen {
 
+	Bar speedBar;
+	
 	boolean lastWindowPopUp;
 	double timerSpeedGirl;
 	double timerSpawnCar;
@@ -58,7 +60,6 @@ public class TrainingScreenTwo implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	SpeedBar speedBar;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -95,7 +96,7 @@ public class TrainingScreenTwo implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		speedBar = new SpeedBar(assetsManager.speedBar, 10, 450);
+
 		cloudManager.stop();
 
 		runButton.setDontRespond(true);
@@ -197,6 +198,11 @@ public class TrainingScreenTwo implements Screen {
 			fire.add(fireAnimation);
 
 		}
+		
+		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				260, 10, 20);
+		speedBar.setVisibility(true);
+	
 	}
 
 	@Override
@@ -222,7 +228,7 @@ public class TrainingScreenTwo implements Screen {
 		// drawBar();
 		drawButtons(delta);
 		drawWindows(delta);
-		drawBar();
+		drawBar(delta);
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
@@ -388,7 +394,7 @@ public class TrainingScreenTwo implements Screen {
 		}
 		if (timerSpawnCar > 5f) {
 			timerSpawnCar = 0;
-			spawnRandomCar(6);
+			spawnRandomCar(10);
 		}
 
 		if (peopleBuildingTimer > 4f) {
@@ -421,6 +427,7 @@ public class TrainingScreenTwo implements Screen {
 				camera.moveY(camera.position.y + 150, 10, 10, 10);
 				cameraFirstZoom = true;
 			}
+			speedBar.setVisibility(false);
 			timerLastPopUp += delta;
 			timerSpawnCar += delta;
 			peopleGroundTimer += delta;
@@ -515,9 +522,12 @@ public class TrainingScreenTwo implements Screen {
 		peopleBuilding.render(batch, delta);
 	}
 
-	void drawBar() {
-		batch.draw(assetsManager.speedBar, 160, 410);
-		batch.draw(assetsManager.boyHead, 570 - Math.abs(truck.getX() * 0.0285f), 410);
+	void drawBar(float delta) {
+		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0255f, 435);
+
+		speedBar.render(batch, delta, truck.getSpeed());
+
 	}
 
 	void drawParticles(float delta) {
@@ -553,9 +563,13 @@ public class TrainingScreenTwo implements Screen {
 			car.upLane();
 			car.setPosition((int) car.getX(), 210);
 		}
-		if ( a == 7) {
+		if (a == 7) {
 			car.upLane();
 			car.setPosition((int) car.getX(), 210);
+		}
+		if (a == 10) {
+			car.upLane();
+			car.setPosition((int) -15000, 210);
 		}
 
 		car.setMaxSpeed(6);
