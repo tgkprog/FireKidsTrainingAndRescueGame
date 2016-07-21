@@ -1,5 +1,6 @@
 package com.lh9.feg1.firekidsgame.animated;
 
+
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Car extends Truck {

@@ -25,9 +25,6 @@ import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class TrainingScreenOne implements Screen {
-
-	boolean minigameRunning;
-	boolean afterMinigameWindow;
 	boolean drawTime;
 
 	Bar timeLeftBar;
@@ -38,7 +35,8 @@ public class TrainingScreenOne implements Screen {
 	static final Vector2 yellowSectionUpRightPosition = new Vector2(770, 390);
 
 	boolean[] yellowButtons;
-
+	boolean minigameRunning;
+	boolean afterMinigameWindow;
 	float minigameTimeLeft = 3;
 	int minigameCounter = 10;
 
@@ -537,7 +535,6 @@ public class TrainingScreenOne implements Screen {
 			girlHead.render(batch, delta);
 			boyHead.render(batch, delta);
 			handwheel.render(batch, delta);
-			// batch.draw(assetsManager.glass,0,0);
 			batch.draw(assetsManager.truckFront[4], 1275, 0);
 			glassSprite.draw(batch);
 			batch.setColor(1, 1, 1, 1);

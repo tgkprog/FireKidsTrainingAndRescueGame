@@ -10,6 +10,7 @@ public class Human extends Animated {
 	boolean animationOnly;
 	boolean left;
 	int counter;
+	boolean lastSideLeft;
 
 	public void render(SpriteBatch batch, float delta) {
 
@@ -17,7 +18,7 @@ public class Human extends Animated {
 
 		if (stateTime / animationTime > frameNumber)
 			stateTime = 0;
-			
+
 		if (this.fromTextureRegion == true) {
 			currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x, y);
@@ -38,7 +39,7 @@ public class Human extends Animated {
 		else if (stateTime > animationTime && speed > 1.5f) {
 			batch.setColor(1, 1, 1, 0.3f);
 			batch.draw(
-					frames[(int) ((stateTime/ animationTime)- animationTime )],
+					frames[(int) ((stateTime / animationTime) - animationTime)],
 					x, y);
 			batch.setColor(1, 1, 1, 1f);
 		}
@@ -96,6 +97,18 @@ public class Human extends Animated {
 		counter++;
 	}
 
+	public void moveReverse() {
+		if (speed > -maxSpeed)
+			speed -= 0.5f;
+		else
+			speed -= (1 / speed);
+
+		if (speed < -maxSpeed - 5)
+			speed = -maxSpeed - 5;
+
+		counter++;
+	}
+
 	public void setSpeed(float s) {
 		speed = s;
 	}
@@ -111,6 +124,12 @@ public class Human extends Animated {
 
 		if (speed > 0)
 			speed -= delta;
+		if (speed < 0)
+			speed += delta;
+
+		if (Math.abs(speed) < 0.01f) {
+			speed = 0;
+		}
 		// if (speed < 0)
 		// speed = 0;
 

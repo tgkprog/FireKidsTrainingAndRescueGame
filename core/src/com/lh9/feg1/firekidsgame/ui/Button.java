@@ -34,6 +34,7 @@ public class Button {
 	}
 
 	public void render(SpriteBatch batch, float delta) {
+	
 		updateTimers(delta);
 		if (alpha != 0) {
 			if (alpha != image.getColor().a)

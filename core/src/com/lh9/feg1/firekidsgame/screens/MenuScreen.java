@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
+import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
@@ -15,6 +16,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class MenuScreen implements Screen {
 
+	Human boy;
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -24,6 +26,9 @@ public class MenuScreen implements Screen {
 	InputInterpreter inputInterpreter;
 	Button meetTheTrucks;
 	Button fireStation;
+	Button settings;
+	Button authors;
+
 	Button[] levelButtons;
 
 	boolean madeShakeScreen;
@@ -42,7 +47,11 @@ public class MenuScreen implements Screen {
 		variables = new Variables();
 
 		fireStation = new Button(700, 100, assetsManager.fireStation);
+		settings = new Button(5, 100, assetsManager.settings);
+		authors = new Button(65, 105, assetsManager.settings);
 		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
+		settings.goUp(360);
+		authors.goUp(405);
 
 		levelButtons = new Button[7];
 
@@ -82,22 +91,23 @@ public class MenuScreen implements Screen {
 
 		fireStation.goUp(825);
 
-		camera.position.x = 888;
-		camera.position.y = 525;
-		camera.zoom = 2.17f;
+		camera.reset();
+		camera.position.x = 957;
+		camera.position.y = 575;
+		camera.zoom = 2.39f;
+		camera.zoom(2.39f, 100);
 
-		camera.zoom(2.17f, 1.3f);
-		camera.moveY(camera.position.y, 10, 10, 100);
-		camera.moveX(camera.position.x, 10, 10, 100);
+		camera.moveX(957, 100, 100, 100);
+		camera.moveY(575, 100, 100, 100);
 
+		boy = new Human();
+		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
+		boy.setMaxSpeed(0);
+		boy.setAnimationOnly(true);
 	}
 
 	@Override
 	public void render(float delta) {
-
-		camera.position.x = 957;
-		camera.position.y = 575;
-		camera.zoom = 2.39f;
 
 		updateLogics(delta);
 
@@ -114,6 +124,7 @@ public class MenuScreen implements Screen {
 		batch.draw(assetsManager.mainBackground[2], 0, 0);
 		batch.draw(assetsManager.mainBackground[3], 960, 0);
 		fireStation.render(batch, (float) delta);
+		drawCharacters(delta);
 		batch.end();
 
 		batch.setProjectionMatrix(guiCamera.combined);
@@ -162,8 +173,11 @@ public class MenuScreen implements Screen {
 
 	}
 
-	void drawButtons(double delta) {
+	void drawButtons(float delta) {
 		meetTheTrucks.render(batch, (float) delta);
+		settings.render(batch, delta);
+		authors.render(batch, delta);
+
 		for (int a = 0; a < 7; a++) {
 			levelButtons[a].render(batch, (float) delta);
 		}
@@ -186,6 +200,18 @@ public class MenuScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
+				.getBigRoadRescueScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new BigRoadRescueScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getRescueMetroScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new RescueMetroScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTrainingScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new TrainingScreenTwo(game));
@@ -204,5 +230,10 @@ public class MenuScreen implements Screen {
 				game.setScreen(new FitnessScreenOne(game));
 			}
 		}
+	}
+
+	void drawCharacters(float delta) {
+		batch.draw(assetsManager.girlMainMenu, 0, 0);
+		boy.render(batch, delta);
 	}
 }

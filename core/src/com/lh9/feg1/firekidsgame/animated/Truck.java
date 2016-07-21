@@ -9,105 +9,143 @@ import com.badlogic.gdx.math.Vector2;
 public class Truck extends Human {
 
 	Sprite wheel;
-
 	int lane = 2;
-
 	boolean[] lanesTaken;
-
 	static final int firstLanePosition = 210;
 	static final int secondLanePosition = 135;
 	static final int animationLanePosition = 80;
-
 	Rectangle truck;
 	Rectangle bounds;
-
 	Vector2 maxPositions;
 	boolean animation;
 	double previousStateTime;
+	boolean allowMovingReverse;
+	Sprite reversedFrame;
 
 	public void bump() {
+
 		if (speed > 0)
 			speed *= -1;
-		if(Math.abs(speed) > 3)
-		{
-			if(speed < 0)
+
+		if (Math.abs(speed) > 3) {
+			if (speed < 0)
 				speed = -3;
-			if(speed > 0)
+			if (speed > 0)
 				speed = 3;
-			
 		}
 	}
 
 	public boolean checkCollision(float x, float y) {
+
 		truck.setPosition(x, y);
 		bounds.setPosition(this.x, this.y);
-
 		if (truck.overlaps(bounds)) {
 			bump();
 			return true;
-		}
-
-		else
+		} else
 			return false;
+
 	}
 
 	public void render(SpriteBatch batch, float delta) {
+
 		if (animation == true && stateTime < animationTime * frameNumber)
 			stateTime += delta * 0.05f;
 
 		if (this.fromTextureRegion == true) {
+
 			if (stateTime != previousStateTime || currentFrame == null)
 				currentFrame = walkAnimation.getKeyFrame(stateTime, true);
-
-			batch.draw(currentFrame, x, y);
+			if (allowMovingReverse == false)
+				batch.draw(currentFrame, x, y);
+			else {
+				reversedFrame = new Sprite(currentFrame);
+				reversedFrame.setPosition(x, y);
+				if (speed < 0)
+					reversedFrame.flip(true, false);
+				reversedFrame.draw(batch);
+			}
 		} else {
-			if (stateTime / animationTime > frameNumber)
-				stateTime = animationTime * frameNumber - animationTime*0.5f;
 
-			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
+			if (stateTime / animationTime > frameNumber)
+				stateTime = animationTime * frameNumber - animationTime * 0.5f;
+
+			if (allowMovingReverse == false)
+				batch.draw(frames[(int) (stateTime / animationTime)], x, y);
+			else {
+				reversedFrame = new Sprite(
+						frames[(int) (stateTime / animationTime)]);
+				reversedFrame.setPosition(x, y);
+				if (speed < 0)
+					reversedFrame.flip(true, false);
+				reversedFrame.draw(batch);
+			}
+
 		}
+
 		batch.setColor(1, 1, 1, 1);
-		wheel.setPosition(x + 85, y + 10);
-		wheel.draw(batch);
-		wheel.setPosition(x + 380, y + 10);
-		wheel.draw(batch);
-		wheel.setPosition(x + 770, y + 10);
-		wheel.draw(batch);
-		wheel.rotate(delta * 70 * speed);
+
+		if (allowMovingReverse == false) {
+			wheel.setPosition(x + 85, y + 10);
+			wheel.draw(batch);
+			wheel.setPosition(x + 380, y + 10);
+			wheel.draw(batch);
+			wheel.setPosition(x + 770, y + 10);
+			wheel.draw(batch);
+			wheel.rotate(delta * 70 * speed);
+		} else {
+			if (speed < 0) {
+				wheel.setPosition(x + 60, y + 10);
+				wheel.draw(batch);
+				wheel.setPosition(x + 445, y + 10);
+				wheel.draw(batch);
+				wheel.setPosition(x + 740, y + 10);
+				wheel.draw(batch);
+				wheel.rotate(delta * 70 * speed);
+			} else if (speed >= 0) {
+				wheel.setPosition(x + 85, y + 10);
+				wheel.draw(batch);
+				wheel.setPosition(x + 380, y + 10);
+				wheel.draw(batch);
+				wheel.setPosition(x + 770, y + 10);
+				wheel.draw(batch);
+				wheel.rotate(delta * 70 * speed);
+			}
+		}
 
 		if (x < maxPositions.x) {
 			speed = 0;
 			x = (int) maxPositions.x;
 		}
+
 		if (x > maxPositions.y) {
 			x = (int) maxPositions.y;
 			speed = 0;
 		}
+
 		updateSpeed(delta);
 		manageLanes(delta);
 		previousStateTime = stateTime;
 	}
 
 	public void loadWheel(Texture wheel) {
+
 		y = 135;
 		this.wheel = new Sprite(wheel);
 		this.wheel.setScale(2f);
 		stateTime = 0;
 		lanesTaken = new boolean[3];
-
 		truck = new Rectangle();
 		truck.setSize(864, 1);
 		bounds = new Rectangle();
 
 		if (this.fromTextureRegion == true)
 			bounds.setSize(this.walkAnimation.getKeyFrame(stateTime, true)
-					.getTexture().getWidth(),
-					1);
+					.getTexture().getWidth(), 1);
 		else
-			bounds.setSize(this.frames[0].getWidth(),
-					1);
-
+			bounds.setSize(this.frames[0].getWidth(), 1);
 		bounds.setPosition(x, y);
+
 	}
 
 	public void setMaxPositions(int x1, int x2) {
@@ -135,6 +173,10 @@ public class Truck extends Human {
 		lane = 0;
 	}
 
+	public void setAllowReverse(boolean allowMovingReverse) {
+		this.allowMovingReverse = allowMovingReverse;
+	}
+
 	void manageLanes(float delta) {
 
 		if (y == animationLanePosition) {
@@ -142,16 +184,19 @@ public class Truck extends Human {
 			lanesTaken[1] = false;
 			lanesTaken[2] = false;
 		}
+
 		if (y == firstLanePosition) {
 			lanesTaken[0] = false;
 			lanesTaken[1] = true;
 			lanesTaken[2] = false;
 		}
+
 		if (y == secondLanePosition) {
 			lanesTaken[0] = false;
 			lanesTaken[1] = false;
 			lanesTaken[2] = true;
 		}
+
 		if (y > secondLanePosition && y < firstLanePosition) {
 			lanesTaken[0] = false;
 			lanesTaken[1] = true;
@@ -166,7 +211,6 @@ public class Truck extends Human {
 		}
 
 		if (speed > 1) {
-
 			if (lane == 1) {
 				if (y < firstLanePosition) {
 					y += delta * 50 * speed;
@@ -174,6 +218,7 @@ public class Truck extends Human {
 				if (y > firstLanePosition)
 					y = firstLanePosition;
 			}
+
 			if (lane == 2) {
 				if (y > secondLanePosition) {
 					y -= delta * 50 * speed;
@@ -182,5 +227,8 @@ public class Truck extends Human {
 					y = secondLanePosition;
 			}
 		}
+	}
+	public boolean getAllowMovingReverse(){
+		return allowMovingReverse;
 	}
 }

@@ -28,9 +28,11 @@ public class Arrow {
 	}
 
 	public void render(SpriteBatch batch, float delta) {
-		arrow.setRotation((float) rotation);
-		arrow.draw(batch);
-		updateRotation(delta);
+		if (arrow.getColor().a != 0) {
+			arrow.setRotation((float) rotation);
+			arrow.draw(batch);
+			updateRotation(delta);
+		}
 	}
 
 	void updateRotation(float delta) {
@@ -57,7 +59,7 @@ public class Arrow {
 			}
 
 		}
-		
+
 	}
 
 	public void setAlpha(float alpha) {

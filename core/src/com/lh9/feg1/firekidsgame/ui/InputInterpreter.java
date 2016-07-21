@@ -34,6 +34,7 @@ public class InputInterpreter implements GestureListener {
 	Button meetTheTrucks;
 	Button levelButtons[];
 	Button runButton;
+	Button runButtonSecond;
 	Button yellowSectionMiddle;
 	Button yellowSectionLeft;
 	Button yellowSectionUpLeft;
@@ -294,6 +295,27 @@ public class InputInterpreter implements GestureListener {
 						camera.zoom(0.98f, 1);
 					}
 				}
+
+			if (runButtonSecond != null)
+				if (runButtonSecond.checkCollision((int) x, (int) y) == true) {
+					runButtonSecond.blink();
+					controlledHuman.moveReverse();
+
+					if (camera.zoom == 3.0f)
+						camera.zoom(2.96f, 3);
+					if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+						camera.zoom(3.0f, 3);
+
+					if (camera.zoom == 0.98f)
+						camera.zoom(0.96f, 1);
+					if (camera.zoom <= 0.96f)
+						camera.zoom(0.98f, 1);
+
+					if (runButtonSecond.dontRespond == true) {
+						camera.zoom(0.98f, 1);
+					}
+				}
+
 			if (pause != null)
 				if (pause.checkCollision((int) x, (int) y) == true) {
 					pause.blink();
@@ -323,6 +345,14 @@ public class InputInterpreter implements GestureListener {
 
 						if (a == 2) {
 							selectedScreen = variables.getTrainingScreenTwo();
+							cloudManager.start();
+						}
+						if (a == 4) {
+							selectedScreen = variables.getRescueMetroScreen();
+							cloudManager.start();
+						}
+						if (a == 6) {
+							selectedScreen = variables.getBigRoadRescueScreen();
 							cloudManager.start();
 						}
 					}
@@ -381,7 +411,9 @@ public class InputInterpreter implements GestureListener {
 	public void setRunButton(Button runButton) {
 		this.runButton = runButton;
 	}
-
+	public void setRunButtonSecond(Button runButtonSecond) {
+		this.runButtonSecond = runButtonSecond;
+	}
 	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
 	}

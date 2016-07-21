@@ -24,6 +24,7 @@ public class Lane {
 	}
 
 	public void render(SpriteBatch batch, float delta) {
+		if(lane.getColor().a != 0)
 		lane.draw(batch);
 		updateTimers(delta);
 	}

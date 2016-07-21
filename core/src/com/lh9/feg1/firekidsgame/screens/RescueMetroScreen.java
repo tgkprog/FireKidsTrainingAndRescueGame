@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
@@ -17,19 +16,18 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
-public class FitnessScreenTwo implements Screen {
-
-	Sprite windowCounter;
+public class RescueMetroScreen implements Screen {
 
 	double timerSpeedGirl;
+
+	Bar speedBar;
 
 	Human boy;
 	Human girl;
 
 	Button pause;
 	Button runButton;
-	Bar boyBar;
-	Bar girlBar;
+
 	Dialogue dialogueWindow;
 
 	CloudManager cloudManager;
@@ -47,7 +45,7 @@ public class FitnessScreenTwo implements Screen {
 
 	final Starter game;
 
-	public FitnessScreenTwo(final Starter gam) {
+	public RescueMetroScreen(final Starter gam) {
 
 		this.game = gam;
 
@@ -74,51 +72,36 @@ public class FitnessScreenTwo implements Screen {
 		inputInterpreter.setRunButton(runButton);
 		cloudManager.stop();
 
+		camera.zoom = 1.95f;
+		camera.position.x = 800;
+		camera.position.y  = 480;
 
-		camera.reset();
-
-		camera.zoom = 3.0f;
-		camera.position.x = 1275;
-		camera.position.y = 720;
-
-		camera.zoom(3.0f, 100);
-		camera.moveX(1275, 100, 100, 100);
-		camera.moveY(720, 100, 100, 100);
+		camera.moveX(800, 0, 0, 100);
+		camera.moveY(480, 0, 0, 100);
+		camera.zoom(1.95f, 100f);
 		
 		dialogueWindow.popUp();
 
 		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
+		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
 
 		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
-
-		boy.setMaxSpeed(4f);
-		girl.setMaxSpeed(4f);
-
-		boy.setAnimationOnly(true);
-		girl.setAnimationOnly(true);
+		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
 
 		inputInterpreter.setControlledHuman(boy);
 
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
-		windowCounter = new Sprite(assetsManager.longButton);
-		windowCounter.setScale(0);
-
-		boyBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				340, 430, 60);
-		girlBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				10, 430, 60);
-		boyBar.setVisibility(true);
-		girlBar.setVisibility(true);
-
+		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				260, 10, 8);
+		speedBar.setVisibility(true);
 	}
 
 	@Override
 	public void render(float delta) {
 
+		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -131,12 +114,12 @@ public class FitnessScreenTwo implements Screen {
 		batch.begin();
 		drawBackground();
 		drawCharacters(delta);
+		drawPointer(delta);
 		batch.end();
-
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		drawParticles(delta);
-		drawCounters(delta);
+		drawBar(delta);
 		drawButtons(delta);
 		drawWindows(delta);
 		cloudManager.render(batch, delta);
@@ -190,31 +173,39 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void drawWindows(double delta) {
-
 		dialogueWindow.draw(batch, delta);
 	}
 
 	void updateLogics(double delta) {
+
+		if (boy.getSpeed() < 0)
+			boy.setSpeed(0);
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
+			girl.setSpeed(4f);
 		}
-		if (boy.getCounter() == 60 && finish == false) {
+		if (boy.getX() > 4000 && finish == false) {
+
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
 			assetsManager.stars.start();
 		}
-		if (girl.getCounter() == 60 && finish == false) {
+		if (girl.getX() > 4000 && finish == false) {
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
 		}
-		if (finish == true) {
+		if (girl.getX() > 4000) {
 			girl.setSpeed(0);
+
+			speedBar.setVisibility(false);
+		}
+		if (boy.getX() > 4000) {
 			boy.setSpeed(0);
-			boyBar.setVisibility(false);
-			girlBar.setVisibility(false);	
+			speedBar.setVisibility(false);
 		}
 		if (finish == true && dialogueWindow.isVisibile() == false
 				&& exit == false) {
@@ -222,32 +213,31 @@ public class FitnessScreenTwo implements Screen {
 			exit = true;
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setScreen(new FitnessScreenThree(game));
+			game.setScreen(new FitnessScreenTwo(game));
 		}
+
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
 
 	}
 
 	void updateCameraLogics(double delta) {
+	
 	}
 
 	void drawBackground() {
-		batch.draw(assetsManager.fitnessBackground[0], 0, 765);
-		batch.draw(assetsManager.fitnessBackground[1], 1275, 765);
-		batch.draw(assetsManager.fitnessBackground[2], 0, 0);
-		batch.draw(assetsManager.fitnessBackground[3], 1275, 0);
+			batch.draw(assetsManager.rescueMetro[0], 0, 0);
+			batch.draw(assetsManager.rescueMetro[1], 797, 0);	
 	}
 
 	void updateGirlAction(double delta) {
-		if (girl.getCounter() < boy.getCounter() - 3)
+		if (girl.getX() < boy.getX() - 100)
 			timerSpeedGirl += delta * 10;
 		if (firstDialogueClicked == true)
 			timerSpeedGirl += delta;
-		if (timerSpeedGirl > 0.18) {
+		if (timerSpeedGirl > 0.4) {
 			timerSpeedGirl = 0;
-			if (firstDialogueClicked == true && finish == false)
-				girl.move();
+			girl.move();
 		}
 	}
 
@@ -257,13 +247,28 @@ public class FitnessScreenTwo implements Screen {
 
 		assetsManager.leaf.update(delta);
 		assetsManager.leaf.draw(batch);
+
+		if (boy.getSpeed() > 7) {
+			// assetsManager.leaf.setPosition(boy.getX(),0);
+			// assetsManager.leaf.start();
+			// Particle effect not finished
+		}
 	}
 
 	void drawParticlesNonGui(float delta) {
 	}
 
-	void drawCounters(float delta) {
-		boyBar.render(batch, delta, boy.getCounter());
-		girlBar.render(batch, delta, girl.getCounter());
+	void drawPointer(float delta) {
+		if (boy.getX() >= girl.getX())
+			batch.draw(assetsManager.pointer, boy.getX() + 25, 180);
+		if (girl.getX() > boy.getX())
+			batch.draw(assetsManager.pointer, girl.getX() + 25, 180);
+	}
+
+	void drawBar(float delta) {
+		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.boyHead, 165 + boy.getX() * 0.1f, 435);
+		batch.draw(assetsManager.girlHead, 165 + girl.getX() * 0.1f, 435);
+		speedBar.render(batch, delta, boy.getSpeed());
 	}
 }

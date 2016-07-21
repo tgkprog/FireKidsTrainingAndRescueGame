@@ -13,33 +13,49 @@ public class StaticAnimation extends Animated {
 	Vector2 scale = new Vector2(1, 1);
 	Sprite frameSprite;
 
-	Vector3 color = new Vector3(1,1,1);
-	
+	Vector3 color = new Vector3(1, 1, 1);
+
 	public void render(SpriteBatch batch, float delta) {
 
-		if (start == true) {
-			if (continous == true)
-				stateTime += delta;
-			else if (stateTime < animationTime * frameNumber) {
-				stateTime += delta;
-				if (stateTime > animationTime * frameNumber)
-					stateTime = animationTime * frameNumber;
+		if (this.fromTextureRegion == true) {
+			if (start == true) {
+				if (continous == true)
+					stateTime += delta;
+				else if (stateTime < animationTime * frameNumber) {
+					stateTime += delta;
+					if (stateTime > animationTime * frameNumber)
+						stateTime = animationTime * frameNumber;
+				}
 			}
-		}
-		
-		frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime, true));
-		frameSprite.setPosition(x, y);
-		frameSprite.setColor(color.x, color.y, color.z, 1);
-		frameSprite.setScale(scale.x, scale.y);
-		frameSprite.draw(batch);
-		
-		if (withPreviousFrame == true && stateTime > animationTime) {
-			frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime
-					- animationTime, true));
-			frameSprite.setColor(color.x, color.y, color.z, 0.5f);
+
+			frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime, true));
 			frameSprite.setPosition(x, y);
+			frameSprite.setColor(color.x, color.y, color.z, 1);
 			frameSprite.setScale(scale.x, scale.y);
 			frameSprite.draw(batch);
+
+			if (withPreviousFrame == true && stateTime > animationTime) {
+				frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime
+						- animationTime, true));
+				frameSprite.setColor(color.x, color.y, color.z, 0.5f);
+				frameSprite.setPosition(x, y);
+				frameSprite.setScale(scale.x, scale.y);
+				frameSprite.draw(batch);
+			}
+		} else {
+
+			stateTime += delta;
+
+			if (continous == true) {
+				if (stateTime / animationTime > frameNumber)
+					stateTime = animationTime * frameNumber - animationTime
+							* 0.5f;
+			} else if (stateTime > frameNumber * animationTime)
+				stateTime = 0;
+
+			System.out.println(stateTime);
+			
+			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
 		}
 	}
 
@@ -63,21 +79,21 @@ public class StaticAnimation extends Animated {
 	public void setScale(Vector2 scale) {
 		this.scale = scale;
 	}
-	
-	public float getX(){
+
+	public float getX() {
 		return x;
 	}
 
-	public float getY(){
+	public float getY() {
 		return y;
 	}
 
 	public void normal() {
-			color = new Vector3(1, 1, 1);
+		color = new Vector3(1, 1, 1);
 	}
 
 	public void red() {
 		color = new Vector3(1, 0, 0);
-			}
+	}
 
 }

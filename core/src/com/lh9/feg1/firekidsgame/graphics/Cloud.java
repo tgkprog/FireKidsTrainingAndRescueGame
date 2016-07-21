@@ -26,6 +26,7 @@ public class Cloud {
 	public void draw(SpriteBatch batch, double delta) {
 		updateTimers(delta);
 		cloudSprite.setScale((float) scale);
+		if(cloudSprite.getScaleX() > 0f)
 		cloudSprite.draw(batch);
 	}
 

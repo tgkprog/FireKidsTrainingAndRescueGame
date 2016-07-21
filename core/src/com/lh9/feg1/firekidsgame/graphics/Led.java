@@ -18,6 +18,7 @@ public class Led {
 	}
 
 	public void render(SpriteBatch batch, float delta) {
+		if(led.getColor().a != 0)
 		led.draw(batch);
 		timer += delta;
 		if (normal == true)
