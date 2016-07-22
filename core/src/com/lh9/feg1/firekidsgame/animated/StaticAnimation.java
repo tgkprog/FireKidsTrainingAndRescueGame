@@ -53,8 +53,6 @@ public class StaticAnimation extends Animated {
 			} else if (stateTime > frameNumber * animationTime)
 				stateTime = 0;
 
-			System.out.println(stateTime);
-			
 			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
 		}
 	}

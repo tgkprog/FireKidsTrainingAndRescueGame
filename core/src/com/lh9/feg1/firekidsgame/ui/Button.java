@@ -18,6 +18,7 @@ public class Button {
 	float multiplier = 3;
 	boolean selected = false;
 	float alpha = 1;
+	int counter = 0;
 	Sprite image;
 	Rectangle mouse;
 	Rectangle bounds;
@@ -140,9 +141,16 @@ public class Button {
 	}
 
 	public void blink() {
+		counter++;
 		blinking = true;
 	}
-
+	public void resetCounter(){
+		counter =0 ;
+	}
+	public int getCounter(){
+		return counter;
+	}
+	
 	public void reverseSelection() {
 		selected = !selected;
 	}

@@ -10,21 +10,27 @@ public class Human extends Animated {
 	boolean animationOnly;
 	boolean left;
 	int counter;
-	boolean lastSideLeft;
+
+	boolean onceOnly;
 
 	public void render(SpriteBatch batch, float delta) {
 
-		stateTime += delta * speed * 0.1f;
+		if (onceOnly == false) {
+			stateTime += delta * speed * 0.1f;
+			if (stateTime / animationTime > frameNumber)
+				stateTime = 0;
 
-		if (stateTime / animationTime > frameNumber)
-			stateTime = 0;
+		} else {
+			stateTime += delta * speed * 0.1f;
+			if (stateTime / animationTime > frameNumber)
+				stateTime = animationTime*frameNumber - animationTime;
+		}
 
 		if (this.fromTextureRegion == true) {
 			currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x, y);
 		} else {
 			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
-
 		}
 		if (this.fromTextureRegion == true) {
 			if (stateTime > animationTime && speed > 1.5f) {
@@ -165,5 +171,19 @@ public class Human extends Animated {
 
 	public void goRight() {
 		left = false;
+	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
+
+	public void resetStateTime() {
+		stateTime = 0;
+		speed =0 ;
+	}
+
+	public void setOnceOnly() {
+		onceOnly = true;
 	}
 }

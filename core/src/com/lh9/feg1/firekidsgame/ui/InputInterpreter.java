@@ -9,9 +9,9 @@ import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
-import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.utils.Variables;
+import com.lh9.feg1.firekidsgame.windows.Dialogue;
 
 public class InputInterpreter implements GestureListener {
 
@@ -39,7 +39,8 @@ public class InputInterpreter implements GestureListener {
 	Button yellowSectionLeft;
 	Button yellowSectionUpLeft;
 	Button yellowSectionUpRight;
-
+	Button eclipseFire;
+	
 	Variables variables = new Variables();
 
 	boolean wasPannedBefore;
@@ -124,6 +125,18 @@ public class InputInterpreter implements GestureListener {
 		manageButtonsCollisions(vec.x, vec.y);
 		manageDialogues(x, y);
 
+
+		vec = new Vector3();
+		vec.x = x;
+		vec.y = y;
+		camera.unproject(vec);
+		
+		if(eclipseFire != null)
+		if (eclipseFire.checkCollision((int) vec.x, (int) vec.y) == true) {
+			eclipseFire.blink();
+		}
+		
+		
 		return false;
 	}
 
@@ -410,6 +423,9 @@ public class InputInterpreter implements GestureListener {
 
 	public void setRunButton(Button runButton) {
 		this.runButton = runButton;
+	}
+	public void setEclipseFire(Button eclipseFire) {
+		this.eclipseFire = eclipseFire;
 	}
 	public void setRunButtonSecond(Button runButtonSecond) {
 		this.runButtonSecond = runButtonSecond;

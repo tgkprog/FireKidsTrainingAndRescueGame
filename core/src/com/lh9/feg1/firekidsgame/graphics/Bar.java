@@ -56,4 +56,9 @@ public class Bar {
 	public void setVisibility(boolean visibility) {
 		this.visibility = visibility;
 	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+	}
 }

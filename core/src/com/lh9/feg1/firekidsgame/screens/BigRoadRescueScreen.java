@@ -7,23 +7,39 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Car;
+import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.StaticAnimation;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
-import com.lh9.feg1.firekidsgame.files.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
+import com.lh9.feg1.firekidsgame.windows.Dialogue;
 
 public class BigRoadRescueScreen implements Screen {
+
+	double waterTimer;
+
+	Human girlHose;
+	Human girlHoseReversed;
+
+	double girlTimer;
+
+	Sprite fireMiniature;
+
+	int fireCounter;
+
+	float fireScale;
+	float delayFire;
 
 	int randomFire;
 	boolean minigameRunning;
@@ -32,6 +48,7 @@ public class BigRoadRescueScreen implements Screen {
 	int minigameCounter = 10;
 
 	Bar speedBar;
+	Bar fireBar;
 	Vector2[][] firePositions;
 	Vector2[] fireRange;
 
@@ -52,8 +69,8 @@ public class BigRoadRescueScreen implements Screen {
 	Button pause;
 	Button runLeft;
 	Button runRight;
+	Button eclipseFire;
 
-	ParticleEffect[] smoke;
 	ParticleEffect[] fireSmoke;
 
 	Dialogue dialogueWindow;
@@ -78,11 +95,11 @@ public class BigRoadRescueScreen implements Screen {
 		firePositions = new Vector2[6][6];
 		fireRange = new Vector2[6];
 
-		for(int a = 0;a< 6;a++){
-			for(int b =0;b<6;b++)
-			firePositions[a][b] = new Vector2();
+		for (int a = 0; a < 6; a++) {
+			for (int b = 0; b < 6; b++)
+				firePositions[a][b] = new Vector2();
 		}
-		
+
 		firePositions[0][0].add(-14000, 720);
 		firePositions[0][1].add(-13760, 620);
 		firePositions[0][2].add(-13960, 520);
@@ -129,7 +146,7 @@ public class BigRoadRescueScreen implements Screen {
 		firePositions[5][3].add(700, 400);
 		firePositions[5][4].add(600, 490);
 		firePositions[5][5].add(500, 660);
-		fireRange[5] = new Vector2(-200, -800);
+		fireRange[5] = new Vector2(200, 800);
 		// Between 200,800
 
 		this.game = gam;
@@ -152,9 +169,12 @@ public class BigRoadRescueScreen implements Screen {
 		runRight.goUp(30);
 		runLeft = new Button(35, -200, assetsManager.runButtonLittle);
 		runLeft.goUp(30);
+		eclipseFire = new Button(350, -200, assetsManager.runButton);
+		eclipseFire.goUp(650);
 
 		runLeft.setAlpha(0.5f);
 		runRight.setAlpha(0.5f);
+		eclipseFire.setAlpha(0f);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -187,9 +207,9 @@ public class BigRoadRescueScreen implements Screen {
 
 		truck = new Truck();
 
-		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
+		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 135);
 		truck.setMaxSpeed(20);
-		truck.setMaxPositions(-14350, 1550);
+		truck.setMaxPositions(-14900, 1550);
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
 
@@ -206,21 +226,27 @@ public class BigRoadRescueScreen implements Screen {
 		inputInterpreter.loadUp(up);
 		inputInterpreter.setControlledTruck(truck);
 
-		smoke = new ParticleEffect[8];
-		for (int a = 0; a < 8; a++) {
-			smoke[a] = new ParticleEffect();
-			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
-					Gdx.files.internal("particles/"));
-		}
-
 		fireSmoke = new ParticleEffect[6];
 		for (int a = 0; a < 6; a++) {
 			fireSmoke[a] = new ParticleEffect();
 			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
 					Gdx.files.internal("particles/"));
 			fireSmoke[a].start();
-
 		}
+
+		girlHose = new Human();
+		girlHose.create(assetsManager.hoseAnimation, 1, 1, 15, 10, 10);
+		girlHose.setAnimationOnly(true);
+		girlHose.setMaxSpeed(2);
+		girlHose.setOnceOnly();
+
+		girlHoseReversed = new Human();
+		girlHoseReversed.create(assetsManager.hoseAnimationReversed, 1, 1, 15,
+				10, 10);
+		girlHoseReversed.setAnimationOnly(true);
+		girlHoseReversed.setMaxSpeed(2);
+		girlHoseReversed.setOnceOnly();
+
 		fire = new ArrayList<StaticAnimation>();
 
 		for (int a = 0; a < 6; a++) {
@@ -257,21 +283,27 @@ public class BigRoadRescueScreen implements Screen {
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 20);
-		speedBar.setVisibility(true);
+
+		fireBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				260, 10, 20);
+		fireBar.setVisibility(true);
 
 		truck.setAllowReverse(true);
+
+		fireMiniature = new Sprite(assetsManager.fireMiniature);
+		fireMiniature.setScale(0);
+
+		inputInterpreter.setEclipseFire(eclipseFire);
+
 		randomizeMinigame();
-		
+
+		assetsManager.water.getEmitters().get(0).setContinuous(false);
+		assetsManager.water.start();
 	}
 
 	@Override
 	public void render(float delta) {
-		
-		for(int a =0;a<6;a++){
-			fireSmoke[a].getEmitters().get(0).setContinuous(false);
-			fire.get(a).setScale(new Vector2(0.5f,0.5f));
-		}
-		
+
 		checkCarsCollisions();
 		updateLogics(delta);
 
@@ -286,6 +318,8 @@ public class BigRoadRescueScreen implements Screen {
 		drawBackground(delta);
 		drawCharacters(delta);
 		drawParticles(delta);
+		eclipseFire.render(batch, delta);
+		fireBar.render(batch, delta, 20 - eclipseFire.getCounter());
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
@@ -334,7 +368,59 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
+
+		if (truck.getSpeed() >= 0) {
+			girlHose.setPosition((int) truck.getX() + 300,
+					(int) truck.getY() + 250);
+			girlHoseReversed.setPosition((int) truck.getX() + 300,
+					(int) truck.getY() + 250);
+			assetsManager.water.setPosition((int) truck.getX() + 385,
+					(int) truck.getY() + 390);
+		} else {
+			girlHose.setPosition((int) truck.getX() + 470,
+					(int) truck.getY() + 250);
+			girlHoseReversed.setPosition((int) truck.getX() + 470,
+					(int) truck.getY() + 250);
+			assetsManager.water.setPosition((int) truck.getX() + 385,
+					(int) truck.getY() + 390);
+		}
+		
+		if (waterTimer == 1) {
+		assetsManager.water.getEmitters().get(0).setContinuous(true);
+		} 
+		if(waterTimer < 1 || minigameRunning == false || fireScale < 1){
+			assetsManager.water.getEmitters().get(0).setContinuous(false);
+		}
+
+		if (truck.getX() > fireRange[randomFire].x - 120
+				&& truck.getX() < fireRange[randomFire].x - 110) {
+			
+
+			if (waterTimer < 1)
+				waterTimer += delta;
+			if (waterTimer > 1)
+				waterTimer = 1;
+
+			if (fireScale == 1) {
+				girlHose.render(batch, delta);
+				girlHoseReversed.resetStateTime();
+			} else if (fireScale >= 0) {
+				girlHoseReversed.render(batch, delta);
+				girlHose.resetStateTime();
+				girlHoseReversed.setSpeed(2);
+			}
+		} else {
+			if (waterTimer > 0)
+				waterTimer -= delta;
+			if (waterTimer < 0)
+				waterTimer = 0;
+			
+			girlHose.render(batch, delta);
+			girlHose.resetStateTime();
+		}
+
 		truck.render(batch, delta);
+
 	}
 
 	void checkCarsCollisions() {
@@ -351,8 +437,8 @@ public class BigRoadRescueScreen implements Screen {
 		pause.render(batch, delta);
 		runRight.render(batch, delta);
 		runLeft.render(batch, delta);
-		up.render(batch, delta);
-		down.render(batch, delta);
+		// up.render(batch, delta);
+		// down.render(batch, delta);
 	}
 
 	void drawWindows(double delta) {
@@ -360,9 +446,15 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void updateLogics(float delta) {
-	
+
+		if(Math.abs(truck.getSpeed()) > 0)
+			speedBar.setVisibility(true);
+		else
+			speedBar.setVisibility(false);
+			
+		randomizeMinigame();
 		manageFire(delta);
-		
+
 		if (cloudManager.getAllScalesEqualOne() == true
 				&& lastWindowPopUp == true)
 			game.setScreen(new MenuScreen(game));
@@ -403,10 +495,8 @@ public class BigRoadRescueScreen implements Screen {
 			runLeft.setDontRespond(false);
 			runRight.setDontRespond(false);
 			pause.setDontRespond(false);
-			up.setDontRespond(false);
-			down.setDontRespond(false);
-			randomizeMinigame();
-			
+			// up.setDontRespond(false);
+			// down.setDontRespond(false);
 		}
 		updateCameraLogics(delta);
 
@@ -479,11 +569,26 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void drawBar(float delta) {
+		
+//		fireMiniature.setScale(0.42f);
+	
+//		batch.draw(assetsManager.fireBar,10,250);
+//		for(int a=0;a<minigameCounter;a++){
+//			fireMiniature.setPosition(3,412 - a*18);
+//			fireMiniature.draw(batch);
+//		}
+		
+		
 		batch.draw(assetsManager.speedBar, 160, 440);
-		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0255f, 435);
-		batch.draw(assetsManager.girlHead,530 + (fireRange[randomFire].x + fireRange[randomFire].y)/2 * 0.0255f, 435);
+		fireMiniature
+				.setPosition(
+						530 + (fireRange[randomFire].x + fireRange[randomFire].y) / 2 * 0.0255f,
+						435);
+		fireMiniature.setScale(fireScale * 0.8f);
+		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
-
+		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0255f, 435);
+		
 	}
 
 	void drawParticles(float delta) {
@@ -500,6 +605,7 @@ public class BigRoadRescueScreen implements Screen {
 						truck.getY() + 20);
 
 		}
+		assetsManager.water.draw(batch, delta);
 	}
 
 	void spawnRandomCar(int a) {
@@ -551,14 +657,27 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void randomizeMinigame() {
-		if (minigameRunning == false && minigameCounter > 0) {
+		if (minigameRunning == false && minigameCounter > 1 && delayFire == 0) {
+			eclipseFire.setDontRespond(true);
+			fireCounter = 20;
+			eclipseFire.resetCounter();
 			minigameCounter--;
 			minigameRunning = true;
-
 			if (minigameCounter != 0) {
-				randomFire = MathUtils.random(0, 5);
+				int tempRandom = MathUtils.random(0, 5);
+				while (tempRandom == randomFire) {
+					tempRandom = MathUtils.random(0, 5);
+				}
+				randomFire = tempRandom;
 			}
-
+			for (int a = 0; a < fire.size(); a++) {
+				fireSmoke[a].getEmitters().get(0).start();
+				fireSmoke[a].setPosition((int) firePositions[randomFire][a].x,
+						(int) firePositions[randomFire][a].y);
+				fire.get(a).setPosition((int) firePositions[randomFire][a].x,
+						(int) firePositions[randomFire][a].y);
+			}
+			fireBar.setVisibility(true);
 			if (minigameCounter == 0) {
 				if (minigameCounter == 0 && afterMinigameWindow == false) {
 					dialogueWindow.popUp();
@@ -570,11 +689,81 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void manageFire(float delta) {
-		if (minigameRunning == true)
-			for (int a = 0; a < fire.size(); a++) {
-				fire.get(a).setPosition((int) firePositions[randomFire][a].x,
-						(int) firePositions[randomFire][a].y);
-			}
-	}
 
+		eclipseFire.setAlpha(fireScale * 1f);
+		fireBar.setPosition(
+				(int) ((fireRange[randomFire].x + fireRange[randomFire].y) / 2) - 75,
+				830);
+		eclipseFire.setPosition(
+				(int) (fireRange[randomFire].x + fireRange[randomFire].y) / 2,
+				650);
+
+		for (int a = 0; a < fire.size(); a++) {
+			if (minigameRunning == false)
+				fireSmoke[a].getEmitters().get(0).setContinuous(false);
+			else
+				fireSmoke[a].getEmitters().get(0).setContinuous(true);
+
+			fire.get(a).setScale(new Vector2(fireScale, fireScale));
+		}
+
+		if (minigameRunning == true) {
+
+			if (eclipseFire.getCounter() == 20) {
+				minigameRunning = false;
+				fireBar.setVisibility(false);
+			}
+
+			if (truck.getX() > fireRange[randomFire].x - 300
+					&& truck.getX() < fireRange[randomFire].y + 300) {
+				truck.animationLane();
+			}
+			if (truck.getX() > fireRange[randomFire].x - 120
+					&& truck.getX() < fireRange[randomFire].x - 110) {
+				truck.setSpeed(0);
+				girlTimer += delta;
+				if (girlTimer > 0.1f) {
+					girlTimer = 0;
+					if (fireScale == 1) {
+						girlHose.move();
+					} else if (fireScale > 0) {
+
+						girlHoseReversed.move();
+						girlHoseReversed.setSpeed(2);
+					}
+				}
+				if (fireScale == 1) {
+					eclipseFire.setDontRespond(false);
+				}
+				else
+				{
+					eclipseFire.setDontRespond(true);			
+				}
+			}
+
+			if (delayFire < 1) {
+				delayFire += delta;
+				if (delayFire > 1)
+					delayFire = 1;
+			}
+			if (delayFire == 1) {
+				if (fireScale < 1) {
+					fireScale += delta;
+					if (fireScale > 1)
+						fireScale = 1;
+				}
+
+			}
+		} else if (delayFire > 0) {
+			truck.upLane();
+
+			delayFire -= delta;
+			if (delayFire < 0)
+				delayFire = 0;
+			fireScale -= delta;
+			if (fireScale < 0)
+				fireScale = 0;
+		}
+
+	}
 }

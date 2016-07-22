@@ -84,25 +84,8 @@ public class Truck extends Human {
 		}
 
 		batch.setColor(1, 1, 1, 1);
-
-		if (allowMovingReverse == false) {
-			wheel.setPosition(x + 85, y + 10);
-			wheel.draw(batch);
-			wheel.setPosition(x + 380, y + 10);
-			wheel.draw(batch);
-			wheel.setPosition(x + 770, y + 10);
-			wheel.draw(batch);
-			wheel.rotate(delta * 70 * speed);
-		} else {
-			if (speed < 0) {
-				wheel.setPosition(x + 60, y + 10);
-				wheel.draw(batch);
-				wheel.setPosition(x + 445, y + 10);
-				wheel.draw(batch);
-				wheel.setPosition(x + 740, y + 10);
-				wheel.draw(batch);
-				wheel.rotate(delta * 70 * speed);
-			} else if (speed >= 0) {
+		if (wheel != null) {
+			if (allowMovingReverse == false) {
 				wheel.setPosition(x + 85, y + 10);
 				wheel.draw(batch);
 				wheel.setPosition(x + 380, y + 10);
@@ -110,9 +93,26 @@ public class Truck extends Human {
 				wheel.setPosition(x + 770, y + 10);
 				wheel.draw(batch);
 				wheel.rotate(delta * 70 * speed);
+			} else {
+				if (speed < 0) {
+					wheel.setPosition(x + 60, y + 10);
+					wheel.draw(batch);
+					wheel.setPosition(x + 445, y + 10);
+					wheel.draw(batch);
+					wheel.setPosition(x + 740, y + 10);
+					wheel.draw(batch);
+					wheel.rotate(delta * 70 * speed);
+				} else if (speed >= 0) {
+					wheel.setPosition(x + 85, y + 10);
+					wheel.draw(batch);
+					wheel.setPosition(x + 380, y + 10);
+					wheel.draw(batch);
+					wheel.setPosition(x + 770, y + 10);
+					wheel.draw(batch);
+					wheel.rotate(delta * 70 * speed);
+				}
 			}
 		}
-
 		if (x < maxPositions.x) {
 			speed = 0;
 			x = (int) maxPositions.x;
@@ -210,10 +210,10 @@ public class Truck extends Human {
 				y -= delta * 300;
 		}
 
-		if (speed > 1) {
+		if (Math.abs(speed) > 1) {
 			if (lane == 1) {
 				if (y < firstLanePosition) {
-					y += delta * 50 * speed;
+					y += delta * 50 * Math.abs(speed);
 				}
 				if (y > firstLanePosition)
 					y = firstLanePosition;
@@ -221,14 +221,15 @@ public class Truck extends Human {
 
 			if (lane == 2) {
 				if (y > secondLanePosition) {
-					y -= delta * 50 * speed;
+					y -= delta * 50 * Math.abs(speed);
 				}
 				if (y < secondLanePosition)
 					y = secondLanePosition;
 			}
 		}
 	}
-	public boolean getAllowMovingReverse(){
+
+	public boolean getAllowMovingReverse() {
 		return allowMovingReverse;
 	}
 }

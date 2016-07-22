@@ -1,4 +1,4 @@
-package com.lh9.feg1.firekidsgame.files.windows;
+package com.lh9.feg1.firekidsgame.windows;
 
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
