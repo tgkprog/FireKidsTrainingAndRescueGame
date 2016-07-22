@@ -6,7 +6,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -28,6 +27,8 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 public class BigRoadRescueScreen implements Screen {
 
 	double waterTimer;
+
+	StaticAnimation fountains[];
 
 	Human girlHose;
 	Human girlHoseReversed;
@@ -70,8 +71,6 @@ public class BigRoadRescueScreen implements Screen {
 	Button runLeft;
 	Button runRight;
 	Button eclipseFire;
-
-	ParticleEffect[] fireSmoke;
 
 	Dialogue dialogueWindow;
 
@@ -205,11 +204,25 @@ public class BigRoadRescueScreen implements Screen {
 
 		dialogueWindow.popUp();
 
-		truck = new Truck();
+		fountains = new StaticAnimation[7];
+		for (int a = 0; a < 7; a++) {
+			fountains[a] = new StaticAnimation();
+			fountains[a].create(assetsManager.fountainAnimation, 5, 1, 5,
+					850 - a * 2600, 250);
+			fountains[a].setAnimationTime(0.2f);
+			fountains[a].setContinous(false);
+			fountains[a].setWithPreviousFrame(true);
+			fountains[a].start();
+		}
 
+		fountains[3].setScale(new Vector2(1.65f, 1.65f));
+		fountains[3].setPosition((int) fountains[3].getX() - 115,
+				(int) fountains[4].getY() + 110);
+
+		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 135);
 		truck.setMaxSpeed(20);
-		truck.setMaxPositions(-14900, 1550);
+		truck.setMaxPositions(-16300, 1550);
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
 
@@ -225,14 +238,6 @@ public class BigRoadRescueScreen implements Screen {
 		inputInterpreter.loadDown(down);
 		inputInterpreter.loadUp(up);
 		inputInterpreter.setControlledTruck(truck);
-
-		fireSmoke = new ParticleEffect[6];
-		for (int a = 0; a < 6; a++) {
-			fireSmoke[a] = new ParticleEffect();
-			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
-					Gdx.files.internal("particles/"));
-			fireSmoke[a].start();
-		}
 
 		girlHose = new Human();
 		girlHose.create(assetsManager.hoseAnimation, 1, 1, 15, 10, 10);
@@ -319,6 +324,7 @@ public class BigRoadRescueScreen implements Screen {
 		drawCharacters(delta);
 		drawParticles(delta);
 		eclipseFire.render(batch, delta);
+
 		fireBar.render(batch, delta, 20 - eclipseFire.getCounter());
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
@@ -384,17 +390,16 @@ public class BigRoadRescueScreen implements Screen {
 			assetsManager.water.setPosition((int) truck.getX() + 385,
 					(int) truck.getY() + 390);
 		}
-		
+
 		if (waterTimer == 1) {
-		assetsManager.water.getEmitters().get(0).setContinuous(true);
-		} 
-		if(waterTimer < 1 || minigameRunning == false || fireScale < 1){
+			assetsManager.water.getEmitters().get(0).setContinuous(true);
+		}
+		if (waterTimer < 1 || minigameRunning == false || fireScale < 1) {
 			assetsManager.water.getEmitters().get(0).setContinuous(false);
 		}
 
 		if (truck.getX() > fireRange[randomFire].x - 120
 				&& truck.getX() < fireRange[randomFire].x - 110) {
-			
 
 			if (waterTimer < 1)
 				waterTimer += delta;
@@ -414,7 +419,7 @@ public class BigRoadRescueScreen implements Screen {
 				waterTimer -= delta;
 			if (waterTimer < 0)
 				waterTimer = 0;
-			
+
 			girlHose.render(batch, delta);
 			girlHose.resetStateTime();
 		}
@@ -447,11 +452,11 @@ public class BigRoadRescueScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		if(Math.abs(truck.getSpeed()) > 0)
+		if (Math.abs(truck.getSpeed()) > 0)
 			speedBar.setVisibility(true);
 		else
 			speedBar.setVisibility(false);
-			
+
 		randomizeMinigame();
 		manageFire(delta);
 
@@ -503,64 +508,96 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (truck.getX() <= 500 && cameraFirstZoom == false)
+		if (truck.getX() <= 500 && cameraFirstZoom == false
+				&& truck.getX() > -15000)
 			camera.position.x = truck.getX() + 300;
 	}
 
 	void drawBackground(float delta) {
-		if (truck.getX() > -800)
+
+		if (truck.getX() > -800) {
 			batch.draw(assetsManager.bigRoad[0], 800, 0);
+			fountains[0].render(batch, delta);
+		}
 		if (truck.getX() > -1600)
 			batch.draw(assetsManager.bigRoad[1], 0, 0);
-		if (truck.getX() > -2400 && truck.getX() < 700)
+		if (truck.getX() > -2400 && truck.getX() < 700) {
+
 			batch.draw(assetsManager.bigRoad[2], -800, 0);
-		if (truck.getX() > -3200 && truck.getX() < -100)
+		}
+		if (truck.getX() > -3200 && truck.getX() < -100) {
 			batch.draw(assetsManager.bigRoad[3], -1600, 0);
-		if (truck.getX() > -4000 && truck.getX() < -900)
+		}
+		if (truck.getX() > -4000 && truck.getX() < -900) {
 			batch.draw(assetsManager.bigRoad[4], -2400, 0);
-		if (truck.getX() > -4800 && truck.getX() < -1700)
+
+			fountains[1].render(batch, delta);
+		}
+		if (truck.getX() > -4800 && truck.getX() < -1700) {
 			batch.draw(assetsManager.bigRoad[5], -3200, 0);
+		}
 		if (truck.getX() > -5600 && truck.getX() < -2500)
 			batch.draw(assetsManager.bigRoad[6], -4000, 0);
-		if (truck.getX() > -6400 && truck.getX() < -3300)
+		if (truck.getX() > -6400 && truck.getX() < -3300) {
 			batch.draw(assetsManager.bigRoad[7], -4800, 0);
+			fountains[2].render(batch, delta);
+		}
 		if (truck.getX() > -7200 && truck.getX() < -4100)
 			batch.draw(assetsManager.bigRoad[8], -5600, 0);
 		if (truck.getX() > -8000 && truck.getX() < -4900)
 			batch.draw(assetsManager.bigRoad[9], -6400, 0);
-		if (truck.getX() > -8800 && truck.getX() < -5700)
+		if (truck.getX() > -8800 && truck.getX() < -5700) {
 			batch.draw(assetsManager.bigRoad[10], -7200, 0);
+			fountains[3].render(batch, delta);
+		}
 		if (truck.getX() > -9600 && truck.getX() < -6500)
 			batch.draw(assetsManager.bigRoad[11], -8000, 0);
 		if (truck.getX() > -10400 && truck.getX() < -7300)
 			batch.draw(assetsManager.bigRoad[12], -8800, 0);
-		if (truck.getX() > -11200 && truck.getX() < -8100)
+		if (truck.getX() > -11200 && truck.getX() < -8100){
 			batch.draw(assetsManager.bigRoad[13], -9600, 0);
+
+			fountains[4].render(batch, delta);
+		}
 		if (truck.getX() > -12000 && truck.getX() < -8900)
 			batch.draw(assetsManager.bigRoad[14], -10400, 0);
 		if (truck.getX() > -12800 && truck.getX() < -9700)
 			batch.draw(assetsManager.bigRoad[15], -11200, 0);
-		if (truck.getX() > -13600 && truck.getX() < -10500)
+		if (truck.getX() > -13600 && truck.getX() < -10500){
 			batch.draw(assetsManager.bigRoad[16], -12000, 0);
+
+		}
+		
 		if (truck.getX() > -14400 && truck.getX() < -11300)
-			batch.draw(assetsManager.bigRoad[17], -12800, 4);
-		if (truck.getX() > -15200 && truck.getX() < -12100)
+		{	batch.draw(assetsManager.bigRoad[17], -12800, 4);
+		fountains[5].render(batch, delta);
+		
+		}if (truck.getX() > -15200 && truck.getX() < -12100)
 			batch.draw(assetsManager.bigRoad[18], -13600, 0);
-		if (truck.getX() > -16000 && truck.getX() < -12900)
+		if (truck.getX() > -19000 && truck.getX() < -12100)
+		{
 			batch.draw(assetsManager.bigRoad[19], -14400, 0);
-		if (truck.getX() > -16800 && truck.getX() < -13700)
-			batch.draw(assetsManager.bigRoad[20], -15200, 0);
-		if (truck.getX() > -17600 && truck.getX() < -14500)
+		}
+			if (truck.getX() > -19000 && truck.getX() < -13700)
+			{
+				batch.draw(assetsManager.bigRoad[20], -15200, 0);
+				fountains[6].render(batch, delta);
+				
+			}
+				if (truck.getX() > -18500 && truck.getX() < -14500)
 			batch.draw(assetsManager.bigRoad[21], -16000, 0);
+
+		
+
 		// if (truck.getX() > -18400)
 		// batch.draw(assetsManager.bigRoad[22], -16800, 0);
 		// if (truck.getX() > -19200)
 		// batch.draw(assetsManager.bigRoad[23], -17600, 0);
 		// if (truck.getX() < -13000)
 		for (int a = 0; a < 6; a++) {
-			fireSmoke[a].setPosition(fire.get(a).getX() + 50, fire.get(a)
+			assetsManager.fireSmoke[a].setPosition(fire.get(a).getX() + 50, fire.get(a)
 					.getY());
-			fireSmoke[a].draw(batch, delta);
+			assetsManager.fireSmoke[a].draw(batch, delta);
 		}
 		// if (truck.getX() < -13000)
 		for (int a = 0; a < fire.size(); a++) {
@@ -569,16 +606,15 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void drawBar(float delta) {
-		
-//		fireMiniature.setScale(0.42f);
-	
-//		batch.draw(assetsManager.fireBar,10,250);
-//		for(int a=0;a<minigameCounter;a++){
-//			fireMiniature.setPosition(3,412 - a*18);
-//			fireMiniature.draw(batch);
-//		}
-		
-		
+
+		// fireMiniature.setScale(0.42f);
+
+		// batch.draw(assetsManager.fireBar,10,250);
+		// for(int a=0;a<minigameCounter;a++){
+		// fireMiniature.setPosition(3,412 - a*18);
+		// fireMiniature.draw(batch);
+		// }
+
 		batch.draw(assetsManager.speedBar, 160, 440);
 		fireMiniature
 				.setPosition(
@@ -587,8 +623,8 @@ public class BigRoadRescueScreen implements Screen {
 		fireMiniature.setScale(fireScale * 0.8f);
 		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
-		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0255f, 435);
-		
+		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0230f, 435);
+
 	}
 
 	void drawParticles(float delta) {
@@ -671,8 +707,8 @@ public class BigRoadRescueScreen implements Screen {
 				randomFire = tempRandom;
 			}
 			for (int a = 0; a < fire.size(); a++) {
-				fireSmoke[a].getEmitters().get(0).start();
-				fireSmoke[a].setPosition((int) firePositions[randomFire][a].x,
+				assetsManager.fireSmoke[a].getEmitters().get(0).start();
+				assetsManager.fireSmoke[a].setPosition((int) firePositions[randomFire][a].x,
 						(int) firePositions[randomFire][a].y);
 				fire.get(a).setPosition((int) firePositions[randomFire][a].x,
 						(int) firePositions[randomFire][a].y);
@@ -700,9 +736,9 @@ public class BigRoadRescueScreen implements Screen {
 
 		for (int a = 0; a < fire.size(); a++) {
 			if (minigameRunning == false)
-				fireSmoke[a].getEmitters().get(0).setContinuous(false);
+				assetsManager.fireSmoke[a].getEmitters().get(0).setContinuous(false);
 			else
-				fireSmoke[a].getEmitters().get(0).setContinuous(true);
+				assetsManager.fireSmoke[a].getEmitters().get(0).setContinuous(true);
 
 			fire.get(a).setScale(new Vector2(fireScale, fireScale));
 		}
@@ -734,10 +770,8 @@ public class BigRoadRescueScreen implements Screen {
 				}
 				if (fireScale == 1) {
 					eclipseFire.setDontRespond(false);
-				}
-				else
-				{
-					eclipseFire.setDontRespond(true);			
+				} else {
+					eclipseFire.setDontRespond(true);
 				}
 			}
 

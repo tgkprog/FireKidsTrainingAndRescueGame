@@ -93,12 +93,15 @@ public class FitnessScreenTwo implements Screen {
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
 
-		boy.setMaxSpeed(4f);
-		girl.setMaxSpeed(4f);
+		boy.setMaxSpeed(2f);
+		girl.setMaxSpeed(2f);
 
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
 
+		boy.setSpeedAdder(0.2f);
+		girl.setSpeedAdder(0.2f);
+		
 		inputInterpreter.setControlledHuman(boy);
 
 		assetsManager.leaf.setPosition(-100, 200);

@@ -26,9 +26,11 @@ public class InputInterpreter implements GestureListener {
 	Camera camera;
 	OrthographicCamera guiCamera;
 
+	Button authors;
 	Button up;
 	Button down;
-
+	Button menu;
+	Button settings;
 	Button fireStation;
 	Button pause;
 	Button meetTheTrucks;
@@ -40,7 +42,7 @@ public class InputInterpreter implements GestureListener {
 	Button yellowSectionUpLeft;
 	Button yellowSectionUpRight;
 	Button eclipseFire;
-	
+
 	Variables variables = new Variables();
 
 	boolean wasPannedBefore;
@@ -125,18 +127,16 @@ public class InputInterpreter implements GestureListener {
 		manageButtonsCollisions(vec.x, vec.y);
 		manageDialogues(x, y);
 
-
 		vec = new Vector3();
 		vec.x = x;
 		vec.y = y;
 		camera.unproject(vec);
-		
-		if(eclipseFire != null)
-		if (eclipseFire.checkCollision((int) vec.x, (int) vec.y) == true) {
-			eclipseFire.blink();
-		}
-		
-		
+
+		if (eclipseFire != null)
+			if (eclipseFire.checkCollision((int) vec.x, (int) vec.y) == true) {
+				eclipseFire.blink();
+			}
+
 		return false;
 	}
 
@@ -256,6 +256,27 @@ public class InputInterpreter implements GestureListener {
 
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
+			if (settings != null) {
+				if (settings.checkCollision((int) x, (int) y) == true) {
+					settings.blink();
+					selectedScreen = variables.getSettingsScreen();
+					cloudManager.start();
+				}
+			}
+			if (authors != null) {
+				if (authors.checkCollision((int) x, (int) y) == true) {
+					authors.blink();
+					selectedScreen = variables.getAuthorsScreen();
+					cloudManager.start();
+				}
+			}
+			if (menu != null) {
+				if (menu.checkCollision((int) x, (int) y) == true) {
+					menu.blink();
+					selectedScreen = variables.getMenuScreen();
+					cloudManager.start();
+				}
+			}
 
 			if (yellowSectionUpRight != null) {
 
@@ -424,14 +445,26 @@ public class InputInterpreter implements GestureListener {
 	public void setRunButton(Button runButton) {
 		this.runButton = runButton;
 	}
+
 	public void setEclipseFire(Button eclipseFire) {
 		this.eclipseFire = eclipseFire;
+	}
+
+	public void setSettings(Button settings) {
+		this.settings = settings;
+	}
+	public void setAuthors(Button authors) {
+		this.authors = authors;
 	}
 	public void setRunButtonSecond(Button runButtonSecond) {
 		this.runButtonSecond = runButtonSecond;
 	}
+
 	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
+	}
+	public void setMenu(Button menu) {
+		this.menu = menu;
 	}
 
 	public void setControlledTruck(Truck controlledTruck) {

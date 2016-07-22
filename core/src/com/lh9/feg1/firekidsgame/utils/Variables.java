@@ -4,12 +4,16 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Variables {
 
+	static final String menuScreen = "Menu Screen";
 	static final String meetTheTrucks = "Meet The Trucks";
 	static final String fitnessScreenOne = "Fitness Screen One";
 	static final String trainingScreen = "Training Screen";
 	static final String trainingScreenTwo = "Training Screen Two";
-	static final String rescueMetroScreen = "RescueMetroScreen";
-	static final String bigRoadRescueScreen = "bigRoadRescueScreen";
+	static final String rescueMetroScreen = "Rescue Metro Screen";
+	static final String bigRoadRescueScreen = "Big Road Rescue Screen";
+	static final String settingsScreen = "Settings Screen";
+	static final String authorsScreen = "AuthorsScreen";
+
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
 	static final Vector2 logoPosition = new Vector2(130, -150);
@@ -66,4 +70,15 @@ public class Variables {
 		return bigRoadRescueScreen;
 	}
 
+	public String getSettingsScreen() {
+		return settingsScreen;
+	}
+
+	public String getMenuScreen() {
+		return menuScreen;
+	}
+
+	public String getAuthorsScreen() {
+		return authorsScreen;
+	}
 }

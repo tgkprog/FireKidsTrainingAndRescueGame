@@ -10,7 +10,8 @@ public class Human extends Animated {
 	boolean animationOnly;
 	boolean left;
 	int counter;
-
+	float speedAdder = 0.5f;
+	
 	boolean onceOnly;
 
 	public void render(SpriteBatch batch, float delta) {
@@ -52,17 +53,17 @@ public class Human extends Animated {
 
 		if (this.fromTextureRegion == true) {
 			if (speed >= 5 && animationOnly == false) {
-				batch.setColor(1, 1, 1, 0.3f);
-				batch.draw(currentFrame, x - 3, y);
-				batch.setColor(1, 1, 1, 0.25f);
-				batch.draw(currentFrame, x - 6, y);
-				batch.setColor(1, 1, 1, 0.20f);
-				batch.draw(currentFrame, x - 9, y);
-				batch.setColor(1, 1, 1, 0.15f);
-				batch.draw(currentFrame, x - 15, y);
-				batch.setColor(1, 1, 1, 0.1f);
-				batch.draw(currentFrame, x - 21, y);
-				batch.setColor(1, 1, 1, 1);
+		//		batch.setColor(1, 1, 1, 0.3f);
+		//		batch.draw(currentFrame, x - 3, y);
+		//		batch.setColor(1, 1, 1, 0.25f);
+		//		batch.draw(currentFrame, x - 6, y);
+		//		batch.setColor(1, 1, 1, 0.20f);
+		///		batch.draw(currentFrame, x - 9, y);
+		//		batch.setColor(1, 1, 1, 0.15f);
+		//		batch.draw(currentFrame, x - 15, y);
+		//		batch.setColor(1, 1, 1, 0.1f);
+		//		batch.draw(currentFrame, x - 21, y);
+		//		batch.setColor(1, 1, 1, 1);
 			}
 		} else if (speed >= 5 && animationOnly == false) {
 			batch.setColor(1, 1, 1, 0.3f);
@@ -93,7 +94,7 @@ public class Human extends Animated {
 
 	public void move() {
 		if (speed < maxSpeed)
-			speed += 0.5f;
+			speed += speedAdder;
 		else
 			speed += (1 / speed);
 
@@ -185,5 +186,8 @@ public class Human extends Animated {
 
 	public void setOnceOnly() {
 		onceOnly = true;
+	}
+	public void setSpeedAdder(float speedAdder){
+		this.speedAdder = speedAdder;
 	}
 }

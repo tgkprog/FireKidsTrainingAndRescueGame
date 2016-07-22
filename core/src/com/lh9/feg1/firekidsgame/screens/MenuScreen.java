@@ -48,7 +48,7 @@ public class MenuScreen implements Screen {
 
 		fireStation = new Button(700, 100, assetsManager.fireStation);
 		settings = new Button(5, 100, assetsManager.settings);
-		authors = new Button(65, 105, assetsManager.settings);
+		authors = new Button(65, 105, assetsManager.authors);
 		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
 		settings.goUp(360);
 		authors.goUp(405);
@@ -87,6 +87,9 @@ public class MenuScreen implements Screen {
 		inputInterpreter.setLevelButtons(levelButtons);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setFireStation(fireStation);
+		inputInterpreter.setSettings(settings);
+		inputInterpreter.setAuthors(authors);
+		
 		cloudManager.stop();
 
 		fireStation.goUp(825);
@@ -197,6 +200,18 @@ public class MenuScreen implements Screen {
 				.getMeetTheTrucks()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new MeetTheTrucksScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getAuthorsScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new AuthorsScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getSettingsScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new SettingsScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables

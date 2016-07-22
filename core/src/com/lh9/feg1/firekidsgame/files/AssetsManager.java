@@ -13,12 +13,18 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 public class AssetsManager extends Thread {
 
 	public Texture lane;
+	public Texture boyTorso;	
+	public Texture authors;
+	public Texture settingsText;
+	public Texture authorsText;
 	public Texture arrow;
 	public Texture longButton;
 	public Texture runButtonGreen;
+	public Texture boyHeadBigBlonde;
 	public Texture button;
 	public Texture fireStation;
 	public Texture pause;
+	public Texture menu;	
 	public Texture carRed;
 	public Texture carYellow;
 	public Texture carPink;
@@ -26,6 +32,7 @@ public class AssetsManager extends Thread {
 	public Texture carGreen;
 	public Texture handTruckFront;
 	public Texture hoseAnimation[];
+	public Texture fountainAnimation[];
 	public Texture hoseAnimationReversed[];
 	public Texture fireMiniature;
 	public Texture truckBlank[];
@@ -104,6 +111,10 @@ public class AssetsManager extends Thread {
 	public ParticleEffect truckEmissions;
 	public ParticleEffect buttonEffect;
 	public ParticleEffect water;
+	
+public	ParticleEffect[] smoke;
+public	ParticleEffect[] fireSmoke;
+
 
 	public BitmapFont font;
 
@@ -116,7 +127,7 @@ public class AssetsManager extends Thread {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
-		parameter.size = 90;
+		parameter.size = 120;
 		parameter.minFilter = TextureFilter.Linear;
 		parameter.magFilter = TextureFilter.Linear;
 
@@ -160,7 +171,10 @@ public class AssetsManager extends Thread {
 		pointer = new Texture("others/this.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
+		settingsText = new Texture("buttons/Settings-text.png");	
+		authorsText = new Texture("buttons/Authors-text.png");	
 		pause = new Texture("buttons/Pause.png");
+		menu = new Texture("buttons/Menu-Button.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
 		handwheelNoHand = new Texture("others/handwheelNoHand.png");
@@ -171,6 +185,7 @@ public class AssetsManager extends Thread {
 		boyHead = new Texture("boy/boyHea" + "d.png");
 		speedBar = new Texture("others/speedBar.png");
 		lane = new Texture("others/lane.png");
+		authors = new Texture("buttons/Authors-button.png");
 		carRed = new Texture("spritesheets/carRed.png");
 		carYellow = new Texture("spritesheets/carYellow.png");
 		carPink = new Texture("spritesheets/carPink.png");
@@ -190,7 +205,8 @@ public class AssetsManager extends Thread {
 		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
 		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
 		yellowSectionLeft = new Texture("buttons/yellowSection2.png");
-
+		boyTorso = new Texture("boy/boyTorso.png");
+		boyHeadBigBlonde = new Texture("boy/boyHeadBigBlonde.png");
 		boyMainMenu = new Texture("boy/boyMainMenu.png");
 		girlMainMenu = new Texture("girl/girlMainMenu.png");
 		boyMenuHand = new Texture("boy/boyMenuHand.png");
@@ -373,6 +389,13 @@ public class AssetsManager extends Thread {
 		fitnessBackground[2] = new Texture("backgrounds/fitness/fitness3.png");
 		fitnessBackground[3] = new Texture("backgrounds/fitness/fitness4.png");
 
+		fountainAnimation = new Texture[5];
+		fountainAnimation[0] = new Texture("spritesheets/fountainAnimation/1.png");
+		fountainAnimation[1] = new Texture("spritesheets/fountainAnimation/2.png");
+		fountainAnimation[2] = new Texture("spritesheets/fountainAnimation/3.png");
+		fountainAnimation[3] = new Texture("spritesheets/fountainAnimation/4.png");
+		fountainAnimation[4] = new Texture("spritesheets/fountainAnimation/5.png");
+		
 		parkBackgrounds = new Texture[6];
 		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
 		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
@@ -392,6 +415,24 @@ public class AssetsManager extends Thread {
 		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
 		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
 
+		smoke = new ParticleEffect[8];
+		for (int a = 0; a < 8; a++) {
+			smoke[a] = new ParticleEffect();
+			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
+					Gdx.files.internal("particles/"));
+		}
+
+		fireSmoke = new ParticleEffect[6];
+		for (int a = 0; a < 6; a++) {
+			fireSmoke[a] = new ParticleEffect();
+			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
+					Gdx.files.internal("particles/"));
+			fireSmoke[a].start();
+
+		}
+
+		
+		
 		for (int a = 0; a < 7; a++) {
 			spritesheetBoyElliptical[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
@@ -458,12 +499,16 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 24; a++) {
 			bigRoad[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		}
-
+		for (int a = 0; a < 5; a++) {
+			fountainAnimation[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		}
+		
 		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
 		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		menu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		barFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		barNotFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -513,11 +558,16 @@ public class AssetsManager extends Thread {
 		yellowSectionLeft.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		yellowSectionMiddle.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
+		settingsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		boyTorso.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		boyHeadBigBlonde.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		authorsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fireMiniature.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		boyMainMenu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		girlMainMenu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		boyMenuHand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		truckBlank[0].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		authors.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		assetsLoaded = true;
 	}

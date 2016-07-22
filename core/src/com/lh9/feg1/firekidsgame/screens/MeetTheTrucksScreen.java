@@ -40,6 +40,7 @@ public class MeetTheTrucksScreen implements Screen {
 	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
+	
 	boolean finish = false;
 
 	final Starter game;
@@ -172,6 +173,12 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void updateLogics(double delta) {
 
+		if(girl.getX() >= 400 && secondDialogueClicked == false){
+			secondDialogueClicked = true;
+			dialogueWindow.popUp();
+			girl.setSpeed(0);
+		}
+		
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
@@ -195,6 +202,7 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getX() >= 400 && girl.getX() < 3600) {
 			camera.position.x = (girl.getX());
 		}
+		
 	}
 
 	void drawBackground() {

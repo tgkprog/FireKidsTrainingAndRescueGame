@@ -109,5 +109,7 @@ public class Animated {
 		batch.end();
 
 	}
-
+	public void setAnimationTime(float animationTime){
+		this.animationTime = animationTime;
+	}
 }

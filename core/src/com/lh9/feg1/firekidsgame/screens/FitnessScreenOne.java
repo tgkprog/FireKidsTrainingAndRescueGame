@@ -84,17 +84,21 @@ public class FitnessScreenOne implements Screen {
 
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
-
+		boy.setMaxSpeed(4);
+		boy.setSpeedAdder(0.3f);
+		
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-
+		girl.setMaxSpeed(4);
+		girl.setSpeedAdder(0.3f);
+		
 		inputInterpreter.setControlledHuman(boy);
 
 		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 8);
+				260, 10, 4);
 		speedBar.setVisibility(true);
 	}
 
