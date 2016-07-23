@@ -15,10 +15,15 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class MeetTheTrucksScreen implements Screen {
 
 	double timerSpeedGirl;
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
 
 	Bar speedBar;
 
@@ -40,7 +45,7 @@ public class MeetTheTrucksScreen implements Screen {
 	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
-	
+
 	boolean finish = false;
 
 	final Starter game;
@@ -93,11 +98,27 @@ public class MeetTheTrucksScreen implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 		speedBar.setVisibility(true);
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getMeetTheTrucks());
+
+		inputInterpreter.setMenuWindow(menuWindow);
+
 	}
 
 	@Override
 	public void render(float delta) {
+		float deltaTemp = delta;
 
+		if (menuWindow.isVisibile() == true)
+			delta = 0;
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -116,10 +137,11 @@ public class MeetTheTrucksScreen implements Screen {
 		batch.begin();
 		drawParticles(delta);
 		drawBar(delta);
-		drawButtons(delta);
-		drawWindows(delta);
-		cloudManager.render(batch, delta);
+		drawButtons(deltaTemp);
+		drawWindows(deltaTemp);
+		cloudManager.render(batch, deltaTemp);
 		batch.end();
+		manageSelectingScreen();
 	}
 
 	@Override
@@ -167,23 +189,25 @@ public class MeetTheTrucksScreen implements Screen {
 		runButton.render(batch, (float) delta);
 	}
 
-	void drawWindows(double delta) {
+	void drawWindows(float delta) {
+
+		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
 	void updateLogics(double delta) {
 
-		if(girl.getX() >= 400 && secondDialogueClicked == false){
+		if (girl.getX() >= 400 && secondDialogueClicked == false) {
 			secondDialogueClicked = true;
 			dialogueWindow.popUp();
 			girl.setSpeed(0);
 		}
-		
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
 		}
-	
+
 		if (finish == true && dialogueWindow.isVisibile() == false
 				&& exit == false) {
 			cloudManager.start();
@@ -202,16 +226,15 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getX() >= 400 && girl.getX() < 3600) {
 			camera.position.x = (girl.getX());
 		}
-		
+
 	}
 
 	void drawBackground() {
-		if (girl.getX() <= 1200) 
+		if (girl.getX() <= 1200)
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
-		if (girl.getX() <= 2000) 
-		batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
-		
-		
+		if (girl.getX() <= 2000)
+			batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
+
 		if (girl.getX() >= 1200 && girl.getX() < 2600)
 			batch.draw(assetsManager.parkBackgrounds[2], 1590, 0);
 
@@ -225,7 +248,7 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void updateGirlAction(double delta) {
-	
+
 	}
 
 	void drawParticles(float delta) {
@@ -241,15 +264,29 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawPointer(float delta) {
-	
+
 	}
 
 	void drawBar(float delta) {
 
-	
 		// speedBar.setSpeed(boy.getSpeed());
 		// speedBar.render(batch);
 		// Works on a placeholder, but having no actual asset
 
+	}
+
+	void manageSelectingScreen() {
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMenuScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMeetTheTrucks()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MeetTheTrucksScreen(game));
+			}
+		}
 	}
 }

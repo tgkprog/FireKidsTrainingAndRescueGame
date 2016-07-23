@@ -15,11 +15,16 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenOne implements Screen {
 
 	double timerSpeedGirl;
-
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
+	
 	Bar speedBar;
 
 	Human boy;
@@ -100,11 +105,31 @@ public class FitnessScreenOne implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 4);
 		speedBar.setVisibility(true);
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getFitnessScreenOne());
+		
+		inputInterpreter.setMenuWindow(menuWindow);
+
 	}
 
 	@Override
 	public void render(float delta) {
 
+
+		float deltaTemp = delta;
+		
+		if(menuWindow.isVisibile() == true)		
+			delta = 0;
+		
+		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -123,10 +148,12 @@ public class FitnessScreenOne implements Screen {
 		batch.begin();
 		drawParticles(delta);
 		drawBar(delta);
-		drawButtons(delta);
-		drawWindows(delta);
-		cloudManager.render(batch, delta);
+		drawButtons(deltaTemp);
+		drawWindows(deltaTemp);
+		cloudManager.render(batch, deltaTemp);
 		batch.end();
+		
+		manageSelectingScreen();
 	}
 
 	@Override
@@ -175,7 +202,9 @@ public class FitnessScreenOne implements Screen {
 		runButton.render(batch, (float) delta);
 	}
 
-	void drawWindows(double delta) {
+	void drawWindows(float delta) {
+
+		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -297,4 +326,19 @@ public class FitnessScreenOne implements Screen {
 		// Works on a placeholder, but having no actual asset
 
 	}
+	void manageSelectingScreen() {
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMenuScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getFitnessScreenOne()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new FitnessScreenOne(game));
+			}
+		}
+	}
+
 }

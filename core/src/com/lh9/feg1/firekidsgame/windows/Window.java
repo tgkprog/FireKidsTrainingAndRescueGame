@@ -21,18 +21,21 @@ public class Window {
 
 	public Window(Texture windowTexture, double x, double y) {
 
+		if(windowTexture != null){
 		window = new Sprite(windowTexture);
-
+		window.setPosition((float) x, (float) y);
+		}
 		this.x = x;
 		this.y = y;
 
-		window.setPosition((float) x, (float) y);
 	}
 
 	public void draw(SpriteBatch batch, double delta) {
 		updateTimers(delta);
-		window.setScale((float) scale);
-		window.draw(batch);	
+		if (window != null) {
+			window.setScale((float) scale);
+			window.draw(batch);
+		}
 	}
 
 	public void updateTimers(double delta) {
@@ -54,7 +57,7 @@ public class Window {
 			}
 
 		}
-		
+
 		if (readyToClose == true && close == true) {
 			if (scale > 0)
 				scale -= delta * 3;

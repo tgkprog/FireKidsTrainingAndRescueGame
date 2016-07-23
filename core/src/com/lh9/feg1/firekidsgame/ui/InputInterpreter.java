@@ -12,17 +12,20 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	MenuWindow menuWindow;
+
+	Button retryButton;
+	Button playButton;
+
 	Human controlledHuman;
 	Truck controlledTruck;
-
 	String selectedScreen = "No button clicked";
-
 	CloudManager cloudManager;
 	Dialogue dialogueWindow;
-
 	Camera camera;
 	OrthographicCamera guiCamera;
 
@@ -256,6 +259,19 @@ public class InputInterpreter implements GestureListener {
 
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
+			if (retryButton != null) {
+				if (retryButton.checkCollision((int) x, (int) y) == true) {
+					retryButton.blink();
+					selectedScreen = menuWindow.getScreen();
+					cloudManager.start();
+				}
+			}
+			if (playButton != null) {
+				if (playButton.checkCollision((int) x, (int) y) == true) {
+					playButton.blink();
+					menuWindow.hide();
+				}
+			}		
 			if (settings != null) {
 				if (settings.checkCollision((int) x, (int) y) == true) {
 					settings.blink();
@@ -353,6 +369,8 @@ public class InputInterpreter implements GestureListener {
 			if (pause != null)
 				if (pause.checkCollision((int) x, (int) y) == true) {
 					pause.blink();
+					if(menuWindow != null)
+					menuWindow.popUp();
 				}
 			if (meetTheTrucks != null) {
 				if (fireStation.checkCollision((int) x, (int) y) == true) {
@@ -398,6 +416,13 @@ public class InputInterpreter implements GestureListener {
 
 			}
 		}
+	}
+
+	public void setMenuWindow(MenuWindow menuWindow) {
+		this.menuWindow = menuWindow;
+		this.retryButton = menuWindow.getRetry();
+		this.playButton = menuWindow.getPlay();
+		this.menu = menuWindow.getMenu();
 	}
 
 	public void setLevelButtons(Button[] levelButtons) {
@@ -457,9 +482,11 @@ public class InputInterpreter implements GestureListener {
 	public void setSettings(Button settings) {
 		this.settings = settings;
 	}
+
 	public void setAuthors(Button authors) {
 		this.authors = authors;
 	}
+
 	public void setRunButtonSecond(Button runButtonSecond) {
 		this.runButtonSecond = runButtonSecond;
 	}
@@ -467,6 +494,7 @@ public class InputInterpreter implements GestureListener {
 	public void setControlledHuman(Human controlledHuman) {
 		this.controlledHuman = controlledHuman;
 	}
+
 	public void setMenu(Button menu) {
 		this.menu = menu;
 	}

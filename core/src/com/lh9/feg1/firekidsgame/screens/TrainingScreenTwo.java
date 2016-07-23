@@ -22,8 +22,13 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class TrainingScreenTwo implements Screen {
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
 
 	Bar speedBar;
 	Sprite truckLed;
@@ -209,11 +214,27 @@ public class TrainingScreenTwo implements Screen {
 		pointer = new Sprite(assetsManager.pointer);
 		pointer.rotate(270);
 		pointer.setScale(0);
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getTrainingScreenTwo());
+
+		inputInterpreter.setMenuWindow(menuWindow);
+		
 	}
 
 	@Override
 	public void render(float delta) {
+		float deltaTemp = delta;
 
+		if (menuWindow.isVisibile() == true)
+			delta = 0;
 		checkCarsCollisions();
 		updateLogics(delta);
 
@@ -232,12 +253,14 @@ public class TrainingScreenTwo implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		// drawBar();
-		drawButtons(delta);
-		drawWindows(delta);
+		drawButtons(deltaTemp);
+		drawWindows(deltaTemp);
 		drawBar(delta);
 		pointer.draw(batch);
-		cloudManager.render(batch, delta);
+		cloudManager.render(batch, deltaTemp);
 		batch.end();
+
+		manageSelectingScreen();
 	}
 
 	@Override
@@ -305,35 +328,34 @@ public class TrainingScreenTwo implements Screen {
 				closestCarIndex = a;
 			}
 		}
-//		System.out.println(Math.abs(cars.get(0).getX() + Math.abs(truck.getX())));
-		if(truck.getX() < 0)
-		if (Math.abs(cars.get(closestCarIndex).getX()+ Math.abs(truck.getX())) < 1000
-				&& truck.getX() > cars.get(closestCarIndex).getX()) {
-			if (pointerScale < 1)
-				pointerScale += delta * 6;
-			else
-				pointerScale = 1;
-		} else {
-			if (pointerScale > 0)
-				pointerScale -= delta * 6;
-			else
-				pointerScale = 0;
+		// System.out.println(Math.abs(cars.get(0).getX() +
+		// Math.abs(truck.getX())));
+		if (truck.getX() < 0)
+			if (Math.abs(cars.get(closestCarIndex).getX()
+					+ Math.abs(truck.getX())) < 1000
+					&& truck.getX() > cars.get(closestCarIndex).getX()) {
+				if (pointerScale < 1)
+					pointerScale += delta * 6;
+				else
+					pointerScale = 1;
+			} else {
+				if (pointerScale > 0)
+					pointerScale -= delta * 6;
+				else
+					pointerScale = 0;
 
-			if (cars.get(closestCarIndex).getY() == 135)
-			{
-				if(pointerScale == 0)
-				pointer.setPosition(25, 25);
-			
-			}	else if (cars.get(closestCarIndex).getY() == 210)
-			{	
+				if (cars.get(closestCarIndex).getY() == 135) {
+					if (pointerScale == 0)
+						pointer.setPosition(25, 25);
 
-				if(pointerScale == 0)
-					pointer.setPosition(25, 100);
-			
+				} else if (cars.get(closestCarIndex).getY() == 210) {
+
+					if (pointerScale == 0)
+						pointer.setPosition(25, 100);
+
+				} else
+					pointerScale = 0;
 			}
-			else
-				pointerScale = 0;
-		}
 
 		if (closestCarLane == 135) {
 
@@ -433,7 +455,8 @@ public class TrainingScreenTwo implements Screen {
 		down.render(batch, delta);
 	}
 
-	void drawWindows(double delta) {
+	void drawWindows(float delta) {
+		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -680,4 +703,20 @@ public class TrainingScreenTwo implements Screen {
 		cars.add(car);
 
 	}
+
+	void manageSelectingScreen() {
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMenuScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreenTwo()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new TrainingScreenTwo(game));
+			}
+		}
+	}
+
 }

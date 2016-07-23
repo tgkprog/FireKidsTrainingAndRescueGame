@@ -14,6 +14,9 @@ public class Variables {
 	static final String settingsScreen = "Settings Screen";
 	static final String authorsScreen = "Authors Screen";
 	static final String catRescueScreen = "Cat Rescue Screen";
+	static final String fitnessScreenTwo = "Fitness Screen Two";
+	static final String fitnessScreenThree = "Fitness Screen Three";
+	
 
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
@@ -87,4 +90,10 @@ public class Variables {
 		return catRescueScreen;
 	}
 	
+	public String getFitnessScreenTwo() {
+		return fitnessScreenTwo;
+	}
+	public String getFitnessScreenThree() {
+		return fitnessScreenThree;
+	}
 }

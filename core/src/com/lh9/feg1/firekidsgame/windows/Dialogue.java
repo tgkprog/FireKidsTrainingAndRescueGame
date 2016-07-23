@@ -15,7 +15,7 @@ public class Dialogue extends Window {
 		this.dark = dark;
 	}
 
-	public void draw(SpriteBatch batch, double delta) {
+	public void draw(SpriteBatch batch, float delta) {
 		if ((float) this.scale * 0.5f != 0) {
 			batch.setColor(1, 1, 1, (float) this.scale * 0.5f);
 			batch.draw(dark, 0, 0);

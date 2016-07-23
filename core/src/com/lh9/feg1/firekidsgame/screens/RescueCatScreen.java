@@ -15,11 +15,16 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
 	double timerSpeedGirl;
-
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
+	
 	Bar speedBar;
 	Human girl;
 	Button pause;
@@ -91,11 +96,27 @@ public class RescueCatScreen implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 		speedBar.setVisibility(true);
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getCatRescueScreen());
+		
+		inputInterpreter.setMenuWindow(menuWindow);
+
 	}
 
 	@Override
 	public void render(float delta) {
-
+	float deltaTemp = delta;
+		
+		if(menuWindow.isVisibile() == true)		
+			delta = 0;
 
 		
 		
@@ -116,10 +137,11 @@ public class RescueCatScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 		drawBar(delta);
-		drawButtons(delta);
-		drawWindows(delta);
-		cloudManager.render(batch, delta);
+		drawButtons(deltaTemp);
+		drawWindows(deltaTemp);
+		cloudManager.render(batch, deltaTemp);
 		batch.end();
+		manageSelectingScreen();
 	}
 
 	@Override
@@ -167,7 +189,8 @@ public class RescueCatScreen implements Screen {
 		// runButton.render(batch, (float) delta);
 	}
 
-	void drawWindows(double delta) {
+	void drawWindows(float delta) {
+		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -206,5 +229,19 @@ public class RescueCatScreen implements Screen {
 	void drawBar(float delta) {
 		// batch.draw(assetsManager.speedBar, 160, 440);
 		// speedBar.render(batch, delta, boy.getSpeed());
+	}
+	void manageSelectingScreen() {
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMenuScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getCatRescueScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new RescueCatScreen(game));
+			}
+		}
 	}
 }

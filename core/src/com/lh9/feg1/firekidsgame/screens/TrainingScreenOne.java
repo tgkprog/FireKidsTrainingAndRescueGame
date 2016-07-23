@@ -23,12 +23,17 @@ import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
+import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class TrainingScreenOne implements Screen {
 	boolean drawTime;
 
 	Bar timeLeftBar;
-
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
+	
 	static final Vector2 yellowSectionMiddlePosition = new Vector2(355, 220);
 	static final Vector2 yellowSectionLeftPosition = new Vector2(5, 240);
 	static final Vector2 yellowSectionUpLeftPosition = new Vector2(0, 390);
@@ -275,12 +280,27 @@ public class TrainingScreenOne implements Screen {
 		timeLeftBar = new Bar(assetsManager.barFilled,
 				assetsManager.barNotFilled, 250, 450,3);
 	
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getTrainingScreen());
+		
+		inputInterpreter.setMenuWindow(menuWindow);
 
 	}
 
 	@Override
 	public void render(float delta) {
-
+	float deltaTemp = delta;
+		
+		if(menuWindow.isVisibile() == true)		
+			delta = 0;
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -298,11 +318,13 @@ public class TrainingScreenOne implements Screen {
 
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
-		drawButtons(delta);
-		drawWindows(delta);
+		drawButtons(deltaTemp);
+		drawWindows(deltaTemp);
 		drawTime(delta);
-		cloudManager.render(batch, delta);
+		cloudManager.render(batch, deltaTemp);
 		batch.end();
+		
+		manageSelectingScreen();
 	}
 
 	@Override
@@ -359,7 +381,9 @@ public class TrainingScreenOne implements Screen {
 
 	}
 
-	void drawWindows(double delta) {
+	void drawWindows(float delta) {
+
+		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
@@ -676,6 +700,20 @@ public class TrainingScreenOne implements Screen {
 				yellowSectionUpRightPointer.setScale(0);
 		}
 
+	}
+	void manageSelectingScreen() {
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getMenuScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new TrainingScreenOne(game));
+			}
+		}
 	}
 
 }
