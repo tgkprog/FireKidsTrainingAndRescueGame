@@ -15,6 +15,7 @@ public class AssetsManager extends Thread {
 	public Texture lane;
 	public Texture boyTorso;	
 	public Texture authors;
+	public Texture rescueMetroSadPeople;
 	public Texture settingsText;
 	public Texture authorsText;
 	public Texture arrow;
@@ -30,7 +31,9 @@ public class AssetsManager extends Thread {
 	public Texture carPink;
 	public Texture carBlue;
 	public Texture carGreen;
+	public Texture rescueCatBackground[];
 	public Texture handTruckFront;
+	public Texture truckLed;
 	public Texture hoseAnimation[];
 	public Texture fountainAnimation[];
 	public Texture hoseAnimationReversed[];
@@ -156,7 +159,8 @@ public	ParticleEffect[] fireSmoke;
 				Gdx.files.internal("particles/"));
 		buttonEffect.setPosition(730, 310);
 		buttonEffect.allowCompletion();
-
+		rescueMetroSadPeople = new Texture(
+				"backgrounds/Rescue-metro-sad-people.png");
 		spritesheetBoyRunning = new Texture(
 				"spritesheets/spritesheetBoyRunning.png");
 		spritesheetGirlRunning = new Texture(
@@ -193,6 +197,7 @@ public	ParticleEffect[] fireSmoke;
 		carBlue = new Texture("spritesheets/carBlue.png");
 		carGreen = new Texture("spritesheets/carGreen.png");
 		handTruckFront = new Texture("boy/handTruckFront.png");
+		truckLed = new Texture("others/truckLed.png");
 		boyHeadBig = new Texture("boy/boyHeadBig.png");
 		girlHeadBig = new Texture("girl/girlHeadBig.png");
 		cockpitPart = new Texture("backgrounds/cockpitPart.png");
@@ -286,6 +291,12 @@ public	ParticleEffect[] fireSmoke;
 		truckFront[2] = new Texture("backgrounds/truckFront3.png");
 		truckFront[3] = new Texture("backgrounds/truckFront4.png");
 		truckFront[4] = new Texture("backgrounds/truckFront5.png");
+
+		rescueCatBackground = new Texture[4];
+		rescueCatBackground[0] = new Texture("backgrounds/rescueCat/1.png");
+		rescueCatBackground[1] = new Texture("backgrounds/rescueCat/2.png");
+		rescueCatBackground[2] = new Texture("backgrounds/rescueCat/3.png");
+		rescueCatBackground[3] = new Texture("backgrounds/rescueCat/4.png");
 
 		rescueMetro = new Texture[2];
 		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
@@ -432,7 +443,10 @@ public	ParticleEffect[] fireSmoke;
 		}
 
 		
-		
+		for (int a = 0; a < 4; a++) {
+			rescueCatBackground[a].setFilter(TextureFilter.Linear,
+					TextureFilter.Linear);
+		}
 		for (int a = 0; a < 7; a++) {
 			spritesheetBoyElliptical[a].setFilter(TextureFilter.Linear,
 					TextureFilter.Linear);
@@ -514,6 +528,7 @@ public	ParticleEffect[] fireSmoke;
 		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		arrow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		rescueMetroSadPeople.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		runButtonGreen.setFilter(TextureFilter.Linear, TextureFilter.Linear);
@@ -549,6 +564,7 @@ public	ParticleEffect[] fireSmoke;
 		peopleBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		bigRoadRescue.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		training.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		truckLed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		meetTheTrucks.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		rescueBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		rescueCat.setFilter(TextureFilter.Linear, TextureFilter.Linear);

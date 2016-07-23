@@ -4,7 +4,6 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
@@ -17,21 +16,15 @@ import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 
-public class RescueMetroScreen implements Screen {
+public class RescueCatScreen implements Screen {
 
 	double timerSpeedGirl;
 
 	Bar speedBar;
-
-	Sprite rescueMetroSadPeople;
-
 	Human girl;
-
 	Button pause;
 	Button runButton;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -39,7 +32,6 @@ public class RescueMetroScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-
 	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
@@ -47,7 +39,7 @@ public class RescueMetroScreen implements Screen {
 
 	final Starter game;
 
-	public RescueMetroScreen(final Starter gam) {
+	public RescueCatScreen(final Starter gam) {
 
 		this.game = gam;
 
@@ -74,17 +66,17 @@ public class RescueMetroScreen implements Screen {
 		inputInterpreter.setRunButton(runButton);
 		cloudManager.stop();
 
-		rescueMetroSadPeople = new Sprite(assetsManager.rescueMetroSadPeople);
-		rescueMetroSadPeople.setPosition(580, 155);
-		rescueMetroSadPeople.setScale(0.35f);
 
-		camera.zoom = 0.4f;
-		camera.position.x = 1070;
-		camera.position.y = 435;
+		
+		camera.reset();
 
-		camera.moveX(1070, 0, 0, 100);
-		camera.moveY(435, 0, 0, 100);
-		camera.zoom(0.4f, 100f);
+		camera.position.x = 1357;
+		camera.position.y = 1220;
+		camera.zoom = 1.2f;
+		
+		camera.zoom(1.2f, 100);
+		camera.moveX(1357, 100, 100, 100);
+		camera.moveY(1220, 100, 100, 100);
 
 		dialogueWindow.popUp();
 
@@ -104,6 +96,9 @@ public class RescueMetroScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
+
+		
+		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -180,14 +175,12 @@ public class RescueMetroScreen implements Screen {
 		updateCameraLogics(delta);
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
+		
+			
 			camera.reset();
-			camera.zoom(1.1f, 3);
-	//		camera.moveX(800, 2, 2, 4);
-	//		camera.moveY(480,2, 2, 4);
-	// 		camera.zoom(1.95f,100);
-			camera.moveX(800, 2, 2, 4);
-			camera.moveY(300,2, 2, 4);
-	
+			camera.zoom(3.1f, 3.5f);
+			camera.moveX(1235, 2, 2, 10);
+			camera.moveY(755,2, 2, 10);
 			firstDialogueClicked = true;
 			
 		}
@@ -198,9 +191,10 @@ public class RescueMetroScreen implements Screen {
 	}
 
 	void drawBackground() {
-		batch.draw(assetsManager.rescueMetro[0], 0, 0);
-		batch.draw(assetsManager.rescueMetro[1], 797, 0);
-		rescueMetroSadPeople.draw(batch);
+		batch.draw(assetsManager.rescueCatBackground[0], 0, 765);
+		batch.draw(assetsManager.rescueCatBackground[1], 1275, 765);
+		batch.draw(assetsManager.rescueCatBackground[2], 0, 0);
+		batch.draw(assetsManager.rescueCatBackground[3], 1275, 0);
 	}
 
 	void drawParticlesNonGui(float delta) {

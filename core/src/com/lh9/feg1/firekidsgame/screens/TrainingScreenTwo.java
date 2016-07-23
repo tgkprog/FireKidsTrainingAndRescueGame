@@ -6,6 +6,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
@@ -25,8 +26,12 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 public class TrainingScreenTwo implements Screen {
 
 	Bar speedBar;
-
+	Sprite truckLed;
+	boolean ledRed;
 	StaticAnimation fountains[];
+
+	double pointerScale;
+	Sprite pointer;
 
 	boolean lastWindowPopUp;
 	double timerSpeedGirl;
@@ -200,6 +205,10 @@ public class TrainingScreenTwo implements Screen {
 		fountains[3].setPosition((int) fountains[3].getX() - 115,
 				(int) fountains[4].getY() + 110);
 
+		truckLed = new Sprite(assetsManager.truckLed);
+		pointer = new Sprite(assetsManager.pointer);
+		pointer.rotate(270);
+		pointer.setScale(0);
 	}
 
 	@Override
@@ -226,6 +235,7 @@ public class TrainingScreenTwo implements Screen {
 		drawButtons(delta);
 		drawWindows(delta);
 		drawBar(delta);
+		pointer.draw(batch);
 		cloudManager.render(batch, delta);
 		batch.end();
 	}
@@ -281,7 +291,7 @@ public class TrainingScreenTwo implements Screen {
 
 		int closestCarLane = 135;
 		int closestCarIndex = 0;
-
+		float closestCarPosition = -15000;
 		for (int a = 0; a < 8; a++) {
 			if (cars.get(a).getX() > truck.getX() - 800
 					&& cars.get(a).getX() < truck.getX() + 850) {
@@ -290,8 +300,36 @@ public class TrainingScreenTwo implements Screen {
 			}
 			cars.get(a).manageGoAutomatically(delta);
 		}
+		for (int a = 0; a < 8; a++) {
+			if (cars.get(a).getX() > closestCarPosition
+					&& cars.get(a).getX() < truck.getX()) {
+				closestCarPosition = cars.get(a).getX();
+				closestCarIndex = a;
+			}
+		}
+
+		if (Math.abs(cars.get(closestCarIndex).getX()-Math.abs(truck.getX()) ) < 500
+				&& truck.getX() > cars.get(closestCarIndex).getX()) {
+			if (pointerScale < 1)
+				pointerScale += delta * 6;
+			else
+				pointerScale = 1;
+		} else {
+			if (pointerScale > 0)
+				pointerScale -= delta * 6;
+			else
+				pointerScale = 0;
+
+			if (cars.get(closestCarIndex).getY() == 135)
+				pointer.setPosition(10, 25);
+			else if (cars.get(closestCarIndex).getY() == 210)
+				pointer.setPosition(10, 100);
+			else
+				pointerScale = 0;
+		}
 
 		if (closestCarLane == 135) {
+
 			truck.render(batch, delta);
 
 			if (firstDialogueClicked == true)
@@ -349,7 +387,23 @@ public class TrainingScreenTwo implements Screen {
 			truck.render(batch, delta);
 
 		}
-
+		if (Math.abs(truck.getSpeed()) >= 0) {
+			truckLed.setPosition(truck.getX() + 30 + truck.getSpeed(),
+					truck.getY() + 45);
+			truckLed.draw(batch);
+			truckLed.setPosition(truck.getX() + 70 + truck.getSpeed(),
+					truck.getY() + 183);
+			truckLed.draw(batch);
+			truckLed.setPosition(truck.getX() + 115 + truck.getSpeed(),
+					truck.getY() + 183);
+			truckLed.draw(batch);
+			truckLed.setPosition(truck.getX() + 165 + truck.getSpeed(),
+					truck.getY() + 183);
+			truckLed.draw(batch);
+			truckLed.setPosition(truck.getX() + 835 + truck.getSpeed(),
+					truck.getY() + 45);
+			truckLed.draw(batch);
+		}
 	}
 
 	void checkCarsCollisions() {
@@ -376,7 +430,25 @@ public class TrainingScreenTwo implements Screen {
 		dialogueWindow.draw(batch, delta);
 	}
 
-	void updateLogics(double delta) {
+	void updateLogics(float delta) {
+		pointer.setScale((float) pointerScale);
+
+		if (ledRed == true) {
+			if (truckLed.getColor().r < 1) {
+				truckLed.setColor(truckLed.getColor().r + delta, 1, 1, 1);
+				if (truckLed.getColor().r > 1) {
+					truckLed.setColor(1, 1, 1, 1);
+					ledRed = false;
+				}
+			}
+		} else {
+			truckLed.setColor(truckLed.getColor().r - delta, 1, 1, 1);
+			if (truckLed.getColor().r < 0) {
+				truckLed.setColor(0, 1, 1, 1);
+				ledRed = false;
+			}
+		}
+
 		if (cloudManager.getAllScalesEqualOne() == true
 				&& lastWindowPopUp == true)
 			game.setScreen(new MenuScreen(game));

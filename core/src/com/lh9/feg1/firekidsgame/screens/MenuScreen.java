@@ -203,6 +203,12 @@ public class MenuScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
+				.getCatRescueScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new RescueCatScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
 				.getAuthorsScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new AuthorsScreen(game));

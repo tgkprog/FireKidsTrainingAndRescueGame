@@ -12,7 +12,8 @@ public class Variables {
 	static final String rescueMetroScreen = "Rescue Metro Screen";
 	static final String bigRoadRescueScreen = "Big Road Rescue Screen";
 	static final String settingsScreen = "Settings Screen";
-	static final String authorsScreen = "AuthorsScreen";
+	static final String authorsScreen = "Authors Screen";
+	static final String catRescueScreen = "Cat Rescue Screen";
 
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
@@ -81,4 +82,9 @@ public class Variables {
 	public String getAuthorsScreen() {
 		return authorsScreen;
 	}
+	
+	public String getCatRescueScreen() {
+		return catRescueScreen;
+	}
+	
 }
