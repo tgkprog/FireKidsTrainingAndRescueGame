@@ -426,8 +426,8 @@ public	ParticleEffect[] fireSmoke;
 		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
 		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
 
-		smoke = new ParticleEffect[8];
-		for (int a = 0; a < 8; a++) {
+		smoke = new ParticleEffect[12];
+		for (int a = 0; a < 12; a++) {
 			smoke[a] = new ParticleEffect();
 			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
 					Gdx.files.internal("particles/"));

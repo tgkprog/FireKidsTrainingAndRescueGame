@@ -126,7 +126,7 @@ public class TrainingScreenTwo implements Screen {
 		truck.goLeft();
 
 		cars = new ArrayList<Car>();
-		for (int a = 0; a < 8; a++) {
+		for (int a = 0; a < 12; a++) {
 			spawnRandomCar(a);
 		}
 		inputInterpreter.setControlledHuman(truck);
@@ -278,21 +278,18 @@ public class TrainingScreenTwo implements Screen {
 
 	void drawCharacters(float delta) {
 
-		for (int a = 0; a < 8; a++) {
-
+		for (int a = 0; a < 12; a++) {
 			if (cars.get(a).getX() > truck.getX() - 800
 					&& cars.get(a).getX() < truck.getX() + 1150) {
 				assetsManager.smoke[a].setPosition(cars.get(a).getX(), cars
 						.get(a).getY());
 				assetsManager.smoke[a].draw(batch, delta);
 			}
-
 		}
-
 		int closestCarLane = 135;
 		int closestCarIndex = 0;
 		float closestCarPosition = -15000;
-		for (int a = 0; a < 8; a++) {
+		for (int a = 0; a < 12; a++) {
 			if (cars.get(a).getX() > truck.getX() - 800
 					&& cars.get(a).getX() < truck.getX() + 850) {
 				closestCarLane = (int) cars.get(a).getY();
@@ -300,15 +297,17 @@ public class TrainingScreenTwo implements Screen {
 			}
 			cars.get(a).manageGoAutomatically(delta);
 		}
-		for (int a = 0; a < 8; a++) {
+
+		for (int a = 0; a < 12; a++) {
 			if (cars.get(a).getX() > closestCarPosition
 					&& cars.get(a).getX() < truck.getX()) {
 				closestCarPosition = cars.get(a).getX();
 				closestCarIndex = a;
 			}
 		}
-
-		if (Math.abs(cars.get(closestCarIndex).getX()-Math.abs(truck.getX()) ) < 500
+//		System.out.println(Math.abs(cars.get(0).getX() + Math.abs(truck.getX())));
+		if(truck.getX() < 0)
+		if (Math.abs(cars.get(closestCarIndex).getX()+ Math.abs(truck.getX())) < 1000
 				&& truck.getX() > cars.get(closestCarIndex).getX()) {
 			if (pointerScale < 1)
 				pointerScale += delta * 6;
@@ -321,9 +320,17 @@ public class TrainingScreenTwo implements Screen {
 				pointerScale = 0;
 
 			if (cars.get(closestCarIndex).getY() == 135)
-				pointer.setPosition(10, 25);
-			else if (cars.get(closestCarIndex).getY() == 210)
-				pointer.setPosition(10, 100);
+			{
+				if(pointerScale == 0)
+				pointer.setPosition(25, 25);
+			
+			}	else if (cars.get(closestCarIndex).getY() == 210)
+			{	
+
+				if(pointerScale == 0)
+					pointer.setPosition(25, 100);
+			
+			}
 			else
 				pointerScale = 0;
 		}
@@ -333,14 +340,14 @@ public class TrainingScreenTwo implements Screen {
 			truck.render(batch, delta);
 
 			if (firstDialogueClicked == true)
-				for (int a = 0; a < 8; a++) {
+				for (int a = 0; a < 12; a++) {
 
 					if (cars.get(a).getX() > truck.getX() - 800
 							&& cars.get(a).getX() < truck.getX() + 1150)
 						cars.get(a).render(batch, delta);
 
 					if (cars.get(a).checkCollision(truck.getX(), truck.getY()) == true) {
-						for (int b = 0; b < 8; b++) {
+						for (int b = 0; b < 12; b++) {
 							if (b != a)
 								cars.get(b).waitSec();
 						}
@@ -351,14 +358,14 @@ public class TrainingScreenTwo implements Screen {
 
 		} else if (closestCarLane == 210) {
 
-			for (int a = 0; a < 8; a++) {
+			for (int a = 0; a < 12; a++) {
 
 				if (firstDialogueClicked == true)
 					if (cars.get(a).getX() > truck.getX() - 800
 							&& cars.get(a).getX() < truck.getX() + 1150)
 						cars.get(a).render(batch, delta);
 				if (cars.get(a).checkCollision(truck.getX(), truck.getY()) == true) {
-					for (int b = 0; b < 8; b++) {
+					for (int b = 0; b < 12; b++) {
 						if (b != a)
 							cars.get(b).waitSec();
 					}
@@ -369,13 +376,13 @@ public class TrainingScreenTwo implements Screen {
 			truck.render(batch, delta);
 		} else {
 
-			for (int a = 0; a < 8; a++) {
+			for (int a = 0; a < 12; a++) {
 				if (a == closestCarIndex)
 					if (cars.get(a).getX() > truck.getX() - 800
 							&& cars.get(a).getX() < truck.getX() + 1150)
 						cars.get(a).render(batch, delta);
 				if (cars.get(a).checkCollision(truck.getX(), truck.getY()) == true) {
-					for (int b = 0; b < 8; b++) {
+					for (int b = 0; b < 12; b++) {
 						if (b != a)
 							cars.get(b).waitSec();
 					}
@@ -407,7 +414,7 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void checkCarsCollisions() {
-		for (int a = 0; a < 8; a++) {
+		for (int a = 0; a < 12; a++) {
 
 		}
 
@@ -505,7 +512,7 @@ public class TrainingScreenTwo implements Screen {
 			truck.runAnimation();
 			runButton.setDontRespond(true);
 			truck.animationLane();
-			for (int a = 0; a < 8; a++) {
+			for (int a = 0; a < 12; a++) {
 				cars.get(a).upLane();
 			}
 		}
@@ -642,15 +649,15 @@ public class TrainingScreenTwo implements Screen {
 		int random = MathUtils.random(1, 5);
 
 		if (random == 1)
-			car.create(assetsManager.carRed, 1, 1, 1, -3000 * (a + 1), 210);
+			car.create(assetsManager.carRed, 1, 1, 1, -1600 * (a + 1), 210);
 		if (random == 2)
-			car.create(assetsManager.carYellow, 1, 1, 1, -3000 * (a + 1), 210);
+			car.create(assetsManager.carYellow, 1, 1, 1, -1600 * (a + 1), 210);
 		if (random == 3)
-			car.create(assetsManager.carPink, 1, 1, 1, -3000 * (a + 1), 210);
+			car.create(assetsManager.carPink, 1, 1, 1, -1600 * (a + 1), 210);
 		if (random == 4)
-			car.create(assetsManager.carBlue, 1, 1, 1, -3000 * (a + 1), 210);
+			car.create(assetsManager.carBlue, 1, 1, 1, -1600 * (a + 1), 210);
 		if (random == 5)
-			car.create(assetsManager.carGreen, 1, 1, 1, -3000 * (a + 1), 210);
+			car.create(assetsManager.carGreen, 1, 1, 1, -1600 * (a + 1), 210);
 
 		random = MathUtils.random(1, 2);
 
@@ -660,14 +667,6 @@ public class TrainingScreenTwo implements Screen {
 		} else {
 			car.upLane();
 			car.setPosition((int) car.getX(), 210);
-		}
-		if (a == 7) {
-			car.upLane();
-			car.setPosition((int) car.getX(), 210);
-		}
-		if (a == 10) {
-			car.upLane();
-			car.setPosition((int) -15000, 210);
 		}
 
 		car.setMaxSpeed(6);
