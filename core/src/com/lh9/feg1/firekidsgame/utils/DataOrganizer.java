@@ -10,7 +10,9 @@ public class DataOrganizer {
 	boolean fps;
 	boolean vibrations;
 	boolean screenAwake;
-
+	boolean gender;
+	// False is for boy
+	// True is for girl
 	int score;
 	int experience;
 
@@ -28,6 +30,10 @@ public class DataOrganizer {
 
 	public void setExperience(int experience) {
 		this.experience = experience;
+	}
+
+	public boolean getGender() {
+		return gender;
 	}
 
 	public boolean getVoice() {
@@ -70,6 +76,10 @@ public class DataOrganizer {
 		this.screenAwake = screenAwake;
 	}
 
+	public void setGender(boolean gender) {
+		this.gender = gender;
+	}
+
 	public void saveData() {
 		Preferences preferences = Gdx.app
 				.getPreferences("Application prefferences");
@@ -78,6 +88,7 @@ public class DataOrganizer {
 		preferences.putBoolean("fps", fps);
 		preferences.putBoolean("vibrations", vibrations);
 		preferences.putBoolean("screenAwake", screenAwake);
+		preferences.putBoolean("gender", gender);
 		preferences.putInteger("experience", experience);
 		preferences.putInteger("score", score);
 		preferences.flush();
@@ -89,6 +100,7 @@ public class DataOrganizer {
 		voice = preferences.getBoolean("voice", true);
 		textureFiltering = preferences.getBoolean("textureFiltering", true);
 		fps = preferences.getBoolean("fps", false);
+		gender = preferences.getBoolean("gender", false);
 		vibrations = preferences.getBoolean("vibrations", true);
 		screenAwake = preferences.getBoolean("screenAwake", true);
 		experience = preferences.getInteger("experience", 0);

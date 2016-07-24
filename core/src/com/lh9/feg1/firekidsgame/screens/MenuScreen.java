@@ -32,6 +32,7 @@ public class MenuScreen implements Screen {
 	Button fireStation;
 	Button settings;
 	Button authors;
+	Button gender;
 	Button[] levelButtons;
 
 	boolean madeShakeScreen;
@@ -42,6 +43,9 @@ public class MenuScreen implements Screen {
 
 		this.game = gam;
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
@@ -50,12 +54,18 @@ public class MenuScreen implements Screen {
 		variables = new Variables();
 
 		fireStation = new Button(700, 100, assetsManager.fireStation);
-		settings = new Button(5, 100, assetsManager.settings);
-		authors = new Button(80, 105, assetsManager.authors);
+		settings = new Button(180, 100, assetsManager.settings);
+		authors = new Button(100, 105, assetsManager.authors);
 		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
 
-		settings.goUp(360);
+		if (dataOrganizer.getGender() == false)
+			gender = new Button(5, 105, assetsManager.boyButton);
+		else
+			gender = new Button(5, 105, assetsManager.girlButton);
+
+		settings.goUp(405);
 		authors.goUp(405);
+		gender.goUp(390);
 
 		boy = new Human();
 		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
@@ -98,6 +108,8 @@ public class MenuScreen implements Screen {
 		inputInterpreter.setFireStation(fireStation);
 		inputInterpreter.setSettings(settings);
 		inputInterpreter.setAuthors(authors);
+		inputInterpreter.setDataOrganizer(dataOrganizer);
+		inputInterpreter.setGenderButton(gender);
 
 		cloudManager.stop();
 
@@ -112,9 +124,7 @@ public class MenuScreen implements Screen {
 		camera.zoom(2.39f, 100);
 		camera.moveX(957, 100, 100, 100);
 		camera.moveY(575, 100, 100, 100);
-		
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
+
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
@@ -143,7 +153,7 @@ public class MenuScreen implements Screen {
 		drawButtons(delta);
 		drawClouds(delta);
 		drawFps();
-		
+
 		batch.end();
 
 		manageSelectingScreen();
@@ -187,6 +197,7 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawButtons(float delta) {
+		gender.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
 		authors.render(batch, delta);
@@ -196,6 +207,11 @@ public class MenuScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
+		if (dataOrganizer.getGender() == false && gender.getSelection() == true)
+			gender.setTexture(assetsManager.boyButton);
+		if (dataOrganizer.getGender() == true && gender.getSelection() == true)
+			gender.setTexture(assetsManager.girlButton);
+
 		if (fireStation.notMoving() == true && madeShakeScreen == false) {
 			madeShakeScreen = true;
 			fireStation.blink();
@@ -281,7 +297,8 @@ public class MenuScreen implements Screen {
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
 	}
-	void drawFps(){
+
+	void drawFps() {
 		fpsManager.render(batch);
 	}
 }

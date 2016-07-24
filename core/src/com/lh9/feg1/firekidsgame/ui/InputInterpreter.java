@@ -17,22 +17,21 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	String selectedScreen = "No button clicked";
+
+	Button gender;
+
 	DataOrganizer dataOrganizer;
-	
 	MenuWindow menuWindow;
 	Button[] settingsButtons;
-
 	Button retryButton;
 	Button playButton;
-
 	Human controlledHuman;
 	Truck controlledTruck;
-	String selectedScreen = "No button clicked";
 	CloudManager cloudManager;
 	Dialogue dialogueWindow;
 	Camera camera;
 	OrthographicCamera guiCamera;
-
 	Button authors;
 	Button up;
 	Button down;
@@ -49,33 +48,28 @@ public class InputInterpreter implements GestureListener {
 	Button yellowSectionUpLeft;
 	Button yellowSectionUpRight;
 	Button eclipseFire;
-
 	Variables variables = new Variables();
+	Vector3 xyzTap = new Vector3();
+	String message = "No data yet";
 
 	boolean wasPannedBefore;
 	boolean assetsLoaded;
 	boolean initialCameraMovements;
+	boolean touched;
+	boolean panned;
+	boolean touchedDown;
+	boolean justStoppedPanning;
+	boolean zoomDeltaChanged;
 
 	double initialPanX;
 	double initialPanY;
-
-	Vector3 xyzTap = new Vector3();
 	double tapX;
 	double tapY;
-
 	double panX = 0;
 	double panY = 0;
 	double touchDownX = 0;
 	double touchDownY = 0;
 	double zoomDelta;
-
-	public String message = "No data yet";
-	public boolean touched;
-	public boolean panned;
-	public boolean touchedDown;
-	boolean justStoppedPanning;
-
-	public boolean zoomDeltaChanged;
 
 	public double getZoomDelta() {
 		if (zoomDeltaChanged == true) {
@@ -263,13 +257,13 @@ public class InputInterpreter implements GestureListener {
 
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
-			
-			//	settingsButtons[0] = fps;
-			//settingsButtons[1] = textureFiltering;
-			//settingsButtons[2] = voice;
-			//settingsButtons[3] = vibrations;
-			//settingsButtons[4] = screenAwake;
-			
+
+			if (gender != null) {
+				if (gender.checkCollision((int) x, (int) y) == true) {
+					gender.blink();
+					dataOrganizer.setGender(!dataOrganizer.getGender());
+				}
+			}
 			if (settingsButtons != null) {
 				if (settingsButtons[0].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[0].blink();
@@ -277,7 +271,8 @@ public class InputInterpreter implements GestureListener {
 				}
 				if (settingsButtons[1].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[1].blink();
-					dataOrganizer.setTextureFiltering(!dataOrganizer.getTextureFiltering());
+					dataOrganizer.setTextureFiltering(!dataOrganizer
+							.getTextureFiltering());
 				}
 				if (settingsButtons[2].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[2].blink();
@@ -289,7 +284,8 @@ public class InputInterpreter implements GestureListener {
 				}
 				if (settingsButtons[4].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[4].blink();
-					dataOrganizer.setScreenAwake(!dataOrganizer.getScreenAwake());
+					dataOrganizer.setScreenAwake(!dataOrganizer
+							.getScreenAwake());
 				}
 			}
 			if (retryButton != null) {
@@ -544,8 +540,13 @@ public class InputInterpreter implements GestureListener {
 		this.down = down;
 	}
 
+	public void setGenderButton(Button gender) {
+		this.gender = gender;
+	}
+
 	public void setSettingsButtons(Button fps, Button textureFiltering,
-			Button voice, Button vibrations, Button screenAwake, DataOrganizer dataOrganizer) {
+			Button voice, Button vibrations, Button screenAwake,
+			DataOrganizer dataOrganizer) {
 		settingsButtons = new Button[5];
 		settingsButtons[0] = fps;
 		settingsButtons[1] = textureFiltering;
@@ -555,6 +556,10 @@ public class InputInterpreter implements GestureListener {
 		this.dataOrganizer = dataOrganizer;
 	}
 
+	public void setDataOrganizer(DataOrganizer dataOrganizer){
+		this.dataOrganizer = dataOrganizer;
+	}
+	
 	public void setYellowSectionButtons(Button yellowSectionMiddle,
 			Button yellowSectionLeft, Button yellowSectionUpLeft,
 			Button yellowSectionUpRight) {

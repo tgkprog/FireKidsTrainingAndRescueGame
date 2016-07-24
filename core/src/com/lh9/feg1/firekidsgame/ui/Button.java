@@ -33,6 +33,15 @@ public class Button {
 		bounds.setSize(image.getWidth(), image.getHeight());
 		bounds.setPosition(x, y);
 	}
+	public void setTexture(Texture texture){
+		float x = image.getX();
+		float y = image.getY();	
+		image = new Sprite(texture);
+		image.setPosition(x, y);
+		bounds = new Rectangle();
+		bounds.setSize(image.getWidth(), image.getHeight());
+		bounds.setPosition(x, y);
+	}
 
 	public void render(SpriteBatch batch, float delta) {
 	

@@ -145,6 +145,7 @@ public class RescueCatScreen implements Screen {
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
 		batch.end();
 		manageSelectingScreen();
 	}
