@@ -28,68 +28,50 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class TrainingScreenOne implements Screen {
-	boolean drawTime;
 
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	
-	Bar timeLeftBar;
-	Button menuButton;
-	Button retryButton;
-	Button playButton;
-	MenuWindow menuWindow;
-	
 	static final Vector2 yellowSectionMiddlePosition = new Vector2(355, 220);
 	static final Vector2 yellowSectionLeftPosition = new Vector2(5, 240);
 	static final Vector2 yellowSectionUpLeftPosition = new Vector2(0, 390);
 	static final Vector2 yellowSectionUpRightPosition = new Vector2(770, 390);
-
 	boolean[] yellowButtons;
 	boolean minigameRunning;
 	boolean afterMinigameWindow;
+	boolean drawTime;
+	boolean goRed;
+	boolean thirdDialogueClicked;
+	boolean finish;
+	boolean sirene;
+	boolean exit;
+	boolean firstDialogueClicked;
+	boolean secondDialogueClicked;
+	float timerSpeedGirl;
+	float timerFrontTruck;
+	float shakeScreenTimer;
+	float timerSirene;
+	float timerSecondWindow;
 	float minigameTimeLeft = 3;
 	int minigameCounter = 10;
 
 	Sprite windowCounter;
-
 	Sprite yellowSectionMiddlePointer;
 	Sprite yellowSectionLeftPointer;
 	Sprite yellowSectionUpLeftPointer;
 	Sprite yellowSectionUpRightPointer;
-
+	Sprite glassSprite;
 	Button yellowSectionMiddle;
 	Button yellowSectionLeft;
 	Button yellowSectionUpLeft;
 	Button yellowSectionUpRight;
-
 	Vector3 normalColor;
 	Vector3 redColor;
-
-	Sprite glassSprite;
-
-	double timerSpeedGirl;
-	double timerFrontTruck;
-	double shakeScreenTimer;
-	double timerSirene;
-	double timerSecondWindow;
-
 	StaticAnimation hand;
-
-	boolean goRed;
-	boolean thirdDialogueClicked;
 	LedManager middleLeds;
-
-	boolean finish;
 	LaneManager laneManager;
-
 	Human boy;
 	Human girl;
-
 	Button pause;
 	Button runButton;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -97,7 +79,6 @@ public class TrainingScreenOne implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-
 	Arrow firstArrow;
 	Arrow secondArrow;
 	Arrow boyHead;
@@ -107,23 +88,23 @@ public class TrainingScreenOne implements Screen {
 	Arrow boyHeadCockpit;
 	Arrow girlHeadCockpit;
 	Arrow girlHandCockpit;
-
 	Arrow truckFrontHand;
-
-	boolean sirene;
-
-	boolean exit;
-	boolean firstDialogueClicked = false;
-	boolean secondDialogueClicked = false;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	Bar timeLeftBar;
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	MenuWindow menuWindow;
 
 	final Starter game;
 
 	public TrainingScreenOne(final Starter gam) {
 
+		this.game = gam;
+
 		normalColor = new Vector3(1, 1, 1);
 		redColor = new Vector3(1, 0, 0);
-
-		this.game = gam;
 
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
@@ -182,6 +163,7 @@ public class TrainingScreenOne implements Screen {
 		runButton = new Button(390, -100, assetsManager.runButtonLittle);
 		runButton.goUp(110);
 		runButton.setDontRespond(true);
+		runButton.setAlpha(0);
 
 		yellowSectionMiddle = new Button((int) yellowSectionMiddlePosition.x,
 				-100, assetsManager.yellowSectionMiddle);
@@ -199,6 +181,31 @@ public class TrainingScreenOne implements Screen {
 				-100, assetsManager.yellowSectionUp);
 		yellowSectionUpRight.goUp((int) yellowSectionUpRightPosition.y);
 
+		yellowSectionMiddle.setAlpha(0);
+		yellowSectionLeft.setAlpha(0);
+		yellowSectionUpLeft.setAlpha(0);
+		yellowSectionUpRight.setAlpha(0);
+
+		boy = new Human();
+		boy.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 400, 50);
+		girl = new Human();
+		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 100, 50);
+		boy.setMaxSpeed(4f);
+		girl.setMaxSpeed(4f);
+		boy.setAnimationOnly(true);
+		girl.setAnimationOnly(true);
+
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getTrainingScreen());
+
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
@@ -207,6 +214,10 @@ public class TrainingScreenOne implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setControlledHuman(boy);
+		inputInterpreter.setMenuWindow(menuWindow);
+		inputInterpreter.setYellowSectionButtons(yellowSectionMiddle,
+				yellowSectionLeft, yellowSectionUpLeft, yellowSectionUpRight);
 
 		cloudManager.stop();
 
@@ -220,40 +231,21 @@ public class TrainingScreenOne implements Screen {
 
 		dialogueWindow.popUp();
 
-		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 400, 50);
-
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 100, 50);
-
-		boy.setMaxSpeed(4f);
-		girl.setMaxSpeed(4f);
-
-		boy.setAnimationOnly(true);
-		girl.setAnimationOnly(true);
-
-		inputInterpreter.setControlledHuman(boy);
-		windowCounter = new Sprite(assetsManager.longButton);
-		windowCounter.setScale(0);
-
 		laneManager = new LaneManager(assetsManager.lane, 1320, 1450);
+		laneManager.setAlpha(1);
 		middleLeds = new LedManager(assetsManager.ledCockpit);
 		middleLeds.setAlpha(1);
-		runButton.setAlpha(0);
-
-		yellowSectionMiddle.setAlpha(0);
-		yellowSectionLeft.setAlpha(0);
-		yellowSectionUpLeft.setAlpha(0);
-		yellowSectionUpRight.setAlpha(0);
 
 		hand = new StaticAnimation();
 		hand.create(assetsManager.handSpritesheet, 2, 2, 3, 1000, -5, 0.1f);
 		hand.setContinous(false);
+
+		windowCounter = new Sprite(assetsManager.longButton);
+		windowCounter.setScale(0);
+
 		glassSprite = new Sprite(assetsManager.glass);
 		glassSprite.setScale(2f, 1.5f);
 		glassSprite.setPosition(630, 565);
-
-		laneManager.setAlpha(1);
 
 		yellowSectionMiddlePointer = new Sprite(assetsManager.pointer);
 		yellowSectionLeftPointer = new Sprite(assetsManager.pointer);
@@ -277,38 +269,26 @@ public class TrainingScreenOne implements Screen {
 		yellowSectionUpLeftPointer.setScale(0);
 		yellowSectionUpRightPointer.setScale(0);
 
-		inputInterpreter.setYellowSectionButtons(yellowSectionMiddle,
-				yellowSectionLeft, yellowSectionUpLeft, yellowSectionUpRight);
-
 		yellowButtons = new boolean[4];
 
 		timeLeftBar = new Bar(assetsManager.barFilled,
-				assetsManager.barNotFilled, 250, 450,3);
-	
-		menuButton = new Button(400, 0, assetsManager.menu);
-		playButton = new Button(450, 0, assetsManager.playButton);
-		retryButton = new Button(500, 0, assetsManager.retryButton);
-		playButton.goUp(300);
-		retryButton.goUp(300);
-		menuButton.goUp(300);
-
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTrainingScreen());
-		
-		inputInterpreter.setMenuWindow(menuWindow);
+				assetsManager.barNotFilled, 250, 450, 3);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-	
 	}
 
 	@Override
 	public void render(float delta) {
-	float deltaTemp = delta;
 		
-		if(menuWindow.isVisibile() == true)		
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+		
+		float deltaTemp = delta;
+
+		if (menuWindow.isVisibile() == true)
 			delta = 0;
 		updateLogics(delta);
 
@@ -320,20 +300,23 @@ public class TrainingScreenOne implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground(delta);
 		drawCharacters(delta);
 		drawArrows(delta);
-		batch.end();
 
+		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		drawTime(delta);
-		cloudManager.render(batch, deltaTemp);
+		drawClouds(deltaTemp);
 		drawFps();
+
 		batch.end();
-		
+
 		manageSelectingScreen();
 	}
 
@@ -377,7 +360,10 @@ public class TrainingScreenOne implements Screen {
 	}
 
 	void drawButtons(float delta) {
+
 		// pause.render(batch, (float) delta);
+		// Not rendering because it's not worth to have a pause in this screen
+
 		runButton.render(batch, delta);
 		yellowSectionMiddle.render(batch, delta);
 		yellowSectionLeft.render(batch, delta);
@@ -392,7 +378,6 @@ public class TrainingScreenOne implements Screen {
 	}
 
 	void drawWindows(float delta) {
-
 		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
@@ -444,7 +429,6 @@ public class TrainingScreenOne implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-
 		shakeScreenTimer += delta;
 		if (shakeScreenTimer > 0.5f) {
 			shakeScreenTimer = 0;
@@ -590,7 +574,7 @@ public class TrainingScreenOne implements Screen {
 		if (drawTime == true) {
 
 			timeLeftBar.render(batch, delta, minigameTimeLeft);
-			
+
 			if (afterMinigameWindow == false) {
 				timeLeftBar.setVisibility(true);
 			} else {
@@ -711,6 +695,7 @@ public class TrainingScreenOne implements Screen {
 		}
 
 	}
+
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
@@ -725,7 +710,12 @@ public class TrainingScreenOne implements Screen {
 			}
 		}
 	}
-	void drawFps(){
+
+	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

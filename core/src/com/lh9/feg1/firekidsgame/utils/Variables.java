@@ -20,6 +20,7 @@ public class Variables {
 
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
+
 	static final Vector2 logoPosition = new Vector2(130, -150);
 	static final Vector2 runButtonPosition = new Vector2(650, 220);
 	static final Vector2 pauseButtonPosition = new Vector2(710, 400);

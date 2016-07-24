@@ -24,24 +24,18 @@ public class FitnessScreenTwo implements Screen {
 
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
-	
 	Sprite windowCounter;
-
-	double timerSpeedGirl;
-
 	Human boy;
 	Human girl;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-	
 	Button pause;
 	Button runButton;
 	Bar boyBar;
 	Bar girlBar;
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -49,6 +43,8 @@ public class FitnessScreenTwo implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+
+	float timerSpeedGirl;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -67,6 +63,7 @@ public class FitnessScreenTwo implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
+
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
@@ -74,58 +71,20 @@ public class FitnessScreenTwo implements Screen {
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
-		inputInterpreter = new InputInterpreter();
-		inputInterpreter.setCameras(camera, guiCamera);
-		inputInterpreter.setCloudManager(cloudManager);
-		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
-		inputInterpreter.setDialogueWindow(dialogueWindow);
-		inputInterpreter.setRunButton(runButton);
-		cloudManager.stop();
-
-
-		camera.reset();
-
-		camera.zoom = 3.0f;
-		camera.position.x = 1275;
-		camera.position.y = 720;
-
-		camera.zoom(3.0f, 100);
-		camera.moveX(1275, 100, 100, 100);
-		camera.moveY(720, 100, 100, 100);
-		
-		dialogueWindow.popUp();
-
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
-
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
-
 		boy.setMaxSpeed(2f);
 		girl.setMaxSpeed(2f);
-
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
-
 		boy.setSpeedAdder(0.2f);
 		girl.setSpeedAdder(0.2f);
-		
-		inputInterpreter.setControlledHuman(boy);
 
-		assetsManager.leaf.setPosition(-100, 200);
-		assetsManager.stars.setPosition(400, 480);
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 
-		windowCounter = new Sprite(assetsManager.longButton);
-		windowCounter.setScale(0);
-
-		boyBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				340, 430, 60);
-		girlBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				10, 430, 60);
-		boyBar.setVisibility(true);
-		girlBar.setVisibility(true);
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
 		retryButton = new Button(500, 0, assetsManager.retryButton);
@@ -136,22 +95,61 @@ public class FitnessScreenTwo implements Screen {
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getFitnessScreenThree());
-		
+
+		inputInterpreter = new InputInterpreter();
+		inputInterpreter.setCameras(camera, guiCamera);
+		inputInterpreter.setCloudManager(cloudManager);
+		inputInterpreter.setPauseButton(pause);
+		inputInterpreter.setDialogueWindow(dialogueWindow);
+		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setControlledHuman(boy);
 		inputInterpreter.setMenuWindow(menuWindow);
+
+		cloudManager.stop();
+
+		camera.reset();
+
+		camera.zoom = 3.0f;
+		camera.position.x = 1275;
+		camera.position.y = 720;
+
+		camera.zoom(3.0f, 100);
+		camera.moveX(1275, 100, 100, 100);
+		camera.moveY(720, 100, 100, 100);
+
+		dialogueWindow.popUp();
+
+		assetsManager.stars.setPosition(400, 480);
+		// assetsManager.leaf.setPosition(-100, 200);
+		// Not using this
+
+		windowCounter = new Sprite(assetsManager.longButton);
+		windowCounter.setScale(0);
+
+		boyBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				340, 430, 60);
+		girlBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				10, 430, 60);
+		boyBar.setVisibility(true);
+		girlBar.setVisibility(true);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-		
 	}
 
 	@Override
 	public void render(float delta) {
-		float deltaTemp = delta;
 		
-		if(menuWindow.isVisibile() == true)		
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
 		
+		float deltaTemp = delta;
+
+		if (menuWindow.isVisibile() == true)
+			delta = 0;
+
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -162,21 +160,23 @@ public class FitnessScreenTwo implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground();
 		drawCharacters(delta);
-		batch.end();
 
+		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawParticles(delta);
-		drawCounters(delta);
+		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
-		cloudManager.render(batch, deltaTemp);
+		drawClouds(deltaTemp);
 		drawFps();
-		
+
 		batch.end();
-		
+
 		manageSelectingScreen();
 	}
 
@@ -252,7 +252,7 @@ public class FitnessScreenTwo implements Screen {
 			girl.setSpeed(0);
 			boy.setSpeed(0);
 			boyBar.setVisibility(false);
-			girlBar.setVisibility(false);	
+			girlBar.setVisibility(false);
 		}
 		if (finish == true && dialogueWindow.isVisibile() == false
 				&& exit == false) {
@@ -293,17 +293,19 @@ public class FitnessScreenTwo implements Screen {
 		assetsManager.stars.update(delta);
 		assetsManager.stars.draw(batch);
 
-		assetsManager.leaf.update(delta);
-		assetsManager.leaf.draw(batch);
+		// assetsManager.leaf.update(delta);
+		// assetsManager.leaf.draw(batch);
+		// Not using this
 	}
 
 	void drawParticlesNonGui(float delta) {
 	}
 
-	void drawCounters(float delta) {
+	void drawBars(float delta) {
 		boyBar.render(batch, delta, boy.getCounter());
 		girlBar.render(batch, delta, girl.getCounter());
 	}
+
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
@@ -318,7 +320,12 @@ public class FitnessScreenTwo implements Screen {
 			}
 		}
 	}
-	void drawFps(){
+
+	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

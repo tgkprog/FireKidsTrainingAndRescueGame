@@ -21,9 +21,12 @@ public class LogoScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	Sprite logoSprite;
-	double logoScale = 0;
+
+	double logoScale;
 	double changingScreenTimer;
-	boolean changeScreen = false;
+
+	boolean changeScreen;
+
 	final Starter game;
 
 	public LogoScreen(final Starter gam) {
@@ -37,6 +40,7 @@ public class LogoScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		logoSprite = game.getLogoSprite();
+
 		logoSprite.setScale(0);
 		logoSprite.setPosition(variables.getLogoPosition().x,
 				variables.getLogoPosition().y);
@@ -45,24 +49,25 @@ public class LogoScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+		
 		manageLoadingAssets();
 		manageChangingScreens(delta);
 		manageLogoScale(delta);
 
 		camera.update();
-		guiCamera.update();
 
 		Gdx.gl.glClearColor(1, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		logoSprite.draw(batch);
-		cloudManager.render(batch, delta);
-		batch.end();
 
-		batch.setProjectionMatrix(guiCamera.combined);
-		batch.begin();
+		drawLogo();
+		drawClouds(delta);
+
 		batch.end();
 
 		manageChangingScreen();
@@ -116,10 +121,10 @@ public class LogoScreen implements Screen {
 			if (logoScale < 0)
 				logoScale = 0;
 		}
-		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f && changeScreen == false)
-			{
+		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f
+				&& changeScreen == false) {
 			logoSprite.setScale((float) logoScale);
-			}
+		}
 	}
 
 	void manageLoadingAssets() {
@@ -140,7 +145,8 @@ public class LogoScreen implements Screen {
 			cloudManager.load(assetsManager.clouds);
 			cloudManager.start();
 		}
-		if (changingScreenTimer > variables.getDelayChangingScreens() && Gdx.graphics.getRawDeltaTime() < 0.05f)
+		if (changingScreenTimer > variables.getDelayChangingScreens()
+				&& Gdx.graphics.getRawDeltaTime() < 0.05f)
 			changeScreen = true;
 	}
 
@@ -150,5 +156,13 @@ public class LogoScreen implements Screen {
 				&& cloudManager.getAllScalesEqualOne() == true) {
 			game.setScreen(new MenuScreen(game));
 		}
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
+	}
+
+	void drawLogo() {
+		logoSprite.draw(batch);
 	}
 }

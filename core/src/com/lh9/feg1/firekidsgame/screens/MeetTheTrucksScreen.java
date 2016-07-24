@@ -23,22 +23,15 @@ public class MeetTheTrucksScreen implements Screen {
 
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
-	
-	double timerSpeedGirl;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-
 	Bar speedBar;
-
 	Human girl;
-
 	Button pause;
 	Button runButton;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -47,11 +40,12 @@ public class MeetTheTrucksScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
-	boolean exit;
-	boolean firstDialogueClicked = false;
-	boolean secondDialogueClicked = false;
+	float timerSpeedGirl;
 
-	boolean finish = false;
+	boolean exit;
+	boolean firstDialogueClicked;
+	boolean secondDialogueClicked;
+	boolean finish;
 
 	final Starter game;
 
@@ -65,6 +59,7 @@ public class MeetTheTrucksScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
+		
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
@@ -72,6 +67,20 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
+		menuButton = new Button(400, 0, assetsManager.menu);
+		playButton = new Button(450, 0, assetsManager.playButton);
+		retryButton = new Button(500, 0, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getMeetTheTrucks());
+		
+		girl = new Human();
+		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -300, 35);
+		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
@@ -80,6 +89,9 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setMenuWindow(menuWindow);
+		inputInterpreter.setControlledHuman(girl);
+		
 		cloudManager.stop();
 
 		camera.zoom = 0.98f;
@@ -92,42 +104,29 @@ public class MeetTheTrucksScreen implements Screen {
 
 		dialogueWindow.popUp();
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -300, 35);
-
-		inputInterpreter.setControlledHuman(girl);
-
-		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 		speedBar.setVisibility(true);
-		menuButton = new Button(400, 0, assetsManager.menu);
-		playButton = new Button(450, 0, assetsManager.playButton);
-		retryButton = new Button(500, 0, assetsManager.retryButton);
-		playButton.goUp(300);
-		retryButton.goUp(300);
-		menuButton.goUp(300);
-
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getMeetTheTrucks());
-
-		inputInterpreter.setMenuWindow(menuWindow);
-
+				
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-	
 	}
 
 	@Override
 	public void render(float delta) {
+		
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+		
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
 			delta = 0;
+
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -138,19 +137,24 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground();
 		drawCharacters(delta);
 		drawPointer(delta);
+
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawParticles(delta);
-		drawBar(delta);
+		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
-		cloudManager.render(batch, deltaTemp);
+		drawClouds(deltaTemp);
 		drawFps();
+
 		batch.end();
+
 		manageSelectingScreen();
 	}
 
@@ -274,15 +278,9 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawPointer(float delta) {
-
 	}
 
-	void drawBar(float delta) {
-
-		// speedBar.setSpeed(boy.getSpeed());
-		// speedBar.render(batch);
-		// Works on a placeholder, but having no actual asset
-
+	void drawBars(float delta) {
 	}
 
 	void manageSelectingScreen() {
@@ -299,7 +297,12 @@ public class MeetTheTrucksScreen implements Screen {
 			}
 		}
 	}
-	void drawFps(){
+
+	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

@@ -27,47 +27,45 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class TrainingScreenTwo implements Screen {
+
+	boolean ledRed;
+	boolean lastWindowPopUp;
+	boolean peopleRescued;
+	boolean cameraFirstZoom;
+	boolean cameraSecondZoom;
+	boolean exit;
+	boolean firstDialogueClicked;
+	boolean secondDialogueClicked;
+	boolean finish;
+	float timerSpeedGirl;
+	float timerSpawnCar;
+	float timerLastPopUp;
+	float pointerScale;
+	float peopleGroundTimer;
+	float peopleBuildingTimer;
+	int lastTimeCarLane;
+
+	Truck truck;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
-	
 	Sprite boyHead;
-	
 	Bar speedBar;
 	Sprite truckLed;
-	boolean ledRed;
 	StaticAnimation fountains[];
-
-	double pointerScale;
 	Sprite pointer;
-
-	boolean lastWindowPopUp;
-	double timerSpeedGirl;
-	double timerSpawnCar;
-	double timerLastPopUp;
-	float peopleGroundTimer;
-	float peopleBuildingTimer;
-	boolean peopleRescued;
-	boolean cameraFirstZoom;
-	boolean cameraSecondZoom;
-	Truck truck;
-
 	ArrayList<StaticAnimation> fire;
 	StaticAnimation peopleGround;
 	StaticAnimation peopleBuilding;
 	ArrayList<Car> cars;
-
 	Button up;
 	Button down;
 	Button pause;
 	Button runButton;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -75,11 +73,6 @@ public class TrainingScreenTwo implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-
-	boolean exit;
-	boolean firstDialogueClicked = false;
-	boolean secondDialogueClicked = false;
-	boolean finish = false;
 
 	final Starter game;
 
@@ -233,18 +226,23 @@ public class TrainingScreenTwo implements Screen {
 				playButton, variables.getTrainingScreenTwo());
 
 		inputInterpreter.setMenuWindow(menuWindow);
-	
+
 		boyHead = new Sprite(assetsManager.boyButton);
 		boyHead.setScale(0.5f);
-		
+
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-	
+
 	}
 
 	@Override
 	public void render(float delta) {
+
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -260,19 +258,22 @@ public class TrainingScreenTwo implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground(delta);
 		drawCharacters(delta);
 		drawParticles(delta);
+
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
-		// drawBar();
+
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		drawBar(delta);
-		pointer.draw(batch);
-		cloudManager.render(batch, deltaTemp);
+		drawClosestCarPointer();
+		drawClouds(deltaTemp);
 		drawFps();
+
 		batch.end();
 
 		manageSelectingScreen();
@@ -343,8 +344,7 @@ public class TrainingScreenTwo implements Screen {
 				closestCarIndex = a;
 			}
 		}
-		// System.out.println(Math.abs(cars.get(0).getX() +
-		// Math.abs(truck.getX())));
+
 		if (truck.getX() < 0)
 			if (Math.abs(cars.get(closestCarIndex).getX()
 					+ Math.abs(truck.getX())) < 1000
@@ -452,18 +452,10 @@ public class TrainingScreenTwo implements Screen {
 
 	void checkCarsCollisions() {
 		for (int a = 0; a < 12; a++) {
-
 		}
-
 	}
 
 	void drawButtons(float delta) {
-		// assetsManager.buttonEffect.draw(batch, delta);
-		// if(runButton.getSelection() == true){
-		// assetsManager.buttonEffect.start();
-		// }
-		// else
-		// assetsManager.buttonEffect.reset();
 		pause.render(batch, delta);
 		runButton.render(batch, delta);
 		up.render(batch, delta);
@@ -647,10 +639,6 @@ public class TrainingScreenTwo implements Screen {
 		if (truck.getX() > -18500 && truck.getX() < -14500)
 			batch.draw(assetsManager.bigRoad[21], -16000, 0);
 
-		// if (truck.getX() > -18400)
-		// batch.draw(assetsManager.bigRoad[22], -16800, 0);
-		// if (truck.getX() > -19200)
-		// batch.draw(assetsManager.bigRoad[23], -17600, 0);
 		if (truck.getX() < -13000)
 			for (int a = 0; a < 6; a++) {
 				assetsManager.fireSmoke[a].setPosition(fire.get(a).getX() + 50,
@@ -667,7 +655,7 @@ public class TrainingScreenTwo implements Screen {
 
 	void drawBar(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
-		
+
 		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
 		boyHead.draw(batch);
 
@@ -684,8 +672,8 @@ public class TrainingScreenTwo implements Screen {
 	void spawnRandomCar(int a) {
 
 		Car car;
-
 		car = new Car();
+
 		int random = MathUtils.random(1, 5);
 
 		if (random == 1)
@@ -700,6 +688,12 @@ public class TrainingScreenTwo implements Screen {
 			car.create(assetsManager.carGreen, 1, 1, 1, -1600 * (a + 1), 210);
 
 		random = MathUtils.random(1, 2);
+		if (MathUtils.randomBoolean() == true) {
+			if (lastTimeCarLane == 1)
+				random = 2;
+			else
+				random = 1;
+		}
 
 		if (random == 1) {
 			car.downLane();
@@ -714,11 +708,10 @@ public class TrainingScreenTwo implements Screen {
 		car.loadWheel(assetsManager.wheel);
 		car.goRight();
 		car.goAutomatically(true);
-
 		car.setSpeed(10f);
-
 		cars.add(car);
 
+		lastTimeCarLane = random;
 	}
 
 	void manageSelectingScreen() {
@@ -735,7 +728,16 @@ public class TrainingScreenTwo implements Screen {
 			}
 		}
 	}
-	void drawFps(){
+
+	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
+	}
+
+	void drawClosestCarPointer() {
+		pointer.draw(batch);
 	}
 }

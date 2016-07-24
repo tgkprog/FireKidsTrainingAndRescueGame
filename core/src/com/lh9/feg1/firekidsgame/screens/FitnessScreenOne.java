@@ -24,26 +24,18 @@ public class FitnessScreenOne implements Screen {
 
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
-
-	double timerSpeedGirl;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-
 	Sprite boyHead;
 	Sprite girlHead;
-
 	Bar speedBar;
-
 	Human boy;
 	Human girl;
-
 	Button pause;
 	Button runButton;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -51,6 +43,8 @@ public class FitnessScreenOne implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+
+	float timerSpeedGirl;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -69,6 +63,7 @@ public class FitnessScreenOne implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
+
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
@@ -76,25 +71,8 @@ public class FitnessScreenOne implements Screen {
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
-		inputInterpreter = new InputInterpreter();
-		inputInterpreter.setCameras(camera, guiCamera);
-		inputInterpreter.setCloudManager(cloudManager);
-		inputInterpreter.setPauseButton(pause);
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
-		inputInterpreter.setDialogueWindow(dialogueWindow);
-		inputInterpreter.setRunButton(runButton);
-		cloudManager.stop();
-
-		camera.zoom = 0.98f;
-		camera.position.x = 400;
-		camera.position.y = 240;
-
-		camera.moveX(390, 0, 0, 100);
-		camera.moveY(240, 0, 0, 100);
-		camera.zoom(0.98f, 100f);
-
-		dialogueWindow.popUp();
 
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
@@ -106,14 +84,6 @@ public class FitnessScreenOne implements Screen {
 		girl.setMaxSpeed(4);
 		girl.setSpeedAdder(0.3f);
 
-		inputInterpreter.setControlledHuman(boy);
-
-		assetsManager.leaf.setPosition(-100, 200);
-		assetsManager.stars.setPosition(400, 480);
-
-		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 4);
-		speedBar.setVisibility(true);
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
 		retryButton = new Button(500, 0, assetsManager.retryButton);
@@ -125,7 +95,33 @@ public class FitnessScreenOne implements Screen {
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getFitnessScreenOne());
 
+		inputInterpreter = new InputInterpreter();
+		inputInterpreter.setCameras(camera, guiCamera);
+		inputInterpreter.setCloudManager(cloudManager);
+		inputInterpreter.setPauseButton(pause);
+		inputInterpreter.setDialogueWindow(dialogueWindow);
+		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setControlledHuman(boy);
 		inputInterpreter.setMenuWindow(menuWindow);
+
+		camera.zoom = 0.98f;
+		camera.position.x = 400;
+		camera.position.y = 240;
+
+		camera.moveX(390, 0, 0, 100);
+		camera.moveY(240, 0, 0, 100);
+		camera.zoom(0.98f, 100f);
+
+		dialogueWindow.popUp();
+		cloudManager.stop();
+
+		assetsManager.stars.setPosition(400, 480);
+		// assetsManager.leaf.setPosition(-100, 200);
+		// Not using this effect
+
+		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				260, 10, 4);
+		speedBar.setVisibility(true);
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		girlHead = new Sprite(assetsManager.girlButton);
@@ -141,6 +137,10 @@ public class FitnessScreenOne implements Screen {
 	@Override
 	public void render(float delta) {
 
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+		
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -156,17 +156,20 @@ public class FitnessScreenOne implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground();
 		drawCharacters(delta);
 		drawPointer(delta);
+
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawParticles(delta);
-		drawBar(delta);
+		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
-		cloudManager.render(batch, deltaTemp);
+		drawClouds(deltaTemp);
 		drawFps();
 
 		batch.end();
@@ -309,15 +312,12 @@ public class FitnessScreenOne implements Screen {
 	void drawParticles(float delta) {
 		assetsManager.stars.update(delta);
 		assetsManager.stars.draw(batch);
-
-		assetsManager.leaf.update(delta);
-		assetsManager.leaf.draw(batch);
-
-		if (boy.getSpeed() > 7) {
-			// assetsManager.leaf.setPosition(boy.getX(),0);
-			// assetsManager.leaf.start();
-			// Particle effect not finished
-		}
+		// assetsManager.leaf.update(delta);
+		// assetsManager.leaf.draw(batch);
+		// if (boy.getSpeed() > 7) {
+		// }
+		// Leafes that fall down once the speed is higher than 7
+		// Not using this, particle effect is incomplete
 	}
 
 	void drawParticlesNonGui(float delta) {
@@ -330,7 +330,7 @@ public class FitnessScreenOne implements Screen {
 			batch.draw(assetsManager.pointer, girl.getX() + 25, 180);
 	}
 
-	void drawBar(float delta) {
+	void drawBars(float delta) {
 
 		batch.draw(assetsManager.speedBar, 160, 440);
 
@@ -341,11 +341,6 @@ public class FitnessScreenOne implements Screen {
 		girlHead.draw(batch);
 
 		speedBar.render(batch, delta, boy.getSpeed());
-
-		// speedBar.setSpeed(boy.getSpeed());
-		// speedBar.render(batch);
-		// Works on a placeholder, but having no actual asset
-
 	}
 
 	void manageSelectingScreen() {
@@ -365,5 +360,9 @@ public class FitnessScreenOne implements Screen {
 
 	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

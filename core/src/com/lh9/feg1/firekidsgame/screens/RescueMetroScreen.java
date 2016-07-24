@@ -24,24 +24,16 @@ public class RescueMetroScreen implements Screen {
 
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
-
-	double timerSpeedGirl;
-
 	Bar speedBar;
-
 	Sprite rescueMetroSadPeople;
-
 	Human girl;
-
 	Button pause;
 	Button runButton;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-
 	Dialogue dialogueWindow;
-
 	CloudManager cloudManager;
 	Variables variables;
 	AssetsManager assetsManager;
@@ -50,10 +42,12 @@ public class RescueMetroScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	float timerSpeedGirl;
+
 	boolean exit;
-	boolean firstDialogueClicked = false;
-	boolean secondDialogueClicked = false;
-	boolean finish = false;
+	boolean firstDialogueClicked;
+	boolean secondDialogueClicked;
+	boolean finish;
 
 	final Starter game;
 
@@ -67,12 +61,27 @@ public class RescueMetroScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
+
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
 		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
+
+		girl = new Human();
+		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
+
+		menuButton = new Button(400, 110, assetsManager.menu);
+		playButton = new Button(450, 110, assetsManager.playButton);
+		retryButton = new Button(500, 110, assetsManager.retryButton);
+		playButton.goUp(300);
+		retryButton.goUp(300);
+		menuButton.goUp(300);
+
+		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
+				playButton, variables.getRescueMetroScreen());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -82,6 +91,9 @@ public class RescueMetroScreen implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setControlledHuman(girl);
+		inputInterpreter.setMenuWindow(menuWindow);
+
 		cloudManager.stop();
 
 		rescueMetroSadPeople = new Sprite(assetsManager.rescueMetroSadPeople);
@@ -98,40 +110,24 @@ public class RescueMetroScreen implements Screen {
 
 		dialogueWindow.popUp();
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-
-		inputInterpreter.setControlledHuman(girl);
-
-		assetsManager.leaf.setPosition(-100, 200);
 		assetsManager.stars.setPosition(400, 480);
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 		speedBar.setVisibility(true);
 
-		menuButton = new Button(400, 110, assetsManager.menu);
-		playButton = new Button(450, 110, assetsManager.playButton);
-		retryButton = new Button(500, 110, assetsManager.retryButton);
-		playButton.goUp(300);
-		retryButton.goUp(300);
-		menuButton.goUp(300);
-
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getRescueMetroScreen());
-
-		inputInterpreter.setMenuWindow(menuWindow);
-
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-
 	}
 
 	@Override
 	public void render(float delta) {
 
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+		
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -147,18 +143,23 @@ public class RescueMetroScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground();
 		drawCharacters(delta);
 		drawPointer(delta);
+
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawBar(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
-		cloudManager.render(batch, deltaTemp);
+		drawClouds(deltaTemp);
 		drawFps();
+
 		batch.end();
+
 		manageSelectingScreen();
 	}
 
@@ -225,12 +226,10 @@ public class RescueMetroScreen implements Screen {
 			camera.moveY(300, 2, 2, 4);
 
 			firstDialogueClicked = true;
-
 		}
 	}
 
 	void updateCameraLogics(double delta) {
-
 	}
 
 	void drawBackground() {
@@ -246,7 +245,6 @@ public class RescueMetroScreen implements Screen {
 	}
 
 	void drawBar(float delta) {
-		// batch.draw(assetsManager.speedBar, 160, 440);
 		// speedBar.render(batch, delta, boy.getSpeed());
 	}
 
@@ -267,5 +265,9 @@ public class RescueMetroScreen implements Screen {
 
 	void drawFps() {
 		fpsManager.render(batch);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

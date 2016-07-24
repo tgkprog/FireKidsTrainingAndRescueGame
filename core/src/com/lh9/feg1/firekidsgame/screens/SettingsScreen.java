@@ -138,6 +138,10 @@ public class SettingsScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
+		if (Gdx.graphics.getRawDeltaTime() > 0.05f
+				&& Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
+
 		updateLogics(delta);
 
 		camera.update(delta);
