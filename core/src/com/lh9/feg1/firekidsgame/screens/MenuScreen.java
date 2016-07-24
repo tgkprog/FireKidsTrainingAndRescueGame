@@ -28,7 +28,6 @@ public class MenuScreen implements Screen {
 	Button fireStation;
 	Button settings;
 	Button authors;
-
 	Button[] levelButtons;
 
 	boolean madeShakeScreen;
@@ -48,10 +47,16 @@ public class MenuScreen implements Screen {
 
 		fireStation = new Button(700, 100, assetsManager.fireStation);
 		settings = new Button(5, 100, assetsManager.settings);
-		authors = new Button(65, 105, assetsManager.authors);
+		authors = new Button(80, 105, assetsManager.authors);
 		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
+
 		settings.goUp(360);
 		authors.goUp(405);
+
+		boy = new Human();
+		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
+		boy.setMaxSpeed(0);
+		boy.setAnimationOnly(true);
 
 		levelButtons = new Button[7];
 
@@ -89,24 +94,21 @@ public class MenuScreen implements Screen {
 		inputInterpreter.setFireStation(fireStation);
 		inputInterpreter.setSettings(settings);
 		inputInterpreter.setAuthors(authors);
-		
+
 		cloudManager.stop();
 
 		fireStation.goUp(825);
 
 		camera.reset();
+
 		camera.position.x = 957;
 		camera.position.y = 575;
 		camera.zoom = 2.39f;
-		camera.zoom(2.39f, 100);
 
+		camera.zoom(2.39f, 100);
 		camera.moveX(957, 100, 100, 100);
 		camera.moveY(575, 100, 100, 100);
 
-		boy = new Human();
-		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
-		boy.setMaxSpeed(0);
-		boy.setAnimationOnly(true);
 	}
 
 	@Override
@@ -122,18 +124,18 @@ public class MenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(assetsManager.mainBackground[0], 0, 576);
-		batch.draw(assetsManager.mainBackground[1], 960, 576);
-		batch.draw(assetsManager.mainBackground[2], 0, 0);
-		batch.draw(assetsManager.mainBackground[3], 960, 0);
-		fireStation.render(batch, (float) delta);
-		drawCharacters(delta);
-		batch.end();
 
+		drawBackground();
+		drawTexts(delta);
+		drawCharacters(delta);
+
+		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawButtons(delta);
-		cloudManager.render(batch, delta);
+		drawClouds(delta);
+
 		batch.end();
 
 		manageSelectingScreen();
@@ -180,18 +182,17 @@ public class MenuScreen implements Screen {
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
 		authors.render(batch, delta);
-
 		for (int a = 0; a < 7; a++) {
 			levelButtons[a].render(batch, (float) delta);
 		}
-
 	}
 
 	void updateLogics(double delta) {
 		if (fireStation.notMoving() == true && madeShakeScreen == false) {
 			madeShakeScreen = true;
 			fireStation.blink();
-			camera.shakeScreen();
+			// camera.shakeScreen();
+			// Not needed
 		}
 	}
 
@@ -256,5 +257,20 @@ public class MenuScreen implements Screen {
 	void drawCharacters(float delta) {
 		batch.draw(assetsManager.girlMainMenu, 0, 0);
 		boy.render(batch, delta);
+	}
+
+	void drawBackground() {
+		batch.draw(assetsManager.mainBackground[0], 0, 576);
+		batch.draw(assetsManager.mainBackground[1], 960, 576);
+		batch.draw(assetsManager.mainBackground[2], 0, 0);
+		batch.draw(assetsManager.mainBackground[3], 960, 0);
+	}
+
+	void drawTexts(float delta) {
+		fireStation.render(batch, delta);
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
 	}
 }

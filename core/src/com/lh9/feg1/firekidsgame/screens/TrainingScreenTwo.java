@@ -30,6 +30,8 @@ public class TrainingScreenTwo implements Screen {
 	Button playButton;
 	MenuWindow menuWindow;
 
+	Sprite boyHead;
+	
 	Bar speedBar;
 	Sprite truckLed;
 	boolean ledRed;
@@ -226,7 +228,9 @@ public class TrainingScreenTwo implements Screen {
 				playButton, variables.getTrainingScreenTwo());
 
 		inputInterpreter.setMenuWindow(menuWindow);
-		
+	
+		boyHead = new Sprite(assetsManager.boyButton);
+		boyHead.setScale(0.5f);
 	}
 
 	@Override
@@ -652,7 +656,9 @@ public class TrainingScreenTwo implements Screen {
 
 	void drawBar(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
-		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0255f, 435);
+		
+		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		boyHead.draw(batch);
 
 		speedBar.render(batch, delta, truck.getSpeed());
 

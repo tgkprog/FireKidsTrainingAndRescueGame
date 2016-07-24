@@ -34,7 +34,7 @@ public class AuthorsScreen implements Screen {
 	Button authorsText;
 
 	boolean blinked;
-	
+
 	final Starter game;
 
 	public AuthorsScreen(final Starter gam) {
@@ -79,13 +79,16 @@ public class AuthorsScreen implements Screen {
 		boyHead = new Arrow(280, 675, assetsManager.boyHeadBig, -0.7f, 0.7f);
 		boyHead.setAlpha(1);
 		boyHead.setScale(0.8f);
+		
 		girlHead = new Arrow(1490, 420, assetsManager.girlHeadBig, -0.5f, 0.5f);
 		girlHead.setAlpha(1);
 		girlHead.setScale(0.8f);
-		middleBoyHead = new Arrow(880, 655, assetsManager.boyHeadBigBlonde, -0.5f, 0.5f);
+		
+		middleBoyHead = new Arrow(880, 655, assetsManager.boyHeadBigBlonde,
+				-0.5f, 0.5f);
 		middleBoyHead.setAlpha(1);
 		middleBoyHead.setScale(0.8f);
-		
+
 		truckFrontHand = new Arrow(205, 520, assetsManager.handTruckFront,
 				-0.5f, 0.5f);
 		truckFrontHand.setAlpha(1);
@@ -105,27 +108,18 @@ public class AuthorsScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		batch.draw(assetsManager.truckFront[0], 0, 765);
-		batch.draw(assetsManager.truckFront[1], 1275, 765);
-		batch.draw(assetsManager.truckFront[2], 0, 0);
-		batch.draw(assetsManager.truckFront[3], 1275, 485);
-	
-		truckFrontHand.render(batch, delta);
-		girlHead.render(batch, delta);
-		middleBoyHead.render(batch, delta);
-		boyHead.render(batch, delta);
-		handwheel.render(batch, delta);
-		batch.draw(assetsManager.truckFront[4], 1275, 0);
-		batch.draw(assetsManager.boyTorso, 920, 480);
 
-		glassSprite.draw(batch);
+		drawBackground(delta);
+
 		batch.end();
-
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
+
 		drawButtons(delta);
-		cloudManager.render(batch, delta);
+		drawClouds(delta);
+
 		batch.end();
+
 		manageSelectingScreen();
 
 	}
@@ -185,5 +179,24 @@ public class AuthorsScreen implements Screen {
 				game.setScreen(new MenuScreen(game));
 			}
 		}
+	}
+
+	void drawClouds(float delta) {
+		cloudManager.render(batch, delta);
+	}
+
+	void drawBackground(float delta) {
+		batch.draw(assetsManager.truckFront[0], 0, 765);
+		batch.draw(assetsManager.truckFront[1], 1275, 765);
+		batch.draw(assetsManager.truckFront[2], 0, 0);
+		batch.draw(assetsManager.truckFront[3], 1275, 485);
+		truckFrontHand.render(batch, delta);
+		girlHead.render(batch, delta);
+		middleBoyHead.render(batch, delta);
+		boyHead.render(batch, delta);
+		handwheel.render(batch, delta);
+		batch.draw(assetsManager.truckFront[4], 1275, 0);
+		batch.draw(assetsManager.boyTorso, 920, 480);
+		glassSprite.draw(batch);
 	}
 }

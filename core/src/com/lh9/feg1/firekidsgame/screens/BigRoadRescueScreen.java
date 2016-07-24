@@ -27,6 +27,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class BigRoadRescueScreen implements Screen {
 	
+	Sprite boyHead;
+	
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
@@ -328,6 +330,11 @@ public class BigRoadRescueScreen implements Screen {
 				playButton, variables.getBigRoadRescueScreen());
 		
 		inputInterpreter.setMenuWindow(menuWindow);
+		
+
+		boyHead = new Sprite(assetsManager.boyButton);
+		boyHead.setScale(0.5f);
+
 	}
 
 	@Override
@@ -699,11 +706,12 @@ public class BigRoadRescueScreen implements Screen {
 		fireMiniature
 				.setPosition(
 						530 + (fireRange[randomFire].x + fireRange[randomFire].y) / 2 * 0.0255f,
-						435);
-		fireMiniature.setScale(fireScale * 0.8f);
+						410);
+		fireMiniature.setScale(fireScale * 0.5f);
 		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
-		batch.draw(assetsManager.boyHead, 530 + truck.getX() * 0.0230f, 435);
+		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		boyHead.draw(batch);
 
 	}
 

@@ -165,6 +165,8 @@ public class FitnessScreenTwo implements Screen {
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
 		batch.end();
+		
+		manageSelectingScreen();
 	}
 
 	@Override

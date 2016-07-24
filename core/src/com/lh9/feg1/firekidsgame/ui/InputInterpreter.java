@@ -10,13 +10,17 @@ import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	DataOrganizer dataOrganizer;
+	
 	MenuWindow menuWindow;
+	Button[] settingsButtons;
 
 	Button retryButton;
 	Button playButton;
@@ -259,6 +263,35 @@ public class InputInterpreter implements GestureListener {
 
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
+			
+			//	settingsButtons[0] = fps;
+			//settingsButtons[1] = textureFiltering;
+			//settingsButtons[2] = voice;
+			//settingsButtons[3] = vibrations;
+			//settingsButtons[4] = screenAwake;
+			
+			if (settingsButtons != null) {
+				if (settingsButtons[0].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[0].blink();
+					dataOrganizer.setFps(!dataOrganizer.getFps());
+				}
+				if (settingsButtons[1].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[1].blink();
+					dataOrganizer.setTextureFiltering(!dataOrganizer.getTextureFiltering());
+				}
+				if (settingsButtons[2].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[2].blink();
+					dataOrganizer.setVoice(!dataOrganizer.getVoice());
+				}
+				if (settingsButtons[3].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[3].blink();
+					dataOrganizer.setVibrations(!dataOrganizer.getVibrations());
+				}
+				if (settingsButtons[4].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[4].blink();
+					dataOrganizer.setScreenAwake(!dataOrganizer.getScreenAwake());
+				}
+			}
 			if (retryButton != null) {
 				if (retryButton.checkCollision((int) x, (int) y) == true) {
 					retryButton.blink();
@@ -271,7 +304,7 @@ public class InputInterpreter implements GestureListener {
 					playButton.blink();
 					menuWindow.hide();
 				}
-			}		
+			}
 			if (settings != null) {
 				if (settings.checkCollision((int) x, (int) y) == true) {
 					settings.blink();
@@ -369,8 +402,8 @@ public class InputInterpreter implements GestureListener {
 			if (pause != null)
 				if (pause.checkCollision((int) x, (int) y) == true) {
 					pause.blink();
-					if(menuWindow != null)
-					menuWindow.popUp();
+					if (menuWindow != null)
+						menuWindow.popUp();
 				}
 			if (meetTheTrucks != null) {
 				if (fireStation.checkCollision((int) x, (int) y) == true) {
@@ -509,6 +542,17 @@ public class InputInterpreter implements GestureListener {
 
 	public void loadDown(Button down) {
 		this.down = down;
+	}
+
+	public void setSettingsButtons(Button fps, Button textureFiltering,
+			Button voice, Button vibrations, Button screenAwake, DataOrganizer dataOrganizer) {
+		settingsButtons = new Button[5];
+		settingsButtons[0] = fps;
+		settingsButtons[1] = textureFiltering;
+		settingsButtons[2] = voice;
+		settingsButtons[3] = vibrations;
+		settingsButtons[4] = screenAwake;
+		this.dataOrganizer = dataOrganizer;
 	}
 
 	public void setYellowSectionButtons(Button yellowSectionMiddle,

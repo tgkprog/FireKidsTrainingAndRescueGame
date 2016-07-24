@@ -4,6 +4,7 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
@@ -24,6 +25,9 @@ public class FitnessScreenOne implements Screen {
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
+	
+	Sprite boyHead;
+	Sprite girlHead;
 	
 	Bar speedBar;
 
@@ -118,6 +122,11 @@ public class FitnessScreenOne implements Screen {
 		
 		inputInterpreter.setMenuWindow(menuWindow);
 
+		boyHead = new Sprite(assetsManager.boyButton);
+		girlHead = new Sprite(assetsManager.girlButton);
+		boyHead.setScale(0.5f);
+		girlHead.setScale(0.5f);
+		
 	}
 
 	@Override
@@ -316,9 +325,13 @@ public class FitnessScreenOne implements Screen {
 	void drawBar(float delta) {
 
 		batch.draw(assetsManager.speedBar, 160, 440);
-		batch.draw(assetsManager.boyHead, 165 + boy.getX() * 0.1f, 435);
-		batch.draw(assetsManager.girlHead, 165 + girl.getX() * 0.1f, 435);
-
+		
+		boyHead.setPosition(165 + boy.getX() * 0.1f, 410);
+		girlHead.setPosition( 165 + girl.getX() * 0.1f, 410);
+		
+		boyHead.draw(batch);
+		girlHead.draw(batch);
+		
 		speedBar.render(batch, delta, boy.getSpeed());
 
 		// speedBar.setSpeed(boy.getSpeed());
