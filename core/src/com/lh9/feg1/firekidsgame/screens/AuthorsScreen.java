@@ -11,12 +11,16 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Arrow;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class AuthorsScreen implements Screen {
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
 	Arrow truckFrontHand;
 	Arrow girlHead;
 	Arrow boyHead;
@@ -79,11 +83,11 @@ public class AuthorsScreen implements Screen {
 		boyHead = new Arrow(280, 675, assetsManager.boyHeadBig, -0.7f, 0.7f);
 		boyHead.setAlpha(1);
 		boyHead.setScale(0.8f);
-		
+
 		girlHead = new Arrow(1490, 420, assetsManager.girlHeadBig, -0.5f, 0.5f);
 		girlHead.setAlpha(1);
 		girlHead.setScale(0.8f);
-		
+
 		middleBoyHead = new Arrow(880, 655, assetsManager.boyHeadBigBlonde,
 				-0.5f, 0.5f);
 		middleBoyHead.setAlpha(1);
@@ -94,6 +98,9 @@ public class AuthorsScreen implements Screen {
 		truckFrontHand.setAlpha(1);
 		truckFrontHand.setScale(0.8f);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
 	@Override
@@ -117,6 +124,7 @@ public class AuthorsScreen implements Screen {
 
 		drawButtons(delta);
 		drawClouds(delta);
+		drawFps();
 
 		batch.end();
 
@@ -198,5 +206,9 @@ public class AuthorsScreen implements Screen {
 		batch.draw(assetsManager.truckFront[4], 1275, 0);
 		batch.draw(assetsManager.boyTorso, 920, 480);
 		glassSprite.draw(batch);
+	}
+
+	void drawFps() {
+		fpsManager.render(batch);
 	}
 }

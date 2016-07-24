@@ -11,20 +11,25 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+
 	double timerSpeedGirl;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-	
+
 	Bar speedBar;
 	Human girl;
 	Button pause;
@@ -71,14 +76,12 @@ public class RescueCatScreen implements Screen {
 		inputInterpreter.setRunButton(runButton);
 		cloudManager.stop();
 
-
-		
 		camera.reset();
 
 		camera.position.x = 1357;
 		camera.position.y = 1220;
 		camera.zoom = 1.2f;
-		
+
 		camera.zoom(1.2f, 100);
 		camera.moveX(1357, 100, 100, 100);
 		camera.moveY(1220, 100, 100, 100);
@@ -106,20 +109,22 @@ public class RescueCatScreen implements Screen {
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getCatRescueScreen());
-		
+
 		inputInterpreter.setMenuWindow(menuWindow);
+
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 	}
 
 	@Override
 	public void render(float delta) {
-	float deltaTemp = delta;
-		
-		if(menuWindow.isVisibile() == true)		
+		float deltaTemp = delta;
+
+		if (menuWindow.isVisibile() == true)
 			delta = 0;
 
-		
-		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -198,14 +203,13 @@ public class RescueCatScreen implements Screen {
 		updateCameraLogics(delta);
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
-		
-			
+
 			camera.reset();
 			camera.zoom(3.1f, 3.5f);
 			camera.moveX(1235, 2, 2, 10);
-			camera.moveY(755,2, 2, 10);
+			camera.moveY(755, 2, 2, 10);
 			firstDialogueClicked = true;
-			
+
 		}
 	}
 
@@ -230,6 +234,7 @@ public class RescueCatScreen implements Screen {
 		// batch.draw(assetsManager.speedBar, 160, 440);
 		// speedBar.render(batch, delta, boy.getSpeed());
 	}
+
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
@@ -243,5 +248,9 @@ public class RescueCatScreen implements Screen {
 				game.setScreen(new RescueCatScreen(game));
 			}
 		}
+	}
+
+	void drawFps() {
+		fpsManager.render(batch);
 	}
 }

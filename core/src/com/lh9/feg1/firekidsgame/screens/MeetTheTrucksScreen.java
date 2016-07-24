@@ -11,14 +11,19 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class MeetTheTrucksScreen implements Screen {
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	
 	double timerSpeedGirl;
 	Button menuButton;
 	Button retryButton;
@@ -111,6 +116,10 @@ public class MeetTheTrucksScreen implements Screen {
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+	
 	}
 
 	@Override
@@ -140,6 +149,7 @@ public class MeetTheTrucksScreen implements Screen {
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
 		batch.end();
 		manageSelectingScreen();
 	}
@@ -288,5 +298,8 @@ public class MeetTheTrucksScreen implements Screen {
 				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
+	}
+	void drawFps(){
+		fpsManager.render(batch);
 	}
 }

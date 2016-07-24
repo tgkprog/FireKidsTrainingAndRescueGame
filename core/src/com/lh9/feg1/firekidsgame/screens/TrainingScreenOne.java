@@ -17,10 +17,12 @@ import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Arrow;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.graphics.LaneManager;
 import com.lh9.feg1.firekidsgame.graphics.LedManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
@@ -28,6 +30,9 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 public class TrainingScreenOne implements Screen {
 	boolean drawTime;
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	
 	Bar timeLeftBar;
 	Button menuButton;
 	Button retryButton;
@@ -293,6 +298,10 @@ public class TrainingScreenOne implements Screen {
 		
 		inputInterpreter.setMenuWindow(menuWindow);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+	
 	}
 
 	@Override
@@ -322,6 +331,7 @@ public class TrainingScreenOne implements Screen {
 		drawWindows(deltaTemp);
 		drawTime(delta);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
 		batch.end();
 		
 		manageSelectingScreen();
@@ -715,5 +725,7 @@ public class TrainingScreenOne implements Screen {
 			}
 		}
 	}
-
+	void drawFps(){
+		fpsManager.render(batch);
+	}
 }

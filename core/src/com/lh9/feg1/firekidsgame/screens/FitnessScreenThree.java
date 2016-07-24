@@ -12,14 +12,19 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenThree implements Screen {
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	
 	Bar girlBar;
 	Bar boyBar;
 	Button menuButton;
@@ -130,6 +135,11 @@ public class FitnessScreenThree implements Screen {
 		girlBar = new Bar(assetsManager.barFilled,assetsManager.barNotFilled,10,430,60);
 		boyBar.setVisibility(true);
 		girlBar.setVisibility(true);
+		
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+	
 	}
 
 	@Override
@@ -161,6 +171,7 @@ public class FitnessScreenThree implements Screen {
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
 		batch.end();
 		manageSelectingScreen();
 	}
@@ -303,5 +314,8 @@ public class FitnessScreenThree implements Screen {
 				game.setScreen(new FitnessScreenThree(game));
 			}
 		}
+	}
+	void drawFps(){
+		fpsManager.render(batch);
 	}
 }

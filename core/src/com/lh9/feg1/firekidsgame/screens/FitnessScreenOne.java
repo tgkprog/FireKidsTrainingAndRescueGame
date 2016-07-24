@@ -12,23 +12,28 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenOne implements Screen {
 
+	DataOrganizer dataOrganizer;
+	FPSManager fpsManager;
+
 	double timerSpeedGirl;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-	
+
 	Sprite boyHead;
 	Sprite girlHead;
-	
+
 	Bar speedBar;
 
 	Human boy;
@@ -95,12 +100,12 @@ public class FitnessScreenOne implements Screen {
 		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
 		boy.setMaxSpeed(4);
 		boy.setSpeedAdder(0.3f);
-		
+
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
 		girl.setMaxSpeed(4);
 		girl.setSpeedAdder(0.3f);
-		
+
 		inputInterpreter.setControlledHuman(boy);
 
 		assetsManager.leaf.setPosition(-100, 200);
@@ -119,26 +124,28 @@ public class FitnessScreenOne implements Screen {
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getFitnessScreenOne());
-		
+
 		inputInterpreter.setMenuWindow(menuWindow);
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		girlHead = new Sprite(assetsManager.girlButton);
 		boyHead.setScale(0.5f);
 		girlHead.setScale(0.5f);
-		
+
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
 	}
 
 	@Override
 	public void render(float delta) {
 
-
 		float deltaTemp = delta;
-		
-		if(menuWindow.isVisibile() == true)		
+
+		if (menuWindow.isVisibile() == true)
 			delta = 0;
-		
-		
+
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -160,8 +167,10 @@ public class FitnessScreenOne implements Screen {
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
+
 		batch.end();
-		
+
 		manageSelectingScreen();
 	}
 
@@ -269,12 +278,11 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void drawBackground() {
-		if (boy.getX() <= 1200) 
+		if (boy.getX() <= 1200)
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
-		if (boy.getX() <= 2000) 
-		batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
-		
-		
+		if (boy.getX() <= 2000)
+			batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
+
 		if (boy.getX() >= 1200 && boy.getX() < 2600)
 			batch.draw(assetsManager.parkBackgrounds[2], 1590, 0);
 
@@ -325,13 +333,13 @@ public class FitnessScreenOne implements Screen {
 	void drawBar(float delta) {
 
 		batch.draw(assetsManager.speedBar, 160, 440);
-		
+
 		boyHead.setPosition(165 + boy.getX() * 0.1f, 410);
-		girlHead.setPosition( 165 + girl.getX() * 0.1f, 410);
-		
+		girlHead.setPosition(165 + girl.getX() * 0.1f, 410);
+
 		boyHead.draw(batch);
 		girlHead.draw(batch);
-		
+
 		speedBar.render(batch, delta, boy.getSpeed());
 
 		// speedBar.setSpeed(boy.getSpeed());
@@ -339,6 +347,7 @@ public class FitnessScreenOne implements Screen {
 		// Works on a placeholder, but having no actual asset
 
 	}
+
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
@@ -354,4 +363,7 @@ public class FitnessScreenOne implements Screen {
 		}
 	}
 
+	void drawFps() {
+		fpsManager.render(batch);
+	}
 }

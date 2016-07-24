@@ -12,13 +12,18 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueMetroScreen implements Screen {
+
+	DataOrganizer dataOrganizer;
+	FPSManager fpsManager;
 
 	double timerSpeedGirl;
 
@@ -34,7 +39,7 @@ public class RescueMetroScreen implements Screen {
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
-	
+
 	Dialogue dialogueWindow;
 
 	CloudManager cloudManager;
@@ -104,8 +109,7 @@ public class RescueMetroScreen implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 		speedBar.setVisibility(true);
-	
-		
+
 		menuButton = new Button(400, 110, assetsManager.menu);
 		playButton = new Button(450, 110, assetsManager.playButton);
 		retryButton = new Button(500, 110, assetsManager.retryButton);
@@ -116,21 +120,23 @@ public class RescueMetroScreen implements Screen {
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getRescueMetroScreen());
-		
+
 		inputInterpreter.setMenuWindow(menuWindow);
+
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 	}
 
 	@Override
 	public void render(float delta) {
 
-		
 		float deltaTemp = delta;
-		
-		if(menuWindow.isVisibile() == true)		
+
+		if (menuWindow.isVisibile() == true)
 			delta = 0;
 
-		
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -151,6 +157,7 @@ public class RescueMetroScreen implements Screen {
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		cloudManager.render(batch, deltaTemp);
+		drawFps();
 		batch.end();
 		manageSelectingScreen();
 	}
@@ -211,14 +218,14 @@ public class RescueMetroScreen implements Screen {
 				&& dialogueWindow.isVisibile() == false) {
 			camera.reset();
 			camera.zoom(1.1f, 3);
-	//		camera.moveX(800, 2, 2, 4);
-	//		camera.moveY(480,2, 2, 4);
-	// 		camera.zoom(1.95f,100);
+			// camera.moveX(800, 2, 2, 4);
+			// camera.moveY(480,2, 2, 4);
+			// camera.zoom(1.95f,100);
 			camera.moveX(800, 2, 2, 4);
-			camera.moveY(300,2, 2, 4);
-	
+			camera.moveY(300, 2, 2, 4);
+
 			firstDialogueClicked = true;
-			
+
 		}
 	}
 
@@ -242,6 +249,7 @@ public class RescueMetroScreen implements Screen {
 		// batch.draw(assetsManager.speedBar, 160, 440);
 		// speedBar.render(batch, delta, boy.getSpeed());
 	}
+
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
@@ -257,4 +265,7 @@ public class RescueMetroScreen implements Screen {
 		}
 	}
 
+	void drawFps() {
+		fpsManager.render(batch);
+	}
 }

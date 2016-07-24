@@ -10,6 +10,7 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Arrow;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.graphics.LaneManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
@@ -18,6 +19,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class SettingsScreen implements Screen {
 
+	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Arrow firstArrow;
 	Arrow secondArrow;
@@ -92,7 +94,7 @@ public class SettingsScreen implements Screen {
 
 		laneManager = new LaneManager(assetsManager.lane, 1320, 1450);
 		laneManager.setAlpha(1);
-		
+
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 
@@ -129,6 +131,8 @@ public class SettingsScreen implements Screen {
 		if (dataOrganizer.getScreenAwake() == true) {
 			screenAwake.red();
 		}
+
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
 	@Override
@@ -154,6 +158,7 @@ public class SettingsScreen implements Screen {
 		drawButtons(delta);
 		drawTexts(delta);
 		drawClouds(delta);
+		drawFps();
 
 		batch.end();
 
@@ -271,5 +276,9 @@ public class SettingsScreen implements Screen {
 		batch.draw(assetsManager.cockpitPart, 1100, 0);
 		firstArrow.render(batch, delta);
 		secondArrow.render(batch, delta);
+	}
+
+	void drawFps() {
+		fpsManager.render(batch);
 	}
 }

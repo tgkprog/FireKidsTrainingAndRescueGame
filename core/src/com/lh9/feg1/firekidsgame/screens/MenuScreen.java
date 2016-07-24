@@ -10,12 +10,16 @@ import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class MenuScreen implements Screen {
 
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
 	Human boy;
 	CloudManager cloudManager;
 	Variables variables;
@@ -108,7 +112,10 @@ public class MenuScreen implements Screen {
 		camera.zoom(2.39f, 100);
 		camera.moveX(957, 100, 100, 100);
 		camera.moveY(575, 100, 100, 100);
-
+		
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
 	@Override
@@ -135,7 +142,8 @@ public class MenuScreen implements Screen {
 
 		drawButtons(delta);
 		drawClouds(delta);
-
+		drawFps();
+		
 		batch.end();
 
 		manageSelectingScreen();
@@ -272,5 +280,8 @@ public class MenuScreen implements Screen {
 
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
+	}
+	void drawFps(){
+		fpsManager.render(batch);
 	}
 }
