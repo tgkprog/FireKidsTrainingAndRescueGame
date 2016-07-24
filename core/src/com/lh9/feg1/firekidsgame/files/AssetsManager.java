@@ -8,9 +8,11 @@ import com.badlogic.gdx.graphics.g2d.BitmapFont;
 import com.badlogic.gdx.graphics.g2d.ParticleEffect;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator;
 import com.badlogic.gdx.graphics.g2d.freetype.FreeTypeFontGenerator.FreeTypeFontParameter;
-import com.lh9.feg1.firekidsgame.utils.Variables;
+import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 
 public class AssetsManager extends Thread {
+
+	DataOrganizer dataOrganizer;
 
 	public Texture voiceText;
 	public Texture vibrationsText;
@@ -18,7 +20,7 @@ public class AssetsManager extends Thread {
 	public Texture fpsText;
 	public Texture screenAwakeText;
 	public Texture lane;
-	public Texture boyTorso;	
+	public Texture boyTorso;
 	public Texture authors;
 	public Texture rescueMetroSadPeople;
 	public Texture settingsText;
@@ -30,7 +32,7 @@ public class AssetsManager extends Thread {
 	public Texture button;
 	public Texture fireStation;
 	public Texture pause;
-	public Texture menu;	
+	public Texture menu;
 	public Texture carRed;
 	public Texture carYellow;
 	public Texture boyButton;
@@ -57,14 +59,11 @@ public class AssetsManager extends Thread {
 	public Texture runButtonLittle;
 	public Texture handwheelNoHand;
 	public Texture wheel;
-
 	public Texture boyMainMenu;
 	public Texture girlMainMenu;
 	public Texture boyMenuHand;
-
 	public Texture spritesheetGirlRunning;
 	public Texture spritesheetBoyRunning;
-
 	public Texture boyWaving[];
 	public Texture spritesheetBoyElliptical[];
 	public Texture spritesheetGirlElliptical[];
@@ -91,11 +90,9 @@ public class AssetsManager extends Thread {
 	public Texture handSpritesheet;
 	public Texture barNotFilled;
 	public Texture barFilled;
-	// Spritesheets
 	public Texture fireBig;
 	public Texture peopleGround;
 	public Texture peopleBuilding;
-
 	public Texture handwheelBig;
 	public Texture spritesheetTruck;
 	public Texture mainBackground[];
@@ -104,7 +101,6 @@ public class AssetsManager extends Thread {
 	public Texture boyHeadCockpit;
 	public Texture girlHeadCockpit;
 	public Texture girlHandCockpit;
-	// Buttons
 	public Texture bigRoadRescue;
 	public Texture training;
 	public Texture meetTheTrucks;
@@ -115,49 +111,59 @@ public class AssetsManager extends Thread {
 	public Texture yellowSectionLeft;
 	public Texture yellowSectionMiddle;
 	public Texture yellowSectionUp;
-
 	public Texture glass;
 
-	// Particles
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
 	public ParticleEffect truckEmissions;
 	public ParticleEffect buttonEffect;
 	public ParticleEffect water;
-	
-public	ParticleEffect[] smoke;
-public	ParticleEffect[] fireSmoke;
-
+	public ParticleEffect[] smoke;
+	public ParticleEffect[] fireSmoke;
 
 	public BitmapFont font;
 
-	boolean assetsLoaded = false;
+	boolean assetsLoaded;
 
 	public void run() {
 
 		this.setPriority(MAX_PRIORITY);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+
+		loadFonts();
+		loadParticles();
+		loadTextures();
+		setFilters();
+
+		assetsLoaded = true;
+	}
+
+	public boolean getAssetsLoaded() {
+		return assetsLoaded;
+	}
+
+	void loadFonts() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
 				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
+		// This font if from the internet
+		// Free for commercial use license
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
 		parameter.size = 120;
 		parameter.minFilter = TextureFilter.Linear;
 		parameter.magFilter = TextureFilter.Linear;
-
 		font = generator.generateFont(parameter);
 		font.setColor(Color.BLACK);
+	}
 
-		if (new Variables().getDebugMode() == true)
-			System.out.println("Started loading assets.");
-
+	void loadParticles() {
 		stars = new ParticleEffect();
 		stars.load(Gdx.files.internal("particles/starsGoodYellow180"),
 				Gdx.files.internal("particles/"));
-
 		water = new ParticleEffect();
 		water.load(Gdx.files.internal("particles/water"),
 				Gdx.files.internal("particles/"));
-
 		leaf = new ParticleEffect();
 		leaf.load(Gdx.files.internal("particles/leaf"),
 				Gdx.files.internal("particles/"));
@@ -169,6 +175,22 @@ public	ParticleEffect[] fireSmoke;
 				Gdx.files.internal("particles/"));
 		buttonEffect.setPosition(730, 310);
 		buttonEffect.allowCompletion();
+		smoke = new ParticleEffect[12];
+		for (int a = 0; a < 12; a++) {
+			smoke[a] = new ParticleEffect();
+			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
+					Gdx.files.internal("particles/"));
+		}
+		fireSmoke = new ParticleEffect[6];
+		for (int a = 0; a < 6; a++) {
+			fireSmoke[a] = new ParticleEffect();
+			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
+					Gdx.files.internal("particles/"));
+			fireSmoke[a].start();
+		}
+	}
+
+	void loadTextures() {
 		rescueMetroSadPeople = new Texture(
 				"backgrounds/Rescue-metro-sad-people.png");
 		spritesheetBoyRunning = new Texture(
@@ -185,8 +207,8 @@ public	ParticleEffect[] fireSmoke;
 		pointer = new Texture("others/this.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
-		settingsText = new Texture("buttons/Settings-text.png");	
-		authorsText = new Texture("buttons/Authors-text.png");	
+		settingsText = new Texture("buttons/Settings-text.png");
+		authorsText = new Texture("buttons/Authors-text.png");
 		pause = new Texture("buttons/Pause.png");
 		switchButton = new Texture("buttons/Switch 3.png");
 		playButton = new Texture("buttons/Play-button.png");
@@ -235,7 +257,6 @@ public	ParticleEffect[] fireSmoke;
 		boyMainMenu = new Texture("boy/boyMainMenu.png");
 		girlMainMenu = new Texture("girl/girlMainMenu.png");
 		boyMenuHand = new Texture("boy/boyMenuHand.png");
-
 		handSpritesheet = new Texture("others/spritesheetPress.png");
 		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
 		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
@@ -421,12 +442,17 @@ public	ParticleEffect[] fireSmoke;
 		fitnessBackground[3] = new Texture("backgrounds/fitness/fitness4.png");
 
 		fountainAnimation = new Texture[5];
-		fountainAnimation[0] = new Texture("spritesheets/fountainAnimation/1.png");
-		fountainAnimation[1] = new Texture("spritesheets/fountainAnimation/2.png");
-		fountainAnimation[2] = new Texture("spritesheets/fountainAnimation/3.png");
-		fountainAnimation[3] = new Texture("spritesheets/fountainAnimation/4.png");
-		fountainAnimation[4] = new Texture("spritesheets/fountainAnimation/5.png");
-		
+		fountainAnimation[0] = new Texture(
+				"spritesheets/fountainAnimation/1.png");
+		fountainAnimation[1] = new Texture(
+				"spritesheets/fountainAnimation/2.png");
+		fountainAnimation[2] = new Texture(
+				"spritesheets/fountainAnimation/3.png");
+		fountainAnimation[3] = new Texture(
+				"spritesheets/fountainAnimation/4.png");
+		fountainAnimation[4] = new Texture(
+				"spritesheets/fountainAnimation/5.png");
+
 		parkBackgrounds = new Texture[6];
 		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
 		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
@@ -446,72 +472,61 @@ public	ParticleEffect[] fireSmoke;
 		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
 		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
 
-		smoke = new ParticleEffect[12];
-		for (int a = 0; a < 12; a++) {
-			smoke[a] = new ParticleEffect();
-			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
-					Gdx.files.internal("particles/"));
-		}
+	}
 
-		fireSmoke = new ParticleEffect[6];
-		for (int a = 0; a < 6; a++) {
-			fireSmoke[a] = new ParticleEffect();
-			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
-					Gdx.files.internal("particles/"));
-			fireSmoke[a].start();
+	void setFilters() {
 
-		}
+		TextureFilter textureFilter;
 
-		
+		if (dataOrganizer.getTextureFiltering() == true)
+			textureFilter = TextureFilter.Linear;
+		else
+			textureFilter = TextureFilter.Nearest;
+
 		for (int a = 0; a < 4; a++) {
-			rescueCatBackground[a].setFilter(TextureFilter.Linear,
+			rescueCatBackground[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 7; a++) {
-			spritesheetBoyElliptical[a].setFilter(TextureFilter.Linear,
+			spritesheetBoyElliptical[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 7; a++) {
-			spritesheetGirlElliptical[a].setFilter(TextureFilter.Linear,
+			spritesheetGirlElliptical[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 3; a++) {
-			spritesheetGirlWeights[a].setFilter(TextureFilter.Linear,
+			spritesheetGirlWeights[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 3; a++) {
-			spritesheetBoyWeights[a].setFilter(TextureFilter.Linear,
+			spritesheetBoyWeights[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 9; a++) {
-			trainBasketAnimation[a].setFilter(TextureFilter.Linear,
+			trainBasketAnimation[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
 		for (int a = 0; a < 1; a++) {
-			levelBackgrounds[a].setFilter(TextureFilter.Linear,
-					TextureFilter.Linear);
+			levelBackgrounds[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 4; a++) {
-			fitnessBackground[a].setFilter(TextureFilter.Linear,
-					TextureFilter.Linear);
+			fitnessBackground[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 6; a++) {
-			parkBackgrounds[a].setFilter(TextureFilter.Linear,
-					TextureFilter.Linear);
+			parkBackgrounds[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
-			rescueMetro[a]
-					.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			rescueMetro[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 6; a++) {
-			boyWaving[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			boyWaving[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 3; a++) {
-			clouds[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			clouds[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 4; a++) {
-			mainBackground[a].setFilter(TextureFilter.Linear,
-					TextureFilter.Linear);
+			mainBackground[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 4; a++) {
 			truckCockpit[a].setFilter(TextureFilter.Nearest,
@@ -522,8 +537,7 @@ public	ParticleEffect[] fireSmoke;
 					TextureFilter.Nearest);
 		}
 		for (int a = 0; a < 15; a++) {
-			hoseAnimation[a].setFilter(TextureFilter.Linear,
-					TextureFilter.Linear);
+			hoseAnimation[a].setFilter(textureFilter, textureFilter);
 		}
 		hoseAnimationReversed = new Texture[15];
 		for (int a = 0; a < 15; a++) {
@@ -531,94 +545,86 @@ public	ParticleEffect[] fireSmoke;
 		}
 
 		for (int a = 0; a < 24; a++) {
-			bigRoad[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			bigRoad[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 5; a++) {
-			fountainAnimation[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
+			fountainAnimation[a].setFilter(textureFilter, textureFilter);
 		}
-		
-		spritesheetGirlRunning.setFilter(TextureFilter.Linear,
-				TextureFilter.Linear);
-		spritesheetBoyRunning.setFilter(TextureFilter.Linear,
-				TextureFilter.Linear);
-		pause.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		menu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		barFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		barNotFilled.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		longButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		arrow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		button.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		rescueMetroSadPeople.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fireStation.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		girlButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);		
-		runButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		runButtonGreen.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		runButtonLittle.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		pointer.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		speedBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		switchButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		lane.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		carRed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		carYellow.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		carPink.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		retryButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		playButton.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		carBlue.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		carGreen.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		vibrationsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fpsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		screenAwakeText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		textureFilteringText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		voiceText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		settings.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		cockpitPart.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		ledCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		handSpritesheet.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyHeadBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		girlHeadBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+
+		spritesheetGirlRunning.setFilter(textureFilter, textureFilter);
+		spritesheetBoyRunning.setFilter(textureFilter, textureFilter);
+		pause.setFilter(textureFilter, textureFilter);
+		menu.setFilter(textureFilter, textureFilter);
+		barFilled.setFilter(textureFilter, textureFilter);
+		barNotFilled.setFilter(textureFilter, textureFilter);
+		longButton.setFilter(textureFilter, textureFilter);
+		arrow.setFilter(textureFilter, textureFilter);
+		button.setFilter(textureFilter, textureFilter);
+		rescueMetroSadPeople.setFilter(textureFilter, textureFilter);
+		fireStation.setFilter(textureFilter, textureFilter);
+		boyButton.setFilter(textureFilter, textureFilter);
+		girlButton.setFilter(textureFilter, textureFilter);
+		runButton.setFilter(textureFilter, textureFilter);
+		runButtonGreen.setFilter(textureFilter, textureFilter);
+		runButtonLittle.setFilter(textureFilter, textureFilter);
+		pointer.setFilter(textureFilter, textureFilter);
+		speedBar.setFilter(textureFilter, textureFilter);
+		switchButton.setFilter(textureFilter, textureFilter);
+		lane.setFilter(textureFilter, textureFilter);
+		carRed.setFilter(textureFilter, textureFilter);
+		carYellow.setFilter(textureFilter, textureFilter);
+		carPink.setFilter(textureFilter, textureFilter);
+		retryButton.setFilter(textureFilter, textureFilter);
+		playButton.setFilter(textureFilter, textureFilter);
+		carBlue.setFilter(textureFilter, textureFilter);
+		carGreen.setFilter(textureFilter, textureFilter);
+		vibrationsText.setFilter(textureFilter, textureFilter);
+		fpsText.setFilter(textureFilter, textureFilter);
+		screenAwakeText.setFilter(textureFilter, textureFilter);
+		textureFilteringText.setFilter(textureFilter, textureFilter);
+		voiceText.setFilter(textureFilter, textureFilter);
+		settings.setFilter(textureFilter, textureFilter);
+		cockpitPart.setFilter(textureFilter, textureFilter);
+		ledCockpit.setFilter(textureFilter, textureFilter);
+		handSpritesheet.setFilter(textureFilter, textureFilter);
+		boyHeadBig.setFilter(textureFilter, textureFilter);
+		girlHeadBig.setFilter(textureFilter, textureFilter);
 		glass.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
-		handwheelBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		spritesheetTruck.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		wheel.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		arrowUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		arrowDown.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fireBar.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		handTruckFront.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		handwheelNoHand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyHeadCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		girlHeadCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		girlHandCockpit.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fireBig.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		peopleGround.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		peopleBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		bigRoadRescue.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		training.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		truckLed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		meetTheTrucks.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		rescueBuilding.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		rescueCat.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fitness.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		rescueTrain.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		yellowSectionUp.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		yellowSectionLeft.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		yellowSectionMiddle.setFilter(TextureFilter.Linear,
-				TextureFilter.Linear);
-		settingsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyTorso.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyHeadBigBlonde.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		authorsText.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		fireMiniature.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyMainMenu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		girlMainMenu.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		boyMenuHand.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		truckBlank[0].setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		authors.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		handwheelBig.setFilter(textureFilter, textureFilter);
+		spritesheetTruck.setFilter(textureFilter, textureFilter);
+		wheel.setFilter(textureFilter, textureFilter);
+		arrowUp.setFilter(textureFilter, textureFilter);
+		arrowDown.setFilter(textureFilter, textureFilter);
+		fireBar.setFilter(textureFilter, textureFilter);
+		handTruckFront.setFilter(textureFilter, textureFilter);
+		handwheelNoHand.setFilter(textureFilter, textureFilter);
+		boyHeadCockpit.setFilter(textureFilter, textureFilter);
+		girlHeadCockpit.setFilter(textureFilter, textureFilter);
+		girlHandCockpit.setFilter(textureFilter, textureFilter);
+		fireBig.setFilter(textureFilter, textureFilter);
+		peopleGround.setFilter(textureFilter, textureFilter);
+		peopleBuilding.setFilter(textureFilter, textureFilter);
+		bigRoadRescue.setFilter(textureFilter, textureFilter);
+		training.setFilter(textureFilter, textureFilter);
+		truckLed.setFilter(textureFilter, textureFilter);
+		meetTheTrucks.setFilter(textureFilter, textureFilter);
+		rescueBuilding.setFilter(textureFilter, textureFilter);
+		rescueCat.setFilter(textureFilter, textureFilter);
+		fitness.setFilter(textureFilter, textureFilter);
+		rescueTrain.setFilter(textureFilter, textureFilter);
+		yellowSectionUp.setFilter(textureFilter, textureFilter);
+		yellowSectionLeft.setFilter(textureFilter, textureFilter);
+		yellowSectionMiddle.setFilter(textureFilter, textureFilter);
+		settingsText.setFilter(textureFilter, textureFilter);
+		boyTorso.setFilter(textureFilter, textureFilter);
+		boyHeadBigBlonde.setFilter(textureFilter, textureFilter);
+		authorsText.setFilter(textureFilter, textureFilter);
+		fireMiniature.setFilter(textureFilter, textureFilter);
+		boyMainMenu.setFilter(textureFilter, textureFilter);
+		girlMainMenu.setFilter(textureFilter, textureFilter);
+		boyMenuHand.setFilter(textureFilter, textureFilter);
+		truckBlank[0].setFilter(textureFilter, textureFilter);
+		authors.setFilter(textureFilter, textureFilter);
 
-		assetsLoaded = true;
-	}
-
-	public boolean getAssetsLoaded() {
-		return assetsLoaded;
 	}
 }
