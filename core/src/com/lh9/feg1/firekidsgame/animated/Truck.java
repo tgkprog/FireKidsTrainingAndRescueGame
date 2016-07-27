@@ -46,7 +46,15 @@ public class Truck extends Human {
 			return false;
 
 	}
+	public boolean checkCollision(Rectangle bounds) {
 
+		truck.setPosition(x, y);
+		if (truck.overlaps(bounds)) {
+			return true;
+		} else
+			return false;
+
+	}
 	public void render(SpriteBatch batch, float delta) {
 
 		if (animation == true && stateTime < animationTime * frameNumber)

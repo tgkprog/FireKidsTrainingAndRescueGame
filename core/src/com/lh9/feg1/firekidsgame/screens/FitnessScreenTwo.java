@@ -67,9 +67,10 @@ public class FitnessScreenTwo implements Screen {
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
-		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
-				assetsManager.runButton);
-		runButton.goUp((int) variables.getRunButtonPosition().y);
+		
+		runButton = new Button(685, -200, assetsManager.runButtonLittle);
+		runButton.goUp(30);
+		runButton.setAlpha(0.5f);
 
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
@@ -233,6 +234,13 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void updateLogics(double delta) {
+		
+		if (menuWindow.isVisibile() == true) {
+			runButton.setDontRespond(true);
+		} else {
+			runButton.setDontRespond(false);
+		}
+		
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;

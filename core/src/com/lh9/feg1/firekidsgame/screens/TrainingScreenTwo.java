@@ -45,6 +45,7 @@ public class TrainingScreenTwo implements Screen {
 	float peopleBuildingTimer;
 	int lastTimeCarLane;
 
+	Sprite fireMiniature;
 	Truck truck;
 	Button menuButton;
 	Button retryButton;
@@ -93,8 +94,9 @@ public class TrainingScreenTwo implements Screen {
 		up.goUp(360);
 		down = new Button(10, -100, assetsManager.arrowDown);
 		down.goUp(250);
-		runButton = new Button(650, 0, assetsManager.runButton);
-		runButton.goUp(220);
+		runButton = new Button(685, -200, assetsManager.runButtonLittle);
+		runButton.goUp(30);
+		runButton.setAlpha(0.5f);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -229,6 +231,9 @@ public class TrainingScreenTwo implements Screen {
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		boyHead.setScale(0.5f);
+		fireMiniature = new Sprite(assetsManager.fireMiniature);
+		fireMiniature.setScale(0.5f);
+		fireMiniature.setPosition(160, 410);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -269,7 +274,7 @@ public class TrainingScreenTwo implements Screen {
 
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
-		drawBar(delta);
+		drawBars(delta);
 		drawClosestCarPointer();
 		drawClouds(deltaTemp);
 		drawFps();
@@ -470,6 +475,16 @@ public class TrainingScreenTwo implements Screen {
 	void updateLogics(float delta) {
 		pointer.setScale((float) pointerScale);
 
+		if (menuWindow.isVisibile() == true) {
+			runButton.setDontRespond(true);
+			up.setDontRespond(true);
+			down.setDontRespond(true);
+		} else {
+			runButton.setDontRespond(false);
+			up.setDontRespond(false);
+			down.setDontRespond(false);
+		}
+		
 		if (ledRed == true) {
 			if (truckLed.getColor().r < 1) {
 				truckLed.setColor(truckLed.getColor().r + delta, 1, 1, 1);
@@ -627,7 +642,7 @@ public class TrainingScreenTwo implements Screen {
 
 		}
 		if (truck.getX() > -15200 && truck.getX() < -12100)
-			batch.draw(assetsManager.bigRoad[18], -13600, 0);
+			batch.draw(assetsManager.bigRoad[18], -13600, -2);
 		if (truck.getX() > -19000 && truck.getX() < -12100) {
 			batch.draw(assetsManager.bigRoad[19], -14400, 0);
 		}
@@ -653,11 +668,13 @@ public class TrainingScreenTwo implements Screen {
 		peopleBuilding.render(batch, delta);
 	}
 
-	void drawBar(float delta) {
+	void drawBars(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
 
 		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
 		boyHead.draw(batch);
+
+		fireMiniature.draw(batch);
 
 		speedBar.render(batch, delta, truck.getSpeed());
 

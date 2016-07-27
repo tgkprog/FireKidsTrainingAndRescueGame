@@ -22,8 +22,6 @@ public class MenuWindow extends Dialogue {
 
 	public void draw(SpriteBatch batch, float delta) {	
 		
-		System.out.println("!!!");
-		
 		menu.goUp((int)this.y+25);
 		retry.goUp((int)this.y+25);
 		play.goUp((int)this.y+25);

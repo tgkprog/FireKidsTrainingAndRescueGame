@@ -98,9 +98,13 @@ public class Human extends Animated {
 		else
 			speed += (1 / speed);
 
+		if(speed >= 0)
 		if (speed > maxSpeed + 5)
 			speed = maxSpeed + 5;
-
+		if(speed < 0)
+			if (speed < -maxSpeed - 5)
+				speed = -maxSpeed - 5;
+			
 		counter++;
 	}
 
@@ -138,9 +142,6 @@ public class Human extends Animated {
 		if (Math.abs(speed) < 0.01f) {
 			speed = 0;
 		}
-		// if (speed < 0)
-		// speed = 0;
-
 	}
 
 	public float getX() {
@@ -191,5 +192,8 @@ public class Human extends Animated {
 
 	public void setSpeedAdder(float speedAdder) {
 		this.speedAdder = speedAdder;
+	}
+	public float getMaxSpeed(){
+		return maxSpeed;
 	}
 }

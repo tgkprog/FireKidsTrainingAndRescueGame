@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Car;
 import com.lh9.feg1.firekidsgame.animated.Human;
@@ -19,6 +20,7 @@ import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
+import com.lh9.feg1.firekidsgame.graphics.CollidableObject;
 import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
@@ -29,6 +31,15 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class BigRoadRescueScreen implements Screen {
 
+	float boltSpawnTimer;
+	float oilSpawnTimer;
+
+	static final int upLane = 210;
+	static final int downLane = 135;
+
+	Sprite boltMiniature;
+	Sprite oilMiniature;
+	Array<CollidableObject> powerUps;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Sprite boyHead;
@@ -42,6 +53,7 @@ public class BigRoadRescueScreen implements Screen {
 	Human girlHoseReversed;
 	Sprite fireMiniature;
 	Bar speedBar;
+	Bar fireToEclipseBar;
 	Bar fireBar;
 	Vector2[][] firePositions;
 	Vector2[] fireRange;
@@ -191,6 +203,9 @@ public class BigRoadRescueScreen implements Screen {
 				260, 10, 20);
 		fireBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 20);
+		fireToEclipseBar = new Bar(assetsManager.barFilledBlue,
+				assetsManager.barNotFilledBlue, 260, 30, minigameCounter);
+		fireToEclipseBar.setVisibility(true);
 		fireBar.setVisibility(true);
 
 		randomizeMinigame();
@@ -203,10 +218,16 @@ public class BigRoadRescueScreen implements Screen {
 		boyHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.fireMiniature);
 		fireMiniature.setScale(0);
+		oilMiniature = new Sprite(assetsManager.oilButton);
+		oilMiniature.setScale(0);
+		boltMiniature = new Sprite(assetsManager.boltButton);
+		boltMiniature.setScale(0);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		powerUps = new Array<CollidableObject>();
 
 		dialogueWindow.popUp();
 		cloudManager.stop();
@@ -218,7 +239,7 @@ public class BigRoadRescueScreen implements Screen {
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -236,6 +257,7 @@ public class BigRoadRescueScreen implements Screen {
 		batch.begin();
 
 		drawBackground(delta);
+		drawPowerUps(delta);
 		drawCharacters(delta);
 		drawParticles(delta);
 		drawFireUtilities(delta);
@@ -386,6 +408,8 @@ public class BigRoadRescueScreen implements Screen {
 		pause.render(batch, delta);
 		runRight.render(batch, delta);
 		runLeft.render(batch, delta);
+		up.render(batch, delta);
+		down.render(batch, delta);
 	}
 
 	void drawWindows(float delta) {
@@ -394,7 +418,45 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void updateLogics(float delta) {
+		boltSpawnTimer += delta;
+		oilSpawnTimer += delta;
 
+		boolean available = false;
+		
+		if(Math.abs(truck.getX()) > Math.abs(fireRange[randomFire].x)){
+			if(Math.abs(truck.getX()) - Math.abs(fireRange[randomFire].x) > 5000)
+			available = true;
+		}
+		else
+		{
+			if(Math.abs( Math.abs(fireRange[randomFire].x) - Math.abs(truck.getX())) > 5000)
+				available = true;
+		}
+		
+		if (Math.abs(truck.getSpeed()) >= 5f && truck.getY() != 80 && available == true)
+			if (MathUtils.randomBoolean() == true) {
+				if (boltSpawnTimer > 20f && powerUps.size < 1) {
+							spawnBolt();
+							boltSpawnTimer = 0;
+						
+				}
+			} else if (oilSpawnTimer > 8f && powerUps.size < 1) {
+					spawnOil();
+					oilSpawnTimer = 0;
+			}
+
+		
+		if (menuWindow.isVisibile() == true) {
+			runRight.setDontRespond(true);
+			runLeft.setDontRespond(true);
+			up.setDontRespond(true);
+			down.setDontRespond(true);
+		} else {
+			runRight.setDontRespond(false);
+			runLeft.setDontRespond(false);
+			up.setDontRespond(false);
+			down.setDontRespond(false);
+		}
 		checkCarsCollisions();
 
 		if (ledRed == true) {
@@ -445,6 +507,8 @@ public class BigRoadRescueScreen implements Screen {
 			runLeft.setDontRespond(false);
 			runRight.setDontRespond(false);
 			pause.setDontRespond(false);
+			up.setDontRespond(false);
+			down.setDontRespond(false);
 			// up.setDontRespond(false);
 			// down.setDontRespond(false);
 		}
@@ -452,9 +516,9 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (truck.getX() <= 500 && cameraFirstZoom == false
+		if (truck.getX() <= 400 && cameraFirstZoom == false
 				&& truck.getX() > -15000)
-			camera.position.x = truck.getX() + 300;
+			camera.position.x = truck.getX() + 400;
 	}
 
 	void drawBackground(float delta) {
@@ -508,7 +572,7 @@ public class BigRoadRescueScreen implements Screen {
 			fountains[5].render(batch, delta);
 		}
 		if (truck.getX() > -15200 && truck.getX() < -12100)
-			batch.draw(assetsManager.bigRoad[18], -13600, 0);
+			batch.draw(assetsManager.bigRoad[18], -13600, -2);
 		if (truck.getX() > -19000 && truck.getX() < -12100)
 			batch.draw(assetsManager.bigRoad[19], -14400, 0);
 		if (truck.getX() > -19000 && truck.getX() < -13700) {
@@ -529,14 +593,32 @@ public class BigRoadRescueScreen implements Screen {
 
 	void drawBars(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
+
+		for (int a = 0; a < powerUps.size; a++) {
+			if (powerUps.get(a).getType() == "Oil") {
+				oilMiniature.setScale(powerUps.get(a).getPercentScale() * 0.5f);
+				oilMiniature.setPosition(
+						530 + powerUps.get(a).getX() * 0.0255f, 410);
+				oilMiniature.draw(batch);
+			}
+			if (powerUps.get(a).getType() == "Bolt") {
+				boltMiniature
+						.setScale(powerUps.get(a).getPercentScale() * 0.5f);
+				boltMiniature.setPosition(
+						530 + powerUps.get(a).getX() * 0.0255f, 410);
+				boltMiniature.draw(batch);
+			}
+		}
 		fireMiniature
 				.setPosition(
 						530 + (fireRange[randomFire].x + fireRange[randomFire].y) / 2 * 0.0255f,
 						410);
 		fireMiniature.setScale(fireScale * 0.5f);
 		fireMiniature.draw(batch);
+
+		fireToEclipseBar.render(batch, delta, 9 - minigameCounter);
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
-		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		boyHead.setPosition(540 + truck.getX() * 0.0255f, 410);
 		boyHead.draw(batch);
 	}
 
@@ -659,10 +741,13 @@ public class BigRoadRescueScreen implements Screen {
 			if (truck.getX() > fireRange[randomFire].x - 300
 					&& truck.getX() < fireRange[randomFire].y + 300) {
 				truck.animationLane();
+				boltSpawnTimer -= delta;
+				oilSpawnTimer -= delta;
 			}
-			if (truck.getX() > fireRange[randomFire].x - 120
-					&& truck.getX() < fireRange[randomFire].x - 110) {
+			if (truck.getX() > fireRange[randomFire].x - 125
+					&& truck.getX() < fireRange[randomFire].x - 105) {
 				truck.setSpeed(0);
+				
 				girlTimer += delta;
 				if (girlTimer > 0.1f) {
 					girlTimer = 0;
@@ -853,5 +938,91 @@ public class BigRoadRescueScreen implements Screen {
 	void drawFireUtilities(float delta) {
 		eclipseFire.render(batch, delta);
 		fireBar.render(batch, delta, 20 - eclipseFire.getCounter());
+	}
+
+	void drawPowerUps(float delta) {
+		for (int a = 0; a < powerUps.size; a++) {
+			powerUps.get(a).render(batch, delta);
+
+			if (truck.checkCollision(powerUps.get(a).getBounds()) == true) {
+				if (powerUps.get(a).getType() == "Bolt"
+						&& powerUps.get(a).getToDestroy() == false) {
+
+					oilSpawnTimer = 0;
+					boltSpawnTimer = 0;
+
+					if (truck.getSpeed() >= 0)
+						for (int g = 0; g < 7; g++)
+							truck.move();
+					else
+						for (int g = 0; g < 7; g++)
+							truck.moveReverse();
+				}
+				if (powerUps.get(a).getType() == "Oil"
+						&& powerUps.get(a).getToDestroy() == false
+						&& powerUps.get(a).getPercentScale() == 1) {
+					truck.setSpeed(truck.getSpeed() * 0.3f);
+					oilSpawnTimer = 0;
+					boltSpawnTimer = 0;
+				}
+
+				powerUps.get(a).toDestroy();
+			}
+			if (powerUps.get(a).isReadyToDestroy() == true) {
+				powerUps.removeIndex(a);
+			}
+		}
+
+	}
+
+	void spawnOil() {
+		MathUtils.random
+				.setSeed((long) (truck.getX() * truck.getSpeed() * MathUtils
+						.random(2000)));
+
+		CollidableObject oil;
+		boolean random = MathUtils.randomBoolean();
+		if (random == true) {
+			if (truck.getX() + 3000 < 1500)
+				oil = new CollidableObject(
+						(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+								.getX()) / 2)), upLane, assetsManager.oil,
+						"Oil");
+			else
+				oil = new CollidableObject(
+						(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+								.getX()) / 2)), upLane, assetsManager.oil,
+						"Oil");
+		} else {
+			if (truck.getX() + 3000 < 1500)
+				oil = new CollidableObject(
+						(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+								.getX()) / 2)), downLane, assetsManager.oil,
+						"Oil");
+			else
+				oil = new CollidableObject(
+						(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+								.getX()) / 2)), downLane, assetsManager.oil,
+						"Oil");
+		}
+		powerUps.add(oil);
+	}
+
+	void spawnBolt() {
+		MathUtils.random
+				.setSeed((long) (truck.getX() * truck.getSpeed() * MathUtils
+						.random(2000)));
+		CollidableObject bolt;
+		boolean random = MathUtils.randomBoolean();
+		if (random == true)
+			bolt = new CollidableObject(
+					(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+							.getX()) / 2)), upLane, assetsManager.bolt, "Bolt");
+		else
+			bolt = new CollidableObject(
+					(int) (((((fireRange[randomFire].x + fireRange[randomFire].y) / 2) + truck
+							.getX()) / 2)), downLane, assetsManager.bolt,
+					"Bolt");
+		powerUps.add(bolt);
 	}
 }

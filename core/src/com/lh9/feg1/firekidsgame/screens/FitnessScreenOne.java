@@ -67,9 +67,9 @@ public class FitnessScreenOne implements Screen {
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
-		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
-				assetsManager.runButton);
-		runButton.goUp((int) variables.getRunButtonPosition().y);
+		runButton = new Button(685, -200, assetsManager.runButtonLittle);
+		runButton.goUp(30);
+		runButton.setAlpha(0.5f);
 
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
@@ -140,7 +140,7 @@ public class FitnessScreenOne implements Screen {
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -230,6 +230,12 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void updateLogics(double delta) {
+
+		if (menuWindow.isVisibile() == true) {
+			runButton.setDontRespond(true);
+		} else {
+			runButton.setDontRespond(false);
+		}
 
 		if (boy.getSpeed() < 0)
 			boy.setSpeed(0);

@@ -10,13 +10,13 @@ public class Bar {
 
 	int x;
 	int y;
-	int maximum;
+	float maximum;
 
 	Texture barNotFilled;
 	Texture barFilled;
 
 	public Bar(Texture barNotFilled, Texture barFilled, int x, int y,
-			int maximum) {
+			float maximum) {
 		this.barNotFilled = barNotFilled;
 		this.barFilled = barFilled;
 		this.x = x;

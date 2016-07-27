@@ -14,6 +14,12 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture oilButton;
+	public Texture boltButton;
+	public Texture oil;
+	public Texture bolt;
+	public Texture barFilledBlue;
+	public Texture barNotFilledBlue;
 	public Texture voiceText;
 	public Texture vibrationsText;
 	public Texture textureFilteringText;
@@ -191,6 +197,12 @@ public class AssetsManager extends Thread {
 	}
 
 	void loadTextures() {
+		barFilledBlue = new Texture("others/barFilledBlue.png");
+		barNotFilledBlue = new Texture("others/barNotFilledBlue.png");
+		oilButton = new Texture("buttons/buttonOil.png");
+		boltButton = new Texture("buttons/buttonBolt.png");
+		oil = new Texture("others/oil.png");
+		bolt = new Texture("others/bolt.png");
 		rescueMetroSadPeople = new Texture(
 				"backgrounds/Rescue-metro-sad-people.png");
 		spritesheetBoyRunning = new Texture(
@@ -583,6 +595,8 @@ public class AssetsManager extends Thread {
 		screenAwakeText.setFilter(textureFilter, textureFilter);
 		textureFilteringText.setFilter(textureFilter, textureFilter);
 		voiceText.setFilter(textureFilter, textureFilter);
+		barFilledBlue.setFilter(textureFilter, textureFilter);
+		barNotFilledBlue.setFilter(textureFilter, textureFilter);
 		settings.setFilter(textureFilter, textureFilter);
 		cockpitPart.setFilter(textureFilter, textureFilter);
 		ledCockpit.setFilter(textureFilter, textureFilter);
@@ -622,9 +636,12 @@ public class AssetsManager extends Thread {
 		fireMiniature.setFilter(textureFilter, textureFilter);
 		boyMainMenu.setFilter(textureFilter, textureFilter);
 		girlMainMenu.setFilter(textureFilter, textureFilter);
+		oilButton.setFilter(textureFilter, textureFilter);
+		boltButton.setFilter(textureFilter, textureFilter);
+		oil.setFilter(textureFilter, textureFilter);
+		bolt.setFilter(textureFilter, textureFilter);
 		boyMenuHand.setFilter(textureFilter, textureFilter);
 		truckBlank[0].setFilter(textureFilter, textureFilter);
 		authors.setFilter(textureFilter, textureFilter);
-
 	}
 }

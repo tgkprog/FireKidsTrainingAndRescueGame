@@ -1,5 +1,6 @@
 package com.lh9.feg1.firekidsgame.graphics;
 
+import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -46,6 +47,9 @@ public class CloudManager {
 	}
 
 	public void render(SpriteBatch batch, double delta) {
+
+		if(Gdx.graphics.getRawDeltaTime() > 0.05f && Gdx.graphics.getDeltaTime() > 0.05f)
+			delta = 0;
 		if (allScalesEqualZero == false && loaded == true) {
 
 			for (int a = 0; a < 13; a++)

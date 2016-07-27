@@ -49,8 +49,8 @@ public class TrainingScreenOne implements Screen {
 	float shakeScreenTimer;
 	float timerSirene;
 	float timerSecondWindow;
-	float minigameTimeLeft = 3;
-	int minigameCounter = 10;
+	float minigameTimeLeft = 2f;
+	int minigameCounter = 30;
 
 	Sprite windowCounter;
 	Sprite yellowSectionMiddlePointer;
@@ -92,6 +92,7 @@ public class TrainingScreenOne implements Screen {
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Bar timeLeftBar;
+	Bar counterLeftBar;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
@@ -209,7 +210,7 @@ public class TrainingScreenOne implements Screen {
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
-		inputInterpreter.setPauseButton(pause);
+		//inputInterpreter.setPauseButton(pause);
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
@@ -272,8 +273,12 @@ public class TrainingScreenOne implements Screen {
 		yellowButtons = new boolean[4];
 
 		timeLeftBar = new Bar(assetsManager.barFilled,
-				assetsManager.barNotFilled, 250, 450, 3);
+				assetsManager.barNotFilled, 250, 450, minigameTimeLeft);
 
+		counterLeftBar = new Bar(assetsManager.barFilledBlue,
+				assetsManager.barNotFilledBlue, 250, 425, minigameCounter);
+
+		
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
@@ -574,11 +579,14 @@ public class TrainingScreenOne implements Screen {
 		if (drawTime == true) {
 
 			timeLeftBar.render(batch, delta, minigameTimeLeft);
+			counterLeftBar.render(batch, delta, 29 - minigameCounter);
 
 			if (afterMinigameWindow == false) {
 				timeLeftBar.setVisibility(true);
+				counterLeftBar.setVisibility(true);
 			} else {
 				timeLeftBar.setVisibility(false);
+				counterLeftBar.setVisibility(false);
 			}
 
 		}
@@ -623,7 +631,7 @@ public class TrainingScreenOne implements Screen {
 		}
 
 		if (allPointersScaleZero == true && minigameRunning == true) {
-			minigameTimeLeft = 3;
+			minigameTimeLeft = 2f;
 			minigameRunning = false;
 		}
 
