@@ -8,6 +8,7 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Truck extends Human {
 
+	Sprite frameSprite;
 	Sprite wheel;
 	int lane = 2;
 	boolean[] lanesTaken;
@@ -21,6 +22,7 @@ public class Truck extends Human {
 	double previousStateTime;
 	boolean allowMovingReverse;
 	Sprite reversedFrame;
+	float scale = 1;
 
 	public void bump() {
 
@@ -46,6 +48,7 @@ public class Truck extends Human {
 			return false;
 
 	}
+
 	public boolean checkCollision(Rectangle bounds) {
 
 		truck.setPosition(x, y);
@@ -55,6 +58,7 @@ public class Truck extends Human {
 			return false;
 
 	}
+
 	public void render(SpriteBatch batch, float delta) {
 
 		if (animation == true && stateTime < animationTime * frameNumber)
@@ -78,11 +82,16 @@ public class Truck extends Human {
 			if (stateTime / animationTime > frameNumber)
 				stateTime = animationTime * frameNumber - animationTime * 0.5f;
 
-			if (allowMovingReverse == false)
-				batch.draw(frames[(int) (stateTime / animationTime)], x, y);
-			else {
+			if (allowMovingReverse == false) {
+				frameSprite = new Sprite(
+						frames[(int) (stateTime / animationTime)]);
+				frameSprite.setPosition(x, y);
+				frameSprite.setScale(scale);
+				frameSprite.draw(batch);
+			} else {
 				reversedFrame = new Sprite(
 						frames[(int) (stateTime / animationTime)]);
+				reversedFrame.setScale(scale);
 				reversedFrame.setPosition(x, y);
 				if (speed < 0)
 					reversedFrame.flip(true, false);
@@ -94,30 +103,60 @@ public class Truck extends Human {
 		batch.setColor(1, 1, 1, 1);
 		if (wheel != null) {
 			if (allowMovingReverse == false) {
-				wheel.setPosition(x + 85, y + 10);
-				wheel.draw(batch);
-				wheel.setPosition(x + 380, y + 10);
-				wheel.draw(batch);
-				wheel.setPosition(x + 770, y + 10);
-				wheel.draw(batch);
-				wheel.rotate(delta * 70 * speed);
-			} else {
-				if (speed < 0) {
-					wheel.setPosition(x + 60, y + 10);
-					wheel.draw(batch);
-					wheel.setPosition(x + 445, y + 10);
-					wheel.draw(batch);
-					wheel.setPosition(x + 740, y + 10);
-					wheel.draw(batch);
-					wheel.rotate(delta * 70 * speed);
-				} else if (speed >= 0) {
+				if (scale == 1) {
 					wheel.setPosition(x + 85, y + 10);
 					wheel.draw(batch);
 					wheel.setPosition(x + 380, y + 10);
 					wheel.draw(batch);
 					wheel.setPosition(x + 770, y + 10);
 					wheel.draw(batch);
-					wheel.rotate(delta * 70 * speed);
+					wheel.rotate(delta * 100 * speed);
+				} else {
+					wheel.setPosition(x - 310, y - 290);
+					wheel.draw(batch);
+					wheel.setPosition(x + 340, y - 290);
+					wheel.draw(batch);
+					wheel.setPosition(x + 1200, y - 290);
+					wheel.draw(batch);
+					wheel.rotate(delta * 100 * speed);
+				}
+			} else {
+				if (speed < 0) {
+					if (scale == 1) {
+						wheel.setPosition(x + 60, y + 10);
+						wheel.draw(batch);
+						wheel.setPosition(x + 445, y + 10);
+						wheel.draw(batch);
+						wheel.setPosition(x + 740, y + 10);
+						wheel.draw(batch);
+						wheel.rotate(delta * 100 * speed);
+					} else {
+						wheel.setPosition(x - 370, y - 290);
+						wheel.draw(batch);
+						wheel.setPosition(x + 485, y - 290);
+						wheel.draw(batch);
+						wheel.setPosition(x + 1140, y - 290);
+						wheel.draw(batch);
+						wheel.rotate(delta * 100 * speed);
+					}
+				} else if (speed >= 0) {
+					if (scale == 1) {
+						wheel.setPosition(x + 85, y + 10);
+						wheel.draw(batch);
+						wheel.setPosition(x + 380, y + 10);
+						wheel.draw(batch);
+						wheel.setPosition(x + 770, y + 10);
+						wheel.draw(batch);
+						wheel.rotate(delta * 100 * speed);
+					} else {
+						wheel.setPosition(x - 310, y - 290);
+						wheel.draw(batch);
+						wheel.setPosition(x + 340, y - 290);
+						wheel.draw(batch);
+						wheel.setPosition(x + 1200, y - 290);
+						wheel.draw(batch);
+						wheel.rotate(delta * 100 * speed);
+					}
 				}
 			}
 		}
@@ -140,7 +179,7 @@ public class Truck extends Human {
 
 		y = 135;
 		this.wheel = new Sprite(wheel);
-		this.wheel.setScale(2f);
+		this.wheel.setScale(2f * scale);
 		stateTime = 0;
 		lanesTaken = new boolean[3];
 		truck = new Rectangle();
@@ -239,5 +278,11 @@ public class Truck extends Human {
 
 	public boolean getAllowMovingReverse() {
 		return allowMovingReverse;
+	}
+
+	public void setScale(float scale) {
+		this.scale = scale;
+		if (wheel != null)
+			wheel.setScale(2f * scale);
 	}
 }

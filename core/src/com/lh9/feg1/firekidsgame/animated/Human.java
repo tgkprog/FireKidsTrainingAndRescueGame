@@ -4,6 +4,7 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Human extends Animated {
 
+	float friction = 1;
 	float speed;
 	float stateTime = 0.05f;
 	float maxSpeed = 8;
@@ -98,19 +99,19 @@ public class Human extends Animated {
 		else
 			speed += (1 / speed);
 
-		if(speed >= 0)
-		if (speed > maxSpeed + 5)
-			speed = maxSpeed + 5;
-		if(speed < 0)
+		if (speed >= 0)
+			if (speed > maxSpeed + 5)
+				speed = maxSpeed + 5;
+		if (speed < 0)
 			if (speed < -maxSpeed - 5)
 				speed = -maxSpeed - 5;
-			
+
 		counter++;
 	}
 
 	public void moveReverse() {
 		if (speed > -maxSpeed)
-			speed -= 0.5f;
+			speed -= speedAdder;
 		else
 			speed -= (1 / speed);
 
@@ -135,11 +136,11 @@ public class Human extends Animated {
 			}
 		}
 		if (speed > 0)
-			speed -= delta;
+			speed -= delta * friction;
 		if (speed < 0)
-			speed += delta;
+			speed += delta * friction;
 
-		if (Math.abs(speed) < 0.01f) {
+		if (Math.abs(speed) < 0.1f) {
 			speed = 0;
 		}
 	}
@@ -193,7 +194,12 @@ public class Human extends Animated {
 	public void setSpeedAdder(float speedAdder) {
 		this.speedAdder = speedAdder;
 	}
-	public float getMaxSpeed(){
+
+	public float getMaxSpeed() {
 		return maxSpeed;
+	}
+
+	public void setFriction(float friction) {
+		this.friction = friction;
 	}
 }

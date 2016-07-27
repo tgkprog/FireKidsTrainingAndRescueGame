@@ -4,9 +4,11 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
+import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
@@ -21,11 +23,19 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
+	Sprite basket;
+	Truck truck;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
+	Bar timeLeftBar;
+	Bar counterLeftBar;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
+	Button up;
+	Button down;
+	Button runLeft;
+	Button runRight;
 	MenuWindow menuWindow;
 	Bar speedBar;
 	Human girl;
@@ -40,12 +50,16 @@ public class RescueCatScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	float timerWin;
 	float timerSpeedGirl;
-
+	float greenTimer = 1;
 	boolean exit;
+	boolean startedClouds;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
+	float buttonsAlpha;
+	float rotation;
 
 	final Starter game;
 
@@ -73,13 +87,41 @@ public class RescueCatScreen implements Screen {
 		playButton.goUp(300);
 		retryButton.goUp(300);
 		menuButton.goUp(300);
+		pause.setAlpha(0.5f);
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getCatRescueScreen());
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
+		truck = new Truck();
+		truck.create(assetsManager.truckNoBasket, 3, 3, 1, 3000, 350);
+		truck.setMaxSpeed(20);
+		truck.setMaxPositions(-1000, 3000);
+		truck.loadWheel(assetsManager.wheel);
+		truck.goLeft();
+		truck.setScale(2.2f);
+		truck.setSpeedAdder(15);
+		truck.setFriction(5);
+
+		up = new Button(10, -100, assetsManager.arrowUp);
+		up.goUp(360);
+		down = new Button(10, -100, assetsManager.arrowDown);
+		down.goUp(250);
+
+		runRight = new Button(685, -200, assetsManager.runButtonLittle);
+		runRight.goUp(30);
+		runLeft = new Button(35, -200, assetsManager.runButtonLittle);
+		runLeft.goUp(30);
+
+		runLeft.setAlpha(0);
+		runRight.setAlpha(0);
+		up.setAlpha(0);
+		down.setAlpha(0);
+
+		runLeft.setDontRespond(true);
+		runRight.setDontRespond(true);
+		up.setDontRespond(true);
+		down.setDontRespond(true);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -90,7 +132,12 @@ public class RescueCatScreen implements Screen {
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
-		inputInterpreter.setControlledHuman(girl);
+		inputInterpreter.setControlledHuman(truck);
+		inputInterpreter.setControlledTruck(truck);
+		inputInterpreter.setRunButton(runLeft);
+		inputInterpreter.setRunButtonSecond(runRight);
+		inputInterpreter.loadDown(down);
+		inputInterpreter.loadUp(up);
 
 		cloudManager.stop();
 
@@ -108,9 +155,14 @@ public class RescueCatScreen implements Screen {
 
 		assetsManager.stars.setPosition(400, 480);
 
-		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 8);
-		speedBar.setVisibility(true);
+		basket = new Sprite(assetsManager.basket);
+
+		counterLeftBar = new Bar(assetsManager.barFilled,
+				assetsManager.barNotFilled, 250, 10, 6);
+		timeLeftBar = new Bar(assetsManager.barFilledBlue,
+				assetsManager.barNotFilledBlue, 250, 455, 10);
+		timeLeftBar.setVisibility(false);
+		counterLeftBar.setVisibility(false);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -119,11 +171,11 @@ public class RescueCatScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -148,7 +200,8 @@ public class RescueCatScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
-		drawBar(delta);
+		drawParticles(deltaTemp);
+		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		drawClouds(deltaTemp);
@@ -196,11 +249,22 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		girl.render(batch, delta);
+		batch.draw(assetsManager.catSad, 1265, 1175);
+		basket.setRotation(rotation);
+		basket.setScale(2.2f);
+		basket.setPosition(truck.getX() + 400 + Math.abs(rotation * 6),
+				750 + Math.abs(rotation * 6));
+		basket.setColor(greenTimer, 1, greenTimer, 1);
+		basket.draw(batch);
+		truck.render(batch, delta);
 	}
 
-	void drawButtons(double delta) {
-		pause.render(batch, (float) delta);
+	void drawButtons(float delta) {
+		pause.render(batch, delta);
+		up.render(batch, delta);
+		down.render(batch, delta);
+		runLeft.render(batch, delta);
+		runRight.render(batch, delta);
 		// runButton.render(batch, (float) delta);
 	}
 
@@ -209,17 +273,92 @@ public class RescueCatScreen implements Screen {
 		dialogueWindow.draw(batch, delta);
 	}
 
-	void updateLogics(double delta) {
+	void updateLogics(float delta) {
+
+		if (finish == true && buttonsAlpha == 0
+				&& secondDialogueClicked == false) {
+			secondDialogueClicked = true;
+			dialogueWindow.popUp();
+		}
+		if (finish == true && buttonsAlpha == 0
+				&& secondDialogueClicked == true
+				&& dialogueWindow.isVisibile() == false
+				&& startedClouds == false) {
+			cloudManager.start();
+			startedClouds = true;
+		}
+
+		if (finish == true && buttonsAlpha > 0) {
+			buttonsAlpha -= delta;
+			if (buttonsAlpha < 0)
+				buttonsAlpha = 0;
+			up.setAlpha(buttonsAlpha);
+			down.setAlpha(buttonsAlpha);
+			runLeft.setAlpha(buttonsAlpha);
+			runRight.setAlpha(buttonsAlpha);
+			pause.setAlpha(buttonsAlpha);
+			counterLeftBar.setVisibility(false);
+			timeLeftBar.setVisibility(false);
+		}
+
+		if (timerWin >= 6) {
+			finish = true;
+			assetsManager.stars.start();
+			runLeft.setDontRespond(true);
+			runRight.setDontRespond(true);
+			up.setDontRespond(true);
+			down.setDontRespond(true);
+			pause.setDontRespond(true);
+		}
+		checkCollisions(delta);
+
+		if (up.getSelection() == true) {
+			rotation -= delta * 60;
+		}
+		if (down.getSelection() == true) {
+			rotation += delta * 60;
+		}
+
+		if (rotation < -50) {
+			rotation = -50;
+		}
+		if (rotation < 0)
+			rotation += delta * 10;
+		if (rotation > 0)
+			rotation = 0;
+
+		truck.setPosition((int) truck.getX(), 600);
+
 		updateCameraLogics(delta);
+		if (firstDialogueClicked == true && buttonsAlpha < 0.5f
+				&& camera.zoom >= 3f && finish == false) {
+			buttonsAlpha += delta;
+
+			if (buttonsAlpha > 0.5f)
+				buttonsAlpha = 0.5f;
+
+			up.setAlpha(buttonsAlpha);
+			down.setAlpha(buttonsAlpha);
+			runLeft.setAlpha(buttonsAlpha);
+			runRight.setAlpha(buttonsAlpha);
+
+			pause.setDontRespond(false);
+			up.setDontRespond(false);
+			down.setDontRespond(false);
+			runLeft.setDontRespond(false);
+			runRight.setDontRespond(false);
+			timeLeftBar.setVisibility(true);
+			counterLeftBar.setVisibility(true);
+		}
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
-
+			truck.setSpeed(16);
 			camera.reset();
 			camera.zoom(3.1f, 3.5f);
 			camera.moveX(1235, 2, 2, 10);
 			camera.moveY(755, 2, 2, 10);
 			firstDialogueClicked = true;
-
 		}
 	}
 
@@ -237,14 +376,26 @@ public class RescueCatScreen implements Screen {
 	void drawParticlesNonGui(float delta) {
 	}
 
+	void drawParticles(float delta) {
+		assetsManager.stars.draw(batch, delta);
+	}
+
 	void drawPointer(float delta) {
 	}
 
-	void drawBar(float delta) {
+	void drawBars(float delta) {
 		// speedBar.render(batch, delta, boy.getSpeed());
+		timeLeftBar.render(batch, delta, 2);
+		counterLeftBar.render(batch, delta, timerWin);
 	}
 
 	void manageSelectingScreen() {
+		if (finish == true && buttonsAlpha == 0
+				&& dialogueWindow.isVisibile() == false) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new MenuScreen(game));
+			}
+		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
@@ -265,5 +416,26 @@ public class RescueCatScreen implements Screen {
 
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
+	}
+
+	void checkCollisions(float delta) {
+		if (rotation < -21 && rotation > -29 && truck.getX() > 815
+				&& truck.getX() < 945 && finish == false) {
+			timerWin += delta;
+			if (greenTimer > 0)
+				greenTimer -= delta;
+			if (greenTimer < 0)
+				greenTimer = 0;
+
+		} else {
+			timerWin -= delta * 3;
+			if (timerWin < 0)
+				timerWin = 0;
+
+			if (greenTimer < 1)
+				greenTimer += delta;
+			if (greenTimer > 1)
+				greenTimer = 1;
+		}
 	}
 }

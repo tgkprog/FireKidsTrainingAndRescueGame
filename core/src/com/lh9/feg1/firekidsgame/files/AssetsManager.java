@@ -14,11 +14,15 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture catHappy;
+	public Texture catSad;
 	public Texture oilButton;
 	public Texture boltButton;
 	public Texture oil;
 	public Texture bolt;
 	public Texture barFilledBlue;
+	public Texture basket;
+	public Texture truckNoBasket[];
 	public Texture barNotFilledBlue;
 	public Texture voiceText;
 	public Texture vibrationsText;
@@ -230,9 +234,12 @@ public class AssetsManager extends Thread {
 		arrow = new Texture("others/arrow.png");
 		handwheelNoHand = new Texture("others/handwheelNoHand.png");
 		button = new Texture("buttons/greenButton.png");
+		catHappy = new Texture("spritesheets/cat/Cat-happy.png");
+		catSad = new Texture("spritesheets/cat/Cat-worried.png");
 		wheel = new Texture("others/wheel.png");
 		fireBar = new Texture("others/fireBar.png");
 		girlHead = new Texture("girl/girlHead.png");
+		basket = new Texture("spritesheets/basket.png");
 		boyHead = new Texture("boy/boyHead.png");
 		voiceText = new Texture("texts/Voice-text.png");
 		vibrationsText = new Texture("texts/Vibrations-text.png");
@@ -280,6 +287,9 @@ public class AssetsManager extends Thread {
 		spritesheetBoyWeights = new Texture[3];
 		truckBlank = new Texture[1];
 		truckBlank[0] = new Texture("others/Train-basket-blank.png");
+
+		truckNoBasket = new Texture[1];
+		truckNoBasket[0] = new Texture("spritesheets/Train-blank.png");
 
 		spritesheetGirlWeights[0] = new Texture(
 				"girl/fitnessBenchGirl/Fitness-bench-press-Girl-1.png");
@@ -572,6 +582,8 @@ public class AssetsManager extends Thread {
 		longButton.setFilter(textureFilter, textureFilter);
 		arrow.setFilter(textureFilter, textureFilter);
 		button.setFilter(textureFilter, textureFilter);
+		catHappy.setFilter(textureFilter, textureFilter);
+		catSad.setFilter(textureFilter, textureFilter);
 		rescueMetroSadPeople.setFilter(textureFilter, textureFilter);
 		fireStation.setFilter(textureFilter, textureFilter);
 		boyButton.setFilter(textureFilter, textureFilter);
@@ -597,6 +609,7 @@ public class AssetsManager extends Thread {
 		voiceText.setFilter(textureFilter, textureFilter);
 		barFilledBlue.setFilter(textureFilter, textureFilter);
 		barNotFilledBlue.setFilter(textureFilter, textureFilter);
+		basket.setFilter(textureFilter, textureFilter);
 		settings.setFilter(textureFilter, textureFilter);
 		cockpitPart.setFilter(textureFilter, textureFilter);
 		ledCockpit.setFilter(textureFilter, textureFilter);
@@ -641,6 +654,7 @@ public class AssetsManager extends Thread {
 		oil.setFilter(textureFilter, textureFilter);
 		bolt.setFilter(textureFilter, textureFilter);
 		boyMenuHand.setFilter(textureFilter, textureFilter);
+		truckNoBasket[0].setFilter(textureFilter, textureFilter);
 		truckBlank[0].setFilter(textureFilter, textureFilter);
 		authors.setFilter(textureFilter, textureFilter);
 	}

@@ -744,11 +744,12 @@ public class BigRoadRescueScreen implements Screen {
 				boltSpawnTimer -= delta;
 				oilSpawnTimer -= delta;
 			}
-			if (truck.getX() > fireRange[randomFire].x - 125
-					&& truck.getX() < fireRange[randomFire].x - 105) {
+			if (truck.getX() > fireRange[randomFire].x - 120
+					&& truck.getX() < fireRange[randomFire].x - 110) {
 				truck.setSpeed(0);
-				
+
 				girlTimer += delta;
+				
 				if (girlTimer > 0.1f) {
 					girlTimer = 0;
 					if (fireScale == 1) {
