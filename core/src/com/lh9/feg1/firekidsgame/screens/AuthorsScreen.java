@@ -36,6 +36,8 @@ public class AuthorsScreen implements Screen {
 	InputInterpreter inputInterpreter;
 	Button menu;
 	Button authorsText;
+	Button nevena;
+	Button tushar;
 
 	boolean blinked;
 
@@ -57,6 +59,12 @@ public class AuthorsScreen implements Screen {
 		authorsText = new Button(255, -500, assetsManager.authorsText);
 		authorsText.goUp(0);
 
+		nevena = new Button(485, -250, assetsManager.nevena);
+		nevena.goUp(110);
+		
+		tushar = new Button(275, -250, assetsManager.tushar);
+		tushar.goUp(430);
+		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
@@ -175,6 +183,8 @@ public class AuthorsScreen implements Screen {
 
 	void drawButtons(float delta) {
 		menu.render(batch, delta);
+		nevena.render(batch, delta);
+		tushar.render(batch, delta);
 		authorsText.render(batch, delta);
 	}
 

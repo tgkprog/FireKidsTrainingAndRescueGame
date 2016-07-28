@@ -16,8 +16,11 @@ public class AssetsManager extends Thread {
 
 	public Texture helmet1;
 	public Texture helmet2;
+	public Texture nevena;
+	public Texture tushar;
 	public Texture catHappy;
 	public Texture catSad;
+	public Texture[] buzzer;
 	public Texture oilButton;
 	public Texture boltButton;
 	public Texture oil;
@@ -233,6 +236,8 @@ public class AssetsManager extends Thread {
 		playButton = new Texture("buttons/Play-button.png");
 		retryButton = new Texture("buttons/Retry-button.png");
 		menu = new Texture("buttons/Menu-Button.png");
+		nevena = new Texture("texts/nevena.png");
+		tushar = new Texture("texts/tushar.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
 		helmet1 = new Texture("others/helmet1.png");
@@ -371,6 +376,11 @@ public class AssetsManager extends Thread {
 		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
 		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
 
+		buzzer = new Texture[3];
+		buzzer[0] = new Texture("spritesheets/buzzer/Buzzer1.png");
+		buzzer[1] = new Texture("spritesheets/buzzer/Buzzer2.png");
+		buzzer[2] = new Texture("spritesheets/buzzer/Buzzer3.png");
+			
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
 		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
@@ -551,6 +561,9 @@ public class AssetsManager extends Thread {
 			boyWaving[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 3; a++) {
+			buzzer[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 3; a++) {
 			clouds[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 4; a++) {
@@ -631,6 +644,8 @@ public class AssetsManager extends Thread {
 		arrowUp.setFilter(textureFilter, textureFilter);
 		arrowDown.setFilter(textureFilter, textureFilter);
 		fireBar.setFilter(textureFilter, textureFilter);
+		nevena.setFilter(textureFilter, textureFilter);
+		tushar.setFilter(textureFilter, textureFilter);
 		handTruckFront.setFilter(textureFilter, textureFilter);
 		handwheelNoHand.setFilter(textureFilter, textureFilter);
 		boyHeadCockpit.setFilter(textureFilter, textureFilter);

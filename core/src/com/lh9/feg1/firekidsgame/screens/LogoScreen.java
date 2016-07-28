@@ -21,6 +21,7 @@ public class LogoScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	Sprite logoSprite;
+	Sprite loadingSprite;
 
 	double logoScale;
 	double changingScreenTimer;
@@ -40,10 +41,14 @@ public class LogoScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		logoSprite = game.getLogoSprite();
-
 		logoSprite.setScale(0);
 		logoSprite.setPosition(variables.getLogoPosition().x,
 				variables.getLogoPosition().y);
+
+		loadingSprite = game.getLoadingSprite();
+		loadingSprite.setScale(0);
+		loadingSprite.setPosition(265, 47);
+
 	}
 
 	@Override
@@ -52,7 +57,7 @@ public class LogoScreen implements Screen {
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		manageLoadingAssets();
 		manageChangingScreens(delta);
 		manageLogoScale(delta);
@@ -66,6 +71,7 @@ public class LogoScreen implements Screen {
 		batch.begin();
 
 		drawLogo();
+		drawLoading();
 		drawClouds(delta);
 
 		batch.end();
@@ -124,6 +130,7 @@ public class LogoScreen implements Screen {
 		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f
 				&& changeScreen == false) {
 			logoSprite.setScale((float) logoScale);
+			loadingSprite.setScale((float) logoScale*2);
 		}
 	}
 
@@ -164,5 +171,9 @@ public class LogoScreen implements Screen {
 
 	void drawLogo() {
 		logoSprite.draw(batch);
+	}
+
+	void drawLoading() {
+		loadingSprite.draw(batch);
 	}
 }

@@ -16,7 +16,9 @@ import com.lh9.feg1.firekidsgame.screens.LogoScreen;
 public class Starter extends Game {
 
 	Texture logo;
+	Texture loading;
 	Sprite logoSprite;
+	Sprite loadingSprite;
 	Camera camera;
 	OrthographicCamera guiCamera;
 	Viewport viewport;
@@ -56,6 +58,9 @@ public class Starter extends Game {
 		logo = new Texture("others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
+		loading = new Texture("texts/loading.png");
+		loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		loadingSprite = new Sprite(loading);
 	}
 
 	public Camera getCamera() {
@@ -76,6 +81,10 @@ public class Starter extends Game {
 
 	public Sprite getLogoSprite() {
 		return logoSprite;
+	}
+
+	public Sprite getLoadingSprite() {
+		return loadingSprite;
 	}
 
 	public CloudManager getCloudManager() {

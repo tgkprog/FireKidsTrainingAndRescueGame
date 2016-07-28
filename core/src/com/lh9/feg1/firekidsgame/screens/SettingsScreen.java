@@ -62,14 +62,18 @@ public class SettingsScreen implements Screen {
 		menu = new Button(395, -450, assetsManager.menu);
 		menu.goUp(180);
 
-		voice = new Button(265, -450, assetsManager.switchButton);
-		voice.goUp(25);
+		textureFiltering = new Button(265, -450, assetsManager.switchButton);
+		textureFiltering.goUp(25);
+		
 		screenAwake = new Button(265, -450, assetsManager.switchButton);
 		screenAwake.goUp(120);
-		textureFiltering = new Button(535, -450, assetsManager.switchButton);
-		textureFiltering.goUp(205);
+		
+		voice = new Button(535, -450, assetsManager.switchButton);
+		voice.goUp(205);
+		
 		vibrations = new Button(535, -450, assetsManager.switchButton);
 		vibrations.goUp(120);
+		
 		fps = new Button(535, -450, assetsManager.switchButton);
 		fps.goUp(25);
 
@@ -79,12 +83,12 @@ public class SettingsScreen implements Screen {
 		vibrationsText.goUp(135);
 		fpsText = new Button(605, -450, assetsManager.fpsText);
 		fpsText.goUp(40);
-		textureFilteringText = new Button(35, -450,
+		textureFilteringText = new Button(0, -450,
 				assetsManager.textureFilteringText);
 		textureFilteringText.goUp(40);
 		voiceText = new Button(605, -450, assetsManager.voiceText);
 		voiceText.goUp(220);
-		screenAwakeText = new Button(35, -450, assetsManager.screenAwakeText);
+		screenAwakeText = new Button(0, -450, assetsManager.screenAwakeText);
 		screenAwakeText.goUp(135);
 
 		firstArrow = new Arrow(440, 790, assetsManager.arrow, 90, 120);
@@ -165,7 +169,7 @@ public class SettingsScreen implements Screen {
 		drawFps();
 
 		batch.end();
-
+		
 		manageSelectingScreen();
 
 	}

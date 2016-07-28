@@ -18,6 +18,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class MenuScreen implements Screen {
 
+	Human buzzer;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Human boy;
@@ -36,7 +37,7 @@ public class MenuScreen implements Screen {
 	Button[] levelButtons;
 
 	float positions = -1000;
-	
+
 	boolean madeShakeScreen;
 
 	final Starter game;
@@ -74,7 +75,12 @@ public class MenuScreen implements Screen {
 		boy.setMaxSpeed(0.25f);
 		boy.setAnimationOnly(true);
 		boy.setSpeed(3.5f);
-		
+
+		buzzer = new Human();
+		buzzer.create(assetsManager.buzzer, 3, 1, 3, 1000, 450);
+		buzzer.setMaxSpeed(3f);
+		buzzer.setAnimationOnly(true);
+
 		levelButtons = new Button[7];
 
 		for (int a = 0; a < 7; a++) {
@@ -213,12 +219,12 @@ public class MenuScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
-		
-		if(positions < 0)
-			positions += delta*100 + Math.abs(positions)*0.025f;
-		if(positions > 0)
+
+		if (positions < 0)
+			positions += delta * 100 + Math.abs(positions) * 0.025f;
+		if (positions > 0)
 			positions = 0;
-		
+
 		if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
 			gender.setTexture(assetsManager.boyButton);
 			dataOrganizer.setGender(false);
@@ -303,12 +309,22 @@ public class MenuScreen implements Screen {
 
 	void drawCharacters(float delta) {
 		batch.draw(assetsManager.girlMainMenu, 0, positions);
-		boy.setPosition(1550, (int)positions);
+		boy.setPosition(1550, (int) positions);
 		boy.render(batch, delta);
 		boy.setSpeed(2.5f);
+		
+		buzzer.setPosition(875, 400);
+		buzzer.render(batch, delta);
+		buzzer.setPosition(1410, 400);
+		buzzer.render(batch, delta);
+		
+		if (inputInterpreter.getSelectedScreenName() != "No button clicked")
+			buzzer.setSpeed(10f);
+		if (positions < 0)
+			buzzer.setSpeed(0f);
+		
 		batch.draw(assetsManager.helmet1, 5, 715 + Math.abs(positions));
 		batch.draw(assetsManager.helmet2, 1700, 715 + Math.abs(positions));
-			
 	}
 
 	void drawBackground() {
