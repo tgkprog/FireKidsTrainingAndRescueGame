@@ -66,7 +66,7 @@ public class Human extends Animated {
 				// batch.draw(currentFrame, x - 21, y);
 				// batch.setColor(1, 1, 1, 1);
 			}
-		} else if (speed >= 5 && animationOnly == false) {
+		} else if (speed >= 2 && animationOnly == false && stateTime - animationTime > 0) {
 			batch.setColor(1, 1, 1, 0.3f);
 			batch.draw(
 					frames[(int) (stateTime - animationTime / animationTime)],

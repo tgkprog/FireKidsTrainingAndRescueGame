@@ -35,6 +35,8 @@ public class MenuScreen implements Screen {
 	Button gender;
 	Button[] levelButtons;
 
+	float positions = -1000;
+	
 	boolean madeShakeScreen;
 
 	final Starter game;
@@ -69,9 +71,10 @@ public class MenuScreen implements Screen {
 
 		boy = new Human();
 		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
-		boy.setMaxSpeed(0);
+		boy.setMaxSpeed(0.25f);
 		boy.setAnimationOnly(true);
-
+		boy.setSpeed(3.5f);
+		
 		levelButtons = new Button[7];
 
 		for (int a = 0; a < 7; a++) {
@@ -114,7 +117,6 @@ public class MenuScreen implements Screen {
 		cloudManager.stop();
 
 		fireStation.goUp(825);
-
 		camera.reset();
 
 		camera.position.x = 957;
@@ -211,6 +213,12 @@ public class MenuScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
+		
+		if(positions < 0)
+			positions += delta*100 + Math.abs(positions)*0.025f;
+		if(positions > 0)
+			positions = 0;
+		
 		if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
 			gender.setTexture(assetsManager.boyButton);
 			dataOrganizer.setGender(false);
@@ -239,7 +247,7 @@ public class MenuScreen implements Screen {
 				.getCatRescueScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new RescueCatScreen(game));
+				game.setScreen(new PreRescueCatScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
@@ -294,8 +302,13 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		batch.draw(assetsManager.girlMainMenu, 0, 0);
+		batch.draw(assetsManager.girlMainMenu, 0, positions);
+		boy.setPosition(1550, (int)positions);
 		boy.render(batch, delta);
+		boy.setSpeed(2.5f);
+		batch.draw(assetsManager.helmet1, 5, 715 + Math.abs(positions));
+		batch.draw(assetsManager.helmet2, 1700, 715 + Math.abs(positions));
+			
 	}
 
 	void drawBackground() {

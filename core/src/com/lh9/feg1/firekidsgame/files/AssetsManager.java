@@ -14,6 +14,8 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture helmet1;
+	public Texture helmet2;
 	public Texture catHappy;
 	public Texture catSad;
 	public Texture oilButton;
@@ -26,6 +28,7 @@ public class AssetsManager extends Thread {
 	public Texture barNotFilledBlue;
 	public Texture voiceText;
 	public Texture vibrationsText;
+	public Texture roadPart;
 	public Texture textureFilteringText;
 	public Texture fpsText;
 	public Texture screenAwakeText;
@@ -205,8 +208,8 @@ public class AssetsManager extends Thread {
 		barNotFilledBlue = new Texture("others/barNotFilledBlue.png");
 		oilButton = new Texture("buttons/buttonOil.png");
 		boltButton = new Texture("buttons/buttonBolt.png");
-		oil = new Texture("others/oil.png");
-		bolt = new Texture("others/bolt.png");
+		oil = new Texture("others/Oil.png");
+		bolt = new Texture("others/Bolt.png");
 		rescueMetroSadPeople = new Texture(
 				"backgrounds/Rescue-metro-sad-people.png");
 		spritesheetBoyRunning = new Texture(
@@ -232,6 +235,8 @@ public class AssetsManager extends Thread {
 		menu = new Texture("buttons/Menu-Button.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
+		helmet1 = new Texture("others/helmet1.png");
+		helmet2 = new Texture("others/helmet2.png");
 		handwheelNoHand = new Texture("others/handwheelNoHand.png");
 		button = new Texture("buttons/greenButton.png");
 		catHappy = new Texture("spritesheets/cat/Cat-happy.png");
@@ -240,6 +245,7 @@ public class AssetsManager extends Thread {
 		fireBar = new Texture("others/fireBar.png");
 		girlHead = new Texture("girl/girlHead.png");
 		basket = new Texture("spritesheets/basket.png");
+		roadPart = new Texture("backgrounds/roadPart.png");
 		boyHead = new Texture("boy/boyHead.png");
 		voiceText = new Texture("texts/Voice-text.png");
 		vibrationsText = new Texture("texts/Vibrations-text.png");
@@ -593,6 +599,8 @@ public class AssetsManager extends Thread {
 		runButtonLittle.setFilter(textureFilter, textureFilter);
 		pointer.setFilter(textureFilter, textureFilter);
 		speedBar.setFilter(textureFilter, textureFilter);
+		helmet1.setFilter(textureFilter, textureFilter);
+		helmet2.setFilter(textureFilter, textureFilter);
 		switchButton.setFilter(textureFilter, textureFilter);
 		lane.setFilter(textureFilter, textureFilter);
 		carRed.setFilter(textureFilter, textureFilter);
@@ -646,6 +654,7 @@ public class AssetsManager extends Thread {
 		boyTorso.setFilter(textureFilter, textureFilter);
 		boyHeadBigBlonde.setFilter(textureFilter, textureFilter);
 		authorsText.setFilter(textureFilter, textureFilter);
+		roadPart.setFilter(textureFilter, textureFilter);
 		fireMiniature.setFilter(textureFilter, textureFilter);
 		boyMainMenu.setFilter(textureFilter, textureFilter);
 		girlMainMenu.setFilter(textureFilter, textureFilter);
