@@ -16,10 +16,11 @@ public class Variables {
 	static final String catRescueScreen = "Cat Rescue Screen";
 	static final String fitnessScreenTwo = "Fitness Screen Two";
 	static final String fitnessScreenThree = "Fitness Screen Three";
-	
+	static final String elevatorScreen = "Elevator Screen";
+
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 3f;
-	
+
 	static final Vector2 logoPosition = new Vector2(130, -150);
 	static final Vector2 runButtonPosition = new Vector2(650, 220);
 	static final Vector2 pauseButtonPosition = new Vector2(710, 400);
@@ -85,15 +86,20 @@ public class Variables {
 	public String getAuthorsScreen() {
 		return authorsScreen;
 	}
-	
+
 	public String getCatRescueScreen() {
 		return catRescueScreen;
 	}
-	
+
 	public String getFitnessScreenTwo() {
 		return fitnessScreenTwo;
 	}
+
 	public String getFitnessScreenThree() {
 		return fitnessScreenThree;
+	}
+
+	public String getElevatorScreen() {
+		return elevatorScreen;
 	}
 }

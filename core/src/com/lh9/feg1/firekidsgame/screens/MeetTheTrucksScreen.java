@@ -63,9 +63,9 @@ public class MeetTheTrucksScreen implements Screen {
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
-		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
-				assetsManager.runButton);
-		runButton.goUp((int) variables.getRunButtonPosition().y);
+		runButton = new Button(685, -200, assetsManager.runButtonLittle);
+		runButton.goUp(30);
+		runButton.setAlpha(0.5f);
 
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
@@ -215,6 +215,7 @@ public class MeetTheTrucksScreen implements Screen {
 			secondDialogueClicked = true;
 			dialogueWindow.popUp();
 			girl.setSpeed(0);
+			girl.resetStateTime();
 		}
 
 		if (firstDialogueClicked == false

@@ -91,8 +91,8 @@ public class FitnessScreenThree implements Screen {
 		girl.setMaxSpeed(2f);
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
-		boy.setSpeedAdder(0.2f);
-		girl.setSpeedAdder(0.2f);
+		boy.setSpeedAdder(0.4f);
+		girl.setSpeedAdder(0.4f);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);

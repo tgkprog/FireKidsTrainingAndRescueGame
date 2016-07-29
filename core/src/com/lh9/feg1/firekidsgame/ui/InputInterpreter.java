@@ -436,6 +436,10 @@ public class InputInterpreter implements GestureListener {
 							selectedScreen = variables.getRescueMetroScreen();
 							cloudManager.start();
 						}
+						if (a == 5) {
+							selectedScreen = variables.getElevatorScreen();
+							cloudManager.start();
+						}
 						if (a == 6) {
 							selectedScreen = variables.getBigRoadRescueScreen();
 							cloudManager.start();
@@ -556,10 +560,10 @@ public class InputInterpreter implements GestureListener {
 		this.dataOrganizer = dataOrganizer;
 	}
 
-	public void setDataOrganizer(DataOrganizer dataOrganizer){
+	public void setDataOrganizer(DataOrganizer dataOrganizer) {
 		this.dataOrganizer = dataOrganizer;
 	}
-	
+
 	public void setYellowSectionButtons(Button yellowSectionMiddle,
 			Button yellowSectionLeft, Button yellowSectionUpLeft,
 			Button yellowSectionUpRight) {

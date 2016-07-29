@@ -77,12 +77,12 @@ public class FitnessScreenOne implements Screen {
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
 		boy.setMaxSpeed(4);
-		boy.setSpeedAdder(0.3f);
+		boy.setSpeedAdder(0.4f);
 
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
 		girl.setMaxSpeed(4);
-		girl.setSpeedAdder(0.3f);
+		girl.setSpeedAdder(0.4f);
 
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);

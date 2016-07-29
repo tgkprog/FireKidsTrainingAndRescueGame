@@ -59,7 +59,7 @@ public class MenuScreen implements Screen {
 		fireStation = new Button(700, 100, assetsManager.fireStation);
 		settings = new Button(180, 100, assetsManager.settings);
 		authors = new Button(100, 105, assetsManager.authors);
-		meetTheTrucks = new Button(-2, -200, assetsManager.longButton);
+		meetTheTrucks = new Button(25, -200, assetsManager.button);
 
 		if (dataOrganizer.getGender() == false)
 			gender = new Button(5, 105, assetsManager.boyButton);
@@ -85,25 +85,25 @@ public class MenuScreen implements Screen {
 
 		for (int a = 0; a < 7; a++) {
 			if (a == 0)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.fitness);
 			if (a == 1)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.training);
 			if (a == 2)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.rescueBuilding);
 			if (a == 3)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.rescueCat);
 			if (a == 4)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.rescueTrain);
 			if (a == 5)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.button);
 			if (a == 6)
-				levelButtons[a] = new Button(178 + 89 * a, -200 - (a * 50),
+				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.bigRoadRescue);
 
 			levelButtons[a].goUp(0);
@@ -123,6 +123,7 @@ public class MenuScreen implements Screen {
 		cloudManager.stop();
 
 		fireStation.goUp(825);
+		
 		camera.reset();
 
 		camera.position.x = 957;
@@ -154,7 +155,7 @@ public class MenuScreen implements Screen {
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
-		drawBackground();
+		drawBackground(delta);
 		drawTexts(delta);
 		drawCharacters(delta);
 
@@ -250,10 +251,17 @@ public class MenuScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
+				.getElevatorScreen()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				dataOrganizer.saveData();
+				game.setScreen(new ElevatorScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
 				.getCatRescueScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new PreRescueCatScreen(game));
+				game.setScreen(new RescueCatScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
@@ -312,26 +320,25 @@ public class MenuScreen implements Screen {
 		boy.setPosition(1550, (int) positions);
 		boy.render(batch, delta);
 		boy.setSpeed(2.5f);
-		
-		buzzer.setPosition(875, 400);
-		buzzer.render(batch, delta);
-		buzzer.setPosition(1410, 400);
-		buzzer.render(batch, delta);
-		
-		if (inputInterpreter.getSelectedScreenName() != "No button clicked")
-			buzzer.setSpeed(10f);
-		if (positions < 0)
-			buzzer.setSpeed(0f);
-		
 		batch.draw(assetsManager.helmet1, 5, 715 + Math.abs(positions));
 		batch.draw(assetsManager.helmet2, 1700, 715 + Math.abs(positions));
 	}
 
-	void drawBackground() {
+	void drawBackground(float delta) {
 		batch.draw(assetsManager.mainBackground[0], 0, 576);
 		batch.draw(assetsManager.mainBackground[1], 960, 576);
 		batch.draw(assetsManager.mainBackground[2], 0, 0);
 		batch.draw(assetsManager.mainBackground[3], 960, 0);
+
+		buzzer.setPosition(875, 400);
+		buzzer.render(batch, delta);
+		buzzer.setPosition(1410, 400);
+		buzzer.render(batch, delta);
+
+		if (inputInterpreter.getSelectedScreenName() != "No button clicked")
+			buzzer.setSpeed(10f);
+		if (positions < 0)
+			buzzer.setSpeed(0f);
 	}
 
 	void drawTexts(float delta) {

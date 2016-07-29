@@ -200,11 +200,11 @@ public class BigRoadRescueScreen implements Screen {
 		loadFireAnimations();
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 20);
+				260, 10, 30);
 		fireBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 20);
 		fireToEclipseBar = new Bar(assetsManager.barFilledBlue,
-				assetsManager.barNotFilledBlue, 260, 30, minigameCounter);
+				assetsManager.barNotFilledBlue, 260, 10, minigameCounter);
 		fireToEclipseBar.setVisibility(true);
 		fireBar.setVisibility(true);
 
@@ -424,12 +424,12 @@ public class BigRoadRescueScreen implements Screen {
 		boolean available = false;
 		
 		if(Math.abs(truck.getX()) > Math.abs(fireRange[randomFire].x)){
-			if(Math.abs(truck.getX()) - Math.abs(fireRange[randomFire].x) > 5000)
+			if(Math.abs(truck.getX()) - Math.abs(fireRange[randomFire].x) > 3000)
 			available = true;
 		}
 		else
 		{
-			if(Math.abs( Math.abs(fireRange[randomFire].x) - Math.abs(truck.getX())) > 5000)
+			if(Math.abs( Math.abs(fireRange[randomFire].x) - Math.abs(truck.getX())) > 3000)
 				available = true;
 		}
 		
@@ -953,10 +953,10 @@ public class BigRoadRescueScreen implements Screen {
 					boltSpawnTimer = 0;
 
 					if (truck.getSpeed() >= 0)
-						for (int g = 0; g < 7; g++)
+						for (int g = 0; g < 20; g++)
 							truck.move();
 					else
-						for (int g = 0; g < 7; g++)
+						for (int g = 0; g < 20; g++)
 							truck.moveReverse();
 				}
 				if (powerUps.get(a).getType() == "Oil"

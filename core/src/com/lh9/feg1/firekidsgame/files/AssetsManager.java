@@ -14,12 +14,18 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture truckBack;
 	public Texture helmet1;
 	public Texture helmet2;
+	public Texture daniel;
 	public Texture nevena;
 	public Texture tushar;
 	public Texture catHappy;
 	public Texture catSad;
+	public Texture elevatorDoor;
+	public Texture[] dogWorried;
+	public Texture[] dogHappy;
+	public Texture[] elevatorBackground;
 	public Texture[] buzzer;
 	public Texture oilButton;
 	public Texture boltButton;
@@ -224,6 +230,7 @@ public class AssetsManager extends Thread {
 		arrowDown = new Texture("buttons/arrow-down.png");
 		runButton = new Texture("buttons/runButton.png");
 		runButtonLittle = new Texture("buttons/Button-2.png");
+		truckBack = new Texture("others/back-side-open.png");
 		runButtonGreen = new Texture("buttons/Button-1.png");
 		settings = new Texture("buttons/settings.png");
 		pointer = new Texture("others/this.png");
@@ -236,6 +243,7 @@ public class AssetsManager extends Thread {
 		playButton = new Texture("buttons/Play-button.png");
 		retryButton = new Texture("buttons/Retry-button.png");
 		menu = new Texture("buttons/Menu-Button.png");
+		daniel = new Texture("texts/daniel.png");
 		nevena = new Texture("texts/nevena.png");
 		tushar = new Texture("texts/tushar.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
@@ -291,6 +299,7 @@ public class AssetsManager extends Thread {
 		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
 		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
 		girlHandCockpit = new Texture("girl/handCockpit.png");
+		elevatorDoor = new Texture("backgrounds/elevator/elevator-door.png");
 
 		spritesheetGirlWeights = new Texture[3];
 		spritesheetGirlElliptical = new Texture[7];
@@ -372,6 +381,12 @@ public class AssetsManager extends Thread {
 		rescueCatBackground[2] = new Texture("backgrounds/rescueCat/3.png");
 		rescueCatBackground[3] = new Texture("backgrounds/rescueCat/4.png");
 
+		elevatorBackground = new Texture[4];
+		elevatorBackground[0] = new Texture("backgrounds/elevator/1.png");
+		elevatorBackground[1] = new Texture("backgrounds/elevator/2.png");
+		elevatorBackground[2] = new Texture("backgrounds/elevator/3.png");
+		elevatorBackground[3] = new Texture("backgrounds/elevator/4.png");
+
 		rescueMetro = new Texture[2];
 		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
 		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
@@ -380,7 +395,15 @@ public class AssetsManager extends Thread {
 		buzzer[0] = new Texture("spritesheets/buzzer/Buzzer1.png");
 		buzzer[1] = new Texture("spritesheets/buzzer/Buzzer2.png");
 		buzzer[2] = new Texture("spritesheets/buzzer/Buzzer3.png");
-			
+
+		dogWorried = new Texture[2];
+		dogWorried[0] = new Texture("spritesheets/dog/worried1.png");
+		dogWorried[1] = new Texture("spritesheets/dog/worried2.png");
+
+		dogHappy = new Texture[2];
+		dogHappy[0] = new Texture("spritesheets/dog/happy1.png");
+		dogHappy[1] = new Texture("spritesheets/dog/happy2.png");
+
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
 		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
@@ -548,8 +571,17 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 1; a++) {
 			levelBackgrounds[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < 2; a++) {
+			dogWorried[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 2; a++) {
+			dogHappy[a].setFilter(textureFilter, textureFilter);
+		}
 		for (int a = 0; a < 4; a++) {
 			fitnessBackground[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 4; a++) {
+			elevatorBackground[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 6; a++) {
 			parkBackgrounds[a].setFilter(textureFilter, textureFilter);
@@ -633,6 +665,7 @@ public class AssetsManager extends Thread {
 		basket.setFilter(textureFilter, textureFilter);
 		settings.setFilter(textureFilter, textureFilter);
 		cockpitPart.setFilter(textureFilter, textureFilter);
+		elevatorDoor.setFilter(textureFilter, textureFilter);
 		ledCockpit.setFilter(textureFilter, textureFilter);
 		handSpritesheet.setFilter(textureFilter, textureFilter);
 		boyHeadBig.setFilter(textureFilter, textureFilter);
@@ -643,7 +676,9 @@ public class AssetsManager extends Thread {
 		wheel.setFilter(textureFilter, textureFilter);
 		arrowUp.setFilter(textureFilter, textureFilter);
 		arrowDown.setFilter(textureFilter, textureFilter);
+		truckBack.setFilter(textureFilter, textureFilter);
 		fireBar.setFilter(textureFilter, textureFilter);
+		daniel.setFilter(textureFilter, textureFilter);
 		nevena.setFilter(textureFilter, textureFilter);
 		tushar.setFilter(textureFilter, textureFilter);
 		handTruckFront.setFilter(textureFilter, textureFilter);

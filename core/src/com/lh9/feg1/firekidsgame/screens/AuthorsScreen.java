@@ -38,6 +38,7 @@ public class AuthorsScreen implements Screen {
 	Button authorsText;
 	Button nevena;
 	Button tushar;
+	Button daniel;
 
 	boolean blinked;
 
@@ -59,12 +60,15 @@ public class AuthorsScreen implements Screen {
 		authorsText = new Button(255, -500, assetsManager.authorsText);
 		authorsText.goUp(0);
 
+		daniel = new Button(80, -250, assetsManager.daniel);
+		daniel.goUp(110);
+
 		nevena = new Button(485, -250, assetsManager.nevena);
 		nevena.goUp(110);
-		
+
 		tushar = new Button(275, -250, assetsManager.tushar);
 		tushar.goUp(430);
-		
+
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
@@ -113,11 +117,11 @@ public class AuthorsScreen implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		updateLogics(delta);
 
 		camera.update(delta);
@@ -183,6 +187,7 @@ public class AuthorsScreen implements Screen {
 
 	void drawButtons(float delta) {
 		menu.render(batch, delta);
+		daniel.render(batch, delta);
 		nevena.render(batch, delta);
 		tushar.render(batch, delta);
 		authorsText.render(batch, delta);
