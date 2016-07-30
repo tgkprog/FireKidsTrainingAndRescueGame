@@ -23,6 +23,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
+	Sprite cloudsFar;
+	Sprite cloudsClose;
 	Sprite basket;
 	Truck truck;
 	FPSManager fpsManager;
@@ -49,6 +51,9 @@ public class RescueCatScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+
+	float cloudPositionAdder = 100;
+	boolean cloudPositionAdd;
 
 	float timerWin;
 	float timerSpeedGirl;
@@ -167,6 +172,10 @@ public class RescueCatScreen implements Screen {
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		cloudsFar = new Sprite(assetsManager.cloudyBackgroundFar);
+		cloudsClose = new Sprite(assetsManager.cloudyBackgroundClose);
+
 	}
 
 	@Override
@@ -249,7 +258,7 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		batch.draw(assetsManager.catSad, 1265, 1175);
+		batch.draw(assetsManager.catSad, 1265, 1157);
 		basket.setRotation(rotation);
 		basket.setScale(2.2f);
 		basket.setPosition(truck.getX() + 400 + Math.abs(rotation * 6),
@@ -274,6 +283,22 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void updateLogics(float delta) {
+
+		if (cloudPositionAdd == false) {
+			if (cloudPositionAdder < 500)
+				cloudPositionAdder += delta * 30;
+			if (cloudPositionAdder > 500) {
+				cloudPositionAdd = true;
+				cloudPositionAdder = 500;
+			}
+		} else {
+			if (cloudPositionAdder > 100)
+				cloudPositionAdder -= delta * 30;
+			if (cloudPositionAdder < 100) {
+				cloudPositionAdd = false;
+				cloudPositionAdder = 100;
+			}
+		}
 
 		if (finish == true && buttonsAlpha == 0
 				&& secondDialogueClicked == false) {

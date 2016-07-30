@@ -22,7 +22,7 @@ public class Button {
 	Sprite image;
 	Rectangle mouse;
 	Rectangle bounds;
-	Vector3 color = new Vector3(1,1,1);
+	Vector3 color = new Vector3(1, 1, 1);
 
 	public Button(int x, int y, Texture texture) {
 		image = new Sprite(texture);
@@ -33,9 +33,10 @@ public class Button {
 		bounds.setSize(image.getWidth(), image.getHeight());
 		bounds.setPosition(x, y);
 	}
-	public void setTexture(Texture texture){
+
+	public void setTexture(Texture texture) {
 		float x = image.getX();
-		float y = image.getY();	
+		float y = image.getY();
 		image = new Sprite(texture);
 		image.setPosition(x, y);
 		bounds = new Rectangle();
@@ -44,7 +45,7 @@ public class Button {
 	}
 
 	public void render(SpriteBatch batch, float delta) {
-	
+
 		updateTimers(delta);
 		if (alpha != 0) {
 			if (alpha != image.getColor().a)
@@ -153,13 +154,15 @@ public class Button {
 		counter++;
 		blinking = true;
 	}
-	public void resetCounter(){
-		counter =0 ;
+
+	public void resetCounter() {
+		counter = 0;
 	}
-	public int getCounter(){
+
+	public int getCounter() {
 		return counter;
 	}
-	
+
 	public void reverseSelection() {
 		selected = !selected;
 	}
@@ -178,11 +181,20 @@ public class Button {
 	public void setAlpha(float alpha) {
 		image.setAlpha(alpha);
 	}
+
 	public void normal() {
 		color = new Vector3(1, 1, 1);
-}
+	}
 
-public void red() {
-	color = new Vector3(1, 0, 0);
-		}
+	public void red() {
+		color = new Vector3(1, 0, 0);
+	}
+
+	public float getX() {
+		return image.getX();
+	}
+
+	public float getY() {
+		return image.getY();
+	}
 }

@@ -18,9 +18,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 public class InputInterpreter implements GestureListener {
 
 	String selectedScreen = "No button clicked";
-
 	Button gender;
-
+	Button[] hitboxes;
 	DataOrganizer dataOrganizer;
 	MenuWindow menuWindow;
 	Button[] settingsButtons;
@@ -133,10 +132,7 @@ public class InputInterpreter implements GestureListener {
 		vec.y = y;
 		camera.unproject(vec);
 
-		if (eclipseFire != null)
-			if (eclipseFire.checkCollision((int) vec.x, (int) vec.y) == true) {
-				eclipseFire.blink();
-			}
+		manageNonGuiCollisions(vec.x,vec.y);
 
 		return false;
 	}
@@ -257,7 +253,6 @@ public class InputInterpreter implements GestureListener {
 
 	void manageButtonsCollisions(double x, double y) {
 		if (cloudManager.getAllScalesEqualZero() == true) {
-
 			if (gender != null) {
 				if (gender.checkCollision((int) x, (int) y) == true) {
 					gender.blink();
@@ -548,6 +543,10 @@ public class InputInterpreter implements GestureListener {
 		this.gender = gender;
 	}
 
+	public void setHitboxes(Button[] hitboxes) {
+		this.hitboxes = hitboxes;
+	}
+
 	public void setSettingsButtons(Button fps, Button textureFiltering,
 			Button voice, Button vibrations, Button screenAwake,
 			DataOrganizer dataOrganizer) {
@@ -571,6 +570,22 @@ public class InputInterpreter implements GestureListener {
 		this.yellowSectionLeft = yellowSectionLeft;
 		this.yellowSectionUpLeft = yellowSectionUpLeft;
 		this.yellowSectionUpRight = yellowSectionUpRight;
+	}
+	void manageNonGuiCollisions(float x, float y){
+		
+		if (eclipseFire != null)
+			if (eclipseFire.checkCollision((int) x, (int)y) == true) {
+				eclipseFire.blink();
+			}
+
+		if (hitboxes != null) {
+			for (int a = 0; a < hitboxes.length; a++) {
+				if (hitboxes[a].checkCollision((int) x, (int) y) == true) {
+					hitboxes[a].blink();
+				}
+			}
+		}
+
 	}
 }
 /*

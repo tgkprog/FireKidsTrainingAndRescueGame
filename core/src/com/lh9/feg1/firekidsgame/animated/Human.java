@@ -32,6 +32,7 @@ public class Human extends Animated {
 			currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x, y);
 		} else {
+			if(stateTime/animationTime < frameNumber)
 			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
 		}
 		if (this.fromTextureRegion == true) {
