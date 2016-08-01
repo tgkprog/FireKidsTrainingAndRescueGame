@@ -1,13 +1,16 @@
 package com.lh9.feg1.firekidsgame.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.MathUtils;
+import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.Starter;
-import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
@@ -22,11 +25,17 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueMetroScreen implements Screen {
 
+	Sprite ball;
+	ArrayList<Vector3> ballEffect;
+	Vector3 ballPosition;
+	Sprite dogsGirl;
+	Sprite[] damage;
+	Button[] hitboxes;
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
 	Bar speedBar;
 	Sprite rescueMetroSadPeople;
-	Human girl;
+	
 	Button pause;
 	Button runButton;
 	Button menuButton;
@@ -41,13 +50,22 @@ public class RescueMetroScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+	Bar timeBar;
+	Bar progressBar;
 
+	boolean afterMinigameWindow;
+	boolean zoomOut;
+	float spawnBallTimer;
 	float timerSpeedGirl;
-
+	boolean[] selectedHitbox;
+	float[] hitboxesAlpha;
+	int minigameCounter = 20;
+	float minigameTimeLeft = 1;
 	boolean exit;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
+	boolean minigameRunning;
 
 	final Starter game;
 
@@ -69,9 +87,6 @@ public class RescueMetroScreen implements Screen {
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-
 		menuButton = new Button(400, 110, assetsManager.menu);
 		playButton = new Button(450, 110, assetsManager.playButton);
 		retryButton = new Button(500, 110, assetsManager.retryButton);
@@ -83,6 +98,27 @@ public class RescueMetroScreen implements Screen {
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getRescueMetroScreen());
 
+		hitboxes = new Button[6];
+		selectedHitbox = new boolean[6];
+		hitboxesAlpha = new float[6];
+
+		damage = new Sprite[20];
+
+		for (int a = 0; a < 20; a++) {
+			damage[a] = new Sprite(assetsManager.clouds[1]);
+			damage[a].setPosition(MathUtils.random(1000, 1400),
+					MathUtils.random(350, 1000));
+			damage[a].setRotation(MathUtils.random(0, 360));
+			damage[a].setColor(0, 0, 0, 0);
+			damage[a].setScale(MathUtils.random(0.1f, 0.3f));
+		}
+		for (int a = 0; a < 6; a++) {
+			hitboxes[a] = new Button(-550, -100, assetsManager.runButtonLittle);
+			hitboxes[a].goUp(400 - a * 50);
+			hitboxes[a].setAlpha(0);
+			hitboxes[a].setDontRespond(true);
+		}
+
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
@@ -91,8 +127,8 @@ public class RescueMetroScreen implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		inputInterpreter.setControlledHuman(girl);
 		inputInterpreter.setMenuWindow(menuWindow);
+		inputInterpreter.setHitboxes(hitboxes);
 
 		cloudManager.stop();
 
@@ -114,20 +150,33 @@ public class RescueMetroScreen implements Screen {
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
-		speedBar.setVisibility(true);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		timeBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
+				250, 460, minigameTimeLeft);
+
+		progressBar = new Bar(assetsManager.barFilledBlue,
+				assetsManager.barNotFilledBlue, 250, 5, minigameCounter - 1);
+
+		timeBar.setVisibility(false);
+		progressBar.setVisibility(false);
+
+		ballEffect = new ArrayList<Vector3>();
+		ball = new Sprite(assetsManager.runButton);
 	}
 
 	@Override
 	public void render(float delta) {
 
+//		camera.zoom = 2.3f;
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -146,13 +195,14 @@ public class RescueMetroScreen implements Screen {
 
 		drawBackground();
 		drawCharacters(delta);
-		drawPointer(delta);
+		drawBallEffect(delta);
+		drawHitBoxes(delta);
 
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
-		drawBar(delta);
+		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		drawClouds(deltaTemp);
@@ -200,7 +250,6 @@ public class RescueMetroScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		girl.render(batch, delta);
 	}
 
 	void drawButtons(double delta) {
@@ -213,15 +262,20 @@ public class RescueMetroScreen implements Screen {
 		dialogueWindow.draw(batch, delta);
 	}
 
-	void updateLogics(double delta) {
+	void updateLogics(float delta) {
+
+		if (camera.zoom > 1.0f) {
+			timeBar.setVisibility(true);
+			progressBar.setVisibility(true);
+			randomizeMinigame();
+			manageHitboxes(delta);
+		}
+
 		updateCameraLogics(delta);
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			camera.reset();
 			camera.zoom(1.1f, 3);
-			// camera.moveX(800, 2, 2, 4);
-			// camera.moveY(480,2, 2, 4);
-			// camera.zoom(1.95f,100);
 			camera.moveX(800, 2, 2, 4);
 			camera.moveY(300, 2, 2, 4);
 
@@ -244,8 +298,9 @@ public class RescueMetroScreen implements Screen {
 	void drawPointer(float delta) {
 	}
 
-	void drawBar(float delta) {
-		// speedBar.render(batch, delta, boy.getSpeed());
+	void drawBars(float delta) {
+		timeBar.render(batch, delta, 1);
+		progressBar.render(batch, delta, 1);
 	}
 
 	void manageSelectingScreen() {
@@ -270,4 +325,119 @@ public class RescueMetroScreen implements Screen {
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
 	}
+
+	void drawElevatorDoor(float delta) {
+
+	}
+
+	void randomizeMinigame() {
+		if (minigameRunning == false && minigameCounter > 0) {
+
+			timeBar.setVisibility(true);
+			progressBar.setVisibility(true);
+
+			minigameTimeLeft = 1;
+			minigameCounter--;
+			minigameRunning = true;
+
+			if (minigameCounter != 0) {
+				for (int a = 0; a < 6; a++)
+					selectedHitbox[a] = false;
+
+				selectedHitbox[MathUtils.random(0, 5)] = true;
+			}
+			for (int a = 0; a < 6; a++) {
+				if (selectedHitbox[a] == true) {
+					hitboxesAlpha[a] = 0.05f;
+					hitboxes[a].setPosition(900, hitboxes[a].getY());
+				}
+			}
+
+			if (minigameCounter == 0) {
+				if (minigameCounter == 0 && afterMinigameWindow == false) {
+					afterMinigameWindow = true;
+					timeBar.setVisibility(false);
+					progressBar.setVisibility(false);
+				}
+			}
+
+		}
+	}
+
+	void manageHitboxes(float delta) {
+		if (minigameTimeLeft > 0)
+			minigameTimeLeft -= delta;
+		if (minigameTimeLeft < 0)
+			minigameTimeLeft = 0;
+		boolean allHitboxesAlphaZero = true;
+		for (int a = 0; a < 6; a++) {
+			if (hitboxesAlpha[a] > 0)
+				allHitboxesAlphaZero = false;
+			if (selectedHitbox[a] == true) {
+				spawnBallTimer += delta;
+				if (spawnBallTimer > 0.25f) {
+					spawnBallTimer = 0;
+					spawnBall(hitboxes[a].getX() - 90, hitboxes[a].getY());
+				}
+				if (hitboxes[a].getX() < 1000 && hitboxes[a].getY() > 350)
+					hitboxes[a].setPosition(hitboxes[a].getX() + delta * 550,
+							hitboxes[a].getY() - delta * 550);
+				hitboxesAlpha[a] += delta * 10;
+				hitboxes[a].setDontRespond(false);
+				if (hitboxesAlpha[a] > 1)
+					hitboxesAlpha[a] = 1;
+
+				if (hitboxes[a].getSelection() == true) {
+					damage[minigameCounter].setAlpha(1);
+					hitboxes[a].setDontRespond(true);
+					selectedHitbox[a] = false;
+					zoomOut = true;
+					assetsManager.hit.setPosition(hitboxes[a].getX() + 75,
+							hitboxes[a].getY() + 75);
+					assetsManager.hit.start();
+				}
+			} else {
+				hitboxes[a].setDontRespond(true);
+				hitboxesAlpha[a] -= delta * 10;
+				if (hitboxesAlpha[a] < 0)
+					hitboxesAlpha[a] = 0;
+			}
+			hitboxes[a].setAlpha(hitboxesAlpha[a]);
+		}
+		if (allHitboxesAlphaZero == true) {
+			minigameRunning = false;
+		}
+	}
+
+	void drawBallEffect(float delta) {
+		for (int a = 0; a < ballEffect.size(); a++) {
+
+			ball.setPosition(ballEffect.get(a).x, ballEffect.get(a).y);
+			ball.setScale(ballEffect.get(a).z);
+			ball.draw(batch);
+
+			ballEffect.get(a).y += ballEffect.get(a).z * 5;
+
+			if (ballEffect.get(a).z > 0)
+				ballEffect.get(a).z -= delta * 0.5f;
+			if (ballEffect.get(a).z < 0)
+				ballEffect.remove(a);
+		}
+	}
+
+	void spawnBall(float x, float y) {
+		ballPosition = new Vector3(x, y, 0.5f);
+		ballEffect.add(ballPosition);
+	}
+
+	void drawHitBoxes(float delta) {
+		for (int a = 0; a < 6; a++) {
+			hitboxes[a].render(batch, delta);
+		}
+		for (int a = 0; a < 20; a++) {
+			// damage[a].draw(batch);
+		}
+
+	}
+
 }

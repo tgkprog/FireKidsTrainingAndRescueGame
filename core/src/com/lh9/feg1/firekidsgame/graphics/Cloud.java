@@ -31,10 +31,14 @@ public class Cloud {
 	}
 
 	public void updateTimers(double delta) {
+		
+		if(Gdx.graphics.getRawDeltaTime() > 0.05f && Gdx.graphics.getDeltaTime() > 0.05f)
+		delta = 0;
+		
 		randomlyMove(delta);
 
 		if (visible == true) {
-			if(Gdx.graphics.getRawDeltaTime() < 0.05f && Gdx.graphics.getDeltaTime() < 0.05f)
+		
 			if (popUpTimer < popUpDelayTime) {
 				popUpTimer += delta;
 			}
