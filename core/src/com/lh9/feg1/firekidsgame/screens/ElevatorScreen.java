@@ -101,7 +101,8 @@ public class ElevatorScreen implements Screen {
 		girl.setAnimationOnly(true);
 		girl.setOnceOnly();
 		girl.setSpeed(1);
-
+		
+	
 		dogHappy = new Human();
 		dogHappy.create(assetsManager.dogHappy, 2, 1, 2, 400, 500);
 

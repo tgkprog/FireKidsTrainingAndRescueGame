@@ -14,6 +14,7 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture[] metroDoor;
 	public Texture cloudyBackgroundClose;
 	public Texture cloudyBackgroundFar;
 	public Texture truckBack;
@@ -445,6 +446,10 @@ public class AssetsManager extends Thread {
 		girlHammer[0] = new Texture("girl/hammer1.png");
 		girlHammer[1] = new Texture("girl/hammer2.png");
 
+		metroDoor = new Texture[2];
+		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
+		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
+		
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
 		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
@@ -617,6 +622,9 @@ public class AssetsManager extends Thread {
 		}
 		for (int a = 0; a < 2; a++) {
 			girlHammer[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 2; a++) {
+			metroDoor[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
 			dogHappy[a].setFilter(textureFilter, textureFilter);
