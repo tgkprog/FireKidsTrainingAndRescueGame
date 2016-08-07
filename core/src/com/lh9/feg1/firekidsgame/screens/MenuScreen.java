@@ -254,7 +254,7 @@ public class MenuScreen implements Screen {
 				.getElevatorScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new ElevatorScreen(game));
+				game.setScreen(new PreElevatorScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
@@ -289,7 +289,7 @@ public class MenuScreen implements Screen {
 				.getRescueMetroScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new RescueMetroScreen(game));
+				game.setScreen(new PreRescueMetroScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
