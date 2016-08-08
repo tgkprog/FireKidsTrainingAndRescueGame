@@ -39,7 +39,9 @@ public class AuthorsScreen implements Screen {
 	Button nevena;
 	Button tushar;
 	Button daniel;
-
+	Button programming;
+	Button graphics;
+	
 	boolean blinked;
 
 	final Starter game;
@@ -56,19 +58,25 @@ public class AuthorsScreen implements Screen {
 		variables = new Variables();
 
 		menu = new Button(715, -250, assetsManager.menu);
-		menu.goUp(400);
+		menu.goUp(360);
 		authorsText = new Button(255, -500, assetsManager.authorsText);
 		authorsText.goUp(0);
 
-		daniel = new Button(80, -250, assetsManager.daniel);
-		daniel.goUp(110);
+		daniel = new Button(50, -250, assetsManager.daniel);
+		daniel.goUp(430);
 
-		nevena = new Button(485, -250, assetsManager.nevena);
-		nevena.goUp(110);
+		nevena = new Button(510, -250, assetsManager.nevena);
+		nevena.goUp(430);
 
-		tushar = new Button(275, -250, assetsManager.tushar);
+		tushar = new Button(280, -250, assetsManager.tushar);
 		tushar.goUp(430);
-
+		
+		graphics = new Button(485, -250, assetsManager.graphicsText);
+		graphics.goUp(100);
+		
+		programming = new Button(125, -250, assetsManager.programmingText);
+		programming.goUp(100);
+		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
@@ -190,6 +198,8 @@ public class AuthorsScreen implements Screen {
 		daniel.render(batch, delta);
 		nevena.render(batch, delta);
 		tushar.render(batch, delta);
+		programming.render(batch, delta);
+		graphics.render(batch, delta);
 		authorsText.render(batch, delta);
 	}
 

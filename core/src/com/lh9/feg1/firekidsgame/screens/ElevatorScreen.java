@@ -32,6 +32,7 @@ public class ElevatorScreen implements Screen {
 	Sprite[] damage;
 	Button[] hitboxes;
 	Bar timeBar;
+	Sprite dogsGirlHappy;
 	Bar progressBar;
 	Sprite elevatorDoor[];
 	DataOrganizer dataOrganizer;
@@ -68,6 +69,8 @@ public class ElevatorScreen implements Screen {
 	float doorAlpha;
 	float timerSpeedGirl;
 	float dogSadTimer;
+	boolean turned;
+	float dogsGirlAlpha = 1;
 	boolean exit;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
@@ -206,6 +209,10 @@ public class ElevatorScreen implements Screen {
 		
 		ballEffect = new ArrayList<Vector3>();
 		ball = new Sprite(assetsManager.runButton);
+		
+		dogsGirlHappy = new Sprite(assetsManager.womanHappy);
+		dogsGirlHappy.setScale(0.7f,0.9f);
+
 	}
 
 	@Override
@@ -312,6 +319,8 @@ public class ElevatorScreen implements Screen {
 		girl.render(batch, delta);
 
 		dogsGirl.draw(batch);
+		if(zoomDogGirl == true)
+		dogsGirlHappy.draw(batch);
 	}
 
 	void drawButtons(double delta) {
@@ -338,12 +347,19 @@ public class ElevatorScreen implements Screen {
 		}
 
 		if (zoomDogGirl == false)
-			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha), -50);
-		else
+		{	dogsGirl.setPosition((int) (1800 - 130 * doorAlpha), -50);
+		dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha), -50);
+		
+		}
+		else{
 			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha)
 					- (dogsGirlY - camera.zoom) * 100,
 					(dogsGirlY - camera.zoom) * 200 - 50);
-
+			dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha)
+					- (dogsGirlY - camera.zoom) * 100,
+					(dogsGirlY - camera.zoom) * 200 - 50);
+		
+		}
 		girl.setPosition((int) (220 + 130 * doorAlpha), 150);
 
 		if (minigameCounter == 0) {
@@ -360,8 +376,19 @@ public class ElevatorScreen implements Screen {
 				rightDoorPosition = 1735;
 		}
 
+		if(zoomDogGirl == true){
+			dogsGirlAlpha -= delta;
+			if(dogsGirlAlpha < 0)
+				dogsGirlAlpha = 0;
+			dogsGirl.setAlpha(dogsGirlAlpha);
+			dogsGirlHappy.setAlpha(1 - dogsGirlAlpha);
+			
+		}
+		
 		if (rightDoorPosition == 1735 && leftDoorPosition == 320
 				&& zoomDogGirl == false) {
+
+
 			dogsGirlY = camera.zoom;
 			camera.zoom(1.5f, 3);
 			camera.moveX(1605, 2, 2, 4);

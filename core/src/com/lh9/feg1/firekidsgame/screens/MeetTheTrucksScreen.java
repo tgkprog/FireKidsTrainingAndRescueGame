@@ -80,6 +80,7 @@ public class MeetTheTrucksScreen implements Screen {
 		
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -300, 35);
+		girl.setMaxSpeed(5);
 		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -238,7 +239,7 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (girl.getX() >= 400 && girl.getX() < 3600) {
+		if (girl.getX() >= 400 && girl.getX() < 5750) {
 			camera.position.x = (girl.getX());
 		}
 
@@ -259,6 +260,13 @@ public class MeetTheTrucksScreen implements Screen {
 			batch.draw(assetsManager.parkBackgrounds[4], 2515, 0);
 		if (girl.getX() >= 2600)
 			batch.draw(assetsManager.parkBackgrounds[3], 3315, 0);
+		
+		if (girl.getX() >= 3100)
+			batch.draw(assetsManager.parkBackgrounds[0], 4110, 0);
+		if (girl.getX() >= 3600)
+			batch.draw(assetsManager.parkBackgrounds[1], 4910, 0);
+		if (girl.getX() >= 4100)
+			batch.draw(assetsManager.parkBackgrounds[2], 5710, 0);
 
 	}
 

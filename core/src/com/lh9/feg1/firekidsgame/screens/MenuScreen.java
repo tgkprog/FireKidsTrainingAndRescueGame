@@ -59,7 +59,7 @@ public class MenuScreen implements Screen {
 		fireStation = new Button(700, 100, assetsManager.fireStation);
 		settings = new Button(180, 100, assetsManager.settings);
 		authors = new Button(100, 105, assetsManager.authors);
-		meetTheTrucks = new Button(25, -200, assetsManager.button);
+		meetTheTrucks = new Button(25, -200, assetsManager.meetTheTrucks);
 
 		if (dataOrganizer.getGender() == false)
 			gender = new Button(5, 105, assetsManager.boyButton);
@@ -101,7 +101,7 @@ public class MenuScreen implements Screen {
 						assetsManager.rescueTrain);
 			if (a == 5)
 				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.button);
+						assetsManager.elevatorButton);
 			if (a == 6)
 				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
 						assetsManager.bigRoadRescue);
@@ -261,7 +261,7 @@ public class MenuScreen implements Screen {
 				.getCatRescueScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new RescueCatScreen(game));
+				game.setScreen(new PreRescueCatScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables

@@ -233,9 +233,9 @@ public class PreElevatorScreen implements Screen {
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		boyHead.setScale(0.5f);
-		fireMiniature = new Sprite(assetsManager.fireMiniature);
+		fireMiniature = new Sprite(assetsManager.elevatorMiniature);
 		fireMiniature.setScale(0.5f);
-		fireMiniature.setPosition(160, 410);
+		fireMiniature.setPosition(275, 410);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -657,7 +657,7 @@ public class PreElevatorScreen implements Screen {
 
 		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
 		boyHead.draw(batch);
-	//	fireMiniature.draw(batch);
+		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, truck.getSpeed());
 
 	}
