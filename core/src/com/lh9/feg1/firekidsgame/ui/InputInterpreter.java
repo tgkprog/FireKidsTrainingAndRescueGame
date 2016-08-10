@@ -18,6 +18,7 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 public class InputInterpreter implements GestureListener {
 
 	String selectedScreen = "No button clicked";
+	Button jump;
 	Button gender;
 	Button[] hitboxes;
 	DataOrganizer dataOrganizer;
@@ -132,7 +133,7 @@ public class InputInterpreter implements GestureListener {
 		vec.y = y;
 		camera.unproject(vec);
 
-		manageNonGuiCollisions(vec.x,vec.y);
+		manageNonGuiCollisions(vec.x, vec.y);
 
 		return false;
 	}
@@ -350,6 +351,7 @@ public class InputInterpreter implements GestureListener {
 					controlledTruck.downLane();
 				}
 			}
+
 			if (runButton != null)
 				if (runButton.checkCollision((int) x, (int) y) == true) {
 					runButton.blink();
@@ -368,6 +370,13 @@ public class InputInterpreter implements GestureListener {
 					if (runButton.dontRespond == true) {
 						camera.zoom(0.98f, 1);
 					}
+				}
+
+			if (jump != null)
+				if (jump.checkCollision((int) x, (int) y) == true) {
+					jump.blink();
+					if (controlledHuman.getAccelerationJump() == -10 && controlledHuman.getY() == 35)
+						controlledHuman.setAccelerationJump(13);
 				}
 
 			if (runButtonSecond != null)
@@ -527,6 +536,10 @@ public class InputInterpreter implements GestureListener {
 		this.menu = menu;
 	}
 
+	public void setJump(Button jump) {
+		this.jump = jump;
+	}
+
 	public void setControlledTruck(Truck controlledTruck) {
 		this.controlledTruck = controlledTruck;
 	}
@@ -571,10 +584,11 @@ public class InputInterpreter implements GestureListener {
 		this.yellowSectionUpLeft = yellowSectionUpLeft;
 		this.yellowSectionUpRight = yellowSectionUpRight;
 	}
-	void manageNonGuiCollisions(float x, float y){
-		
+
+	void manageNonGuiCollisions(float x, float y) {
+
 		if (eclipseFire != null)
-			if (eclipseFire.checkCollision((int) x, (int)y) == true) {
+			if (eclipseFire.checkCollision((int) x, (int) y) == true) {
 				eclipseFire.blink();
 			}
 
