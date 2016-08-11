@@ -138,7 +138,7 @@ public class MeetTheTrucksScreen implements Screen {
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-		assetsManager.hit.scaleEffect(0.3f);
+		assetsManager.hit.scaleEffect(0.333f);
 
 		truckLed = new Sprite(assetsManager.truckLed);
 		
@@ -385,9 +385,13 @@ public class MeetTheTrucksScreen implements Screen {
 		if (truckPart == true) {
 			camera.position.x = truck.getX() + 720;
 		}
-		if (eclipsePart == true) {
+		if (eclipsePart == true && girl.getX() <= 13500) {
 			camera.position.x = girl.getX();
 		}
+		else if(eclipsePart == true){
+			camera.position.x = 13500;		
+		}
+
 	}
 
 	void drawBackground() {
@@ -458,11 +462,11 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getX() >= 8600  && girl.getX() < 13000)
 			batch.draw(assetsManager.parkBackgrounds[3], 11520, 0);
 
-		if (girl.getX() >= 9100  && girl.getX() < 13600)
+		if (girl.getX() >= 9100)
 			batch.draw(assetsManager.parkBackgrounds[0], 12315, 0);
-		if (girl.getX() >= 9600  && girl.getX() < 14600)
+		if (girl.getX() >= 9600)
 			batch.draw(assetsManager.parkBackgrounds[1], 13113, 0);
-		if (girl.getX() >= 10100  && girl.getX() < 15600)
+		if (girl.getX() >= 10100)
 			batch.draw(assetsManager.parkBackgrounds[2], 13910, 0);
 
 		
@@ -488,29 +492,28 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawBars(float delta) {
+	
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
 		
 		batch.draw(assetsManager.speedBar, 160, 440);
 		
-		boyHead.setPosition(150 + truck.getX() * 0.0255f, 410);
+		boyHead.setPosition(160 + girl.getX() * 0.0285f, 410);
 		boyHead.draw(batch);
 		
-		speedBar.render(batch, delta, truck.getSpeed());
-
 	}
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				assetsManager.hit.scaleEffect(1);
+				assetsManager.hit.scaleEffect(3);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMeetTheTrucks()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				assetsManager.hit.scaleEffect(1);
+				assetsManager.hit.scaleEffect(3);
 				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
