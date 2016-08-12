@@ -1,5 +1,6 @@
 ## Java
-
+local_docs/
+android/android-release.apk
 *.class
 *.war
 *.ear
