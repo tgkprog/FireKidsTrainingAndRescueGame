@@ -87,12 +87,12 @@ public class FitnessScreenThree implements Screen {
 		boy.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 1200, 50);
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 300, 50);
-		boy.setMaxSpeed(2f);
-		girl.setMaxSpeed(2f);
+		boy.setMaxSpeed(1.6f);
+		girl.setMaxSpeed(1.6f);
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
-		boy.setSpeedAdder(0.4f);
-		girl.setSpeedAdder(0.4f);
+		boy.setSpeedAdder(0.3f);
+		girl.setSpeedAdder(0.3f);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);

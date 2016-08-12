@@ -21,7 +21,9 @@ public class AssetsManager extends Thread {
 	public Texture tree;
 	public Texture truckBackDoor;
 	public Texture[] girlHoseHydrant;
+	public Texture[] girlHoseHydrantReversed;
 	public Texture catMiniature;
+	public Texture truckMiniature;
 	public Texture programmingText;
 	public Texture graphicsText;
 	public Texture trainMiniature;
@@ -366,12 +368,13 @@ public class AssetsManager extends Thread {
 		girlHandCockpit = new Texture("girl/handCockpit.png");
 		programmingText = new Texture("texts/Programming.png");
 		graphicsText = new Texture("texts/Graphics.png");
+		truckMiniature = new Texture("buttons/truckMiniature.png");
 		sign = new Texture("texts/Sign.png");
 		breakTheWallText = new Texture("texts/Break-the-wall.png");
 		eclipseFireText = new Texture("texts/Elipse-fire.png");
 		jumpText = new Texture("texts/Jump.png");
 		wall = new Texture("others/wall.png");
-		rideTruckText = new Texture("texts/Ride-truck.png");
+		rideTruckText = new Texture("texts/Ride-Truck.png");
 
 		elevatorDoor = new Texture[2];
 
@@ -509,6 +512,10 @@ public class AssetsManager extends Thread {
 		girlHoseHydrant[5] = new Texture("girl/hoseHydrant/6.png");
 		girlHoseHydrant[6] = new Texture("girl/hoseHydrant/7.png");
 
+		girlHoseHydrantReversed = new Texture[7];
+		for (int a = 0; a < 7; a++) {
+			girlHoseHydrantReversed[a] = girlHoseHydrant[6 - a];
+		}
 		trainBasketAnimation = new Texture[14];
 		trainBasketAnimation[0] = new Texture(
 				"spritesheets/trainBasket/Train-basket-1.png");
@@ -745,6 +752,7 @@ public class AssetsManager extends Thread {
 		button.setFilter(textureFilter, textureFilter);
 		catHappy.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
+		truckMiniature.setFilter(textureFilter, textureFilter);
 		rescueMetroSadPeople.setFilter(textureFilter, textureFilter);
 		fireStation.setFilter(textureFilter, textureFilter);
 		boyButton.setFilter(textureFilter, textureFilter);

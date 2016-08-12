@@ -76,12 +76,12 @@ public class FitnessScreenTwo implements Screen {
 		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
-		boy.setMaxSpeed(2f);
-		girl.setMaxSpeed(2f);
+		boy.setMaxSpeed(1.6f);
+		girl.setMaxSpeed(1.6f);
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
-		boy.setSpeedAdder(0.4f);
-		girl.setSpeedAdder(0.4f);
+		boy.setSpeedAdder(0.3f);
+		girl.setSpeedAdder(0.3f);
 
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);

@@ -290,17 +290,17 @@ public class FitnessScreenOne implements Screen {
 		if (boy.getX() <= 1200)
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
 		if (boy.getX() <= 2000)
-			batch.draw(assetsManager.parkBackgrounds[1], 790, 0);
+			batch.draw(assetsManager.parkBackgrounds[1], 789, 0);
 
 		if (boy.getX() >= 1200 && boy.getX() < 2600)
-			batch.draw(assetsManager.parkBackgrounds[2], 1590, 0);
+			batch.draw(assetsManager.parkBackgrounds[2], 1589, 0);
 
 		if (boy.getX() >= 1600 && boy.getX() < 3100)
-			batch.draw(assetsManager.parkBackgrounds[5], 2050, 0);
+			batch.draw(assetsManager.parkBackgrounds[5], 2049, 0);
 		if (boy.getX() >= 2100)
-			batch.draw(assetsManager.parkBackgrounds[4], 2515, 0);
+			batch.draw(assetsManager.parkBackgrounds[4], 2514, 0);
 		if (boy.getX() >= 2600)
-			batch.draw(assetsManager.parkBackgrounds[3], 3315, 0);
+			batch.draw(assetsManager.parkBackgrounds[3], 3314, 0);
 
 	}
 
