@@ -26,7 +26,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
-public class PreRescueCatScreen implements Screen {
+public class PreElevatorScreen implements Screen {
 
 	boolean ledRed;
 	boolean lastWindowPopUp;
@@ -78,7 +78,7 @@ public class PreRescueCatScreen implements Screen {
 
 	final Starter game;
 
-	public PreRescueCatScreen(final Starter gam) {
+	public PreElevatorScreen(final Starter gam) {
 
 		this.game = gam;
 
@@ -233,9 +233,9 @@ public class PreRescueCatScreen implements Screen {
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		boyHead.setScale(0.5f);
-		fireMiniature = new Sprite(assetsManager.catMiniature);
+		fireMiniature = new Sprite(assetsManager.elevatorMiniature);
 		fireMiniature.setScale(0.5f);
-		fireMiniature.setPosition(120, 410);
+		fireMiniature.setPosition(275, 410);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -538,10 +538,12 @@ public class PreRescueCatScreen implements Screen {
 						peopleBuildingTimer - 6.5f));
 		}
 
-		if (truck.getX() <= -16000) {
+		if (truck.getX() <= -9900) {
 
 			if (cameraFirstZoom == false) {
 	
+				truck.setSpeed(0);
+			
 				camera.reset();
 				camera.zoom(-1.5f, 25);
 			//	camera.moveX(camera.position.x + 200, 10, 10, 10);
@@ -713,13 +715,19 @@ public class PreRescueCatScreen implements Screen {
 
 	void manageSelectingScreen() {
 	if(cameraFirstZoom == true && cloudManager.getAllScalesEqualOne()== true){
-		game.setScreen(new RescueCatScreen(game));
+		game.setScreen(new ElevatorScreen(game));
 	}
 		
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreenTwo()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new TrainingScreenTwo(game));
 			}
 		}
 	}

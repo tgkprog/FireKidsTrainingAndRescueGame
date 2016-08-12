@@ -26,7 +26,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
-public class PreRescueCatScreen implements Screen {
+public class PreRescueMetroScreen implements Screen {
 
 	boolean ledRed;
 	boolean lastWindowPopUp;
@@ -78,7 +78,7 @@ public class PreRescueCatScreen implements Screen {
 
 	final Starter game;
 
-	public PreRescueCatScreen(final Starter gam) {
+	public PreRescueMetroScreen(final Starter gam) {
 
 		this.game = gam;
 
@@ -233,7 +233,7 @@ public class PreRescueCatScreen implements Screen {
 
 		boyHead = new Sprite(assetsManager.boyButton);
 		boyHead.setScale(0.5f);
-		fireMiniature = new Sprite(assetsManager.catMiniature);
+		fireMiniature = new Sprite(assetsManager.trainMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(120, 410);
 
@@ -713,13 +713,19 @@ public class PreRescueCatScreen implements Screen {
 
 	void manageSelectingScreen() {
 	if(cameraFirstZoom == true && cloudManager.getAllScalesEqualOne()== true){
-		game.setScreen(new RescueCatScreen(game));
+		game.setScreen(new RescueMetroScreen(game));
 	}
 		
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new MenuScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreenTwo()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new TrainingScreenTwo(game));
 			}
 		}
 	}

@@ -1,9 +1,12 @@
 package com.lh9.feg1.firekidsgame.animated;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Human extends Animated {
 
+	Rectangle bounds;
+	float accelerationJump;
 	float friction = 1;
 	float speed;
 	float stateTime = 0.05f;
@@ -16,6 +19,10 @@ public class Human extends Animated {
 	boolean onceOnly;
 
 	public void render(SpriteBatch batch, float delta) {
+
+		if (bounds != null) {
+			bounds.setPosition(x, y);
+		}
 
 		if (onceOnly == false) {
 			stateTime += delta * speed * 0.1f;
@@ -32,25 +39,25 @@ public class Human extends Animated {
 			currentFrame = walkAnimation.getKeyFrame(stateTime, true);
 			batch.draw(currentFrame, x, y);
 		} else {
-			if(stateTime/animationTime < frameNumber)
-			batch.draw(frames[(int) (stateTime / animationTime)], x, y);
+			if (stateTime / animationTime < frameNumber)
+				batch.draw(frames[(int) (stateTime / animationTime)], x, y);
 		}
 		if (this.fromTextureRegion == true) {
 			if (stateTime > animationTime && speed > 1.5f) {
 				frameBefore = walkAnimation.getKeyFrame(stateTime
 						- animationTime, true);
-				batch.setColor(1, 1, 1, 0.3f);
-				batch.draw(frameBefore, x, y);
-				batch.setColor(1, 1, 1, 1f);
+				// batch.setColor(1, 1, 1, 0.3f);
+				// batch.draw(frameBefore, x, y);
+				// batch.setColor(1, 1, 1, 1f);
 			}
 		}
 
 		else if (stateTime > animationTime && speed > 1.5f) {
-			batch.setColor(1, 1, 1, 0.3f);
-			batch.draw(
-					frames[(int) ((stateTime / animationTime) - animationTime)],
-					x, y);
-			batch.setColor(1, 1, 1, 1f);
+			// batch.setColor(1, 1, 1, 0.3f);
+			// batch.draw(
+			// frames[(int) ((stateTime / animationTime) - animationTime)],
+			// x, y);
+			// batch.setColor(1, 1, 1, 1f);
 		}
 
 		if (this.fromTextureRegion == true) {
@@ -67,28 +74,21 @@ public class Human extends Animated {
 				// batch.draw(currentFrame, x - 21, y);
 				// batch.setColor(1, 1, 1, 1);
 			}
-		} else if (speed >= 2 && animationOnly == false && stateTime - animationTime > 0) {
-			batch.setColor(1, 1, 1, 0.3f);
-			batch.draw(
-					frames[(int) (stateTime - animationTime / animationTime)],
-					x - 3, y);
-			batch.setColor(1, 1, 1, 0.25f);
-			batch.draw(
-					frames[(int) (stateTime - animationTime / animationTime)],
-					x - 6, y);
-			batch.setColor(1, 1, 1, 0.20f);
-			batch.draw(
-					frames[(int) (stateTime - animationTime / animationTime)],
-					x - 9, y);
-			batch.setColor(1, 1, 1, 0.15f);
-			batch.draw(
-					frames[(int) (stateTime - animationTime / animationTime)],
-					x - 15, y);
-			batch.setColor(1, 1, 1, 0.1f);
-			batch.draw(
-					frames[(int) (stateTime - animationTime / animationTime)],
-					x - 21, y);
-			batch.setColor(1, 1, 1, 1);
+		} else if (speed >= 2 && animationOnly == false
+				&& stateTime - animationTime > 0) {
+			/*
+			 * batch.setColor(1, 1, 1, 0.3f); batch.draw( frames[(int)
+			 * (stateTime - animationTime / animationTime)], x - 3, y);
+			 * batch.setColor(1, 1, 1, 0.25f); batch.draw( frames[(int)
+			 * (stateTime - animationTime / animationTime)], x - 6, y);
+			 * batch.setColor(1, 1, 1, 0.20f); batch.draw( frames[(int)
+			 * (stateTime - animationTime / animationTime)], x - 9, y);
+			 * batch.setColor(1, 1, 1, 0.15f); batch.draw( frames[(int)
+			 * (stateTime - animationTime / animationTime)], x - 15, y);
+			 * batch.setColor(1, 1, 1, 0.1f); batch.draw( frames[(int)
+			 * (stateTime - animationTime / animationTime)], x - 21, y);
+			 * batch.setColor(1, 1, 1, 1);
+			 */
 		}
 
 		updateSpeed(delta);
@@ -158,6 +158,23 @@ public class Human extends Animated {
 		return speed;
 	}
 
+	public void createBounds() {
+		bounds = new Rectangle();
+		if (fromTextureRegion == false)
+			bounds.setSize(this.frames[0].getWidth(),
+					this.frames[0].getHeight());
+		else
+			bounds.setSize(walkAnimation.getKeyFrame(stateTime, true)
+					.getTexture().getWidth(),
+					walkAnimation.getKeyFrame(stateTime, true).getTexture()
+							.getHeight());
+
+	}
+
+	public Rectangle getRectangle() {
+		return bounds;
+	}
+
 	public void setAnimationOnly(boolean animationOnly) {
 		this.animationOnly = animationOnly;
 	}
@@ -202,5 +219,13 @@ public class Human extends Animated {
 
 	public void setFriction(float friction) {
 		this.friction = friction;
+	}
+
+	public void setAccelerationJump(float accelerationJump) {
+		this.accelerationJump = accelerationJump;
+	}
+
+	public float getAccelerationJump() {
+		return accelerationJump;
 	}
 }

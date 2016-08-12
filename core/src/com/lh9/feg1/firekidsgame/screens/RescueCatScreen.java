@@ -399,7 +399,9 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void drawParticlesNonGui(float delta) {
+		assetsManager.hit.draw(batch, delta);
 	}
+
 
 	void drawParticles(float delta) {
 		assetsManager.stars.draw(batch, delta);
