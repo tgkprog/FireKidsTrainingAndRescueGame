@@ -97,4 +97,5 @@ public class StaticAnimation extends Animated {
 		color = new Vector3(1, 0, 0);
 	}
 
+
 }

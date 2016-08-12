@@ -46,6 +46,7 @@ public class TrainingScreenOne implements Screen {
 	boolean secondDialogueClicked;
 	float timerSpeedGirl;
 	float timerFrontTruck;
+	float endingPointerScale;
 	float shakeScreenTimer;
 	float timerSirene;
 	float timerSecondWindow;
@@ -60,6 +61,7 @@ public class TrainingScreenOne implements Screen {
 	Sprite glassSprite;
 	Button yellowSectionMiddle;
 	Button yellowSectionLeft;
+	Sprite endingPointer;
 	Button yellowSectionUpLeft;
 	Button yellowSectionUpRight;
 	Vector3 normalColor;
@@ -210,7 +212,7 @@ public class TrainingScreenOne implements Screen {
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
-		//inputInterpreter.setPauseButton(pause);
+		// inputInterpreter.setPauseButton(pause);
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
@@ -270,6 +272,9 @@ public class TrainingScreenOne implements Screen {
 		yellowSectionUpLeftPointer.setScale(0);
 		yellowSectionUpRightPointer.setScale(0);
 
+		endingPointer = new Sprite(assetsManager.pointer);
+		endingPointer.setScale(0);
+		endingPointer.setPosition(410, 210);
 		yellowButtons = new boolean[4];
 
 		timeLeftBar = new Bar(assetsManager.barFilled,
@@ -278,7 +283,6 @@ public class TrainingScreenOne implements Screen {
 		counterLeftBar = new Bar(assetsManager.barFilledBlue,
 				assetsManager.barNotFilledBlue, 250, 425, minigameCounter);
 
-		
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
@@ -286,11 +290,11 @@ public class TrainingScreenOne implements Screen {
 
 	@Override
 	public void render(float delta) {
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -315,6 +319,7 @@ public class TrainingScreenOne implements Screen {
 		batch.begin();
 
 		drawButtons(deltaTemp);
+		drawParticles(delta);
 		drawWindows(deltaTemp);
 		drawTime(delta);
 		drawClouds(deltaTemp);
@@ -380,11 +385,18 @@ public class TrainingScreenOne implements Screen {
 		yellowSectionUpLeftPointer.draw(batch);
 		yellowSectionUpRightPointer.draw(batch);
 
+		endingPointer.setScale(endingPointerScale);
+		endingPointer.draw(batch);
+
 	}
 
 	void drawWindows(float delta) {
 		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
+	}
+
+	void drawParticles(float delta) {
+		assetsManager.hit.draw(batch, delta);
 	}
 
 	void updateLogics(float delta) {
@@ -393,6 +405,11 @@ public class TrainingScreenOne implements Screen {
 
 		if (afterMinigameWindow == true && dialogueWindow.isVisibile() == false) {
 			runButton.setDontRespond(false);
+			if(endingPointerScale < 1)
+			endingPointerScale += 4*delta;
+			if(endingPointerScale > 1)
+				endingPointerScale = 1;
+			
 		}
 
 		if (secondDialogueClicked == true
@@ -644,6 +661,9 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionMiddle.getSelection() == true) {
 				yellowButtons[0] = false;
+				assetsManager.hit.setPosition(yellowSectionMiddle.getX()+50, yellowSectionMiddle.getY());
+				assetsManager.hit.allowCompletion();
+				assetsManager.hit.start();
 
 			}
 		} else if (yellowSectionMiddlePointer.getScaleX() > 0) {
@@ -661,6 +681,9 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionLeft.getSelection() == true) {
 				yellowButtons[1] = false;
+				assetsManager.hit.setPosition(yellowSectionLeft.getX(), yellowSectionLeft.getY());
+				assetsManager.hit.allowCompletion();
+				assetsManager.hit.start();
 			}
 		} else if (yellowSectionLeftPointer.getScaleX() > 0) {
 			yellowSectionLeftPointer.setScale(yellowSectionLeftPointer
@@ -677,6 +700,9 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionUpLeft.getSelection() == true) {
 				yellowButtons[2] = false;
+				assetsManager.hit.setPosition(yellowSectionUpLeft.getX(), yellowSectionUpLeft.getY());
+				assetsManager.hit.allowCompletion();
+				assetsManager.hit.start();
 			}
 		} else if (yellowSectionUpLeftPointer.getScaleX() > 0) {
 			yellowSectionUpLeftPointer.setScale(yellowSectionUpLeftPointer
@@ -694,6 +720,10 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionUpRight.getSelection() == true) {
 				yellowButtons[3] = false;
+				assetsManager.hit.setPosition(yellowSectionUpRight.getX(), yellowSectionUpRight.getY());
+				assetsManager.hit.allowCompletion();
+				assetsManager.hit.start();
+				
 			}
 		} else if (yellowSectionUpRightPointer.getScaleX() > 0) {
 			yellowSectionUpRightPointer.setScale(yellowSectionUpRightPointer

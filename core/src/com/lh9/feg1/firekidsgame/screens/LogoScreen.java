@@ -54,8 +54,8 @@ public class LogoScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
-		if (Gdx.graphics.getRawDeltaTime() > 0.05f
-				&& Gdx.graphics.getDeltaTime() > 0.05f)
+		if (Gdx.graphics.getRawDeltaTime() > 0.045f
+				|| Gdx.graphics.getDeltaTime() > 0.045f)
 			delta = 0;
 
 		manageLoadingAssets();
@@ -139,26 +139,29 @@ public class LogoScreen implements Screen {
 			if (assetsManager.isAlive() == false
 					&& assetsManager.getAssetsLoaded() == false
 					&& logoSprite.getScaleX() == variables.getMaxLogoScale())
+			{
 				assetsManager.run();
-		}
+			}
+			}
 	}
 
 	void manageChangingScreens(double delta) {
+
 		if (assetsManager.getAssetsLoaded() == true
-				&& Gdx.graphics.getRawDeltaTime() < 0.05f)
+				&& Gdx.graphics.getRawDeltaTime() < 0.04f)
 			changingScreenTimer += delta;
 		if (assetsManager.getAssetsLoaded() == true
-				&& cloudManager.isLoaded() == false) {
+				&& cloudManager.isLoaded() == false && Gdx.graphics.getDeltaTime() < 0.04f) {
 			cloudManager.load(assetsManager.clouds);
 			cloudManager.start();
 		}
 		if (changingScreenTimer > variables.getDelayChangingScreens()
-				&& Gdx.graphics.getRawDeltaTime() < 0.05f)
+				&& Gdx.graphics.getRawDeltaTime() < 0.04f)
 			changeScreen = true;
 	}
 
 	void manageChangingScreen() {
-		if (changeScreen == true && Gdx.graphics.getRawDeltaTime() < 0.05f
+		if (changeScreen == true && Gdx.graphics.getRawDeltaTime() < 0.04f
 				&& logoScale == 0
 				&& cloudManager.getAllScalesEqualOne() == true) {
 			game.setScreen(new MenuScreen(game));

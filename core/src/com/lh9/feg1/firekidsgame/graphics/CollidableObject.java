@@ -95,4 +95,7 @@ public class CollidableObject {
 	public int getY(){
 		return y;
 	}
+	public void setTimerLiving(float timerLiving){
+		this.timerLiving = timerLiving;
+	}
 }

@@ -722,6 +722,13 @@ public class PreRescueCatScreen implements Screen {
 				game.setScreen(new MenuScreen(game));
 			}
 		}
+
+		if (inputInterpreter.getSelectedScreenName() == variables
+				.getTrainingScreenTwo()) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreen(new PreRescueCatScreen(game));
+			}
+		}
 	}
 
 	void drawFps() {

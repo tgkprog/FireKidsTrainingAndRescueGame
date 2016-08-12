@@ -725,7 +725,7 @@ public class PreRescueMetroScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTrainingScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setScreen(new TrainingScreenTwo(game));
+				game.setScreen(new PreRescueMetroScreen(game));
 			}
 		}
 	}

@@ -19,14 +19,24 @@ public class AssetsManager extends Thread {
 	public Texture cloudyBackgroundFar;
 	public Texture truckBack;
 	public Texture tree;
+	public Texture truckBackDoor;
+	public Texture[] girlHoseHydrant;
 	public Texture catMiniature;
 	public Texture programmingText;
 	public Texture graphicsText;
 	public Texture trainMiniature;
+	public Texture speedometer;
 	public Texture elevatorMiniature;
 	public Texture elevatorButton;
+	public Texture hoseHydrant;
 	public Texture dogsGirl;
 	public Texture damage;
+	public Texture sign;
+	public Texture breakTheWallText;
+	public Texture eclipseFireText;
+	public Texture jumpText;
+	public Texture wall;
+	public Texture rideTruckText;
 	public Texture[] girlHammer;
 	public Texture helmet1;
 	public Texture helmet2;
@@ -63,6 +73,7 @@ public class AssetsManager extends Thread {
 	public Texture arrow;
 	public Texture longButton;
 	public Texture runButtonGreen;
+	public Texture foot;
 	public Texture boyHeadBigBlonde;
 	public Texture button;
 	public Texture fireStation;
@@ -159,6 +170,7 @@ public class AssetsManager extends Thread {
 	public Texture glass;
 	public Texture womanHappy;
 
+	public ParticleEffect running;
 	public ParticleEffect stars;
 	public ParticleEffect leaf;
 	public ParticleEffect hit;
@@ -217,6 +229,11 @@ public class AssetsManager extends Thread {
 		hit = new ParticleEffect();
 		hit.load(Gdx.files.internal("particles/hit"),
 				Gdx.files.internal("particles/"));
+
+		running = new ParticleEffect();
+		running.load(Gdx.files.internal("particles/running"),
+				Gdx.files.internal("particles/"));
+
 		truckEmissions = new ParticleEffect();
 		truckEmissions.load(Gdx.files.internal("particles/truckEmissions"),
 				Gdx.files.internal("particles/"));
@@ -259,10 +276,13 @@ public class AssetsManager extends Thread {
 		arrowDown = new Texture("buttons/arrow-down.png");
 		runButton = new Texture("buttons/runButton.png");
 		runButtonLittle = new Texture("buttons/Button-2.png");
-		truckBack = new Texture("others/back-side-open.png");
+		foot = new Texture("others/foot.png");
+		truckBack = new Texture("others/truckBackOpen.png");
+		truckBackDoor = new Texture("others/truckBackDoor.png");
 		runButtonGreen = new Texture("buttons/Button-1.png");
 		settings = new Texture("buttons/settings.png");
 		pointer = new Texture("others/this.png");
+		speedometer = new Texture("others/speedometer.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		fireStation = new Texture("buttons/fireStation.png");
 		settingsText = new Texture("buttons/Settings-text.png");
@@ -312,6 +332,7 @@ public class AssetsManager extends Thread {
 
 		elevatorButton = new Texture("buttons/elevator.png");
 		fireMiniature = new Texture("others/Fire3-1.png");
+		hoseHydrant = new Texture("others/hoseHydrant.png");
 		handTruckFront = new Texture("boy/handTruckFront.png");
 		truckLed = new Texture("others/truckLed.png");
 		trainMiniature = new Texture("buttons/trainMiniature.png");
@@ -345,7 +366,13 @@ public class AssetsManager extends Thread {
 		girlHandCockpit = new Texture("girl/handCockpit.png");
 		programmingText = new Texture("texts/Programming.png");
 		graphicsText = new Texture("texts/Graphics.png");
-		
+		sign = new Texture("texts/Sign.png");
+		breakTheWallText = new Texture("texts/Break-the-wall.png");
+		eclipseFireText = new Texture("texts/Elipse-fire.png");
+		jumpText = new Texture("texts/Jump.png");
+		wall = new Texture("others/wall.png");
+		rideTruckText = new Texture("texts/Ride-truck.png");
+
 		elevatorDoor = new Texture[2];
 
 		elevatorDoor[0] = new Texture("backgrounds/elevator/door1.png");
@@ -464,7 +491,7 @@ public class AssetsManager extends Thread {
 		metroDoor = new Texture[2];
 		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
 		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
-		
+
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
 		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
@@ -472,6 +499,15 @@ public class AssetsManager extends Thread {
 		boyWaving[3] = new Texture("boy/Boy-waving-4.png");
 		boyWaving[4] = new Texture("boy/Boy-waving-5.png");
 		boyWaving[5] = new Texture("boy/Boy-waving-6.png");
+
+		girlHoseHydrant = new Texture[7];
+		girlHoseHydrant[0] = new Texture("girl/hoseHydrant/1.png");
+		girlHoseHydrant[1] = new Texture("girl/hoseHydrant/2.png");
+		girlHoseHydrant[2] = new Texture("girl/hoseHydrant/3.png");
+		girlHoseHydrant[3] = new Texture("girl/hoseHydrant/4.png");
+		girlHoseHydrant[4] = new Texture("girl/hoseHydrant/5.png");
+		girlHoseHydrant[5] = new Texture("girl/hoseHydrant/6.png");
+		girlHoseHydrant[6] = new Texture("girl/hoseHydrant/7.png");
 
 		trainBasketAnimation = new Texture[14];
 		trainBasketAnimation[0] = new Texture(
@@ -668,6 +704,10 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 4; a++) {
 			mainBackground[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < 7; a++) {
+			girlHoseHydrant[a].setFilter(textureFilter, textureFilter);
+		}
+
 		for (int a = 0; a < 4; a++) {
 			truckCockpit[a].setFilter(TextureFilter.Nearest,
 					TextureFilter.Nearest);
@@ -694,10 +734,13 @@ public class AssetsManager extends Thread {
 		spritesheetGirlRunning.setFilter(textureFilter, textureFilter);
 		spritesheetBoyRunning.setFilter(textureFilter, textureFilter);
 		pause.setFilter(textureFilter, textureFilter);
+		hoseHydrant.setFilter(textureFilter, textureFilter);
+		speedometer.setFilter(textureFilter, textureFilter);
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
 		barNotFilled.setFilter(textureFilter, textureFilter);
 		longButton.setFilter(textureFilter, textureFilter);
+		foot.setFilter(textureFilter, textureFilter);
 		arrow.setFilter(textureFilter, textureFilter);
 		button.setFilter(textureFilter, textureFilter);
 		catHappy.setFilter(textureFilter, textureFilter);
@@ -742,6 +785,12 @@ public class AssetsManager extends Thread {
 		programmingText.setFilter(textureFilter, textureFilter);
 		graphicsText.setFilter(textureFilter, textureFilter);
 		barNotFilledBlue.setFilter(textureFilter, textureFilter);
+		sign.setFilter(textureFilter, textureFilter);
+		breakTheWallText.setFilter(textureFilter, textureFilter);
+		jumpText.setFilter(textureFilter, textureFilter);
+		wall.setFilter(textureFilter, textureFilter);
+		rideTruckText.setFilter(textureFilter, textureFilter);
+		eclipseFireText.setFilter(textureFilter, textureFilter);
 		basket.setFilter(textureFilter, textureFilter);
 		settings.setFilter(textureFilter, textureFilter);
 		cockpitPart.setFilter(textureFilter, textureFilter);
@@ -758,6 +807,7 @@ public class AssetsManager extends Thread {
 		arrowUp.setFilter(textureFilter, textureFilter);
 		arrowDown.setFilter(textureFilter, textureFilter);
 		truckBack.setFilter(textureFilter, textureFilter);
+		truckBackDoor.setFilter(textureFilter, textureFilter);
 		fireBar.setFilter(textureFilter, textureFilter);
 		daniel.setFilter(textureFilter, textureFilter);
 		nevena.setFilter(textureFilter, textureFilter);

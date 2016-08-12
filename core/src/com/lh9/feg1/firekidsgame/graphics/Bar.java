@@ -1,10 +1,13 @@
 package com.lh9.feg1.firekidsgame.graphics;
 
 import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bar {
 
+	Sprite speedometerSprite;
+	boolean speedometer;
 	boolean visibility;
 	float alpha;
 
@@ -25,7 +28,7 @@ public class Bar {
 	}
 
 	public void render(SpriteBatch batch, float delta, float speed) {
-
+		
 		if (visibility == true) {
 			if (alpha < 1)
 				alpha += delta * 3;
@@ -51,6 +54,11 @@ public class Bar {
 		}
 
 		batch.setColor(1, 1, 1, 1);
+		
+		if(speedometer == true){
+			speedometerSprite.setAlpha(alpha);
+			speedometerSprite.draw(batch);
+		}
 	}
 
 	public void setVisibility(boolean visibility) {
@@ -60,5 +68,11 @@ public class Bar {
 	public void setPosition(int x, int y) {
 		this.x = x;
 		this.y = y;
+	}
+
+	public void setSpeedometer(Texture speedometerTex) {
+	//	speedometer = true;
+	//	speedometerSprite = new Sprite(speedometerTex);
+	//	speedometerSprite.setPosition(x-100, y-10);
 	}
 }
