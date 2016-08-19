@@ -14,10 +14,15 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture grassFlowers;
+	public Texture[] trees;
+	public Texture[] bushes;
 	public Texture[] metroDoor;
 	public Texture cloudyBackgroundClose;
 	public Texture cloudyBackgroundFar;
 	public Texture truckBack;
+	public Texture grass;
+	public Texture[] sky;
 	public Texture tree;
 	public Texture truckBackDoor;
 	public Texture[] girlHoseHydrant;
@@ -25,6 +30,7 @@ public class AssetsManager extends Thread {
 	public Texture catMiniature;
 	public Texture truckMiniature;
 	public Texture programmingText;
+	public Texture ground;
 	public Texture graphicsText;
 	public Texture trainMiniature;
 	public Texture speedometer;
@@ -101,6 +107,7 @@ public class AssetsManager extends Thread {
 	public Texture rescueCatBackground[];
 	public Texture handTruckFront;
 	public Texture truckLed;
+	public Texture lake;
 	public Texture hoseAnimation[];
 	public Texture fountainAnimation[];
 	public Texture hoseAnimationReversed[];
@@ -133,6 +140,7 @@ public class AssetsManager extends Thread {
 	public Texture settings;
 	public Texture boyHeadBig;
 	public Texture girlHeadBig;
+	public Texture barrel;
 	public Texture girlHead;
 	public Texture boyHead;
 	public Texture switchButton;
@@ -279,6 +287,7 @@ public class AssetsManager extends Thread {
 		runButton = new Texture("buttons/runButton.png");
 		runButtonLittle = new Texture("buttons/Button-2.png");
 		foot = new Texture("others/foot.png");
+		barrel = new Texture("others/Barrel.png");
 		truckBack = new Texture("others/truckBackOpen.png");
 		truckBackDoor = new Texture("others/truckBackDoor.png");
 		runButtonGreen = new Texture("buttons/Button-1.png");
@@ -337,6 +346,7 @@ public class AssetsManager extends Thread {
 		hoseHydrant = new Texture("others/hoseHydrant.png");
 		handTruckFront = new Texture("boy/handTruckFront.png");
 		truckLed = new Texture("others/truckLed.png");
+		lake = new Texture("backgrounds/Lake.png");
 		trainMiniature = new Texture("buttons/trainMiniature.png");
 		elevatorMiniature = new Texture("buttons/elevatorMiniature.png");
 		boyHeadBig = new Texture("boy/boyHeadBig.png");
@@ -352,6 +362,7 @@ public class AssetsManager extends Thread {
 		peopleGround = new Texture("spritesheets/peopleGround.png");
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
 		barFilled = new Texture("others/barFilled.png");
+		grassFlowers = new Texture("backgrounds/grassFlowers.png");
 		barNotFilled = new Texture("others/barNotFilled.png");
 		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
 		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
@@ -367,6 +378,7 @@ public class AssetsManager extends Thread {
 		womanHappy = new Texture("backgrounds/elevator/womanHappy.png");
 		girlHandCockpit = new Texture("girl/handCockpit.png");
 		programmingText = new Texture("texts/Programming.png");
+		ground = new Texture("backgrounds/ground.png");
 		graphicsText = new Texture("texts/Graphics.png");
 		truckMiniature = new Texture("buttons/truckMiniature.png");
 		sign = new Texture("texts/Sign.png");
@@ -387,6 +399,16 @@ public class AssetsManager extends Thread {
 		spritesheetBoyWeights = new Texture[3];
 		truckBlank = new Texture[1];
 		truckBlank[0] = new Texture("others/Train-basket-blank.png");
+
+		grass = new Texture("backgrounds/grass.png");
+
+		sky = new Texture[6];
+		sky[0] = new Texture("backgrounds/sky1.png");
+		sky[1] = new Texture("backgrounds/sky1reversed.png");
+		sky[2] = new Texture("backgrounds/sky2.png");
+		sky[3] = new Texture("backgrounds/sky2reversed.png");
+		sky[4] = new Texture("backgrounds/sky3.png");
+		sky[5] = new Texture("backgrounds/sky3reversed.png");
 
 		truckNoBasket = new Texture[1];
 		truckNoBasket[0] = new Texture("spritesheets/Train-blank.png");
@@ -494,6 +516,16 @@ public class AssetsManager extends Thread {
 		metroDoor = new Texture[2];
 		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
 		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
+
+		bushes = new Texture[3];
+		bushes[0] = new Texture("backgrounds/bushes1.png");
+		bushes[1] = new Texture("backgrounds/bushes2.png");
+		bushes[2] = new Texture("backgrounds/Bushes-small.png");
+
+		trees = new Texture[3];
+		trees[0] = new Texture("backgrounds/tree1.png");
+		trees[1] = new Texture("backgrounds/tree2.png");
+		trees[2] = new Texture("backgrounds/tree3.png");
 
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
@@ -678,11 +710,22 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 2; a++) {
 			dogWorried[a].setFilter(textureFilter, textureFilter);
 		}
+		grass.setFilter(textureFilter, textureFilter);
+
+		for (int a = 0; a < 6; a++) {
+			sky[a].setFilter(textureFilter, textureFilter);
+		}
 		for (int a = 0; a < 2; a++) {
 			girlHammer[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
 			metroDoor[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 3; a++) {
+			bushes[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 3; a++) {
+			trees[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
 			dogHappy[a].setFilter(textureFilter, textureFilter);
@@ -745,9 +788,11 @@ public class AssetsManager extends Thread {
 		speedometer.setFilter(textureFilter, textureFilter);
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
+		grassFlowers.setFilter(textureFilter, textureFilter);
 		barNotFilled.setFilter(textureFilter, textureFilter);
 		longButton.setFilter(textureFilter, textureFilter);
 		foot.setFilter(textureFilter, textureFilter);
+		barrel.setFilter(textureFilter, textureFilter);
 		arrow.setFilter(textureFilter, textureFilter);
 		button.setFilter(textureFilter, textureFilter);
 		catHappy.setFilter(textureFilter, textureFilter);
@@ -791,6 +836,7 @@ public class AssetsManager extends Thread {
 		voiceText.setFilter(textureFilter, textureFilter);
 		barFilledBlue.setFilter(textureFilter, textureFilter);
 		programmingText.setFilter(textureFilter, textureFilter);
+		ground.setFilter(textureFilter, textureFilter);
 		graphicsText.setFilter(textureFilter, textureFilter);
 		barNotFilledBlue.setFilter(textureFilter, textureFilter);
 		sign.setFilter(textureFilter, textureFilter);
