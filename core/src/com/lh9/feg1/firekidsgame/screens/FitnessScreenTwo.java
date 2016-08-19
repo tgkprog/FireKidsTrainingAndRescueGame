@@ -72,10 +72,22 @@ public class FitnessScreenTwo implements Screen {
 		runButton.goUp(30);
 		runButton.setAlpha(0.5f);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+		
+		if(dataOrganizer.getGender() == false){
 		boy = new Human();
 		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
 		girl = new Human();
 		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
+		}
+		else{
+		boy = new Human();
+		boy.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 1200, 50);
+		girl = new Human();
+		girl.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 300, 50);
+		}
 		boy.setMaxSpeed(1.6f);
 		girl.setMaxSpeed(1.6f);
 		boy.setAnimationOnly(true);
@@ -95,7 +107,7 @@ public class FitnessScreenTwo implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getFitnessScreenThree());
+				playButton, variables.getFitnessScreenTwo());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -134,9 +146,6 @@ public class FitnessScreenTwo implements Screen {
 		boyBar.setVisibility(true);
 		girlBar.setVisibility(true);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
 	@Override

@@ -83,10 +83,26 @@ public class FitnessScreenThree implements Screen {
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getFitnessScreenTwo());
 
-		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 1200, 50);
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 300, 50);
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		if (dataOrganizer.getGender() == false) {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 1200,
+					50);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 300,
+					50);
+		} else {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetGirlElliptical, 4, 2, 7, 1200,
+					50);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 300,
+					50);
+		}
+
 		boy.setMaxSpeed(1.6f);
 		girl.setMaxSpeed(1.6f);
 		boy.setAnimationOnly(true);
@@ -128,9 +144,6 @@ public class FitnessScreenThree implements Screen {
 		boyBar.setVisibility(true);
 		girlBar.setVisibility(true);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
 	@Override
@@ -233,7 +246,7 @@ public class FitnessScreenThree implements Screen {
 		} else {
 			runButton.setDontRespond(false);
 		}
-		
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;

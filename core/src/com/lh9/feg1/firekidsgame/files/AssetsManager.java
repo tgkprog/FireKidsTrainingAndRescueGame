@@ -14,8 +14,11 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture star;
 	public Texture grassFlowers;
 	public Texture[] trees;
+	public Texture[] girlRunningSuit;
+	public Texture[] boyRunningSuit;
 	public Texture[] bushes;
 	public Texture[] metroDoor;
 	public Texture cloudyBackgroundClose;
@@ -26,7 +29,9 @@ public class AssetsManager extends Thread {
 	public Texture tree;
 	public Texture truckBackDoor;
 	public Texture[] girlHoseHydrant;
+	public Texture[] boyHoseHydrant;
 	public Texture[] girlHoseHydrantReversed;
+	public Texture[] boyHoseHydrantReversed;
 	public Texture catMiniature;
 	public Texture truckMiniature;
 	public Texture programmingText;
@@ -363,6 +368,7 @@ public class AssetsManager extends Thread {
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
 		barFilled = new Texture("others/barFilled.png");
 		grassFlowers = new Texture("backgrounds/grassFlowers.png");
+		star = new Texture("particles/star.png");
 		barNotFilled = new Texture("others/barNotFilled.png");
 		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
 		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
@@ -527,6 +533,17 @@ public class AssetsManager extends Thread {
 		trees[1] = new Texture("backgrounds/tree2.png");
 		trees[2] = new Texture("backgrounds/tree3.png");
 
+		girlRunningSuit = new Texture[11];
+		for (int a = 0; a < 11; a++) {
+			girlRunningSuit[a] = new Texture("girl/running_suit/" + (a + 1)
+					+ ".png");
+		}
+		boyRunningSuit = new Texture[11];
+		for (int a = 0; a < 11; a++) {
+			boyRunningSuit[10 - a] = new Texture("boy/running_suit/" + (a + 1)
+					+ ".png");
+		}
+
 		boyWaving = new Texture[6];
 		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
 		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
@@ -544,10 +561,20 @@ public class AssetsManager extends Thread {
 		girlHoseHydrant[5] = new Texture("girl/hoseHydrant/6.png");
 		girlHoseHydrant[6] = new Texture("girl/hoseHydrant/7.png");
 
+		boyHoseHydrant = new Texture[7];
+		for (int a = 0; a < 7; a++)
+			boyHoseHydrant[a] = new Texture("boy/hose_hydrant/" + (a+1) + ".png");
+
 		girlHoseHydrantReversed = new Texture[7];
 		for (int a = 0; a < 7; a++) {
 			girlHoseHydrantReversed[a] = girlHoseHydrant[6 - a];
 		}
+
+		boyHoseHydrantReversed = new Texture[7];
+		for (int a = 0; a < 7; a++) {
+			boyHoseHydrantReversed[a] = boyHoseHydrant[6 - a];
+		}
+
 		trainBasketAnimation = new Texture[14];
 		trainBasketAnimation[0] = new Texture(
 				"spritesheets/trainBasket/Train-basket-1.png");
@@ -727,6 +754,12 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 3; a++) {
 			trees[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < 3; a++) {
+			girlRunningSuit[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 3; a++) {
+			boyRunningSuit[a].setFilter(textureFilter, textureFilter);
+		}
 		for (int a = 0; a < 2; a++) {
 			dogHappy[a].setFilter(textureFilter, textureFilter);
 		}
@@ -756,6 +789,9 @@ public class AssetsManager extends Thread {
 		}
 		for (int a = 0; a < 7; a++) {
 			girlHoseHydrant[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 7; a++) {
+			boyHoseHydrant[a].setFilter(textureFilter, textureFilter);
 		}
 
 		for (int a = 0; a < 4; a++) {
@@ -789,6 +825,7 @@ public class AssetsManager extends Thread {
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
 		grassFlowers.setFilter(textureFilter, textureFilter);
+		star.setFilter(textureFilter, textureFilter);
 		barNotFilled.setFilter(textureFilter, textureFilter);
 		longButton.setFilter(textureFilter, textureFilter);
 		foot.setFilter(textureFilter, textureFilter);
