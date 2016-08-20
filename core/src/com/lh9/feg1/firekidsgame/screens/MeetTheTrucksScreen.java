@@ -141,7 +141,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if (dataOrganizer.getGender() == true) {
 			girl = new Human();
-			girl.create(assetsManager.girlRunningSuit, 11, 1, 11, -150, 35);
+			girl.create(assetsManager.girlRunningSuit, 31, 1, 31, -150, 35);
 
 			boyHead = new Sprite(assetsManager.girlButton);
 
@@ -155,7 +155,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		} else {
 			girl = new Human();
-			girl.create(assetsManager.boyRunningSuit, 11, 1, 11, -150, 35);
+			girl.create(assetsManager.boyRunningSuit, 31, 1, 31, -150, 35);
 
 			boyHead = new Sprite(assetsManager.boyButton);
 
@@ -166,11 +166,12 @@ public class MeetTheTrucksScreen implements Screen {
 			girlHoseHydrantReversed.create(
 					assetsManager.boyHoseHydrantReversed, 1, 7, 7, 11500, 30);
 			girlHoseHydrantReversed.setAnimationTime(0.1f);
-
 		}
+		
 		boyHead.setScale(0.5f);
 
 		girl.setMaxSpeed(5);
+		girl.setAnimationTime(0.035f);
 		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 35);
 		truck.setMaxSpeed(20);
@@ -412,6 +413,7 @@ public class MeetTheTrucksScreen implements Screen {
 	@Override
 	public void render(float delta) {
 
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -1205,7 +1207,7 @@ public class MeetTheTrucksScreen implements Screen {
 		for (int a = 0; a < grassFlowers.size; a++) {
 
 			if (grassFlowers.get(a).getX() - girl.getX() < 850
-					&& grassFlowers.get(a).getX() - girl.getX() > -1300
+					&& grassFlowers.get(a).getX() - girl.getX() > -1400
 					|| (lakes.get(a).getX() > 12400 && girl.getX() >= 13500)) {
 				grassFlowers.get(a).draw(batch);
 

@@ -22,7 +22,7 @@ public class Animated {
 	float stateTime;
 	int frameNumber;
 	float animationTime = 0.025f;
-
+	boolean animationTimeSet;
 	boolean fromTextureRegion = true;
 	Texture[] frames;
 
@@ -111,5 +111,6 @@ public class Animated {
 	}
 	public void setAnimationTime(float animationTime){
 		this.animationTime = animationTime;
+		animationTimeSet = true;
 	}
 }

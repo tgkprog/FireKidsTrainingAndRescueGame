@@ -78,13 +78,18 @@ public class RescueMetroScreen implements Screen {
 
 		this.game = gam;
 
+	
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-
+		
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+				
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
@@ -112,9 +117,15 @@ public class RescueMetroScreen implements Screen {
 
 		girlAnimation = new Sprite[2];
 
+		if(dataOrganizer.getGender() == true){
 		girlAnimation[0] = new Sprite(assetsManager.girlHammer[0]);
 		girlAnimation[1] = new Sprite(assetsManager.girlHammer[1]);
-
+		}
+		else
+		{
+			girlAnimation[0] = new Sprite(assetsManager.boyHammer[0]);
+			girlAnimation[1] = new Sprite(assetsManager.boyHammer[1]);	
+		}
 		girlAnimation[0].setScale(0.3f);
 		girlAnimation[1].setScale(0.3f);
 
@@ -183,9 +194,6 @@ public class RescueMetroScreen implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 8);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		timeBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				250, 460, minigameTimeLeft);
@@ -425,8 +433,6 @@ public class RescueMetroScreen implements Screen {
 	}
 
 	void randomizeMinigame() {
-
-		System.out.println(minigameCounter);
 
 		if (minigameRunning == false && minigameCounter > 0) {
 

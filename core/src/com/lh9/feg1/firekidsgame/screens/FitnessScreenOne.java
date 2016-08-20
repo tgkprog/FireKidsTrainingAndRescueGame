@@ -26,7 +26,6 @@ public class FitnessScreenOne implements Screen {
 
 	float girlPositionLastFrame;
 	float girlPositionTimer;
-	
 
 	Array<Sprite> bushes;
 	Array<Sprite> trees;
@@ -90,39 +89,41 @@ public class FitnessScreenOne implements Screen {
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-if(dataOrganizer.getGender() == false){	 	
-		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
-		boy.setMaxSpeed(4);
-		boy.setSpeedAdder(0.4f);
+		if (dataOrganizer.getGender() == false) {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetBoyRunning, 31, 1, 31, -100, 35);
+			boy.setMaxSpeed(4);
+			boy.setSpeedAdder(0.4f);
 
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-		girl.setMaxSpeed(4);
-		girl.setSpeedAdder(0.4f);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetGirlRunning, 31, 1, 31, -100,
+					35);
+			girl.setMaxSpeed(4);
+			girl.setSpeedAdder(0.4f);
 
-		boyHead = new Sprite(assetsManager.boyButton);
-		girlHead = new Sprite(assetsManager.girlButton);
-		boyHead.setScale(0.5f);
-		girlHead.setScale(0.5f);
-}
-else
-{
-	boy = new Human();
-	boy.create(assetsManager.spritesheetGirlRunning, 5, 3, 11, -100, 35);
-	boy.setMaxSpeed(4);
-	boy.setSpeedAdder(0.4f);
+			boyHead = new Sprite(assetsManager.boyButton);
+			girlHead = new Sprite(assetsManager.girlButton);
+			boyHead.setScale(0.5f);
+			girlHead.setScale(0.5f);
+		} else {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetGirlRunning, 31, 1, 31, -100, 35);
+			boy.setMaxSpeed(4);
+			boy.setSpeedAdder(0.4f);
 
-	girl = new Human();
-	girl.create(assetsManager.spritesheetBoyRunning, 5, 3, 11, -100, 35);
-	girl.setMaxSpeed(4);
-	girl.setSpeedAdder(0.4f);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetBoyRunning, 31, 1, 31, -100, 35);
+			girl.setMaxSpeed(4);
+			girl.setSpeedAdder(0.4f);
 
-	boyHead = new Sprite(assetsManager.girlButton);
-	girlHead = new Sprite(assetsManager.boyButton);
-	boyHead.setScale(0.5f);
-	girlHead.setScale(0.5f);
-}
+			boyHead = new Sprite(assetsManager.girlButton);
+			girlHead = new Sprite(assetsManager.boyButton);
+			boyHead.setScale(0.5f);
+			girlHead.setScale(0.5f);
+		}
+
+		girl.setAnimationTime(0.035f);
+		boy.setAnimationTime(0.035f);
 		
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
@@ -162,8 +163,6 @@ else
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 4);
 		speedBar.setVisibility(true);
-
-
 
 		skies = new Array<Sprite>();
 		Sprite sky = new Sprite(assetsManager.sky[0]);
@@ -261,12 +260,11 @@ else
 
 		}
 
-		
 	}
 
 	@Override
 	public void render(float delta) {
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -288,7 +286,7 @@ else
 		batch.begin();
 		drawSky(delta);
 		batch.end();
-		
+
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
 
@@ -410,7 +408,7 @@ else
 
 			camera.reset();
 			camera.zoom = 0.98f;
-		
+
 			game.setScreen(new FitnessScreenTwo(game));
 		}
 
@@ -426,14 +424,13 @@ else
 	}
 
 	void drawBackground(float delta) {
-		
+
 		drawGrassFlowers(delta);
 		drawLakes(delta);
 		drawBushes(delta);
 		drawTrees(delta);
 		drawStars(delta);
 
-		
 		if (boy.getX() <= 1200)
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
 		if (boy.getX() <= 2000)
@@ -526,10 +523,10 @@ else
 			if (skies.get(a).getX() <= 801 && skies.get(a).getX() > -801)
 				skies.get(a).draw(batch);
 			if (boy.getX() > 395 && girlPositionLastFrame != boy.getX()) {
-					skies.get(a).setPosition(
-							skies.get(a).getX() - delta*2 * boy.getSpeed(),
-							skies.get(a).getY());
-			
+				skies.get(a).setPosition(
+						skies.get(a).getX() - delta * 2 * boy.getSpeed(),
+						skies.get(a).getY());
+
 			}
 		}
 		girlPositionLastFrame += delta;
@@ -553,8 +550,7 @@ else
 					|| (bushes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
 				bushes.get(a).draw(batch);
 
-				if (boy.getX() >= 395
-						&& (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					bushes.get(a).setPosition(
@@ -578,8 +574,7 @@ else
 					|| (lakes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
 				lakes.get(a).draw(batch);
 
-				if (boy.getX() >= 395
-						&& (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					lakes.get(a)
@@ -599,24 +594,24 @@ else
 			starAlpha = stars.get(a).getColor().a;
 			if (stars.get(a).getX() - boy.getX() < 950
 					&& stars.get(a).getX() - boy.getX() > -1550
-					|| (stars.get(a).getX() > 12400 && boy.getX() >= 13500) && stars.get(a).getColor().a != 0) {
+					|| (stars.get(a).getX() > 12400 && boy.getX() >= 13500)
+					&& stars.get(a).getColor().a != 0) {
 				stars.get(a).draw(batch);
 			}
 
 			if (boy.getX() + 50 > stars.get(a).getX()) {
-		
+
 				stars.get(a).setPosition(stars.get(a).getX(),
 						stars.get(a).getY() + delta * 430);
-				if (starAlpha - delta*0.2f > 0){
-					stars.get(a).setAlpha(stars.get(a).getColor().a - 0.2f*delta);
-					stars.get(a).rotate(delta*350);
-				}
-				else
-				{
+				if (starAlpha - delta * 0.2f > 0) {
+					stars.get(a).setAlpha(
+							stars.get(a).getColor().a - 0.2f * delta);
+					stars.get(a).rotate(delta * 350);
+				} else {
 					stars.get(a).setAlpha(0);
-					//stars.removeIndex(a);
+					// stars.removeIndex(a);
 				}
-				}
+			}
 		}
 	}
 
@@ -629,12 +624,11 @@ else
 		for (int a = 0; a < grassFlowers.size; a++) {
 
 			if (grassFlowers.get(a).getX() - boy.getX() < 850
-					&& grassFlowers.get(a).getX() - boy.getX() > -1550
+					&& grassFlowers.get(a).getX() - boy.getX() > -1650
 					|| (lakes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
 				grassFlowers.get(a).draw(batch);
 
-				if (boy.getX() >= 395
-						&& (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					grassFlowers.get(a).setPosition(
@@ -658,8 +652,7 @@ else
 					|| (trees.get(a).getX() > 12900 && boy.getX() >= 13500)) {
 				trees.get(a).draw(batch);
 
-				if (boy.getX() >= 395
-						&& (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					trees.get(a)

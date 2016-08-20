@@ -20,6 +20,6 @@ public class FPSManager {
 	public void render(SpriteBatch batch) {
 		if(draw == true)
 		font.draw(batch, Integer.toString(Gdx.graphics.getFramesPerSecond()),
-				710, 460);
+				625, 460);
 	}
 }

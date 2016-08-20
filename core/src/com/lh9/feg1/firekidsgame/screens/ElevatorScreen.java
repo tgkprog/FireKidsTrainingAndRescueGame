@@ -85,6 +85,7 @@ public class ElevatorScreen implements Screen {
 
 		this.game = gam;
 
+	
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
@@ -92,6 +93,11 @@ public class ElevatorScreen implements Screen {
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
@@ -100,12 +106,15 @@ public class ElevatorScreen implements Screen {
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
 		girl = new Human();
-		girl.create(assetsManager.girlHammer, 1, 2, 2, 400, 405);
+		if (dataOrganizer.getGender() == true)
+			girl.create(assetsManager.girlHammer, 1, 2, 2, 400, 405);
+		else
+			girl.create(assetsManager.boyHammer, 1, 2, 2, 400, 405);
+
 		girl.setAnimationOnly(true);
 		girl.setOnceOnly();
 		girl.setSpeed(1);
-		
-	
+
 		dogHappy = new Human();
 		dogHappy.create(assetsManager.dogHappy, 2, 1, 2, 400, 500);
 
@@ -191,10 +200,6 @@ public class ElevatorScreen implements Screen {
 		leftDoorPosition = 780;
 		rightDoorPosition = 1251;
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-
 		timeBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				250, 460, minigameTimeLeft);
 
@@ -205,13 +210,13 @@ public class ElevatorScreen implements Screen {
 		progressBar.setVisibility(false);
 
 		dogsGirl = new Sprite(assetsManager.dogsGirl);
-		dogsGirl.setScale(0.7f,0.9f);
-		
+		dogsGirl.setScale(0.7f, 0.9f);
+
 		ballEffect = new ArrayList<Vector3>();
 		ball = new Sprite(assetsManager.runButton);
-		
+
 		dogsGirlHappy = new Sprite(assetsManager.womanHappy);
-		dogsGirlHappy.setScale(0.7f,0.9f);
+		dogsGirlHappy.setScale(0.7f, 0.9f);
 
 	}
 
@@ -319,8 +324,8 @@ public class ElevatorScreen implements Screen {
 		girl.render(batch, delta);
 
 		dogsGirl.draw(batch);
-		if(zoomDogGirl == true)
-		dogsGirlHappy.draw(batch);
+		if (zoomDogGirl == true)
+			dogsGirlHappy.draw(batch);
 	}
 
 	void drawButtons(double delta) {
@@ -346,19 +351,18 @@ public class ElevatorScreen implements Screen {
 			cloudManager.start();
 		}
 
-		if (zoomDogGirl == false)
-		{	dogsGirl.setPosition((int) (1800 - 130 * doorAlpha), -50);
-		dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha), -50);
-		
-		}
-		else{
+		if (zoomDogGirl == false) {
+			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha), -50);
+			dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha), -50);
+
+		} else {
 			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha)
 					- (dogsGirlY - camera.zoom) * 100,
 					(dogsGirlY - camera.zoom) * 200 - 50);
 			dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha)
 					- (dogsGirlY - camera.zoom) * 100,
 					(dogsGirlY - camera.zoom) * 200 - 50);
-		
+
 		}
 		girl.setPosition((int) (220 + 130 * doorAlpha), 150);
 
@@ -376,18 +380,17 @@ public class ElevatorScreen implements Screen {
 				rightDoorPosition = 1735;
 		}
 
-		if(zoomDogGirl == true){
+		if (zoomDogGirl == true) {
 			dogsGirlAlpha -= delta;
-			if(dogsGirlAlpha < 0)
+			if (dogsGirlAlpha < 0)
 				dogsGirlAlpha = 0;
 			dogsGirl.setAlpha(dogsGirlAlpha);
 			dogsGirlHappy.setAlpha(1 - dogsGirlAlpha);
-			
+
 		}
-		
+
 		if (rightDoorPosition == 1735 && leftDoorPosition == 320
 				&& zoomDogGirl == false) {
-
 
 			dogsGirlY = camera.zoom;
 			camera.zoom(1.5f, 3);
@@ -487,7 +490,7 @@ public class ElevatorScreen implements Screen {
 			elevatorDoor[0].setAlpha(doorAlpha);
 			elevatorDoor[1].setAlpha(doorAlpha);
 		}
-		
+
 		elevatorDoor[0].setPosition(leftDoorPosition, elevatorDoor[0].getY());
 		elevatorDoor[1].setPosition(rightDoorPosition, elevatorDoor[1].getY());
 
