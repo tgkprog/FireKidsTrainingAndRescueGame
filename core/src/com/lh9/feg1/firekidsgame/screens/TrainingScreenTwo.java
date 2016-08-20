@@ -229,15 +229,19 @@ public class TrainingScreenTwo implements Screen {
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
-		boyHead = new Sprite(assetsManager.boyButton);
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		if (dataOrganizer.getGender() == false)
+			boyHead = new Sprite(assetsManager.boyButton);
+		else
+			boyHead = new Sprite(assetsManager.girlButton);
+
 		boyHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.fireMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(160, 410);
-
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 	}
 
@@ -484,7 +488,7 @@ public class TrainingScreenTwo implements Screen {
 			up.setDontRespond(false);
 			down.setDontRespond(false);
 		}
-		
+
 		if (ledRed == true) {
 			if (truckLed.getColor().r < 1) {
 				truckLed.setColor(truckLed.getColor().r + delta, 1, 1, 1);

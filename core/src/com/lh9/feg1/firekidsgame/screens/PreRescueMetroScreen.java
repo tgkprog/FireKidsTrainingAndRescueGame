@@ -231,15 +231,21 @@ public class PreRescueMetroScreen implements Screen {
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
+		
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		if(dataOrganizer.getGender() == false)
 		boyHead = new Sprite(assetsManager.boyButton);
-		boyHead.setScale(0.5f);
+		else
+			boyHead = new Sprite(assetsManager.girlButton);
+		
+			boyHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.trainMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(120, 410);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 	}
 

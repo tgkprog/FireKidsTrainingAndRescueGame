@@ -1007,7 +1007,8 @@ public class MeetTheTrucksScreen implements Screen {
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			camera.reset();
-			game.setScreen(new MenuScreen(game));
+			assetsManager.hit.scaleEffect(3f);
+			game.setScreen(new FoodsScreen(game));
 		}
 
 	}

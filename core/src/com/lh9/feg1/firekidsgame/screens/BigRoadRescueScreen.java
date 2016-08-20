@@ -214,7 +214,16 @@ public class BigRoadRescueScreen implements Screen {
 		assetsManager.water.start();
 
 		truckLed = new Sprite(assetsManager.truckLed);
-		boyHead = new Sprite(assetsManager.boyButton);
+
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		if (dataOrganizer.getGender() == false)
+			boyHead = new Sprite(assetsManager.boyButton);
+		else
+			boyHead = new Sprite(assetsManager.girlButton);
+
 		boyHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.fireMiniature);
 		fireMiniature.setScale(0);
@@ -222,10 +231,6 @@ public class BigRoadRescueScreen implements Screen {
 		oilMiniature.setScale(0);
 		boltMiniature = new Sprite(assetsManager.boltButton);
 		boltMiniature.setScale(0);
-
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		powerUps = new Array<CollidableObject>();
 
@@ -422,30 +427,29 @@ public class BigRoadRescueScreen implements Screen {
 		oilSpawnTimer += delta;
 
 		boolean available = false;
-		
-		if(Math.abs(truck.getX()) > Math.abs(fireRange[randomFire].x)){
-			if(Math.abs(truck.getX()) - Math.abs(fireRange[randomFire].x) > 3000)
-			available = true;
-		}
-		else
-		{
-			if(Math.abs( Math.abs(fireRange[randomFire].x) - Math.abs(truck.getX())) > 3000)
+
+		if (Math.abs(truck.getX()) > Math.abs(fireRange[randomFire].x)) {
+			if (Math.abs(truck.getX()) - Math.abs(fireRange[randomFire].x) > 3000)
+				available = true;
+		} else {
+			if (Math.abs(Math.abs(fireRange[randomFire].x)
+					- Math.abs(truck.getX())) > 3000)
 				available = true;
 		}
-		
-		if (Math.abs(truck.getSpeed()) >= 5f && truck.getY() != 80 && available == true)
+
+		if (Math.abs(truck.getSpeed()) >= 5f && truck.getY() != 80
+				&& available == true)
 			if (MathUtils.randomBoolean() == true) {
 				if (boltSpawnTimer > 20f && powerUps.size < 1) {
-							spawnBolt();
-							boltSpawnTimer = 0;
-						
+					spawnBolt();
+					boltSpawnTimer = 0;
+
 				}
 			} else if (oilSpawnTimer > 8f && powerUps.size < 1) {
-					spawnOil();
-					oilSpawnTimer = 0;
+				spawnOil();
+				oilSpawnTimer = 0;
 			}
 
-		
 		if (menuWindow.isVisibile() == true) {
 			runRight.setDontRespond(true);
 			runLeft.setDontRespond(true);
@@ -749,7 +753,7 @@ public class BigRoadRescueScreen implements Screen {
 				truck.setSpeed(0);
 
 				girlTimer += delta;
-				
+
 				if (girlTimer > 0.1f) {
 					girlTimer = 0;
 					if (fireScale == 1) {

@@ -17,6 +17,7 @@ public class Variables {
 	static final String fitnessScreenTwo = "Fitness Screen Two";
 	static final String fitnessScreenThree = "Fitness Screen Three";
 	static final String elevatorScreen = "Elevator Screen";
+	static final String foodsScreen = "Foods Screen";
 
 	static final double maxLogoScale = 0.5f;
 	static final double delayChangingScreens = 0f;
@@ -100,6 +101,10 @@ public class Variables {
 	}
 
 	public String getElevatorScreen() {
+		return elevatorScreen;
+	}
+
+	public String getFoodsScreen() {
 		return elevatorScreen;
 	}
 }

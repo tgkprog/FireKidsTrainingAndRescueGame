@@ -355,6 +355,7 @@ public class InputInterpreter implements GestureListener {
 			if (runButton != null)
 				if (runButton.checkCollision((int) x, (int) y) == true) {
 					runButton.blink();
+					if(controlledHuman != null)
 					controlledHuman.move();
 
 					if (camera.zoom == 3.0f)
@@ -382,6 +383,7 @@ public class InputInterpreter implements GestureListener {
 			if (runButtonSecond != null)
 				if (runButtonSecond.checkCollision((int) x, (int) y) == true) {
 					runButtonSecond.blink();
+					if(controlledHuman != null)
 					controlledHuman.moveReverse();
 
 					if (camera.zoom == 3.0f)

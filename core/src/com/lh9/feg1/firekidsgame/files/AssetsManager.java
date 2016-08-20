@@ -14,12 +14,14 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture[] food;
 	public Texture star;
 	public Texture grassFlowers;
 	public Texture[] trees;
 	public Texture[] girlRunningSuit;
 	public Texture[] boyRunningSuit;
 	public Texture[] bushes;
+	public Texture[] foodBackground;
 	public Texture[] metroDoor;
 	public Texture cloudyBackgroundClose;
 	public Texture cloudyBackgroundFar;
@@ -511,6 +513,10 @@ public class AssetsManager extends Thread {
 		dogWorried[0] = new Texture("spritesheets/dog/worried1.png");
 		dogWorried[1] = new Texture("spritesheets/dog/worried2.png");
 
+		food = new Texture[8];
+		for (int a = 0; a < 8; a++)
+			food[a] = new Texture("food/" + a + ".png");
+
 		dogHappy = new Texture[2];
 		dogHappy[0] = new Texture("spritesheets/dog/happy1.png");
 		dogHappy[1] = new Texture("spritesheets/dog/happy2.png");
@@ -527,6 +533,12 @@ public class AssetsManager extends Thread {
 		bushes[0] = new Texture("backgrounds/bushes1.png");
 		bushes[1] = new Texture("backgrounds/bushes2.png");
 		bushes[2] = new Texture("backgrounds/Bushes-small.png");
+
+		foodBackground = new Texture[4];
+		foodBackground[0] = new Texture("backgrounds/food_bk/1.png");
+		foodBackground[1] = new Texture("backgrounds/food_bk/2.png");
+		foodBackground[2] = new Texture("backgrounds/food_bk/3.png");
+		foodBackground[3] = new Texture("backgrounds/food_bk/4.png");
 
 		trees = new Texture[3];
 		trees[0] = new Texture("backgrounds/tree1.png");
@@ -563,7 +575,8 @@ public class AssetsManager extends Thread {
 
 		boyHoseHydrant = new Texture[7];
 		for (int a = 0; a < 7; a++)
-			boyHoseHydrant[a] = new Texture("boy/hose_hydrant/" + (a+1) + ".png");
+			boyHoseHydrant[a] = new Texture("boy/hose_hydrant/" + (a + 1)
+					+ ".png");
 
 		girlHoseHydrantReversed = new Texture[7];
 		for (int a = 0; a < 7; a++) {
@@ -754,6 +767,9 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 3; a++) {
 			trees[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < 4; a++) {
+			foodBackground[a].setFilter(textureFilter, textureFilter);
+		}
 		for (int a = 0; a < 3; a++) {
 			girlRunningSuit[a].setFilter(textureFilter, textureFilter);
 		}
@@ -762,6 +778,9 @@ public class AssetsManager extends Thread {
 		}
 		for (int a = 0; a < 2; a++) {
 			dogHappy[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < 8; a++) {
+			food[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 4; a++) {
 			fitnessBackground[a].setFilter(textureFilter, textureFilter);

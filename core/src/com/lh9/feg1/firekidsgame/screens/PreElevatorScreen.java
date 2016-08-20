@@ -133,7 +133,7 @@ public class PreElevatorScreen implements Screen {
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
 		truck.setSpeed(5);
-		
+
 		cars = new ArrayList<Car>();
 		for (int a = 0; a < 10; a++) {
 			spawnRandomCar(a);
@@ -231,15 +231,18 @@ public class PreElevatorScreen implements Screen {
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
-		boyHead = new Sprite(assetsManager.boyButton);
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+		if (dataOrganizer.getGender() == false)
+			boyHead = new Sprite(assetsManager.boyButton);
+		else
+			boyHead = new Sprite(assetsManager.girlButton);
+
 		boyHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.elevatorMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(275, 410);
-
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 	}
 
@@ -486,7 +489,7 @@ public class PreElevatorScreen implements Screen {
 			up.setDontRespond(false);
 			down.setDontRespond(false);
 		}
-		
+
 		if (ledRed == true) {
 			if (truckLed.getColor().r < 1) {
 				truckLed.setColor(truckLed.getColor().r + delta, 1, 1, 1);
@@ -541,20 +544,20 @@ public class PreElevatorScreen implements Screen {
 		if (truck.getX() <= -9900) {
 
 			if (cameraFirstZoom == false) {
-	
+
 				truck.setSpeed(0);
-			
+
 				camera.reset();
 				camera.zoom(-1.5f, 25);
-			//	camera.moveX(camera.position.x + 200, 10, 10, 10);
-			//	camera.moveY(camera.position.y + 150, 10, 10, 10);
+				// camera.moveX(camera.position.x + 200, 10, 10, 10);
+				// camera.moveY(camera.position.y + 150, 10, 10, 10);
 				cameraFirstZoom = true;
-			
+
 				cloudManager.start();
 			}
 			speedBar.setVisibility(false);
 			runButton.setDontRespond(true);
-			
+
 			for (int a = 0; a < 10; a++) {
 				cars.get(a).setSpeed(0);
 			}
@@ -573,7 +576,8 @@ public class PreElevatorScreen implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (truck.getX() <= 500 && cameraFirstZoom == false && truck.getX() > -15500)
+		if (truck.getX() <= 500 && cameraFirstZoom == false
+				&& truck.getX() > -15500)
 			camera.position.x = truck.getX() + 300;
 	}
 
@@ -714,10 +718,11 @@ public class PreElevatorScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
-	if(cameraFirstZoom == true && cloudManager.getAllScalesEqualOne()== true){
-		game.setScreen(new ElevatorScreen(game));
-	}
-		
+		if (cameraFirstZoom == true
+				&& cloudManager.getAllScalesEqualOne() == true) {
+			game.setScreen(new ElevatorScreen(game));
+		}
+
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
@@ -728,7 +733,7 @@ public class PreElevatorScreen implements Screen {
 				.getTrainingScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new PreElevatorScreen(game));
-		
+
 			}
 		}
 	}
