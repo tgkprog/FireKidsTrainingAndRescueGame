@@ -379,7 +379,7 @@ public class FitnessScreenOne implements Screen {
 			girl.setSpeed(4f);
 		}
 		if (boy.getX() > 4000 && finish == false) {
-
+			pause.setDontRespond(true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;

@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -31,18 +32,21 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class MeetTheTrucksScreen implements Screen {
 
+	Bar wallHits;
 	ArrayList<Vector2> waterPositions;
 	ArrayList<Vector2> waterVelocities;
 	Sprite cartoonWater;
 	ArrayList<Sprite> footMarks;
 	Human girlHoseHydrant;
 	Human girlHoseHydrantReversed;
+	FallingText breakTheWall;
 	FallingText eclipseFire;
 	FallingText jump;
 	FallingText rideTruck;
 	Sprite truckLed;
 	Truck truck;
 	FPSManager fpsManager;
+	Sprite[] wallHitAnimation;
 	DataOrganizer dataOrganizer;
 	Button menuButton;
 	Sprite truckMiniature;
@@ -78,7 +82,7 @@ public class MeetTheTrucksScreen implements Screen {
 	Array<Sprite> grassFlowers;
 	Array<Sprite> stars;
 
-	float girlPositionTimer = 0;
+	float PositionTimer = 0;
 	float spawnWaterTimer;
 	boolean leftFoot;
 	float footmarkSpawnTimer;
@@ -97,8 +101,12 @@ public class MeetTheTrucksScreen implements Screen {
 	boolean girlHoseStarted;
 	float pointersPosition;
 	float girlPositionLastFrame;
+	boolean finishingRun;
 	float truckBackDoorPosition = 108;
 	boolean reverseHoseAnimation;
+	int wallHitCounter = 24;
+	boolean setWallHitCounter;
+	float girlPositionTimer;
 	final Starter game;
 
 	public MeetTheTrucksScreen(final Starter gam) {
@@ -139,6 +147,7 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getMeetTheTrucks());
 
+		wallHitAnimation = new Sprite[2];
 		if (dataOrganizer.getGender() == true) {
 			girl = new Human();
 			girl.create(assetsManager.girlRunningSuit, 31, 1, 31, -150, 35);
@@ -153,6 +162,14 @@ public class MeetTheTrucksScreen implements Screen {
 					assetsManager.girlHoseHydrantReversed, 1, 7, 7, 11500, 30);
 			girlHoseHydrantReversed.setAnimationTime(0.1f);
 
+			wallHitAnimation[0] = new Sprite(
+					assetsManager.girlHammer_16_percent[0]);
+			wallHitAnimation[1] = new Sprite(
+					assetsManager.girlHammer_16_percent[1]);
+
+			wallHitAnimation[0].setPosition(12560, 30);
+			wallHitAnimation[1].setPosition(12560, 30);
+
 		} else {
 			girl = new Human();
 			girl.create(assetsManager.boyRunningSuit, 31, 1, 31, -150, 35);
@@ -166,8 +183,16 @@ public class MeetTheTrucksScreen implements Screen {
 			girlHoseHydrantReversed.create(
 					assetsManager.boyHoseHydrantReversed, 1, 7, 7, 11500, 30);
 			girlHoseHydrantReversed.setAnimationTime(0.1f);
+
+			wallHitAnimation[0] = new Sprite(
+					assetsManager.boyHammer_16_percent[0]);
+			wallHitAnimation[1] = new Sprite(
+					assetsManager.boyHammer_16_percent[1]);
+			wallHitAnimation[0].setPosition(12560, 30);
+			wallHitAnimation[1].setPosition(12560, 30);
+
 		}
-		
+
 		boyHead.setScale(0.5f);
 
 		girl.setMaxSpeed(5);
@@ -220,6 +245,7 @@ public class MeetTheTrucksScreen implements Screen {
 		jump = new FallingText(assetsManager.jumpText, 370, 390);
 		rideTruck = new FallingText(assetsManager.rideTruckText, 330, 390);
 		eclipseFire = new FallingText(assetsManager.eclipseFireText, 330, 390);
+		breakTheWall = new FallingText(assetsManager.breakTheWallText, 320, 390);
 
 		fireAnimation = new StaticAnimation();
 		fireAnimation.create(assetsManager.fireBig, 2, 3, 6, 12000, 30,
@@ -262,6 +288,9 @@ public class MeetTheTrucksScreen implements Screen {
 		truckMiniature = new Sprite(assetsManager.truckMiniature);
 		truckMiniature.setScale(0.5f);
 
+		wallHits = new Bar(assetsManager.barNotFilled, assetsManager.barFilled,
+				12490, 290, 20);
+
 		cartoonWater = new Sprite(assetsManager.clouds[0]);
 		cartoonWater.setScale(0.05f);
 		cartoonWater.setColor(Color.BLUE);
@@ -288,7 +317,6 @@ public class MeetTheTrucksScreen implements Screen {
 					MathUtils.random(50, 100));
 			grassFlowers.add(grass);
 		}
-
 		Sprite star = new Sprite(assetsManager.star);
 		star.setPosition(270, 50);
 		stars.add(star);
@@ -341,6 +369,13 @@ public class MeetTheTrucksScreen implements Screen {
 				s.setPosition(a * 100 + 2050, 50);
 				stars.add(s);
 			}
+		}
+
+		for (int a = 0; a < 8; a++) {
+			Sprite s = null;
+			s = new Sprite(assetsManager.star);
+			s.setPosition(a * 100 + 12900, 50);
+			stars.add(s);
 		}
 
 		for (int a = 0; a < 50; a++) {
@@ -408,12 +443,16 @@ public class MeetTheTrucksScreen implements Screen {
 		sky.setPosition(3328, 200);
 		skies.add(sky);
 
+		Sprite fireStationComplete = new Sprite(
+				assetsManager.fireStationComplete);
+		fireStationComplete.setPosition(10000, 35);
+		trees.add(fireStationComplete);
+
 	}
 
 	@Override
 	public void render(float delta) {
 
-		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -443,6 +482,7 @@ public class MeetTheTrucksScreen implements Screen {
 		drawFootmarks(delta);
 		drawCharacters(delta);
 		drawParticlesNonGui(delta);
+		drawNonGuiBars(delta);
 
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
@@ -498,7 +538,18 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
-		if (girl.getX() < 2270 || eclipsePart == true && girl.getX() <= 11750)
+
+		if (girl.getX() == 12550 && finishingRun == false) {
+
+			if (runButton.getCounter() % 2 == 0)
+				wallHitAnimation[0].draw(batch);
+			else
+				wallHitAnimation[1].draw(batch);
+
+		}
+
+		if (girl.getX() < 2270 || eclipsePart == true && girl.getX() <= 11750
+				&& !(girl.getX() == 12550 && finishingRun == false))
 			girl.render(batch, delta);
 
 		if (girl.getX() > 1000 && girl.getX() < 11000)
@@ -515,7 +566,8 @@ public class MeetTheTrucksScreen implements Screen {
 			girlHoseHydrantReversed.render(batch, delta);
 		}
 		if (reverseHoseAnimation == true
-				&& girlHoseHydrantReversed.getSpeed() == 0) {
+				&& girlHoseHydrantReversed.getSpeed() == 0
+				&& !(girl.getX() == 12550 && finishingRun == false)) {
 			girl.render(batch, delta);
 		}
 
@@ -555,20 +607,42 @@ public class MeetTheTrucksScreen implements Screen {
 			rideTruck.stop();
 			eclipseFire.start();
 		}
+		if (girl.getX() > 11800) {
+			jump.stop();
+			rideTruck.stop();
+			eclipseFire.stop();
+		}
+		if (girl.getX() > 11900) {
+			breakTheWall.start();
+		}
+		if (girl.getX() > 12400)
+			breakTheWall.stop();
 
+		breakTheWall.render(batch, delta);
 		eclipseFire.render(batch, delta);
 		jump.render(batch, delta);
 		rideTruck.render(batch, delta);
-
 	}
 
 	void drawWindows(float delta) {
-
 		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
 
 	void updateLogics(float delta) {
+
+		if (girl.getX() >= 12550 && finishingRun == false) {
+
+			girl.setSpeed(1);
+			girl.setPosition(12550, (int) girl.getY());
+			if (setWallHitCounter == false) {
+				runButton.resetCounter();
+				setWallHitCounter = true;
+			}
+			if (runButton.getCounter() >= 20)
+				finishingRun = true;
+
+		}
 
 		if (girl.getX() >= 14000)
 			girl.setPosition(14000, (int) girl.getY());
@@ -948,9 +1022,17 @@ public class MeetTheTrucksScreen implements Screen {
 			batch.draw(assetsManager.hoseHydrant, 11700, 38);
 		}
 
-		// batch.draw(assetsManager.wall, 12700, 38);
 		if (girl.getX() > 11750 && truckBackDoorPosition > 140)
 			drawWater(delta);
+
+		if (girl.getX() > 12000 && finishingRun == false)
+			batch.draw(assetsManager.wall[0], 12600, 45);
+		if (girl.getX() >= 12550) {
+			if (runButton.getCounter() > 7 && runButton.getCounter() < 16)
+				batch.draw(assetsManager.wall[1], 12600, 45);
+			if (runButton.getCounter() > 15)
+				batch.draw(assetsManager.wall[2], 12600, 45);
+		}
 
 	}
 
@@ -1208,7 +1290,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 			if (grassFlowers.get(a).getX() - girl.getX() < 850
 					&& grassFlowers.get(a).getX() - girl.getX() > -1400
-					|| (lakes.get(a).getX() > 12400 && girl.getX() >= 13500)) {
+					|| (grassFlowers.get(a).getX() > 12400 && girl.getX() >= 13500)) {
 				grassFlowers.get(a).draw(batch);
 
 				if (girl.getX() >= 395
@@ -1216,8 +1298,8 @@ public class MeetTheTrucksScreen implements Screen {
 						&& girl.getX() <= 13500 && delta != 0)
 
 					grassFlowers.get(a).setPosition(
-							(float) (grassFlowers.get(a).getX() + (lakes.get(a)
-									.getY() / 30) * girlSpeed * 0.1f),
+							(float) (grassFlowers.get(a).getX() + (grassFlowers
+									.get(a).getY() / 30) * girlSpeed * 0.1f),
 							grassFlowers.get(a).getY());
 			}
 		}
@@ -1256,7 +1338,8 @@ public class MeetTheTrucksScreen implements Screen {
 		for (int a = 0; a < skies.size; a++) {
 			if (skies.get(a).getX() <= 801 && skies.get(a).getX() > -801)
 				skies.get(a).draw(batch);
-			if (girl.getX() > 395 && girlPositionLastFrame != girl.getX()) {
+			if (girl.getX() > 395 && girlPositionLastFrame != girl.getX()
+					&& girl.getX() <= 135000) {
 				if (Math.abs(truck.getSpeed()) < 0.5f)
 					skies.get(a).setPosition(
 							skies.get(a).getX() - delta * 1.95f
@@ -1274,5 +1357,13 @@ public class MeetTheTrucksScreen implements Screen {
 			girlPositionTimer = 0;
 		}
 
+	}
+
+	void drawNonGuiBars(float delta) {
+		if (girl.getX() == 12550)
+			wallHits.setVisibility(true);
+		if (girl.getX() > 12550)
+			wallHits.setVisibility(false);
+		wallHits.render(batch, delta, runButton.getCounter());
 	}
 }
