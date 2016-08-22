@@ -7,7 +7,6 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
-import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -74,6 +73,7 @@ public class MeetTheTrucksScreen implements Screen {
 	StaticAnimation fireAnimationBig;
 	StaticAnimation fireAnimationBiggest;
 	Vector2[] fireAnimationScales;
+	Sprite guiStar;
 
 	Array<Sprite> bushes;
 	Array<Sprite> trees;
@@ -82,6 +82,9 @@ public class MeetTheTrucksScreen implements Screen {
 	Array<Sprite> grassFlowers;
 	Array<Sprite> stars;
 
+	int starsCollectedLastFrame;
+	boolean enlargeStar;
+	int starsCollected = 0;
 	float PositionTimer = 0;
 	float spawnWaterTimer;
 	boolean leftFoot;
@@ -448,6 +451,9 @@ public class MeetTheTrucksScreen implements Screen {
 		fireStationComplete.setPosition(10000, 35);
 		trees.add(fireStationComplete);
 
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
 	}
 
 	@Override
@@ -489,6 +495,7 @@ public class MeetTheTrucksScreen implements Screen {
 		batch.begin();
 
 		drawParticles(delta);
+		drawGuiStarsCounter(delta);
 		drawBars(delta);
 		drawTexts(delta);
 		drawButtons(deltaTemp);
@@ -546,6 +553,7 @@ public class MeetTheTrucksScreen implements Screen {
 			else
 				wallHitAnimation[1].draw(batch);
 
+			assetsManager.hit.setPosition(12640, 135);
 		}
 
 		if (girl.getX() < 2270 || eclipsePart == true && girl.getX() <= 11750
@@ -615,7 +623,7 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getX() > 11900) {
 			breakTheWall.start();
 		}
-		if (girl.getX() > 12400)
+		if (girl.getX() > 12650)
 			breakTheWall.stop();
 
 		breakTheWall.render(batch, delta);
@@ -633,6 +641,10 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if (girl.getX() >= 12550 && finishingRun == false) {
 
+			if (runButton.getSelection() == true) {
+				assetsManager.hit.start();
+			} else
+				assetsManager.hit.allowCompletion();
 			girl.setSpeed(1);
 			girl.setPosition(12550, (int) girl.getY());
 			if (setWallHitCounter == false) {
@@ -975,6 +987,9 @@ public class MeetTheTrucksScreen implements Screen {
 		fireAnimationBig.setScale(fireAnimationScales[1]);
 		fireAnimation.setScale(fireAnimationScales[2]);
 
+		if (waterRange > 4)
+			waterRange = 4;
+
 		if (waterRange > 1.4f && waterRange < 1.7f) {
 			if (fireAnimationScales[0].x > 0)
 				fireAnimationScales[0].x -= delta;
@@ -1009,7 +1024,7 @@ public class MeetTheTrucksScreen implements Screen {
 				fireAnimationScales[2].y = 0;
 		}
 
-		if (girl.getX() > 10600) {
+		if (girl.getX() > 10600 && girl.getX() < 12500) {
 			fireAnimationBiggest.render(batch, delta);
 			fireAnimationBig.render(batch, delta);
 			fireAnimation.render(batch, delta);
@@ -1208,9 +1223,11 @@ public class MeetTheTrucksScreen implements Screen {
 
 		for (int a = 0; a < bushes.size; a++) {
 
-			if (bushes.get(a).getX() - girl.getX() < 900
-					&& bushes.get(a).getX() - girl.getX() > -1400
-					|| (bushes.get(a).getX() > 12400 && girl.getX() >= 13500)) {
+			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| girl.getX() >= 13500
+					|| (bushes.get(a).getX() - girl.getX() < 400 && bushes.get(
+							a).getWidth()
+							+ bushes.get(a).getX() - girl.getX() > -400)) {
 				bushes.get(a).draw(batch);
 
 				if (girl.getX() >= 395
@@ -1233,9 +1250,10 @@ public class MeetTheTrucksScreen implements Screen {
 
 		for (int a = 0; a < lakes.size; a++) {
 
-			if (lakes.get(a).getX() - girl.getX() < 850
-					&& lakes.get(a).getX() - girl.getX() > -1300
-					|| (lakes.get(a).getX() > 12400 && girl.getX() >= 13500)) {
+			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| girl.getX() >= 13500
+					|| (lakes.get(a).getX() - girl.getX() < 400 && lakes.get(a)
+							.getWidth() + lakes.get(a).getX() - girl.getX() > -400)) {
 				lakes.get(a).draw(batch);
 
 				if (girl.getX() >= 395
@@ -1253,22 +1271,23 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawStars(float delta) {
-
+		starsCollected = 0;
 		for (int a = 0; a < stars.size; a++) {
 			float starAlpha = 1;
 			starAlpha = stars.get(a).getColor().a;
-			if (stars.get(a).getX() - girl.getX() < 950
-					&& stars.get(a).getX() - girl.getX() > -1300
-					|| (stars.get(a).getX() > 12400 && girl.getX() >= 13500)
-					&& stars.get(a).getColor().a != 0) {
+			if ((girl.getX() <= 395 && stars.get(a).getX() < 800)
+					|| girl.getX() >= 13500
+					|| (stars.get(a).getX() - girl.getX() < 400 && stars.get(a)
+							.getWidth() + stars.get(a).getX() - girl.getX() > -400)) {
 				stars.get(a).draw(batch);
 			}
 
 			if (girl.getX() + 50 > stars.get(a).getX()) {
-
+				starsCollected++;
 				stars.get(a).setPosition(stars.get(a).getX(),
 						stars.get(a).getY() + delta * 430);
 				if (starAlpha - delta * 0.2f > 0) {
+					
 					stars.get(a).setAlpha(
 							stars.get(a).getColor().a - 0.2f * delta);
 					stars.get(a).rotate(delta * 350);
@@ -1278,6 +1297,10 @@ public class MeetTheTrucksScreen implements Screen {
 				}
 			}
 		}
+		if(starsCollected > starsCollectedLastFrame)
+			enlargeStar = true;
+
+		starsCollectedLastFrame  = starsCollected;
 	}
 
 	void drawGrassFlowers(float delta) {
@@ -1287,10 +1310,12 @@ public class MeetTheTrucksScreen implements Screen {
 			girlSpeed = 3;
 
 		for (int a = 0; a < grassFlowers.size; a++) {
-
-			if (grassFlowers.get(a).getX() - girl.getX() < 850
-					&& grassFlowers.get(a).getX() - girl.getX() > -1400
-					|| (grassFlowers.get(a).getX() > 12400 && girl.getX() >= 13500)) {
+			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| girl.getX() >= 13500
+					|| (grassFlowers.get(a).getX() - girl.getX() < 400 && grassFlowers
+							.get(a).getWidth()
+							+ grassFlowers.get(a).getX()
+							- girl.getX() > -400)) {
 				grassFlowers.get(a).draw(batch);
 
 				if (girl.getX() >= 395
@@ -1313,9 +1338,10 @@ public class MeetTheTrucksScreen implements Screen {
 
 		for (int a = 0; a < trees.size; a++) {
 
-			if ((trees.get(a).getX() - girl.getX()) < 850
-					&& trees.get(a).getX() - girl.getX() > -1300
-					|| (trees.get(a).getX() > 12900 && girl.getX() >= 13500)) {
+			if ((girl.getX() <= 395 && trees.get(a).getX() < 800)
+					|| girl.getX() >= 13500
+					|| (trees.get(a).getX() - girl.getX() < 400 && trees.get(a)
+							.getWidth() + trees.get(a).getX() - girl.getX() > -400)) {
 				trees.get(a).draw(batch);
 
 				if (girl.getX() >= 395
@@ -1365,5 +1391,23 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getX() > 12550)
 			wallHits.setVisibility(false);
 		wallHits.render(batch, delta, runButton.getCounter());
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3*delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta*3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected),
+				60, 463);
 	}
 }

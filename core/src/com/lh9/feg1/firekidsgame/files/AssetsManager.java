@@ -14,6 +14,8 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture starButton;
+	public Texture starButtonEmpty;
 	public Texture fireStationComplete;
 	public Texture[] food;
 	public Texture star;
@@ -204,6 +206,7 @@ public class AssetsManager extends Thread {
 	public ParticleEffect[] fireSmoke;
 
 	public BitmapFont font;
+	public BitmapFont fontLittle;
 
 	boolean assetsLoaded;
 
@@ -237,6 +240,13 @@ public class AssetsManager extends Thread {
 		parameter.magFilter = TextureFilter.Linear;
 		font = generator.generateFont(parameter);
 		font.setColor(Color.BLACK);
+		
+		parameter.size = 50;
+		parameter.minFilter = TextureFilter.Linear;
+		parameter.magFilter = TextureFilter.Linear;
+		fontLittle = generator.generateFont(parameter);
+		fontLittle.setColor(Color.BLACK);
+		
 	}
 
 	void loadParticles() {
@@ -362,6 +372,8 @@ public class AssetsManager extends Thread {
 		pointer = new Texture("others/this.png");
 		speedometer = new Texture("others/speedometer.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
+		starButton = new Texture("buttons/starButton.png");
+		starButtonEmpty = new Texture("buttons/starButtonEmpty.png");
 		fireStation = new Texture("buttons/fireStation.png");
 		settingsText = new Texture("buttons/Settings-text.png");
 		authorsText = new Texture("buttons/Authors-text.png");
@@ -1022,6 +1034,8 @@ public class AssetsManager extends Thread {
 		playButton.setFilter(textureFilter, textureFilter);
 		vibrationsText.setFilter(textureFilter, textureFilter);
 		fpsText.setFilter(textureFilter, textureFilter);
+		starButton.setFilter(textureFilter, textureFilter);
+		starButtonEmpty.setFilter(textureFilter, textureFilter);
 		screenAwakeText.setFilter(textureFilter, textureFilter);
 		textureFilteringText.setFilter(textureFilter, textureFilter);
 		damage.setFilter(textureFilter, textureFilter);

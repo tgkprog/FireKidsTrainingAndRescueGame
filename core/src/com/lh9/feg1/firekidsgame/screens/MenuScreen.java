@@ -34,6 +34,7 @@ public class MenuScreen implements Screen {
 	Button settings;
 	Button authors;
 	Button gender;
+	Button[] starsCounterButtons;
 	Button[] levelButtons;
 
 	float positions = -1000;
@@ -82,7 +83,17 @@ public class MenuScreen implements Screen {
 		buzzer.setAnimationOnly(true);
 
 		levelButtons = new Button[7];
-
+/*
+		starsCounterButtons = new Button[6];
+		starsCounterButtons[0] = new Button(270, -150,
+				assetsManager.starButton);
+		starsCounterButtons[0].goUp(420);
+		for (int a = 1; a < 6; a++) {
+			starsCounterButtons[a] = new Button(270 + 45 * a, -200 - (a * 50),
+					assetsManager.starButtonEmpty);
+			starsCounterButtons[a].goUp(420);
+		}
+*/
 		for (int a = 0; a < 7; a++) {
 			if (a == 0)
 				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
@@ -123,7 +134,7 @@ public class MenuScreen implements Screen {
 		cloudManager.stop();
 
 		fireStation.goUp(825);
-		
+
 		camera.reset();
 
 		camera.position.x = 957;
@@ -210,6 +221,9 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawButtons(float delta) {
+//		assetsManager.fontLittle.draw(batch, "123",
+//				680, 425);
+//		batch.draw(assetsManager.star,740,385);
 		gender.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
@@ -217,6 +231,9 @@ public class MenuScreen implements Screen {
 		for (int a = 0; a < 7; a++) {
 			levelButtons[a].render(batch, (float) delta);
 		}
+	//	for (int a = 0; a < 6; a++) {
+	//		starsCounterButtons[a].render(batch, (float) delta);
+	//	}
 	}
 
 	void updateLogics(double delta) {
