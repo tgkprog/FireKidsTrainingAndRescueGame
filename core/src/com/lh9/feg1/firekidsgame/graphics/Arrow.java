@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Arrow {
 
+	//This is used for rotating of the objects in some order
+	
 	Sprite arrow;
 	double rotation;
 	double rotationMin;

@@ -6,6 +6,8 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Bar {
 
+	
+	
 	Sprite speedometerSprite;
 	boolean speedometer;
 	boolean visibility;

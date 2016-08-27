@@ -207,7 +207,7 @@ public class TrainingScreenOne implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTrainingScreen());
+				playButton, variables.getTrainingScreenOne());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -738,11 +738,12 @@ public class TrainingScreenOne implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setScreenPlayed(2);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreen()) {
+				.getTrainingScreenOne()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new TrainingScreenOne(game));
 			}

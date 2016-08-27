@@ -197,4 +197,8 @@ public class Button {
 	public float getY() {
 		return image.getY();
 	}
+
+	public boolean isBlockedFromInteraction() {
+		return dontRespond;
+	}
 }

@@ -1,5 +1,7 @@
 package com.lh9.feg1.firekidsgame.screens;
 
+import java.util.ArrayList;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.GL20;
@@ -27,6 +29,7 @@ public class FitnessScreenOne implements Screen {
 	float girlPositionLastFrame;
 	float girlPositionTimer;
 
+	int starsAll =0;
 	Array<Sprite> bushes;
 	Array<Sprite> trees;
 	Array<Sprite> lakes;
@@ -36,6 +39,7 @@ public class FitnessScreenOne implements Screen {
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
 	Button menuButton;
+	ArrayList<Sprite> footMarks;
 	Button retryButton;
 	Button playButton;
 	MenuWindow menuWindow;
@@ -54,13 +58,20 @@ public class FitnessScreenOne implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-
+	Sprite guiStar;
 	float timerSpeedGirl;
 
 	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
 	boolean finish = false;
+	int starsCollectedLastFrame;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	boolean leftFootGirl;
+	boolean leftFootBoy = true;
+	float footmarkSpawnTimerGirl;
+	float footmarkSpawnTimerBoy;
 
 	final Starter game;
 
@@ -107,13 +118,15 @@ public class FitnessScreenOne implements Screen {
 			girlHead.setScale(0.5f);
 		} else {
 			boy = new Human();
-			boy.create(assetsManager.spritesheetGirlRunning, 31, 1, 31, -100, 35);
-			boy.setMaxSpeed(4);
+			boy.create(assetsManager.spritesheetGirlRunning, 31, 1, 31, -100,
+					35);
+			boy.setMaxSpeed(3.5f);
 			boy.setSpeedAdder(0.4f);
 
 			girl = new Human();
-			girl.create(assetsManager.spritesheetBoyRunning, 31, 1, 31, -100, 35);
-			girl.setMaxSpeed(4);
+			girl.create(assetsManager.spritesheetBoyRunning, 31, 1, 31, -100,
+					35);
+			girl.setMaxSpeed(3.5f);
 			girl.setSpeedAdder(0.4f);
 
 			boyHead = new Sprite(assetsManager.girlButton);
@@ -124,7 +137,7 @@ public class FitnessScreenOne implements Screen {
 
 		girl.setAnimationTime(0.035f);
 		boy.setAnimationTime(0.035f);
-		
+
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
 		retryButton = new Button(500, 0, assetsManager.retryButton);
@@ -211,12 +224,13 @@ public class FitnessScreenOne implements Screen {
 		}
 
 		for (int a = 0; a < 80; a++) {
-			if (a < 15 || (a > 35 && a < 50) || a > 65) {
+			if (a < 15 || (a > 22 && a < 30)) {
 				Sprite s = null;
 				s = new Sprite(assetsManager.star);
 
 				s.setPosition(a * 100 + 500, 80);
 				stars.add(s);
+
 			}
 		}
 
@@ -260,11 +274,19 @@ public class FitnessScreenOne implements Screen {
 
 		}
 
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
+		footMarks = new ArrayList<Sprite>();
+
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
+		inputInterpreter.checkKeyboardInput();
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -291,6 +313,7 @@ public class FitnessScreenOne implements Screen {
 		batch.begin();
 
 		drawBackground(delta);
+		drawFootmarks(delta);
 		drawCharacters(delta);
 		drawPointer(delta);
 
@@ -298,6 +321,7 @@ public class FitnessScreenOne implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawParticles(delta);
 		drawBars(delta);
 		drawButtons(deltaTemp);
@@ -364,6 +388,9 @@ public class FitnessScreenOne implements Screen {
 
 	void updateLogics(double delta) {
 
+		if (exit == true)
+			pause.setDontRespond(true);
+
 		if (menuWindow.isVisibile() == true) {
 			runButton.setDontRespond(true);
 		} else {
@@ -386,6 +413,7 @@ public class FitnessScreenOne implements Screen {
 			assetsManager.stars.start();
 		}
 		if (girl.getX() > 4000 && finish == false) {
+			pause.setDontRespond(true);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
@@ -404,13 +432,6 @@ public class FitnessScreenOne implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-
-			camera.reset();
-			camera.zoom = 0.98f;
-
-			game.setScreen(new FitnessScreenTwo(game));
-		}
 
 		updateCameraLogics(delta);
 		updateGirlAction(delta);
@@ -418,7 +439,7 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (boy.getX() >= 400 && boy.getX() < 3600) {
+		if (boy.getX() >= 395 && boy.getX() <= 3600) {
 			camera.position.x = (boy.getX());
 		}
 	}
@@ -494,15 +515,22 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void manageSelectingScreen() {
+		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {		
+			game.setCollectedStars(starsCollected + starsAll);
+			game.setScreen(new FitnessScreenTwo(game));
+		}
+
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getFitnessScreenOne()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new FitnessScreenOne(game));
 			}
 		}
@@ -545,12 +573,15 @@ public class FitnessScreenOne implements Screen {
 
 		for (int a = 0; a < bushes.size; a++) {
 
-			if (bushes.get(a).getX() - boy.getX() < 900
-					&& bushes.get(a).getX() - boy.getX() > -1400
-					|| (bushes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
+			if ((boy.getX() <= 400 && bushes.get(a).getX() < 800)
+					|| boy.getX() >= 3600
+					|| (bushes.get(a).getX() - boy.getX() < 400 && bushes
+							.get(a).getWidth()
+							+ bushes.get(a).getX()
+							- boy.getX() > -400)) {
 				bushes.get(a).draw(batch);
 
-				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 400 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					bushes.get(a).setPosition(
@@ -569,12 +600,13 @@ public class FitnessScreenOne implements Screen {
 
 		for (int a = 0; a < lakes.size; a++) {
 
-			if (lakes.get(a).getX() - boy.getX() < 850
-					&& lakes.get(a).getX() - boy.getX() > -1550
-					|| (lakes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
+			if ((boy.getX() <= 400 && bushes.get(a).getX() < 800)
+					|| boy.getX() >= 3600
+					|| (lakes.get(a).getX() - boy.getX() < 400 && lakes.get(a)
+							.getWidth() + lakes.get(a).getX() - boy.getX() > -400)) {
 				lakes.get(a).draw(batch);
 
-				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 400 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					lakes.get(a)
@@ -588,22 +620,23 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void drawStars(float delta) {
-
+		starsCollected = 0;
 		for (int a = 0; a < stars.size; a++) {
 			float starAlpha = 1;
 			starAlpha = stars.get(a).getColor().a;
-			if (stars.get(a).getX() - boy.getX() < 950
-					&& stars.get(a).getX() - boy.getX() > -1550
-					|| (stars.get(a).getX() > 12400 && boy.getX() >= 13500)
-					&& stars.get(a).getColor().a != 0) {
+			if ((boy.getX() <= 400 && stars.get(a).getX() < 800)
+					|| boy.getX() >= 3600
+					|| (stars.get(a).getX() - boy.getX() < 400 && stars.get(a)
+							.getWidth() + stars.get(a).getX() - boy.getX() > -400)) {
 				stars.get(a).draw(batch);
 			}
 
 			if (boy.getX() + 50 > stars.get(a).getX()) {
-
+				starsCollected++;
 				stars.get(a).setPosition(stars.get(a).getX(),
 						stars.get(a).getY() + delta * 430);
 				if (starAlpha - delta * 0.2f > 0) {
+
 					stars.get(a).setAlpha(
 							stars.get(a).getColor().a - 0.2f * delta);
 					stars.get(a).rotate(delta * 350);
@@ -613,6 +646,10 @@ public class FitnessScreenOne implements Screen {
 				}
 			}
 		}
+		if (starsCollected > starsCollectedLastFrame)
+			enlargeStar = true;
+
+		starsCollectedLastFrame = starsCollected;
 	}
 
 	void drawGrassFlowers(float delta) {
@@ -622,18 +659,20 @@ public class FitnessScreenOne implements Screen {
 			boySpeed = 3;
 
 		for (int a = 0; a < grassFlowers.size; a++) {
-
-			if (grassFlowers.get(a).getX() - boy.getX() < 850
-					&& grassFlowers.get(a).getX() - boy.getX() > -1650
-					|| (lakes.get(a).getX() > 12400 && boy.getX() >= 13500)) {
+			if ((boy.getX() <= 400 && bushes.get(a).getX() < 800)
+					|| boy.getX() >= 3600
+					|| (grassFlowers.get(a).getX() - boy.getX() < 400 && grassFlowers
+							.get(a).getWidth()
+							+ grassFlowers.get(a).getX()
+							- boy.getX() > -400)) {
 				grassFlowers.get(a).draw(batch);
 
-				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 400 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					grassFlowers.get(a).setPosition(
-							(float) (grassFlowers.get(a).getX() + (lakes.get(a)
-									.getY() / 30) * boySpeed * 0.1f),
+							(float) (grassFlowers.get(a).getX() + (grassFlowers
+									.get(a).getY() / 30) * boySpeed * 0.1f),
 							grassFlowers.get(a).getY());
 			}
 		}
@@ -647,12 +686,13 @@ public class FitnessScreenOne implements Screen {
 
 		for (int a = 0; a < trees.size; a++) {
 
-			if ((trees.get(a).getX() - boy.getX()) < 850
-					&& trees.get(a).getX() - boy.getX() > -1550
-					|| (trees.get(a).getX() > 12900 && boy.getX() >= 13500)) {
+			if ((boy.getX() <= 400 && trees.get(a).getX() < 800)
+					|| boy.getX() >= 3600
+					|| (trees.get(a).getX() - boy.getX() < 400 && trees.get(a)
+							.getWidth() + trees.get(a).getX() - boy.getX() > -400)) {
 				trees.get(a).draw(batch);
 
-				if (boy.getX() >= 395 && (girlPositionLastFrame != boy.getX())
+				if (boy.getX() >= 400 && (girlPositionLastFrame != boy.getX())
 						&& boy.getX() <= 3600 && delta != 0)
 
 					trees.get(a)
@@ -665,4 +705,67 @@ public class FitnessScreenOne implements Screen {
 		}
 	}
 
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 463);
+	}
+
+	void drawFootmarks(float delta) {
+
+		footmarkSpawnTimerGirl += delta;
+		if (footmarkSpawnTimerGirl > 0.15f) {
+			footmarkSpawnTimerGirl = 0;
+			Sprite s = new Sprite(assetsManager.foot);
+			if (leftFootGirl == true) {
+				s.setPosition(girl.getX() + 10 + girl.getSpeed(), 37);
+				leftFootGirl = false;
+			} else {
+				s.setPosition(girl.getX() + 10 + girl.getSpeed(), 32);
+				leftFootGirl = true;
+			}
+			footMarks.add(s);
+		}
+			footmarkSpawnTimerBoy += delta;
+			if (footmarkSpawnTimerBoy > 0.15f) {
+				footmarkSpawnTimerBoy = 0;
+				Sprite d = new Sprite(assetsManager.foot);
+				if (leftFootBoy == true) {
+					d.setPosition(boy.getX() + 10 + boy.getSpeed(), 37);
+					leftFootBoy = false;
+				} else {
+					d.setPosition(boy.getX() + 10 + boy.getSpeed(), 32);
+					leftFootBoy = true;
+				}
+				footMarks.add(d);
+			}
+
+			for (int a = 0; a < footMarks.size(); a++) {
+				System.out.println("drawing footmark x y "
+						+ footMarks.get(a).getX() + " "
+						+ footMarks.get(a).getY());
+				if (footMarks.get(a).getColor().a > 0)
+					footMarks.get(a).setColor(1, 1, 1,
+							footMarks.get(a).getColor().a - delta * 0.75f);
+
+				if (footMarks.get(a).getColor().a <= 0.1f) {
+					footMarks.remove(a);
+				} else
+					footMarks.get(a).draw(batch);
+			}
+
+		
+	}
 }

@@ -6,6 +6,7 @@ import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.utils.Array;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.Truck;
@@ -14,6 +15,7 @@ import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.FPSManager;
+import com.lh9.feg1.firekidsgame.graphics.Star;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
@@ -23,6 +25,7 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
+	int starsAll;
 	Sprite cloudsFar;
 	Sprite cloudsClose;
 	Sprite basket;
@@ -42,7 +45,6 @@ public class RescueCatScreen implements Screen {
 	Bar speedBar;
 	Human girl;
 	Button pause;
-	Button runButton;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
 	Variables variables;
@@ -66,6 +68,12 @@ public class RescueCatScreen implements Screen {
 	float buttonsAlpha;
 	float rotation;
 
+	Array<Star> stars;
+	Sprite guiStar;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	int starsCollectedLastFrame;
+
 	final Starter game;
 
 	public RescueCatScreen(final Starter gam) {
@@ -82,9 +90,6 @@ public class RescueCatScreen implements Screen {
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
-		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
-				assetsManager.runButton);
-		runButton.goUp((int) variables.getRunButtonPosition().y);
 
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
@@ -93,6 +98,8 @@ public class RescueCatScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 		pause.setAlpha(0.5f);
+
+		assetsManager.stars.setPosition(400, 480);
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
@@ -109,9 +116,9 @@ public class RescueCatScreen implements Screen {
 		truck.setFriction(5);
 
 		up = new Button(10, -100, assetsManager.arrowUp);
-		up.goUp(360);
+		up.goUp(320);
 		down = new Button(10, -100, assetsManager.arrowDown);
-		down.goUp(250);
+		down.goUp(210);
 
 		runRight = new Button(685, -200, assetsManager.runButtonLittle);
 		runRight.goUp(30);
@@ -135,7 +142,6 @@ public class RescueCatScreen implements Screen {
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
-		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
 		inputInterpreter.setControlledHuman(truck);
 		inputInterpreter.setControlledTruck(truck);
@@ -176,10 +182,28 @@ public class RescueCatScreen implements Screen {
 		cloudsFar = new Sprite(assetsManager.cloudyBackgroundFar);
 		cloudsClose = new Sprite(assetsManager.cloudyBackgroundClose);
 
+		stars = new Array<Star>();
+
+		for (int a = 0; a < 10; a++) {
+			Star star;
+			star = new Star(assetsManager.star, a * 200, 350, 2.5f);
+			stars.add(star);
+		}
+
+		runLeft.setDontRespond(true);
+		runRight.setDontRespond(true);
+		
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
+	
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
+		
+		inputInterpreter.checkKeyboardInput();
 
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
@@ -202,6 +226,7 @@ public class RescueCatScreen implements Screen {
 		batch.begin();
 
 		drawBackground();
+		drawStars(delta);
 		drawCharacters(delta);
 		drawPointer(delta);
 
@@ -209,6 +234,7 @@ public class RescueCatScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawParticles(deltaTemp);
 		drawBars(delta);
 		drawButtons(deltaTemp);
@@ -355,6 +381,7 @@ public class RescueCatScreen implements Screen {
 		truck.setPosition((int) truck.getX(), 600);
 
 		updateCameraLogics(delta);
+		
 		if (firstDialogueClicked == true && buttonsAlpha < 0.5f
 				&& camera.zoom >= 3f && finish == false) {
 			buttonsAlpha += delta;
@@ -402,7 +429,6 @@ public class RescueCatScreen implements Screen {
 		assetsManager.hit.draw(batch, delta);
 	}
 
-
 	void drawParticles(float delta) {
 		assetsManager.stars.draw(batch, delta);
 	}
@@ -420,18 +446,22 @@ public class RescueCatScreen implements Screen {
 		if (finish == true && buttonsAlpha == 0
 				&& dialogueWindow.isVisibile() == false) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
+				game.setScreenPlayed(4);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getCatRescueScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new RescueCatScreen(game));
 			}
 		}
@@ -464,5 +494,44 @@ public class RescueCatScreen implements Screen {
 			if (greenTimer > 1)
 				greenTimer = 1;
 		}
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 463);
+	}
+
+	void drawStars(float delta) {
+
+		for (int a = 0; a < stars.size; a++) {
+
+			stars.get(a).draw(batch, delta);
+
+			if ((truck.getX() - 450 < stars.get(a).getX())) {
+
+				if (stars.get(a).getHit() == false) {
+					starsCollected++;
+					stars.get(a).setHit();
+				}
+			}
+
+		}
+		if (starsCollected > starsCollectedLastFrame)
+			enlargeStar = true;
+
+		starsCollectedLastFrame = starsCollected;
 	}
 }

@@ -27,8 +27,12 @@ public class Starter extends Game {
 	SpriteBatch batch;
 	CloudManager cloudManager;
 
+	int collectedStars;
+	boolean[] screensPlayed;
+
 	@Override
 	public void create() {
+		screensPlayed = new boolean[8];
 
 		cloudManager = new CloudManager();
 		assetsManager = new AssetsManager();
@@ -89,5 +93,25 @@ public class Starter extends Game {
 
 	public CloudManager getCloudManager() {
 		return cloudManager;
+	}
+
+	public boolean[] getScreensPlayed() {
+		return screensPlayed;
+	}
+
+	public boolean getScreenPlayed(int id) {
+		return screensPlayed[id];
+	}
+
+	public void setScreenPlayed(int id) {
+		screensPlayed[id] = true;
+	}
+
+	public int getCollectedStars() {
+		return collectedStars;
+	}
+
+	public void setCollectedStars(int collectedStars) {
+		this.collectedStars = collectedStars;
 	}
 }

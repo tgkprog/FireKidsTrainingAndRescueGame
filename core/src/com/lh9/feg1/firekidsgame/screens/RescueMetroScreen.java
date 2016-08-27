@@ -32,6 +32,7 @@ public class RescueMetroScreen implements Screen {
 	Truck truck;
 	Sprite[] damage;
 	Button[] hitboxes;
+	int starsAll;
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
 	Bar speedBar;
@@ -72,6 +73,12 @@ public class RescueMetroScreen implements Screen {
 	boolean finish;
 	boolean minigameRunning;
 
+	Sprite guiStar;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	int starsCollectedLastFrame;
+
+	
 	final Starter game;
 
 	public RescueMetroScreen(final Starter gam) {
@@ -211,12 +218,18 @@ public class RescueMetroScreen implements Screen {
 		metroDoor[0] = new Sprite(assetsManager.metroDoor[0]);
 		metroDoor[1] = new Sprite(assetsManager.metroDoor[1]);
 
+
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
+
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
-		// camera.zoom = 2.3f;
+		inputInterpreter.checkKeyboardInput();
 
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
@@ -251,6 +264,7 @@ public class RescueMetroScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
@@ -322,6 +336,7 @@ public class RescueMetroScreen implements Screen {
 
 		if (minigameCounter == 0 && finishDialogue == false) {
 			dialogueWindow.popUp();
+			assetsManager.stars.start();
 			finishDialogue = true;
 		}
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false
@@ -403,18 +418,22 @@ public class RescueMetroScreen implements Screen {
 
 	void manageSelectingScreen() {
 		if (finish == true && cloudManager.getAllScalesEqualOne() == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+			game.setScreenPlayed(5);
 			game.setScreen(new MenuScreen(game));
 		}
 
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getRescueMetroScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new RescueMetroScreen(game));
 			}
 		}
@@ -498,6 +517,7 @@ public class RescueMetroScreen implements Screen {
 					assetsManager.hit.setPosition(hitboxes[a].getX() + 75,
 							hitboxes[a].getY() + 75);
 					assetsManager.hit.start();
+					starsCollected++;
 				}
 			} else {
 				hitboxes[a].setDontRespond(true);
@@ -541,6 +561,25 @@ public class RescueMetroScreen implements Screen {
 			// damage[a].draw(batch);
 		}
 
+	}
+
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 463);
 	}
 
 }

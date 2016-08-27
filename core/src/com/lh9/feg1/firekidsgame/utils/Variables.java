@@ -7,7 +7,7 @@ public class Variables {
 	static final String menuScreen = "Menu Screen";
 	static final String meetTheTrucks = "Meet The Trucks";
 	static final String fitnessScreenOne = "Fitness Screen One";
-	static final String trainingScreen = "Training Screen";
+	static final String trainingScreenOne = "Training Screen One";
 	static final String trainingScreenTwo = "Training Screen Two";
 	static final String rescueMetroScreen = "Rescue Metro Screen";
 	static final String bigRoadRescueScreen = "Big Road Rescue Screen";
@@ -60,8 +60,8 @@ public class Variables {
 		return fitnessScreenOne;
 	}
 
-	public String getTrainingScreen() {
-		return trainingScreen;
+	public String getTrainingScreenOne() {
+		return trainingScreenOne;
 	}
 
 	public String getTrainingScreenTwo() {

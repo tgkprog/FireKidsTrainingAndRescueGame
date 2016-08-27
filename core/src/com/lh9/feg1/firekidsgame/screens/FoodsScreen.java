@@ -23,6 +23,12 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FoodsScreen implements Screen {
 
+	Sprite guiStar;
+
+	int starsCollectedLastFrame;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	int starsAll = 0;
 	Arrow playerHead;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
@@ -53,6 +59,7 @@ public class FoodsScreen implements Screen {
 
 	static final int healthyFood[] = { 0, 1, 4, 7 };
 
+	boolean checkedAnswer = true;
 	boolean minigameRunning;
 	boolean exit;
 	boolean firstDialogueClicked = false;
@@ -121,8 +128,8 @@ public class FoodsScreen implements Screen {
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
-		inputInterpreter.setRunButton(yes);
-		inputInterpreter.setRunButtonSecond(no);
+		inputInterpreter.setRunButton(no);
+		inputInterpreter.setRunButtonSecond(yes);
 		inputInterpreter.setMenuWindow(menuWindow);
 
 		cloudManager.stop();
@@ -156,11 +163,19 @@ public class FoodsScreen implements Screen {
 		counterBar.setVisibility(false);
 		currentFood = new Sprite(assetsManager.food[0]);
 		currentFood.setPosition(5000, 5000);
+		
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
+		
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
+		inputInterpreter.checkKeyboardInput();
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -187,6 +202,7 @@ public class FoodsScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawFood(delta);
 		drawParticles(delta);
 		drawBars(delta);
@@ -249,8 +265,6 @@ public class FoodsScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		checkAnswer();
-
 		if (firstDialogueClicked == true) {
 			counterBar.setVisibility(true);
 			timeBar.setVisibility(true);
@@ -270,6 +284,7 @@ public class FoodsScreen implements Screen {
 		if(minigameCounter == 0 && finish == false){
 			finish = true;
 			dialogueWindow.popUp();
+			assetsManager.stars.start();
 		}
 		
 		if (firstDialogueClicked == false
@@ -285,9 +300,7 @@ public class FoodsScreen implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setScreen(new MenuScreen(game));
-		}
+		
 		updateCameraLogics(delta);
 
 	}
@@ -302,6 +315,18 @@ public class FoodsScreen implements Screen {
 		batch.draw(assetsManager.foodBackground[3], 0, 0);
 		batch.draw(assetsManager.foodBackground[2], 1275, 0);
 		batch.draw(assetsManager.boyTorso, 920, 510);
+	
+		batch.draw(assetsManager.food[0],2360,600);
+		batch.draw(assetsManager.food[1],2170,600);
+		batch.draw(assetsManager.food[4],2100,600);
+		batch.draw(assetsManager.food[7],2160,600);
+		
+		batch.draw(assetsManager.food[2],320,600);
+		batch.draw(assetsManager.food[3],260,600);
+		batch.draw(assetsManager.food[5],90,600);
+		batch.draw(assetsManager.food[6],320,650);
+					
+		
 		playerHead.render(batch, delta);
 	}
 
@@ -317,6 +342,8 @@ public class FoodsScreen implements Screen {
 			assetsManager.hit.start();
 			clicked = true;
 			timeBarTimer = 5;
+			if(checkAnswer() == true)
+				starsCollected++;
 		}
 		if (yes.getSelection() == true && minigameRunning == true
 				&& currentFood.getX() < 330 && clicked == false) {
@@ -324,6 +351,9 @@ public class FoodsScreen implements Screen {
 			assetsManager.hit.start();
 			clicked = true;
 			timeBarTimer = 5;
+			
+			if(checkAnswer() == true)
+				starsCollected++;
 		}
 		// assetsManager.leaf.update(delta);
 		// assetsManager.leaf.draw(batch);
@@ -342,14 +372,21 @@ public class FoodsScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getFoodsScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new FoodsScreen(game));
 			}
+		}
+		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+			game.setScreenPlayed(0);
+			game.setCollectedStars(starsCollected + starsAll);
+			game.setScreen(new MenuScreen(game));
 		}
 	}
 
@@ -363,8 +400,11 @@ public class FoodsScreen implements Screen {
 
 	void randomizeMinigame(float delta) {
 		if (firstDialogueClicked == true && minigameCounter > 0
-				&& minigameRunning == false) {
+				&& minigameRunning == false && checkedAnswer == true) {
+			checkedAnswer = false;
 			currentFoodID = MathUtils.random(0, 7);
+			yes.setDontRespond(false);
+			no.setDontRespond(false);
 			currentFood = new Sprite(assetsManager.food[currentFoodID]);
 			currentFood.setPosition(805, 50);
 			minigameRunning = true;
@@ -386,14 +426,18 @@ public class FoodsScreen implements Screen {
 							* 10, currentFood.getY());
 		if (currentFood.getX() < 320 && minigameRunning == true
 				&& clicked == false)
+		{
 			currentFood.setPosition(320, currentFood.getY());
-
+		}
 		if (clicked == true) {
 			if (currentFood.getX() > -2000 && minigameRunning == true)
 				currentFood.setPosition(
 						currentFood.getX() - 5
 								* Math.abs(delta * (350 - currentFood.getX())),
 						currentFood.getY());
+			yes.setDontRespond(true);
+			no.setDontRespond(true);
+			
 		}
 		currentFood.draw(batch);
 
@@ -405,17 +449,20 @@ public class FoodsScreen implements Screen {
 	}
 
 	boolean checkAnswer() {
-		if (clicked == true) {
+	checkedAnswer = true;
+		System.out.println(currentFoodID);
+	if (clicked == true) {
 			if (no.getSelection() == true) {
 				for (int a = 0; a < healthyFood.length; a++) {
-					if (currentFoodID == a) {
+					if (currentFoodID == healthyFood[a]) {
 						return false;
 					}
 				}
 				return true;
 			} else if (yes.getSelection() == true) {
 				for (int a = 0; a < healthyFood.length; a++) {
-					if (currentFoodID == a) {
+					if (currentFoodID == healthyFood[a]) {
+						
 						return true;
 					}
 				}
@@ -423,5 +470,23 @@ public class FoodsScreen implements Screen {
 			}
 		}
 		return false;
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 463);
 	}
 }

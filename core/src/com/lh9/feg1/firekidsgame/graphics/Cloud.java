@@ -37,8 +37,7 @@ public class Cloud {
 		
 		randomlyMove(delta);
 
-		if (visible == true) {
-		
+		if (visible == true) {		
 			if (popUpTimer < popUpDelayTime) {
 				popUpTimer += delta;
 			}

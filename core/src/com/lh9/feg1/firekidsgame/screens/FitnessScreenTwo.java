@@ -22,6 +22,10 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenTwo implements Screen {
 
+	int starsAll;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	Sprite guiStar;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Sprite windowCounter;
@@ -55,6 +59,7 @@ public class FitnessScreenTwo implements Screen {
 
 	public FitnessScreenTwo(final Starter gam) {
 
+		
 		this.game = gam;
 
 		cloudManager = game.getCloudManager();
@@ -67,7 +72,7 @@ public class FitnessScreenTwo implements Screen {
 		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPauseButtonPosition().y);
-		
+
 		runButton = new Button(685, -200, assetsManager.runButtonLittle);
 		runButton.goUp(30);
 		runButton.setAlpha(0.5f);
@@ -75,25 +80,26 @@ public class FitnessScreenTwo implements Screen {
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-		
-		if(dataOrganizer.getGender() == false){
-		boy = new Human();
-		boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
-		girl = new Human();
-		girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
-		}
-		else{
-		boy = new Human();
-		boy.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 1200, 50);
-		girl = new Human();
-		girl.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 300, 50);
+
+		if (dataOrganizer.getGender() == false) {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 1200, 50);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 300, 50);
+		} else {
+			boy = new Human();
+			boy.create(assetsManager.spritesheetGirlWeights, 2, 2, 3, 1200, 50);
+			girl = new Human();
+			girl.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 300, 50);
 		}
 		boy.setMaxSpeed(1.6f);
 		girl.setMaxSpeed(1.6f);
 		boy.setAnimationOnly(true);
 		girl.setAnimationOnly(true);
-		boy.setSpeedAdder(0.3f);
-		girl.setSpeedAdder(0.3f);
+		boy.setSpeedAdder(0.25f);
+		girl.setSpeedAdder(0.25f);
+		girl.setFriction(1.35f);
+		boy.setFriction(1.35f);
 
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
@@ -146,15 +152,22 @@ public class FitnessScreenTwo implements Screen {
 		boyBar.setVisibility(true);
 		girlBar.setVisibility(true);
 
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 380);
+
+starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
+
+		inputInterpreter.checkKeyboardInput();
 		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
-		
+
 		float deltaTemp = delta;
 
 		if (menuWindow.isVisibile() == true)
@@ -178,6 +191,7 @@ public class FitnessScreenTwo implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawParticles(delta);
 		drawBars(delta);
 		drawButtons(deltaTemp);
@@ -243,13 +257,13 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void updateLogics(double delta) {
-		
+
 		if (menuWindow.isVisibile() == true) {
 			runButton.setDontRespond(true);
 		} else {
 			runButton.setDontRespond(false);
 		}
-		
+
 		if (firstDialogueClicked == false
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
@@ -277,6 +291,7 @@ public class FitnessScreenTwo implements Screen {
 			exit = true;
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new FitnessScreenThree(game));
 		}
 		updateCameraLogics(delta);
@@ -296,7 +311,7 @@ public class FitnessScreenTwo implements Screen {
 
 	void updateGirlAction(double delta) {
 		if (girl.getCounter() < boy.getCounter() - 3)
-			timerSpeedGirl += delta * 10;
+			timerSpeedGirl += delta * 6;
 		if (firstDialogueClicked == true)
 			timerSpeedGirl += delta;
 		if (timerSpeedGirl > 0.18) {
@@ -319,6 +334,7 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void drawBars(float delta) {
+		starsCollected = boy.getCounter();
 		boyBar.render(batch, delta, boy.getCounter());
 		girlBar.render(batch, delta, girl.getCounter());
 	}
@@ -327,12 +343,14 @@ public class FitnessScreenTwo implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getFitnessScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new FitnessScreenTwo(game));
 			}
 		}
@@ -344,5 +362,23 @@ public class FitnessScreenTwo implements Screen {
 
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 413);
 	}
 }

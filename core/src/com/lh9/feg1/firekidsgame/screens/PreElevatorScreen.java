@@ -10,6 +10,7 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
 import com.badlogic.gdx.math.Vector2;
+import com.badlogic.gdx.utils.Array;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Car;
 import com.lh9.feg1.firekidsgame.animated.StaticAnimation;
@@ -19,6 +20,7 @@ import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.FPSManager;
+import com.lh9.feg1.firekidsgame.graphics.Star;
 import com.lh9.feg1.firekidsgame.ui.Button;
 import com.lh9.feg1.firekidsgame.ui.InputInterpreter;
 import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
@@ -45,7 +47,7 @@ public class PreElevatorScreen implements Screen {
 	float peopleGroundTimer;
 	float peopleBuildingTimer;
 	int lastTimeCarLane;
-
+	int starsAll;
 	Sprite fireMiniature;
 	Truck truck;
 	Button menuButton;
@@ -76,6 +78,13 @@ public class PreElevatorScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	Array<Star> stars;
+	Sprite guiStar;
+	boolean enlargeStar;
+	int starsCollected = 0;
+	int starsCollectedLastFrame;
+
+	
 	final Starter game;
 
 	public PreElevatorScreen(final Starter gam) {
@@ -92,13 +101,15 @@ public class PreElevatorScreen implements Screen {
 		pause.goUp(400);
 
 		up = new Button(10, -100, assetsManager.arrowUp);
-		up.goUp(360);
+		up.goUp(320);
 		down = new Button(10, -100, assetsManager.arrowDown);
-		down.goUp(250);
+		down.goUp(210);
 		runButton = new Button(685, -200, assetsManager.runButtonLittle);
 		runButton.goUp(30);
 		runButton.setAlpha(0.5f);
 
+		assetsManager.stars.setPosition(400, 480);
+		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
@@ -244,11 +255,30 @@ public class PreElevatorScreen implements Screen {
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(275, 410);
 
+
+		stars = new Array<Star>();
+
+		for (int a = 0; a < 250; a++) {
+			Star star;
+			if (a % 2 == 0)
+				star = new Star(assetsManager.star, 1250 - a * 200, 135, 1.5f);
+			else
+				star = new Star(assetsManager.star, 1250 - a * 200, 210, 1.5f);
+			stars.add(star);
+		}
+
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 430);
+
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
+		inputInterpreter.checkKeyboardInput();
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -277,6 +307,7 @@ public class PreElevatorScreen implements Screen {
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
 
+		drawGuiStarsCounter(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
 		drawBars(delta);
@@ -507,9 +538,10 @@ public class PreElevatorScreen implements Screen {
 		}
 
 		if (cloudManager.getAllScalesEqualOne() == true
-				&& lastWindowPopUp == true)
+				&& lastWindowPopUp == true){
+			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new MenuScreen(game));
-
+		}
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
 			dialogueWindow.popUp();
 			lastWindowPopUp = true;
@@ -654,6 +686,8 @@ public class PreElevatorScreen implements Screen {
 		if (truck.getX() > -18500 && truck.getX() < -14500)
 			batch.draw(assetsManager.bigRoad[21], -16000, 0);
 
+		drawStars(delta);
+
 	}
 
 	void drawBars(float delta) {
@@ -720,18 +754,23 @@ public class PreElevatorScreen implements Screen {
 	void manageSelectingScreen() {
 		if (cameraFirstZoom == true
 				&& cloudManager.getAllScalesEqualOne() == true) {
+			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new ElevatorScreen(game));
 		}
 
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
+
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTrainingScreenTwo()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
+
 				game.setScreen(new PreElevatorScreen(game));
 
 			}
@@ -748,5 +787,51 @@ public class PreElevatorScreen implements Screen {
 
 	void drawClosestCarPointer() {
 		pointer.draw(batch);
+	}
+
+	void drawStars(float delta) {
+
+		for (int a = 0; a < stars.size; a++) {
+
+			if ((truck.getX() <= -15000 && stars.get(a).getX() < 800)
+					|| truck.getX() >= 400
+					|| (stars.get(a).getX() - truck.getX() < 1300 && stars.get(
+							a).getWidth()
+							+ stars.get(a).getX() - truck.getX() > -1300)) {
+				stars.get(a).draw(batch, delta);
+			}
+
+			if ((truck.getX() - 50 < stars.get(a).getX()
+					&& truck.getX() + 900 > stars.get(a).getX() && Math
+					.abs(truck.getY() - stars.get(a).getY()) < 10)) {
+				if (stars.get(a).getHit() == false) {
+					starsCollected++;
+					stars.get(a).setHit();
+				}
+			}
+
+		}
+		if (starsCollected > starsCollectedLastFrame)
+			enlargeStar = true;
+
+		starsCollectedLastFrame = starsCollected;
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 463);
 	}
 }

@@ -130,7 +130,7 @@ public class LogoScreen implements Screen {
 		if (logoScale <= 1 && Gdx.graphics.getRawDeltaTime() < 0.05f
 				&& changeScreen == false) {
 			logoSprite.setScale((float) logoScale);
-			loadingSprite.setScale((float) logoScale*2);
+			loadingSprite.setScale((float) logoScale * 2);
 		}
 	}
 
@@ -138,11 +138,10 @@ public class LogoScreen implements Screen {
 		if (logoScale == variables.getMaxLogoScale()) {
 			if (assetsManager.isAlive() == false
 					&& assetsManager.getAssetsLoaded() == false
-					&& logoSprite.getScaleX() == variables.getMaxLogoScale())
-			{
+					&& logoSprite.getScaleX() == variables.getMaxLogoScale()) {
 				assetsManager.run();
 			}
-			}
+		}
 	}
 
 	void manageChangingScreens(double delta) {
@@ -151,7 +150,8 @@ public class LogoScreen implements Screen {
 				&& Gdx.graphics.getRawDeltaTime() < 0.04f)
 			changingScreenTimer += delta;
 		if (assetsManager.getAssetsLoaded() == true
-				&& cloudManager.isLoaded() == false && Gdx.graphics.getDeltaTime() < 0.04f) {
+				&& cloudManager.isLoaded() == false
+				&& Gdx.graphics.getDeltaTime() < 0.04f) {
 			cloudManager.load(assetsManager.clouds);
 			cloudManager.start();
 		}

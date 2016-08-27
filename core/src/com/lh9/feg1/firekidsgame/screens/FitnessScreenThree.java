@@ -21,7 +21,10 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenThree implements Screen {
-
+	boolean enlargeStar;
+	int starsCollected = 0;
+	int starsAll;
+	Sprite guiStar;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Bar girlBar;
@@ -109,7 +112,10 @@ public class FitnessScreenThree implements Screen {
 		girl.setAnimationOnly(true);
 		boy.setSpeedAdder(0.3f);
 		girl.setSpeedAdder(0.3f);
-
+		girl.setFriction(1.25f);
+		boy.setFriction(1.25f);
+		
+		
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
@@ -144,11 +150,18 @@ public class FitnessScreenThree implements Screen {
 		boyBar.setVisibility(true);
 		girlBar.setVisibility(true);
 
+		starsAll = game.getCollectedStars();
+
+		guiStar = new Sprite(assetsManager.star);
+		guiStar.setScale(0.75f);
+		guiStar.setPosition(0, 380);
 	}
 
 	@Override
 	public void render(float delta) {
 
+		inputInterpreter.checkKeyboardInput();
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -177,6 +190,7 @@ public class FitnessScreenThree implements Screen {
 		batch.begin();
 
 		drawParticles(delta);
+		drawGuiStarsCounter(delta);
 		drawBars(delta);
 		drawButtons(deltaTemp);
 		drawWindows(deltaTemp);
@@ -278,6 +292,9 @@ public class FitnessScreenThree implements Screen {
 			exit = true;
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+		game.setCollectedStars(starsCollected);
+			game.setScreenPlayed(1);
+			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new MenuScreen(game));
 		}
 
@@ -295,7 +312,7 @@ public class FitnessScreenThree implements Screen {
 
 	void updateGirlAction(double delta) {
 		if (girl.getCounter() < boy.getCounter() - 3)
-			timerSpeedGirl += delta * 10;
+			timerSpeedGirl += delta * 6;
 		if (firstDialogueClicked == true)
 			timerSpeedGirl += delta;
 		if (timerSpeedGirl > 0.18) {
@@ -317,6 +334,7 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void drawBars(float delta) {
+		starsCollected = boy.getCounter();
 		boyBar.render(batch, delta, boy.getCounter());
 		girlBar.render(batch, delta, girl.getCounter());
 	}
@@ -325,12 +343,14 @@ public class FitnessScreenThree implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMenuScreen()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getFitnessScreenThree()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new FitnessScreenThree(game));
 			}
 		}
@@ -342,5 +362,23 @@ public class FitnessScreenThree implements Screen {
 
 	void drawClouds(float delta) {
 		cloudManager.render(batch, delta);
+	}
+
+	void drawGuiStarsCounter(float delta) {
+		if (enlargeStar == true) {
+			if (guiStar.getScaleX() < 0.9f)
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
+		} else if (guiStar.getScaleX() > 0.75f)
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
+
+		if (guiStar.getScaleX() < 0.75f)
+			guiStar.setScale(0.75f);
+		if (guiStar.getScaleX() > 0.9f) {
+			guiStar.setScale(0.9f);
+			enlargeStar = false;
+		}
+		guiStar.draw(batch);
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
+				60, 413);
 	}
 }

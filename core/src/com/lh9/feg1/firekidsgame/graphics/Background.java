@@ -13,6 +13,8 @@ import com.badlogic.gdx.math.Vector3;
 
 public class Background {
 
+	//We don't use this
+	
 	FrameBuffer fbo;
 	SpriteBatch batch;
 

@@ -85,6 +85,7 @@ public class MeetTheTrucksScreen implements Screen {
 	int starsCollectedLastFrame;
 	boolean enlargeStar;
 	int starsCollected = 0;
+	int starsAll = 0;
 	float PositionTimer = 0;
 	float spawnWaterTimer;
 	boolean leftFoot;
@@ -153,6 +154,9 @@ public class MeetTheTrucksScreen implements Screen {
 		wallHitAnimation = new Sprite[2];
 		if (dataOrganizer.getGender() == true) {
 			girl = new Human();
+			
+			//player = new Human();
+		
 			girl.create(assetsManager.girlRunningSuit, 31, 1, 31, -150, 35);
 
 			boyHead = new Sprite(assetsManager.girlButton);
@@ -200,6 +204,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		girl.setMaxSpeed(5);
 		girl.setAnimationTime(0.035f);
+		
 		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 35);
 		truck.setMaxSpeed(20);
@@ -454,11 +459,15 @@ public class MeetTheTrucksScreen implements Screen {
 		guiStar = new Sprite(assetsManager.star);
 		guiStar.setScale(0.75f);
 		guiStar.setPosition(0, 430);
+
+		starsAll = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
+		inputInterpreter.checkKeyboardInput();
+		
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -806,9 +815,10 @@ public class MeetTheTrucksScreen implements Screen {
 		if (girl.getY() < 35)
 			girl.setPosition((int) girl.getX(), 35);
 
-		if (girl.getX() >= 400 && secondDialogueClicked == false) {
+		if (girl.getX() >= 14000 && secondDialogueClicked == false) {
 			secondDialogueClicked = true;
-			// dialogueWindow.popUp();
+			dialogueWindow.popUp();
+			assetsManager.stars.start();
 			// girl.setSpeed(0);
 			// girl.resetStateTime();
 		}
@@ -823,7 +833,9 @@ public class MeetTheTrucksScreen implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		if (girl.getX() >= 14000 && exit == false) {
+		if (girl.getX() >= 14000 && exit == false
+				&& secondDialogueClicked == true
+				&& dialogueWindow.isVisibile() == false) {
 			exit = true;
 			cloudManager.start();
 		}
@@ -1093,6 +1105,7 @@ public class MeetTheTrucksScreen implements Screen {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
@@ -1101,15 +1114,16 @@ public class MeetTheTrucksScreen implements Screen {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
+				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			camera.reset();
+			game.setCollectedStars(starsCollected + starsAll);
 			assetsManager.hit.scaleEffect(3f);
 			game.setScreen(new FoodsScreen(game));
 		}
-
 	}
 
 	void drawFps() {
@@ -1287,7 +1301,7 @@ public class MeetTheTrucksScreen implements Screen {
 				stars.get(a).setPosition(stars.get(a).getX(),
 						stars.get(a).getY() + delta * 430);
 				if (starAlpha - delta * 0.2f > 0) {
-					
+
 					stars.get(a).setAlpha(
 							stars.get(a).getColor().a - 0.2f * delta);
 					stars.get(a).rotate(delta * 350);
@@ -1297,10 +1311,10 @@ public class MeetTheTrucksScreen implements Screen {
 				}
 			}
 		}
-		if(starsCollected > starsCollectedLastFrame)
+		if (starsCollected > starsCollectedLastFrame)
 			enlargeStar = true;
 
-		starsCollectedLastFrame  = starsCollected;
+		starsCollectedLastFrame = starsCollected;
 	}
 
 	void drawGrassFlowers(float delta) {
@@ -1396,9 +1410,9 @@ public class MeetTheTrucksScreen implements Screen {
 	void drawGuiStarsCounter(float delta) {
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
-				guiStar.setScale(guiStar.getScaleX() + 3*delta);
+				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
 		} else if (guiStar.getScaleX() > 0.75f)
-			guiStar.setScale(guiStar.getScaleX() - delta*3);
+			guiStar.setScale(guiStar.getScaleX() - delta * 3);
 
 		if (guiStar.getScaleX() < 0.75f)
 			guiStar.setScale(0.75f);
@@ -1407,7 +1421,7 @@ public class MeetTheTrucksScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected),
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
 				60, 463);
 	}
 }

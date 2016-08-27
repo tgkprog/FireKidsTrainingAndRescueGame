@@ -46,6 +46,7 @@ public class AssetsManager extends Thread {
 	public Texture speedometer;
 	public Texture elevatorMiniature;
 	public Texture elevatorButton;
+	public Texture elevatorButton_desaturated;
 	public Texture hoseHydrant;
 	public Texture dogsGirl;
 	public Texture damage;
@@ -100,19 +101,16 @@ public class AssetsManager extends Thread {
 	public Texture fireStation;
 	public Texture pause;
 	public Texture menu;
-
 	public Texture carRedButton;
 	public Texture carYellowButton;
 	public Texture carPinkButton;
 	public Texture carBlueButton;
 	public Texture carGreenButton;
-
 	public Texture carRed;
 	public Texture carYellow;
 	public Texture carPink;
 	public Texture carBlue;
 	public Texture carGreen;
-
 	public Texture boyButtonButton;
 	public Texture girlButtonButton;
 	public Texture boyButton;
@@ -140,10 +138,8 @@ public class AssetsManager extends Thread {
 	public Texture boyMainMenu;
 	public Texture girlMainMenu;
 	public Texture boyMenuHand;
-
 	public Texture[] spritesheetGirlRunning;
 	public Texture[] spritesheetBoyRunning;
-
 	public Texture boyWaving[];
 	public Texture spritesheetBoyElliptical[];
 	public Texture spritesheetGirlElliptical[];
@@ -189,6 +185,12 @@ public class AssetsManager extends Thread {
 	public Texture rescueCat;
 	public Texture fitness;
 	public Texture rescueTrain;
+	public Texture bigRoadRescue_desaturated;
+	public Texture training_desaturated;
+	public Texture rescueBuilding_desaturated;
+	public Texture rescueCat_desaturated;
+	public Texture fitness_desaturated;
+	public Texture rescueTrain_desaturated;
 	public Texture yellowSectionLeft;
 	public Texture yellowSectionMiddle;
 	public Texture yellowSectionUp;
@@ -240,13 +242,12 @@ public class AssetsManager extends Thread {
 		parameter.magFilter = TextureFilter.Linear;
 		font = generator.generateFont(parameter);
 		font.setColor(Color.BLACK);
-		
+
 		parameter.size = 50;
 		parameter.minFilter = TextureFilter.Linear;
 		parameter.magFilter = TextureFilter.Linear;
 		fontLittle = generator.generateFont(parameter);
 		fontLittle.setColor(Color.BLACK);
-		
 	}
 
 	void loadParticles() {
@@ -421,6 +422,9 @@ public class AssetsManager extends Thread {
 		carGreenButton = new Texture("buttons/carGreenButton.png");
 
 		elevatorButton = new Texture("buttons/elevator.png");
+		elevatorButton_desaturated = new Texture(
+				"buttons/elevator_desaturated.png");
+
 		fireMiniature = new Texture("others/Fire3-1.png");
 		hoseHydrant = new Texture("others/hoseHydrant.png");
 		handTruckFront = new Texture("boy/handTruckFront.png");
@@ -553,6 +557,16 @@ public class AssetsManager extends Thread {
 		fitness = new Texture("buttons/fitness.png");
 		rescueTrain = new Texture("buttons/rescueTrain.png");
 
+		bigRoadRescue_desaturated = new Texture(
+				"buttons/bigRoadRescue_desaturated.png");
+		training_desaturated = new Texture("buttons/training_desaturated.png");
+		rescueBuilding_desaturated = new Texture(
+				"buttons/rescueBuilding_desaturated.png");
+		rescueCat_desaturated = new Texture("buttons/rescueCat_desaturated.png");
+		fitness_desaturated = new Texture("buttons/fitness_desaturated.png");
+		rescueTrain_desaturated = new Texture(
+				"buttons/rescueTrain_desaturated.png");
+
 		truckFront = new Texture[5];
 		truckFront[0] = new Texture("backgrounds/truckFront1.png");
 		truckFront[1] = new Texture("backgrounds/truckFront2.png");
@@ -603,7 +617,7 @@ public class AssetsManager extends Thread {
 		girlHammer_16_percent = new Texture[2];
 		girlHammer_16_percent[0] = new Texture("girl/hammer1_16_percent.png");
 		girlHammer_16_percent[1] = new Texture("girl/hammer2_16_percent.png");
-		
+
 		boyHammer = new Texture[2];
 		boyHammer[0] = new Texture("boy/boy_hammer/1.png");
 		boyHammer[1] = new Texture("boy/boy_hammer/2.png");
@@ -611,7 +625,7 @@ public class AssetsManager extends Thread {
 		boyHammer_16_percent = new Texture[2];
 		boyHammer_16_percent[0] = new Texture("boy/boy_hammer/1_16_percent.png");
 		boyHammer_16_percent[1] = new Texture("boy/boy_hammer/2_16_percent.png");
-		
+
 		metroDoor = new Texture[2];
 		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
 		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
@@ -1082,15 +1096,20 @@ public class AssetsManager extends Thread {
 		peopleGround.setFilter(textureFilter, textureFilter);
 		peopleBuilding.setFilter(textureFilter, textureFilter);
 		bigRoadRescue.setFilter(textureFilter, textureFilter);
-		training.setFilter(textureFilter, textureFilter);
 		trainMiniature.setFilter(textureFilter, textureFilter);
 		elevatorMiniature.setFilter(textureFilter, textureFilter);
 		truckLed.setFilter(textureFilter, textureFilter);
+		training.setFilter(textureFilter, textureFilter);
 		meetTheTrucks.setFilter(textureFilter, textureFilter);
 		rescueBuilding.setFilter(textureFilter, textureFilter);
 		rescueCat.setFilter(textureFilter, textureFilter);
 		fitness.setFilter(textureFilter, textureFilter);
 		rescueTrain.setFilter(textureFilter, textureFilter);
+		training_desaturated.setFilter(textureFilter, textureFilter);
+		rescueBuilding_desaturated.setFilter(textureFilter, textureFilter);
+		rescueCat_desaturated.setFilter(textureFilter, textureFilter);
+		fitness_desaturated.setFilter(textureFilter, textureFilter);
+		rescueTrain_desaturated.setFilter(textureFilter, textureFilter);
 		yellowSectionUp.setFilter(textureFilter, textureFilter);
 		yellowSectionLeft.setFilter(textureFilter, textureFilter);
 		yellowSectionMiddle.setFilter(textureFilter, textureFilter);
@@ -1102,6 +1121,7 @@ public class AssetsManager extends Thread {
 		roadPart.setFilter(textureFilter, textureFilter);
 		fireMiniature.setFilter(textureFilter, textureFilter);
 		elevatorButton.setFilter(textureFilter, textureFilter);
+		elevatorButton_desaturated.setFilter(textureFilter, textureFilter);
 		boyMainMenu.setFilter(textureFilter, textureFilter);
 		girlMainMenu.setFilter(textureFilter, textureFilter);
 		oilButton.setFilter(textureFilter, textureFilter);

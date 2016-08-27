@@ -38,7 +38,6 @@ public class MenuScreen implements Screen {
 	Button[] levelButtons;
 
 	float positions = -1000;
-
 	boolean madeShakeScreen;
 
 	final Starter game;
@@ -83,39 +82,63 @@ public class MenuScreen implements Screen {
 		buzzer.setAnimationOnly(true);
 
 		levelButtons = new Button[7];
-/*
-		starsCounterButtons = new Button[6];
-		starsCounterButtons[0] = new Button(270, -150,
-				assetsManager.starButton);
-		starsCounterButtons[0].goUp(420);
-		for (int a = 1; a < 6; a++) {
-			starsCounterButtons[a] = new Button(270 + 45 * a, -200 - (a * 50),
-					assetsManager.starButtonEmpty);
-			starsCounterButtons[a].goUp(420);
-		}
-*/
+		/*
+		 * starsCounterButtons = new Button[6]; starsCounterButtons[0] = new
+		 * Button(270, -150, assetsManager.starButton);
+		 * starsCounterButtons[0].goUp(420); for (int a = 1; a < 6; a++) {
+		 * starsCounterButtons[a] = new Button(270 + 45 * a, -200 - (a * 50),
+		 * assetsManager.starButtonEmpty); starsCounterButtons[a].goUp(420); }
+		 */
 		for (int a = 0; a < 7; a++) {
 			if (a == 0)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.fitness);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.fitness);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.fitness_desaturated);
 			if (a == 1)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.training);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.training);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.training_desaturated);
 			if (a == 2)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.rescueBuilding);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueBuilding);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueBuilding_desaturated);
 			if (a == 3)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.rescueCat);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueCat);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueCat_desaturated);
 			if (a == 4)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.rescueTrain);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueTrain);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.rescueTrain_desaturated);
 			if (a == 5)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.elevatorButton);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.elevatorButton);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.elevatorButton_desaturated);
 			if (a == 6)
-				levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-						assetsManager.bigRoadRescue);
+				if (game.getScreenPlayed(a) == true)
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.bigRoadRescue);
+				else
+					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+							assetsManager.bigRoadRescue_desaturated);
 
 			levelButtons[a].goUp(0);
 		}
@@ -130,6 +153,7 @@ public class MenuScreen implements Screen {
 		inputInterpreter.setAuthors(authors);
 		inputInterpreter.setDataOrganizer(dataOrganizer);
 		inputInterpreter.setGenderButton(gender);
+		inputInterpreter.getScreensPlayed(game.getScreensPlayed());
 
 		cloudManager.stop();
 
@@ -146,6 +170,16 @@ public class MenuScreen implements Screen {
 		camera.moveY(575, 100, 100, 100);
 
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		System.out.println(game.getCollectedStars());
+
+		if (game.getCollectedStars() == 0) {
+			game.setCollectedStars(dataOrganizer.getScore());
+			System.out.println("setting collected stars");
+		} else {
+			System.out.println("setting new score");
+			dataOrganizer.setScore(game.getCollectedStars());
+		}
 	}
 
 	@Override
@@ -221,9 +255,9 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawButtons(float delta) {
-//		assetsManager.fontLittle.draw(batch, "123",
-//				680, 425);
-//		batch.draw(assetsManager.star,740,385);
+		// assetsManager.fontLittle.draw(batch, "123",
+		// 680, 425);
+		// batch.draw(assetsManager.star,740,385);
 		gender.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
@@ -231,9 +265,9 @@ public class MenuScreen implements Screen {
 		for (int a = 0; a < 7; a++) {
 			levelButtons[a].render(batch, (float) delta);
 		}
-	//	for (int a = 0; a < 6; a++) {
-	//		starsCounterButtons[a].render(batch, (float) delta);
-	//	}
+		// for (int a = 0; a < 6; a++) {
+		// starsCounterButtons[a].render(batch, (float) delta);
+		// }
 	}
 
 	void updateLogics(double delta) {
@@ -251,6 +285,7 @@ public class MenuScreen implements Screen {
 			gender.setTexture(assetsManager.girlButton);
 			dataOrganizer.setGender(true);
 		}
+		
 		if (fireStation.notMoving() == true && madeShakeScreen == false) {
 			madeShakeScreen = true;
 			fireStation.blink();
@@ -317,7 +352,7 @@ public class MenuScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreen()) {
+				.getTrainingScreenOne()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new TrainingScreenOne(game));

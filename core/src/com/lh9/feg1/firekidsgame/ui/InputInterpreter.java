@@ -1,6 +1,7 @@
 package com.lh9.feg1.firekidsgame.ui;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.Input.Keys;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.input.GestureDetector;
 import com.badlogic.gdx.input.GestureDetector.GestureListener;
@@ -17,6 +18,7 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	boolean[] screensPlayed;
 	String selectedScreen = "No button clicked";
 	Button jump;
 	Button gender;
@@ -341,71 +343,34 @@ public class InputInterpreter implements GestureListener {
 
 			if (up != null) {
 				if (up.checkCollision((int) x, (int) y) == true) {
-					controlledTruck.upLane();
-					up.blink();
+					upAction();
 				}
 			}
 			if (down != null) {
 				if (down.checkCollision((int) x, (int) y) == true) {
-					down.blink();
-					controlledTruck.downLane();
+					downAction();
 				}
 			}
 
 			if (runButton != null)
 				if (runButton.checkCollision((int) x, (int) y) == true) {
-					runButton.blink();
-					if(controlledHuman != null)
-					controlledHuman.move();
-
-					if (camera.zoom == 3.0f)
-						camera.zoom(2.96f, 3);
-					if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
-						camera.zoom(3.0f, 3);
-
-					if (camera.zoom == 0.98f)
-						camera.zoom(0.96f, 1);
-					if (camera.zoom <= 0.96f)
-						camera.zoom(0.98f, 1);
-
-					if (runButton.dontRespond == true) {
-						camera.zoom(0.98f, 1);
-					}
+					runButtonAction();
 				}
 
 			if (jump != null)
 				if (jump.checkCollision((int) x, (int) y) == true) {
-					jump.blink();
-					if (controlledHuman.getAccelerationJump() == -10 && controlledHuman.getY() == 35)
-						controlledHuman.setAccelerationJump(13);
+					jumpAction();
 				}
 
 			if (runButtonSecond != null)
 				if (runButtonSecond.checkCollision((int) x, (int) y) == true) {
-					runButtonSecond.blink();
-					if(controlledHuman != null)
-					controlledHuman.moveReverse();
-
-					if (camera.zoom == 3.0f)
-						camera.zoom(2.96f, 3);
-					if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
-						camera.zoom(3.0f, 3);
-
-					if (camera.zoom == 0.98f)
-						camera.zoom(0.96f, 1);
-					if (camera.zoom <= 0.96f)
-						camera.zoom(0.98f, 1);
-
-					if (runButtonSecond.dontRespond == true) {
-						camera.zoom(0.98f, 1);
-					}
+					runButtonSecondAction();
 				}
 
 			if (pause != null)
 				if (pause.checkCollision((int) x, (int) y) == true) {
-					pause.blink();
-					if (menuWindow != null)
-						menuWindow.popUp();
+					pauseAction();
+
 				}
 			if (meetTheTrucks != null) {
 				if (fireStation.checkCollision((int) x, (int) y) == true) {
@@ -421,32 +386,31 @@ public class InputInterpreter implements GestureListener {
 					if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
 						levelButtons[a].blink();
 
-						if (a == 0) {
+						if (a == 0 && screensPlayed[a] == true) {
 							selectedScreen = variables.getFitnessScreenOne();
 							cloudManager.start();
 						}
-						if (a == 1) {
-							selectedScreen = variables.getTrainingScreen();
+						if (a == 1 && screensPlayed[a] == true) {
+							selectedScreen = variables.getTrainingScreenOne();
 							cloudManager.start();
 						}
-
-						if (a == 2) {
+						if (a == 2 && screensPlayed[a] == true) {
 							selectedScreen = variables.getTrainingScreenTwo();
 							cloudManager.start();
 						}
-						if (a == 3) {
+						if (a == 3 && screensPlayed[a] == true) {
 							selectedScreen = variables.getCatRescueScreen();
 							cloudManager.start();
 						}
-						if (a == 4) {
+						if (a == 4 && screensPlayed[a] == true) {
 							selectedScreen = variables.getRescueMetroScreen();
 							cloudManager.start();
 						}
-						if (a == 5) {
+						if (a == 5 && screensPlayed[a] == true) {
 							selectedScreen = variables.getElevatorScreen();
 							cloudManager.start();
 						}
-						if (a == 6) {
+						if (a == 6 && screensPlayed[a] == true) {
 							selectedScreen = variables.getBigRoadRescueScreen();
 							cloudManager.start();
 						}
@@ -587,11 +551,15 @@ public class InputInterpreter implements GestureListener {
 		this.yellowSectionUpRight = yellowSectionUpRight;
 	}
 
+	public void getScreensPlayed(boolean screensPlayed[]) {
+		this.screensPlayed = screensPlayed;
+	}
+
 	void manageNonGuiCollisions(float x, float y) {
 
 		if (eclipseFire != null)
 			if (eclipseFire.checkCollision((int) x, (int) y) == true) {
-				eclipseFire.blink();
+				eclipseFireAction();
 			}
 
 		if (hitboxes != null) {
@@ -601,7 +569,137 @@ public class InputInterpreter implements GestureListener {
 				}
 			}
 		}
+	}
 
+	public void checkKeyboardInput() {
+		if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
+			if (dialogueWindow != null && dialogueWindow.isVisibile() == true)
+				dialogueWindow.hide();
+		}
+
+		if (Gdx.input.isKeyJustPressed(Keys.SPACE))
+			eclipseFireAction();
+		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE))
+			pauseAction();
+		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+			upAction();
+			jumpAction();
+		}
+		if (Gdx.input.isKeyJustPressed(Keys.DOWN))
+			downAction();
+		if (runButton != null && runButtonSecond == null)
+			if (Gdx.input.isKeyJustPressed(Keys.RIGHT)
+					|| Gdx.input.isKeyJustPressed(Keys.LEFT))
+				runButtonAction();
+		if (runButton == null && runButtonSecond != null)
+			if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
+				runButtonSecondAction();
+		if (runButton != null && runButtonSecond != null) {
+			if (Gdx.input.isKeyJustPressed(Keys.LEFT))
+				runButtonAction();
+			if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
+				runButtonSecondAction();
+		}
+
+	}
+
+	void eclipseFireAction() {
+		if (eclipseFire != null && eclipseFire.isBlockedFromInteraction() == false)
+			eclipseFire.blink();
+	}
+
+	void pauseAction() {
+		if (menuWindow != null && menuWindow.isVisibile() == true
+				&& dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false) {
+			pause.blink();
+			menuWindow.hide();
+		}
+		if (menuWindow != null && menuWindow.isVisibile() == false
+				&& dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false) {
+			pause.blink();
+			menuWindow.popUp();
+		}
+	}
+
+	void upAction() {
+		if (up != null && up.isBlockedFromInteraction() == false) {
+			up.blink();
+			if (controlledTruck != null)
+				controlledTruck.upLane();
+		}
+	}
+
+	void downAction() {
+		if (down != null && dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false
+				&& down.isBlockedFromInteraction() == false) {
+			down.blink();
+			if (controlledTruck != null)
+				controlledTruck.downLane();
+		}
+	}
+
+	void runButtonAction() {
+		if (runButton != null && dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false
+				&& runButton.isBlockedFromInteraction() == false) {
+			runButton.blink();
+
+			if (controlledHuman != null)
+				controlledHuman.move();
+
+			if (camera.zoom == 3.0f)
+				camera.zoom(2.96f, 3);
+			if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+				camera.zoom(3.0f, 3);
+
+			if (camera.zoom == 0.98f)
+				camera.zoom(0.96f, 1);
+			if (camera.zoom <= 0.96f)
+				camera.zoom(0.98f, 1);
+
+			if (runButton.dontRespond == true) {
+				camera.zoom(0.98f, 1);
+			}
+
+		}
+	}
+
+	void jumpAction() {
+		if (jump != null && dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false
+				&& jump.isBlockedFromInteraction() == false) {
+			jump.blink();
+			if (controlledHuman.getAccelerationJump() == -10
+					&& controlledHuman.getY() == 35)
+				controlledHuman.setAccelerationJump(13);
+		}
+	}
+
+	void runButtonSecondAction() {
+		if (runButtonSecond != null && dialogueWindow != null
+				&& dialogueWindow.isVisibile() == false
+				&& runButtonSecond.isBlockedFromInteraction() == false) {
+			runButtonSecond.blink();
+			if (controlledHuman != null)
+				controlledHuman.moveReverse();
+
+			if (camera.zoom == 3.0f)
+				camera.zoom(2.96f, 3);
+			if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+				camera.zoom(3.0f, 3);
+
+			if (camera.zoom == 0.98f)
+				camera.zoom(0.96f, 1);
+			if (camera.zoom <= 0.96f)
+				camera.zoom(0.98f, 1);
+
+			if (runButtonSecond.dontRespond == true) {
+				camera.zoom(0.98f, 1);
+			}
+		}
 	}
 }
 /*
