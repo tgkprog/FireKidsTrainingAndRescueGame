@@ -71,9 +71,9 @@ public class FitnessScreenTwo implements Screen {
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
 
-		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
-		pause.goUp((int) variables.getPauseButtonPosition().y);
+		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
 
 		runButton = new Button(685, -200, assetsManager.runButtonLittle);
 		runButton.goUp(30);
@@ -115,7 +115,7 @@ public class FitnessScreenTwo implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getFitnessScreenTwo());
+				playButton, variables.getFITNESS_SCREEN_TWO());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -343,14 +343,14 @@ public class FitnessScreenTwo implements Screen {
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getFitnessScreenTwo()) {
+				.getFITNESS_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new FitnessScreenTwo(game));

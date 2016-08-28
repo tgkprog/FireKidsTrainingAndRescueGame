@@ -42,8 +42,8 @@ public class LogoScreen implements Screen {
 		assetsManager = game.getAssetsManager();
 		logoSprite = game.getLogoSprite();
 		logoSprite.setScale(0);
-		logoSprite.setPosition(variables.getLogoPosition().x,
-				variables.getLogoPosition().y);
+		logoSprite.setPosition(variables.getLOGO_POSITION().x,
+				variables.getLOGO_POSITION().y);
 
 		loadingSprite = game.getLoadingSprite();
 		loadingSprite.setScale(0);
@@ -117,10 +117,10 @@ public class LogoScreen implements Screen {
 
 	void manageLogoScale(double delta) {
 		if (assetsManager.getAssetsLoaded() == false) {
-			if (logoScale < variables.getMaxLogoScale())
+			if (logoScale < variables.getMAX_LOGO_SCALE())
 				logoScale += delta;
-			if (logoScale > variables.getMaxLogoScale())
-				logoScale = variables.getMaxLogoScale();
+			if (logoScale > variables.getMAX_LOGO_SCALE())
+				logoScale = variables.getMAX_LOGO_SCALE();
 		} else if (changeScreen == true) {
 			if (logoScale > 0 && Gdx.graphics.getRawDeltaTime() < 0.05f)
 				logoScale -= delta;
@@ -135,10 +135,10 @@ public class LogoScreen implements Screen {
 	}
 
 	void manageLoadingAssets() {
-		if (logoScale == variables.getMaxLogoScale()) {
+		if (logoScale == variables.getMAX_LOGO_SCALE()) {
 			if (assetsManager.isAlive() == false
 					&& assetsManager.getAssetsLoaded() == false
-					&& logoSprite.getScaleX() == variables.getMaxLogoScale()) {
+					&& logoSprite.getScaleX() == variables.getMAX_LOGO_SCALE()) {
 				assetsManager.run();
 			}
 		}
@@ -155,7 +155,7 @@ public class LogoScreen implements Screen {
 			cloudManager.load(assetsManager.clouds);
 			cloudManager.start();
 		}
-		if (changingScreenTimer > variables.getDelayChangingScreens()
+		if (changingScreenTimer > variables.getDELAY_CHANGING_SCREENS()
 				&& Gdx.graphics.getRawDeltaTime() < 0.04f)
 			changeScreen = true;
 	}

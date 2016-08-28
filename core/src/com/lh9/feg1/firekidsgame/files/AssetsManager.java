@@ -14,6 +14,9 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture[] buildings;
+	public Texture noPrompts;
+	public Texture train;
 	public Texture[] peopleSad;
 	public Texture[] peopleHappy;
 	public Texture starButton;
@@ -385,6 +388,7 @@ public class AssetsManager extends Thread {
 		daniel = new Texture("texts/daniel.png");
 		nevena = new Texture("texts/nevena.png");
 		tushar = new Texture("texts/tushar.png");
+		noPrompts = new Texture("texts/No-prompts.png");
 		longButton = new Texture("buttons/greenButtonLong.png");
 		arrow = new Texture("others/arrow.png");
 		helmet1 = new Texture("others/helmet1.png");
@@ -443,6 +447,7 @@ public class AssetsManager extends Thread {
 		peopleGround = new Texture("spritesheets/peopleGround.png");
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
 		barFilled = new Texture("others/barFilled.png");
+		train = new Texture("others/train.png");
 		grassFlowers = new Texture("backgrounds/grassFlowers.png");
 		star = new Texture("particles/star.png");
 		barNotFilled = new Texture("others/barNotFilled.png");
@@ -597,6 +602,10 @@ public class AssetsManager extends Thread {
 		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
 		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
 
+		buildings = new Texture[1];
+for(int a =0;a<buildings.length;a++)
+		buildings[a] = new Texture("buildings/" + (a+1) + ".png");
+		
 		cloudyBackgroundClose = new Texture("backgrounds/rescueCat/close.png");
 		cloudyBackgroundFar = new Texture("backgrounds/rescueCat/far.png");
 
@@ -968,6 +977,9 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 3; a++) {
 			clouds[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < buildings.length; a++) {
+			buildings[a].setFilter(textureFilter, textureFilter);
+		}
 		for (int a = 0; a < 4; a++) {
 			mainBackground[a].setFilter(textureFilter, textureFilter);
 		}
@@ -1037,6 +1049,7 @@ public class AssetsManager extends Thread {
 		helmet2.setFilter(textureFilter, textureFilter);
 		switchButton.setFilter(textureFilter, textureFilter);
 		lane.setFilter(textureFilter, textureFilter);
+		train.setFilter(textureFilter, textureFilter);
 
 		carRed.setFilter(textureFilter, textureFilter);
 		carYellow.setFilter(textureFilter, textureFilter);
@@ -1108,6 +1121,7 @@ public class AssetsManager extends Thread {
 		rescueBuilding.setFilter(textureFilter, textureFilter);
 		rescueCat.setFilter(textureFilter, textureFilter);
 		fitness.setFilter(textureFilter, textureFilter);
+		noPrompts.setFilter(textureFilter, textureFilter);
 		rescueTrain.setFilter(textureFilter, textureFilter);
 		training_desaturated.setFilter(textureFilter, textureFilter);
 		rescueBuilding_desaturated.setFilter(textureFilter, textureFilter);

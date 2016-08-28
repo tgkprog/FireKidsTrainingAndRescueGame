@@ -157,7 +157,7 @@ public class BigRoadRescueScreen implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getBigRoadRescueScreen());
+				playButton, variables.getBIG_ROAD_RESCUE_SCREEN());
 
 		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 135);
@@ -851,7 +851,7 @@ public class BigRoadRescueScreen implements Screen {
 		}
 
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 
 				game.setCollectedStars(starsCollected + starsAll);
@@ -859,7 +859,7 @@ public class BigRoadRescueScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getBigRoadRescueScreen()) {
+				.getBIG_ROAD_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 
 				game.setCollectedStars(starsCollected + starsAll);

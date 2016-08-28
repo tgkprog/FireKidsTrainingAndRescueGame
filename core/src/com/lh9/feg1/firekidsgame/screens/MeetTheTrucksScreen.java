@@ -76,6 +76,8 @@ public class MeetTheTrucksScreen implements Screen {
 	Sprite pointer;
 	Sprite guiStar;
 	Sprite cartoonWater;
+	Sprite train;
+	Sprite trainMiniature;
 
 	Array<Sprite> bushes;
 	Array<Sprite> trees;
@@ -136,9 +138,9 @@ public class MeetTheTrucksScreen implements Screen {
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
-		pause.goUp((int) variables.getPauseButtonPosition().y);
+		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
 
 		runButton = new Button(700, -200, assetsManager.runButtonLittle);
 		runButton.goUp(250);
@@ -157,7 +159,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getMeetTheTrucks());
+				playButton, variables.getMEET_THE_TRUCKS());
 
 		wallHitAnimation = new Sprite[2];
 		if (dataOrganizer.getGender() == true) {
@@ -466,6 +468,31 @@ public class MeetTheTrucksScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+
+		train = new Sprite(assetsManager.train);
+		train.setPosition(-460, 200);
+
+		trainMiniature = new Sprite(assetsManager.trainMiniature);
+		trainMiniature.setScale(0.5f);
+
+		Sprite solarTowers = new Sprite(assetsManager.buildings[0]);
+		solarTowers.setPosition(200, 185);
+		grassFlowers.add(solarTowers);
+		/*
+		 * for(int a =0;a<4;a++){ Sprite randomBuilding = new
+		 * Sprite(assetsManager.buildings[a+1]); randomBuilding.setPosition(2400
+		 * + a*700,45); trees.add(randomBuilding); }
+		 * 
+		 * Sprite buildingCinema = new Sprite(assetsManager.buildings[5]);
+		 * buildingCinema.setPosition(11600, 185);
+		 * grassFlowers.add(buildingCinema);
+		 * 
+		 * Sprite art = new Sprite(assetsManager.buildings[6]);
+		 * art.setPosition(8500, 185); grassFlowers.add(art);
+		 * 
+		 * Sprite monument = new Sprite(assetsManager.buildings[7]);
+		 * monument.setPosition(13000, 185); grassFlowers.add(monument);
+		 */
 	}
 
 	@Override
@@ -772,7 +799,7 @@ public class MeetTheTrucksScreen implements Screen {
 			up.setAlpha(jumpAlpha);
 		}
 
-		if (player.getX() >= 11750) {
+		if (player.getX() >= 11750 && reverseHoseAnimation == false) {
 
 			if (truckBackDoorPosition < 260)
 				truckBackDoorPosition += 40 * delta;
@@ -782,6 +809,12 @@ public class MeetTheTrucksScreen implements Screen {
 				jumpAlpha = 0f;
 			up.setDontRespond(true);
 			up.setAlpha(jumpAlpha);
+		}
+		if (reverseHoseAnimation == true) {
+			if (truckBackDoorPosition > 108)
+				truckBackDoorPosition -= 40 * delta;
+			if (truckBackDoorPosition < 108)
+				truckBackDoorPosition = 108;
 		}
 
 		player.setPosition((int) player.getX(), (int) player.getY()
@@ -903,6 +936,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawBackground(float delta) {
 
+		drawTrain(delta);
 		drawGrassFlowers(delta);
 		drawLakes(delta);
 		drawBushes(delta);
@@ -922,8 +956,11 @@ public class MeetTheTrucksScreen implements Screen {
 		}
 		if (player.getX() >= 1600 && player.getX() < 3100) {
 			batch.draw(assetsManager.parkBackgrounds[5], 2049, 0);
+			
+			if(dataOrganizer.getPrompts() == false){
 			pointer.setPosition(2290, pointersPosition + 200);
 			pointer.draw(batch);
+			}
 		}
 		if (player.getX() >= 2100 && player.getX() < 4600)
 			batch.draw(assetsManager.parkBackgrounds[4], 2514, 0);
@@ -1097,6 +1134,9 @@ public class MeetTheTrucksScreen implements Screen {
 		fireMiniature.setPosition(495, 410);
 		fireMiniature.draw(batch);
 
+		trainMiniature.setPosition(160 + train.getX() * 0.0285f, 410);
+		trainMiniature.draw(batch);
+
 		if (truckPart == false)
 			truckMiniature.setPosition(225, 410);
 		else if (eclipsePart == false)
@@ -1108,7 +1148,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
@@ -1117,7 +1157,7 @@ public class MeetTheTrucksScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMeetTheTrucks()) {
+				.getMEET_THE_TRUCKS()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
@@ -1154,41 +1194,44 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawPointers(float delta) {
 
-		if (player.getX() < 2000) {
+		if (dataOrganizer.getPrompts() == false) {
+			if (player.getX() < 2000 && dataOrganizer.getPrompts()) {
 
-			pointer.setPosition(390, pointersPosition + 100);
+				pointer.setPosition(390, pointersPosition + 100);
+				pointer.draw(batch);
+				pointer.setPosition(790, pointersPosition + 100);
+				pointer.draw(batch);
+				pointer.setPosition(1190, pointersPosition + 100);
+				pointer.draw(batch);
+
+			}
+
+			pointer.setPosition(10590, pointersPosition);
 			pointer.draw(batch);
-			pointer.setPosition(790, pointersPosition + 100);
+			pointer.setPosition(10940, pointersPosition);
 			pointer.draw(batch);
-			pointer.setPosition(1190, pointersPosition + 100);
+			pointer.setPosition(11290, pointersPosition);
 			pointer.draw(batch);
 
-		}
-
-		pointer.setPosition(10590, pointersPosition);
-		pointer.draw(batch);
-		pointer.setPosition(10940, pointersPosition);
-		pointer.draw(batch);
-		pointer.setPosition(11290, pointersPosition);
-		pointer.draw(batch);
-
-		if (pointersGoUp == false) {
-			if (pointersPosition < 100) {
-				pointersPosition += delta * 80;
-				if (pointersPosition > 100) {
-					pointersPosition = 100;
-					pointersGoUp = true;
+			if (pointersGoUp == false) {
+				if (pointersPosition < 100) {
+					pointersPosition += delta * 80;
+					if (pointersPosition > 100) {
+						pointersPosition = 100;
+						pointersGoUp = true;
+					}
+				}
+			} else {
+				if (pointersPosition > 50) {
+					pointersPosition -= delta * 80;
+					if (pointersPosition < 50) {
+						pointersPosition = 50;
+						pointersGoUp = false;
+					}
 				}
 			}
-		} else {
-			if (pointersPosition > 50) {
-				pointersPosition -= delta * 80;
-				if (pointersPosition < 50) {
-					pointersPosition = 50;
-					pointersGoUp = false;
-				}
-			}
 		}
+
 	}
 
 	void drawWater(float delta) {
@@ -1434,5 +1477,17 @@ public class MeetTheTrucksScreen implements Screen {
 		guiStar.draw(batch);
 		assetsManager.fontLittle.draw(batch,
 				Integer.toString(starsCollected + starsAll), 60, 463);
+	}
+
+	void drawTrain(float delta) {
+
+		if (player.getX() > 100 && dialogueWindow.isVisibile() == false
+				&& train.getX() < 14000)
+			train.setPosition(train.getX() + delta * 275, train.getY());
+
+		if (train.getX() - player.getX() < 400
+				&& train.getWidth() + train.getX() - player.getX() > -400)
+
+			train.draw(batch);
 	}
 }

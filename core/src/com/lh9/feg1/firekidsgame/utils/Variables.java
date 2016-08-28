@@ -4,107 +4,107 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Variables {
 
-	static final String menuScreen = "Menu Screen";
-	static final String meetTheTrucks = "Meet The Trucks";
-	static final String fitnessScreenOne = "Fitness Screen One";
-	static final String trainingScreenOne = "Training Screen One";
-	static final String trainingScreenTwo = "Training Screen Two";
-	static final String rescueMetroScreen = "Rescue Metro Screen";
-	static final String bigRoadRescueScreen = "Big Road Rescue Screen";
-	static final String settingsScreen = "Settings Screen";
-	static final String authorsScreen = "Authors Screen";
-	static final String catRescueScreen = "Cat Rescue Screen";
-	static final String fitnessScreenTwo = "Fitness Screen Two";
-	static final String fitnessScreenThree = "Fitness Screen Three";
-	static final String elevatorScreen = "Elevator Screen";
-	static final String foodsScreen = "Foods Screen";
+	static final String MENU_SCREEN = "Menu Screen";
+	static final String MEET_THE_TRUCKS = "Meet The Trucks";
+	static final String FITNESS_SCREEN_ONE = "Fitness Screen One";
+	static final String TRAINING_SCREEN_ONE = "Training Screen One";
+	static final String TRAINING_SCREEN_TWO = "Training Screen Two";
+	static final String RESCUE_METRO_SCREEN = "Rescue Metro Screen";
+	static final String BIG_ROAD_RESCUE_SCREEN = "Big Road Rescue Screen";
+	static final String SETTINGS_SCREEN = "Settings Screen";
+	static final String AUTHORS_SCREEN = "Authors Screen";
+	static final String CAT_RESCUE_SCREEN = "Cat Rescue Screen";
+	static final String FITNESS_SCREEN_TWO = "Fitness Screen Two";
+	static final String FITNESS_SCREEN_THREE = "Fitness Screen Three";
+	static final String ELEVATOR_SCREEN = "Elevator Screen";
+	static final String FOODS_SCREEN = "Foods Screen";
 
-	static final double maxLogoScale = 0.5f;
-	static final double delayChangingScreens = 0f;
+	static final double MAX_LOGO_SCALE = 0.5f;
+	static final double DELAY_CHANGING_SCREENS = 0f;
 
-	static final Vector2 logoPosition = new Vector2(130, -150);
-	static final Vector2 runButtonPosition = new Vector2(650, 220);
-	static final Vector2 pauseButtonPosition = new Vector2(710, 400);
+	static final Vector2 LOGO_POSITION = new Vector2(130, -150);
+	static final Vector2 RUN_BUTTON_POSITION = new Vector2(650, 220);
+	static final Vector2 PAUSE_BUTTON_POSITION = new Vector2(710, 400);
 
-	static final boolean debugMode = false;
+	static final boolean DEBUG_MODE = false;
 
-	public boolean getDebugMode() {
-		return debugMode;
+	public boolean getDEBUG_MODE() {
+		return DEBUG_MODE;
 	}
 
-	public double getMaxLogoScale() {
-		return maxLogoScale;
+	public double getMAX_LOGO_SCALE() {
+		return MAX_LOGO_SCALE;
 	}
 
-	public double getDelayChangingScreens() {
-		return delayChangingScreens;
+	public double getDELAY_CHANGING_SCREENS() {
+		return DELAY_CHANGING_SCREENS;
 	}
 
-	public Vector2 getLogoPosition() {
-		return logoPosition;
+	public Vector2 getLOGO_POSITION() {
+		return LOGO_POSITION;
 	}
 
-	public Vector2 getRunButtonPosition() {
-		return runButtonPosition;
+	public Vector2 getRUN_BUTTON_POSITION() {
+		return RUN_BUTTON_POSITION;
 	}
 
-	public Vector2 getPauseButtonPosition() {
-		return pauseButtonPosition;
+	public Vector2 getPAUSE_BUTTON_POSITION() {
+		return PAUSE_BUTTON_POSITION;
 	}
 
-	public String getMeetTheTrucks() {
-		return meetTheTrucks;
+	public String getMEET_THE_TRUCKS() {
+		return MEET_THE_TRUCKS;
 	}
 
-	public String getFitnessScreenOne() {
-		return fitnessScreenOne;
+	public String getFITNESS_SCREEN_ONE() {
+		return FITNESS_SCREEN_ONE;
 	}
 
-	public String getTrainingScreenOne() {
-		return trainingScreenOne;
+	public String getTRAINING_SCREEN_ONE() {
+		return TRAINING_SCREEN_ONE;
 	}
 
-	public String getTrainingScreenTwo() {
-		return trainingScreenTwo;
+	public String getTRAINING_SCREEN_TWO() {
+		return TRAINING_SCREEN_TWO;
 	}
 
-	public String getRescueMetroScreen() {
-		return rescueMetroScreen;
+	public String getRESCUE_METRO_SCREEN() {
+		return RESCUE_METRO_SCREEN;
 	}
 
-	public String getBigRoadRescueScreen() {
-		return bigRoadRescueScreen;
+	public String getBIG_ROAD_RESCUE_SCREEN() {
+		return BIG_ROAD_RESCUE_SCREEN;
 	}
 
-	public String getSettingsScreen() {
-		return settingsScreen;
+	public String getSETTINGS_SCREEN() {
+		return SETTINGS_SCREEN;
 	}
 
-	public String getMenuScreen() {
-		return menuScreen;
+	public String getMENU_SCREEN() {
+		return MENU_SCREEN;
 	}
 
-	public String getAuthorsScreen() {
-		return authorsScreen;
+	public String getAUTHORS_SCREEN() {
+		return AUTHORS_SCREEN;
 	}
 
-	public String getCatRescueScreen() {
-		return catRescueScreen;
+	public String getCAT_RESCUE_SCREEN() {
+		return CAT_RESCUE_SCREEN;
 	}
 
-	public String getFitnessScreenTwo() {
-		return fitnessScreenTwo;
+	public String getFITNESS_SCREEN_TWO() {
+		return FITNESS_SCREEN_TWO;
 	}
 
-	public String getFitnessScreenThree() {
-		return fitnessScreenThree;
+	public String getFITNESS_SCREEN_THREE() {
+		return FITNESS_SCREEN_THREE;
 	}
 
-	public String getElevatorScreen() {
-		return elevatorScreen;
+	public String getELEVATOR_SCREEN() {
+		return ELEVATOR_SCREEN;
 	}
 
-	public String getFoodsScreen() {
-		return elevatorScreen;
+	public String getFOODS_SCREEN() {
+		return FOODS_SCREEN;
 	}
 }

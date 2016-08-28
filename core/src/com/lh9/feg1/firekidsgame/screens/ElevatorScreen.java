@@ -104,12 +104,12 @@ public class ElevatorScreen implements Screen {
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
-		pause.goUp((int) variables.getPauseButtonPosition().y);
-		runButton = new Button((int) variables.getRunButtonPosition().x, 0,
+		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
+		runButton = new Button((int) variables.getRUN_BUTTON_POSITION().x, 0,
 				assetsManager.runButton);
-		runButton.goUp((int) variables.getRunButtonPosition().y);
+		runButton.goUp((int) variables.getRUN_BUTTON_POSITION().y);
 
 		player = new Human();
 		if (dataOrganizer.getGender() == true)
@@ -130,7 +130,7 @@ public class ElevatorScreen implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getRescueMetroScreen());
+				playButton, variables.getRESCUE_METRO_SCREEN());
 
 		hitboxes = new Button[6];
 		selectedHitbox = new boolean[6];
@@ -471,14 +471,14 @@ public class ElevatorScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getRescueMetroScreen()) {
+				.getRESCUE_METRO_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected);
 				game.setScreen(new ElevatorScreen(game));

@@ -11,6 +11,7 @@ public class DataOrganizer {
 	boolean vibrations;
 	boolean screenAwake;
 	boolean gender;
+	boolean prompts;
 	// False is for boy
 	// True is for girl
 	int score;
@@ -19,6 +20,10 @@ public class DataOrganizer {
 	public int getScore() {
 		return score;
 	}
+	
+	public boolean getPrompts() {
+		return prompts;
+	}
 
 	public int getExperience() {
 		return experience;
@@ -26,6 +31,10 @@ public class DataOrganizer {
 
 	public void setScore(int score) {
 		this.score = score;
+	}
+
+	public void setPrompts(boolean prompts) {
+		this.prompts = prompts;
 	}
 
 	public void setExperience(int experience) {
@@ -86,6 +95,7 @@ public class DataOrganizer {
 		preferences.putBoolean("voice", voice);
 		preferences.putBoolean("textureFiltering", textureFiltering);
 		preferences.putBoolean("fps", fps);
+		preferences.putBoolean("prompts", prompts);
 		preferences.putBoolean("vibrations", vibrations);
 		preferences.putBoolean("screenAwake", screenAwake);
 		preferences.putBoolean("gender", gender);
@@ -101,6 +111,7 @@ public class DataOrganizer {
 		textureFiltering = preferences.getBoolean("textureFiltering", true);
 		fps = preferences.getBoolean("fps", false);
 		gender = preferences.getBoolean("gender", false);
+		prompts = preferences.getBoolean("prompts", false);
 		vibrations = preferences.getBoolean("vibrations", true);
 		screenAwake = preferences.getBoolean("screenAwake", true);
 		experience = preferences.getInteger("experience", 0);

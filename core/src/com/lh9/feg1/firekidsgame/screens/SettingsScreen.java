@@ -31,6 +31,7 @@ public class SettingsScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+	
 	Button menu;
 	Button settingsText;
 	Button fps;
@@ -38,6 +39,8 @@ public class SettingsScreen implements Screen {
 	Button textureFiltering;
 	Button textureFilteringText;
 	Button voice;
+	Button noPrompts;
+	Button noPromptsText;
 	Button voiceText;
 	Button vibrations;
 	Button vibrationsText;
@@ -70,6 +73,11 @@ public class SettingsScreen implements Screen {
 		
 		voice = new Button(535, -450, assetsManager.switchButton);
 		voice.goUp(205);
+		
+		noPrompts = new Button(265, -450, assetsManager.switchButton);
+		noPrompts.goUp(205);
+		noPromptsText = new Button(0, -450, assetsManager.noPrompts);
+		noPromptsText.goUp(225);
 		
 		vibrations = new Button(535, -450, assetsManager.switchButton);
 		vibrations.goUp(120);
@@ -107,7 +115,7 @@ public class SettingsScreen implements Screen {
 		inputInterpreter.setMenu(menu);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setSettingsButtons(fps, textureFiltering, voice,
-				vibrations, screenAwake, dataOrganizer);
+				vibrations, screenAwake, noPrompts,dataOrganizer);
 
 		cloudManager.stop();
 
@@ -217,6 +225,7 @@ public class SettingsScreen implements Screen {
 		vibrations.render(batch, delta);
 		screenAwake.render(batch, delta);
 		menu.render(batch, delta);
+		noPrompts.render(batch, delta);
 	}
 
 	void drawTexts(float delta) {
@@ -226,6 +235,7 @@ public class SettingsScreen implements Screen {
 		voiceText.render(batch, delta);
 		screenAwakeText.render(batch, delta);
 		settingsText.render(batch, delta);
+		noPromptsText.render(batch, delta);
 	}
 
 	void updateLogics(double delta) {
@@ -259,11 +269,16 @@ public class SettingsScreen implements Screen {
 		} else {
 			screenAwake.normal();
 		}
+		if (dataOrganizer.getPrompts() == true) {
+			noPrompts.red();
+		} else {
+			noPrompts.normal();
+		}
 	}
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new MenuScreen(game));

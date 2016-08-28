@@ -212,7 +212,7 @@ public class AuthorsScreen implements Screen {
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setScreen(new MenuScreen(game));
 			}

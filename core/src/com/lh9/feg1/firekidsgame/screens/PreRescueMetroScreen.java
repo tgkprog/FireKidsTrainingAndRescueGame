@@ -240,7 +240,7 @@ public class PreRescueMetroScreen implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTrainingScreenTwo());
+				playButton, variables.getTRAINING_SCREEN_TWO());
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
@@ -759,14 +759,14 @@ public class PreRescueMetroScreen implements Screen {
 	}
 		
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreenTwo()) {
+				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new PreRescueMetroScreen(game));

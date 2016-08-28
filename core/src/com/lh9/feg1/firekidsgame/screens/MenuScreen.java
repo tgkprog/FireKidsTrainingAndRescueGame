@@ -292,70 +292,70 @@ public class MenuScreen implements Screen {
 
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMeetTheTrucks()) {
+				.getMEET_THE_TRUCKS()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new RescueMetroScreen(game));
+				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getElevatorScreen()) {
+				.getELEVATOR_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new PreElevatorScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getCatRescueScreen()) {
+				.getCAT_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new PreRescueCatScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getAuthorsScreen()) {
+				.getAUTHORS_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new AuthorsScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getSettingsScreen()) {
+				.getSETTINGS_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new SettingsScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getBigRoadRescueScreen()) {
+				.getBIG_ROAD_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new BigRoadRescueScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getRescueMetroScreen()) {
+				.getRESCUE_METRO_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new PreRescueMetroScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreenTwo()) {
+				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new TrainingScreenTwo(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTrainingScreenOne()) {
+				.getTRAINING_SCREEN_ONE()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new TrainingScreenOne(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getFitnessScreenOne()) {
+				.getFITNESS_SCREEN_ONE()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new FitnessScreenOne(game));

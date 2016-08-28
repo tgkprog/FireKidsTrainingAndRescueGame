@@ -116,7 +116,7 @@ public class InputInterpreter implements GestureListener {
 		touchDownX = x;
 		touchDownY = y;
 
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("touchDown");
 
 		Vector3 vec = new Vector3();
@@ -144,7 +144,7 @@ public class InputInterpreter implements GestureListener {
 	public boolean tap(float x, float y, int count, int button) {
 		// TODO Auto-generated method stub
 
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("tap");
 		touched = true;
 
@@ -154,7 +154,7 @@ public class InputInterpreter implements GestureListener {
 	@Override
 	public boolean longPress(float x, float y) {
 		// TODO Auto-generated method stub
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("longPress");
 		return false;
 	}
@@ -183,7 +183,7 @@ public class InputInterpreter implements GestureListener {
 		panX = x;
 		panY = y;
 
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("pan");
 
 		return false;
@@ -193,7 +193,7 @@ public class InputInterpreter implements GestureListener {
 	public boolean panStop(float x, float y, int pointer, int button) {
 		// TODO Auto-generated method stub
 
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("panStop");
 		panned = false;
 		justStoppedPanning = true;
@@ -204,7 +204,7 @@ public class InputInterpreter implements GestureListener {
 	@Override
 	public boolean zoom(float initialDistance, float distance) {
 
-		if (variables.getDebugMode() == true) {
+		if (variables.getDEBUG_MODE() == true) {
 			System.out.println("zoom");
 
 			System.out.println("initialDistance: " + initialDistance
@@ -229,7 +229,7 @@ public class InputInterpreter implements GestureListener {
 			Vector2 pointer1, Vector2 pointer2) {
 		// TODO Auto-generated method stub
 
-		if (variables.getDebugMode() == true)
+		if (variables.getDEBUG_MODE() == true)
 			System.out.println("pinch");
 		return false;
 	}
@@ -285,6 +285,11 @@ public class InputInterpreter implements GestureListener {
 					dataOrganizer.setScreenAwake(!dataOrganizer
 							.getScreenAwake());
 				}
+				if (settingsButtons[5].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[5].blink();
+					dataOrganizer.setPrompts(!dataOrganizer
+							.getPrompts());
+				}
 			}
 			if (retryButton != null) {
 				if (retryButton.checkCollision((int) x, (int) y) == true) {
@@ -302,21 +307,21 @@ public class InputInterpreter implements GestureListener {
 			if (settings != null) {
 				if (settings.checkCollision((int) x, (int) y) == true) {
 					settings.blink();
-					selectedScreen = variables.getSettingsScreen();
+					selectedScreen = variables.getSETTINGS_SCREEN();
 					cloudManager.start();
 				}
 			}
 			if (authors != null) {
 				if (authors.checkCollision((int) x, (int) y) == true) {
 					authors.blink();
-					selectedScreen = variables.getAuthorsScreen();
+					selectedScreen = variables.getAUTHORS_SCREEN();
 					cloudManager.start();
 				}
 			}
 			if (menu != null) {
 				if (menu.checkCollision((int) x, (int) y) == true) {
 					menu.blink();
-					selectedScreen = variables.getMenuScreen();
+					selectedScreen = variables.getMENU_SCREEN();
 					cloudManager.start();
 				}
 			}
@@ -378,7 +383,7 @@ public class InputInterpreter implements GestureListener {
 				}
 				if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
 					meetTheTrucks.blink();
-					selectedScreen = variables.getMeetTheTrucks();
+					selectedScreen = variables.getMEET_THE_TRUCKS();
 					cloudManager.start();
 				}
 
@@ -387,31 +392,31 @@ public class InputInterpreter implements GestureListener {
 						levelButtons[a].blink();
 
 						if (a == 0 && screensPlayed[a] == true) {
-							selectedScreen = variables.getFitnessScreenOne();
+							selectedScreen = variables.getFITNESS_SCREEN_ONE();
 							cloudManager.start();
 						}
 						if (a == 1 && screensPlayed[a] == true) {
-							selectedScreen = variables.getTrainingScreenOne();
+							selectedScreen = variables.getTRAINING_SCREEN_ONE();
 							cloudManager.start();
 						}
 						if (a == 2 && screensPlayed[a] == true) {
-							selectedScreen = variables.getTrainingScreenTwo();
+							selectedScreen = variables.getTRAINING_SCREEN_TWO();
 							cloudManager.start();
 						}
 						if (a == 3 && screensPlayed[a] == true) {
-							selectedScreen = variables.getCatRescueScreen();
+							selectedScreen = variables.getCAT_RESCUE_SCREEN();
 							cloudManager.start();
 						}
 						if (a == 4 && screensPlayed[a] == true) {
-							selectedScreen = variables.getRescueMetroScreen();
+							selectedScreen = variables.getRESCUE_METRO_SCREEN();
 							cloudManager.start();
 						}
 						if (a == 5 && screensPlayed[a] == true) {
-							selectedScreen = variables.getElevatorScreen();
+							selectedScreen = variables.getELEVATOR_SCREEN();
 							cloudManager.start();
 						}
 						if (a == 6 && screensPlayed[a] == true) {
-							selectedScreen = variables.getBigRoadRescueScreen();
+							selectedScreen = variables.getBIG_ROAD_RESCUE_SCREEN();
 							cloudManager.start();
 						}
 					}
@@ -527,14 +532,16 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	public void setSettingsButtons(Button fps, Button textureFiltering,
-			Button voice, Button vibrations, Button screenAwake,
+			Button voice, Button vibrations, Button screenAwake, Button noPrompts,
 			DataOrganizer dataOrganizer) {
-		settingsButtons = new Button[5];
+		settingsButtons = new Button[6];
 		settingsButtons[0] = fps;
 		settingsButtons[1] = textureFiltering;
 		settingsButtons[2] = voice;
 		settingsButtons[3] = vibrations;
 		settingsButtons[4] = screenAwake;
+		settingsButtons[5] = noPrompts;
+		
 		this.dataOrganizer = dataOrganizer;
 	}
 

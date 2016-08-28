@@ -84,9 +84,9 @@ public class RescueCatScreen implements Screen {
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
 
-		pause = new Button((int) variables.getPauseButtonPosition().x, 120,
+		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
-		pause.goUp((int) variables.getPauseButtonPosition().y);
+		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
 
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
@@ -100,7 +100,7 @@ public class RescueCatScreen implements Screen {
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getCatRescueScreen());
+				playButton, variables.getCAT_RESCUE_SCREEN());
 
 		truck = new Truck();
 		truck.create(assetsManager.truckNoBasket, 3, 3, 1, 3000, 350);
@@ -449,14 +449,14 @@ public class RescueCatScreen implements Screen {
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMenuScreen()) {
+				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getCatRescueScreen()) {
+				.getCAT_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new RescueCatScreen(game));
