@@ -30,6 +30,43 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class PreElevatorScreen implements Screen {
 
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	Button up;
+	Button down;
+	Button pause;
+	Button runButton;
+
+	Sprite guiStar;
+	Sprite playerHead;
+	Sprite truckLed;
+	Sprite fireMiniature;
+	Sprite pointer;
+
+	Bar speedBar;
+
+	ArrayList<StaticAnimation> fire;
+	StaticAnimation peopleGround;
+	StaticAnimation peopleBuilding;
+	StaticAnimation fountains[];
+
+	Array<Car> cars;
+	Array<Star> stars;
+	Truck truck;
+	MenuWindow menuWindow;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	Dialogue dialogueWindow;
+	CloudManager cloudManager;
+	Variables variables;
+	AssetsManager assetsManager;
+	Camera camera;
+	OrthographicCamera guiCamera;
+	SpriteBatch batch;
+	InputInterpreter inputInterpreter;
+	
+	boolean enlargeStar;
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -48,42 +85,8 @@ public class PreElevatorScreen implements Screen {
 	float peopleBuildingTimer;
 	int lastTimeCarLane;
 	int starsAll;
-	Sprite fireMiniature;
-	Truck truck;
-	Button menuButton;
-	Button retryButton;
-	Button playButton;
-	MenuWindow menuWindow;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	Sprite boyHead;
-	Bar speedBar;
-	Sprite truckLed;
-	StaticAnimation fountains[];
-	Sprite pointer;
-	ArrayList<StaticAnimation> fire;
-	StaticAnimation peopleGround;
-	StaticAnimation peopleBuilding;
-	ArrayList<Car> cars;
-	Button up;
-	Button down;
-	Button pause;
-	Button runButton;
-	Dialogue dialogueWindow;
-	CloudManager cloudManager;
-	Variables variables;
-	AssetsManager assetsManager;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	SpriteBatch batch;
-	InputInterpreter inputInterpreter;
-
-	Array<Star> stars;
-	Sprite guiStar;
-	boolean enlargeStar;
-	int starsCollected = 0;
+	int starsCollected;
 	int starsCollectedLastFrame;
-
 	
 	final Starter game;
 
@@ -145,7 +148,7 @@ public class PreElevatorScreen implements Screen {
 		truck.goLeft();
 		truck.setSpeed(5);
 
-		cars = new ArrayList<Car>();
+		cars = new Array<Car>();
 		for (int a = 0; a < 10; a++) {
 			spawnRandomCar(a);
 		}
@@ -246,11 +249,11 @@ public class PreElevatorScreen implements Screen {
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 		if (dataOrganizer.getGender() == false)
-			boyHead = new Sprite(assetsManager.boyButton);
+			playerHead = new Sprite(assetsManager.boyButton);
 		else
-			boyHead = new Sprite(assetsManager.girlButton);
+			playerHead = new Sprite(assetsManager.girlButton);
 
-		boyHead.setScale(0.5f);
+		playerHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.elevatorMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(275, 410);
@@ -693,8 +696,8 @@ public class PreElevatorScreen implements Screen {
 	void drawBars(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
 
-		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
-		boyHead.draw(batch);
+		playerHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		playerHead.draw(batch);
 		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, truck.getSpeed());
 

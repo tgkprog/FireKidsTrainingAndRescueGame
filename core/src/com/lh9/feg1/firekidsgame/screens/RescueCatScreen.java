@@ -8,7 +8,6 @@ import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.utils.Array;
 import com.lh9.feg1.firekidsgame.Starter;
-import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
@@ -25,15 +24,7 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
-	int starsAll;
-	Sprite cloudsFar;
-	Sprite cloudsClose;
-	Sprite basket;
-	Truck truck;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	Bar timeLeftBar;
-	Bar counterLeftBar;
+	Button pause;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
@@ -41,10 +32,20 @@ public class RescueCatScreen implements Screen {
 	Button down;
 	Button runLeft;
 	Button runRight;
-	MenuWindow menuWindow;
+	Sprite guiStar;
+	Sprite cloudsFar;
+	Sprite cloudsClose;
+	Sprite basket;
+	
+	Bar timeLeftBar;
+	Bar counterLeftBar;
 	Bar speedBar;
-	Human girl;
-	Button pause;
+
+	Array<Star> stars;
+	Truck truck;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	MenuWindow menuWindow;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
 	Variables variables;
@@ -55,25 +56,21 @@ public class RescueCatScreen implements Screen {
 	InputInterpreter inputInterpreter;
 
 	float cloudPositionAdder = 100;
-	boolean cloudPositionAdd;
-
+	float buttonsAlpha;
+	float rotation;
 	float timerWin;
-	float timerSpeedGirl;
 	float greenTimer = 1;
 	boolean exit;
 	boolean startedClouds;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
-	float buttonsAlpha;
-	float rotation;
-
-	Array<Star> stars;
-	Sprite guiStar;
 	boolean enlargeStar;
-	int starsCollected = 0;
+	boolean cloudPositionAdd;
+	int starsCollected;
 	int starsCollectedLastFrame;
-
+	int starsAll;
+	
 	final Starter game;
 
 	public RescueCatScreen(final Starter gam) {

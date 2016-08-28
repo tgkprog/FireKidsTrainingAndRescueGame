@@ -30,7 +30,44 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class PreRescueMetroScreen implements Screen {
 
-	int starsAll;
+	Array<Star> stars;
+	
+	Sprite guiStar;
+	Sprite fireMiniature;
+	Sprite truckLed;
+	Sprite playerHead;
+	Sprite pointer;
+	
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	Button up;
+	Button down;
+	Button pause;
+	Button runButton;
+	
+	StaticAnimation peopleGround;
+	StaticAnimation peopleBuilding;
+	
+	ArrayList<StaticAnimation> fire;
+	StaticAnimation fountains[];
+	
+	ArrayList<Car> cars;
+	Truck truck;
+	MenuWindow menuWindow;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	Bar speedBar;
+	Dialogue dialogueWindow;
+	CloudManager cloudManager;
+	Variables variables;
+	AssetsManager assetsManager;
+	Camera camera;
+	OrthographicCamera guiCamera;
+	SpriteBatch batch;
+	InputInterpreter inputInterpreter;
+
+	boolean enlargeStar;
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -48,44 +85,10 @@ public class PreRescueMetroScreen implements Screen {
 	float peopleGroundTimer;
 	float peopleBuildingTimer;
 	int lastTimeCarLane;
-
-	Sprite fireMiniature;
-	Truck truck;
-	Button menuButton;
-	Button retryButton;
-	Button playButton;
-	MenuWindow menuWindow;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	Sprite boyHead;
-	Bar speedBar;
-	Sprite truckLed;
-	StaticAnimation fountains[];
-	Sprite pointer;
-	ArrayList<StaticAnimation> fire;
-	StaticAnimation peopleGround;
-	StaticAnimation peopleBuilding;
-	ArrayList<Car> cars;
-	Button up;
-	Button down;
-	Button pause;
-	Button runButton;
-	Dialogue dialogueWindow;
-	CloudManager cloudManager;
-	Variables variables;
-	AssetsManager assetsManager;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	SpriteBatch batch;
-	InputInterpreter inputInterpreter;
-
-
-	Array<Star> stars;
-	Sprite guiStar;
-	boolean enlargeStar;
-	int starsCollected = 0;
+	int starsAll;
+	int starsCollected;
 	int starsCollectedLastFrame;
-	
+		
 	final Starter game;
 
 	public PreRescueMetroScreen(final Starter gam) {
@@ -247,11 +250,11 @@ public class PreRescueMetroScreen implements Screen {
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		if(dataOrganizer.getGender() == false)
-		boyHead = new Sprite(assetsManager.boyButton);
+		playerHead = new Sprite(assetsManager.boyButton);
 		else
-			boyHead = new Sprite(assetsManager.girlButton);
+			playerHead = new Sprite(assetsManager.girlButton);
 		
-			boyHead.setScale(0.5f);
+			playerHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.trainMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(120, 410);
@@ -691,8 +694,8 @@ public class PreRescueMetroScreen implements Screen {
 	void drawBars(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
 
-		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
-		boyHead.draw(batch);
+		playerHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		playerHead.draw(batch);
 		fireMiniature.draw(batch);
 		speedBar.render(batch, delta, truck.getSpeed());
 

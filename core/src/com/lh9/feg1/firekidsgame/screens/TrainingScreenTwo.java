@@ -30,6 +30,42 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class TrainingScreenTwo implements Screen {
 
+	Sprite guiStar;
+	Sprite fireMiniature;
+	Sprite pointer;
+	Sprite playerHead;
+	Sprite truckLed;
+	
+	Button menuButton;
+	Button retryButton;
+	Button playButton;
+	Button up;
+	Button down;
+	Button pause;
+	Button runButton;
+	
+	StaticAnimation peopleGround;
+	StaticAnimation peopleBuilding;
+	
+	Array<Star> stars;
+	ArrayList<StaticAnimation> fire;
+	ArrayList<Car> cars;
+	
+	Truck truck;
+	MenuWindow menuWindow;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	Bar speedBar;
+	StaticAnimation fountains[];
+	Dialogue dialogueWindow;
+	CloudManager cloudManager;
+	Variables variables;
+	AssetsManager assetsManager;
+	Camera camera;
+	OrthographicCamera guiCamera;
+	SpriteBatch batch;
+	InputInterpreter inputInterpreter;
+	
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -39,6 +75,7 @@ public class TrainingScreenTwo implements Screen {
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
+	boolean enlargeStar;
 	float timerSpeedGirl;
 	float timerSpawnCar;
 	float timerLastPopUp;
@@ -47,43 +84,9 @@ public class TrainingScreenTwo implements Screen {
 	float peopleBuildingTimer;
 	int lastTimeCarLane;
 	int starsAll;
-
-	Array<Star> stars;
-	Sprite guiStar;
-	boolean enlargeStar;
-	int starsCollected = 0;
+	int starsCollected;
 	int starsCollectedLastFrame;
-
-	Sprite fireMiniature;
-	Truck truck;
-	Button menuButton;
-	Button retryButton;
-	Button playButton;
-	MenuWindow menuWindow;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	Sprite boyHead;
-	Bar speedBar;
-	Sprite truckLed;
-	StaticAnimation fountains[];
-	Sprite pointer;
-	ArrayList<StaticAnimation> fire;
-	StaticAnimation peopleGround;
-	StaticAnimation peopleBuilding;
-	ArrayList<Car> cars;
-	Button up;
-	Button down;
-	Button pause;
-	Button runButton;
-	Dialogue dialogueWindow;
-	CloudManager cloudManager;
-	Variables variables;
-	AssetsManager assetsManager;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	SpriteBatch batch;
-	InputInterpreter inputInterpreter;
-
+	
 	final Starter game;
 
 	public TrainingScreenTwo(final Starter gam) {
@@ -243,11 +246,11 @@ public class TrainingScreenTwo implements Screen {
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		if (dataOrganizer.getGender() == false)
-			boyHead = new Sprite(assetsManager.boyButton);
+			playerHead = new Sprite(assetsManager.boyButton);
 		else
-			boyHead = new Sprite(assetsManager.girlButton);
+			playerHead = new Sprite(assetsManager.girlButton);
 
-		boyHead.setScale(0.5f);
+		playerHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.fireMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(160, 410);
@@ -700,8 +703,8 @@ public class TrainingScreenTwo implements Screen {
 	void drawBars(float delta) {
 		batch.draw(assetsManager.speedBar, 160, 440);
 
-		boyHead.setPosition(530 + truck.getX() * 0.0255f, 410);
-		boyHead.draw(batch);
+		playerHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		playerHead.draw(batch);
 
 		fireMiniature.draw(batch);
 

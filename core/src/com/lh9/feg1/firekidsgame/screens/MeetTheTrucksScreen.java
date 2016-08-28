@@ -31,34 +31,10 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class MeetTheTrucksScreen implements Screen {
 
-	Bar wallHits;
-	ArrayList<Vector2> waterPositions;
-	ArrayList<Vector2> waterVelocities;
-	Sprite cartoonWater;
-	ArrayList<Sprite> footMarks;
-	Human girlHoseHydrant;
-	Human girlHoseHydrantReversed;
-	FallingText breakTheWall;
-	FallingText eclipseFire;
-	FallingText jump;
-	FallingText rideTruck;
-	Sprite truckLed;
 	Truck truck;
 	FPSManager fpsManager;
-	Sprite[] wallHitAnimation;
 	DataOrganizer dataOrganizer;
-	Button menuButton;
-	Sprite truckMiniature;
-	Button up;
-	Sprite boyHead;
-	Button retryButton;
-	Button playButton;
-	Sprite fireMiniature;
 	MenuWindow menuWindow;
-	Bar speedBar;
-	Human girl;
-	Button pause;
-	Button runButton;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
 	Variables variables;
@@ -67,13 +43,39 @@ public class MeetTheTrucksScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
+
+	Vector2[] fireAnimationScales;
+	ArrayList<Vector2> waterPositions;
+	ArrayList<Vector2> waterVelocities;
+
+	Human player;
+	Human playerHoseHydrant;
+	Human playerHoseHydrantReversed;
+
+	FallingText breakTheWall;
+	FallingText eclipseFire;
+	FallingText jump;
+	FallingText rideTruck;
+
+	Bar speedBar;
+	Bar wallHits;
+
+	Button menuButton;
+	Button up;
+	Button retryButton;
+	Button playButton;
+	Button pause;
+	Button runButton;
+
+	Sprite[] wallHitAnimation;
+	Sprite truckLed;
+	Sprite truckMiniature;
+	Sprite playerHead;
+	Sprite fireMiniature;
 	Sprite oil;
 	Sprite pointer;
-	StaticAnimation fireAnimation;
-	StaticAnimation fireAnimationBig;
-	StaticAnimation fireAnimationBiggest;
-	Vector2[] fireAnimationScales;
 	Sprite guiStar;
+	Sprite cartoonWater;
 
 	Array<Sprite> bushes;
 	Array<Sprite> trees;
@@ -81,19 +83,18 @@ public class MeetTheTrucksScreen implements Screen {
 	Array<Sprite> lakes;
 	Array<Sprite> grassFlowers;
 	Array<Sprite> stars;
+	ArrayList<Sprite> footMarks;
+
+	StaticAnimation fireAnimation;
+	StaticAnimation fireAnimationBig;
+	StaticAnimation fireAnimationBiggest;
 
 	int starsCollectedLastFrame;
-	boolean enlargeStar;
 	int starsCollected = 0;
 	int starsAll = 0;
-	float PositionTimer = 0;
-	float spawnWaterTimer;
+	int wallHitCounter = 24;
 	boolean leftFoot;
-	float footmarkSpawnTimer;
-	float waterRange;
 	boolean pat = true;
-	float jumpAlpha = 0.5f;
-	float timerSpeedGirl;
 	boolean exit;
 	boolean pointersGoUp;
 	boolean firstDialogueClicked;
@@ -101,16 +102,23 @@ public class MeetTheTrucksScreen implements Screen {
 	boolean finish;
 	boolean truckPart;
 	boolean eclipsePart;
-	float runningPositionTimer;
-	boolean girlHoseStarted;
-	float pointersPosition;
-	float girlPositionLastFrame;
+	boolean playerHoseStarted;
 	boolean finishingRun;
-	float truckBackDoorPosition = 108;
 	boolean reverseHoseAnimation;
-	int wallHitCounter = 24;
 	boolean setWallHitCounter;
-	float girlPositionTimer;
+	boolean enlargeStar;
+	float footmarkSpawnTimer;
+	float PositionTimer = 0;
+	float spawnWaterTimer;
+	float waterRange;
+	float jumpAlpha = 0.5f;
+	float timerSpeedplayer;
+	float truckBackDoorPosition = 108;
+	float pointersPosition;
+	float playerPositionLastFrame;
+	float runningPositionTimer;
+	float playerPositionTimer;
+
 	final Starter game;
 
 	public MeetTheTrucksScreen(final Starter gam) {
@@ -153,21 +161,19 @@ public class MeetTheTrucksScreen implements Screen {
 
 		wallHitAnimation = new Sprite[2];
 		if (dataOrganizer.getGender() == true) {
-			girl = new Human();
-			
-			//player = new Human();
-		
-			girl.create(assetsManager.girlRunningSuit, 31, 1, 31, -150, 35);
+			player = new Human();
 
-			boyHead = new Sprite(assetsManager.girlButton);
+			player.create(assetsManager.girlRunningSuit, 31, 1, 31, -150, 35);
 
-			girlHoseHydrant = new Human();
-			girlHoseHydrant.create(assetsManager.girlHoseHydrant, 1, 7, 7,
+			playerHead = new Sprite(assetsManager.girlButton);
+
+			playerHoseHydrant = new Human();
+			playerHoseHydrant.create(assetsManager.girlHoseHydrant, 1, 7, 7,
 					11500, 30);
-			girlHoseHydrantReversed = new Human();
-			girlHoseHydrantReversed.create(
+			playerHoseHydrantReversed = new Human();
+			playerHoseHydrantReversed.create(
 					assetsManager.girlHoseHydrantReversed, 1, 7, 7, 11500, 30);
-			girlHoseHydrantReversed.setAnimationTime(0.1f);
+			playerHoseHydrantReversed.setAnimationTime(0.1f);
 
 			wallHitAnimation[0] = new Sprite(
 					assetsManager.girlHammer_16_percent[0]);
@@ -178,18 +184,18 @@ public class MeetTheTrucksScreen implements Screen {
 			wallHitAnimation[1].setPosition(12560, 30);
 
 		} else {
-			girl = new Human();
-			girl.create(assetsManager.boyRunningSuit, 31, 1, 31, -150, 35);
+			player = new Human();
+			player.create(assetsManager.boyRunningSuit, 31, 1, 31, -150, 35);
 
-			boyHead = new Sprite(assetsManager.boyButton);
+			playerHead = new Sprite(assetsManager.boyButton);
 
-			girlHoseHydrant = new Human();
-			girlHoseHydrant.create(assetsManager.boyHoseHydrant, 1, 7, 7,
+			playerHoseHydrant = new Human();
+			playerHoseHydrant.create(assetsManager.boyHoseHydrant, 1, 7, 7,
 					11500, 30);
-			girlHoseHydrantReversed = new Human();
-			girlHoseHydrantReversed.create(
+			playerHoseHydrantReversed = new Human();
+			playerHoseHydrantReversed.create(
 					assetsManager.boyHoseHydrantReversed, 1, 7, 7, 11500, 30);
-			girlHoseHydrantReversed.setAnimationTime(0.1f);
+			playerHoseHydrantReversed.setAnimationTime(0.1f);
 
 			wallHitAnimation[0] = new Sprite(
 					assetsManager.boyHammer_16_percent[0]);
@@ -200,11 +206,11 @@ public class MeetTheTrucksScreen implements Screen {
 
 		}
 
-		boyHead.setScale(0.5f);
+		playerHead.setScale(0.5f);
 
-		girl.setMaxSpeed(5);
-		girl.setAnimationTime(0.035f);
-		
+		player.setMaxSpeed(5);
+		player.setAnimationTime(0.035f);
+
 		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 35);
 		truck.setMaxSpeed(20);
@@ -222,7 +228,7 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
-		inputInterpreter.setControlledHuman(girl);
+		inputInterpreter.setControlledHuman(player);
 		inputInterpreter.setJump(up);
 		cloudManager.stop();
 
@@ -285,8 +291,8 @@ public class MeetTheTrucksScreen implements Screen {
 		fireAnimationBiggest.setWithPreviousFrame(true);
 		fireAnimationBiggest.start();
 
-		girlHoseHydrant.setOnceOnly();
-		girlHoseHydrantReversed.setOnceOnly();
+		playerHoseHydrant.setOnceOnly();
+		playerHoseHydrantReversed.setOnceOnly();
 
 		footMarks = new ArrayList<Sprite>();
 
@@ -467,7 +473,7 @@ public class MeetTheTrucksScreen implements Screen {
 	public void render(float delta) {
 
 		inputInterpreter.checkKeyboardInput();
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -555,7 +561,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawCharacters(float delta) {
 
-		if (girl.getX() == 12550 && finishingRun == false) {
+		if (player.getX() == 12550 && finishingRun == false) {
 
 			if (runButton.getCounter() % 2 == 0)
 				wallHitAnimation[0].draw(batch);
@@ -565,38 +571,39 @@ public class MeetTheTrucksScreen implements Screen {
 			assetsManager.hit.setPosition(12640, 135);
 		}
 
-		if (girl.getX() < 2270 || eclipsePart == true && girl.getX() <= 11750
-				&& !(girl.getX() == 12550 && finishingRun == false))
-			girl.render(batch, delta);
+		if (player.getX() < 2270 || eclipsePart == true
+				&& player.getX() <= 11750
+				&& !(player.getX() == 12550 && finishingRun == false))
+			player.render(batch, delta);
 
-		if (girl.getX() > 1000 && girl.getX() < 11000)
+		if (player.getX() > 1000 && player.getX() < 11000)
 			truck.render(batch, delta);
 
-		if (girl.getX() > 11750 && reverseHoseAnimation == false) {
-			girlHoseHydrant.render(batch, delta);
+		if (player.getX() > 11750 && reverseHoseAnimation == false) {
+			playerHoseHydrant.render(batch, delta);
 		}
-		girlHoseHydrant.setPosition(11700, 35);
+		playerHoseHydrant.setPosition(11700, 35);
 
 		if (reverseHoseAnimation == true
-				&& girlHoseHydrantReversed.getSpeed() != 0) {
-			girlHoseHydrantReversed.setPosition(11700, 35);
-			girlHoseHydrantReversed.render(batch, delta);
+				&& playerHoseHydrantReversed.getSpeed() != 0) {
+			playerHoseHydrantReversed.setPosition(11700, 35);
+			playerHoseHydrantReversed.render(batch, delta);
 		}
 		if (reverseHoseAnimation == true
-				&& girlHoseHydrantReversed.getSpeed() == 0
-				&& !(girl.getX() == 12550 && finishingRun == false)) {
-			girl.render(batch, delta);
+				&& playerHoseHydrantReversed.getSpeed() == 0
+				&& !(player.getX() == 12550 && finishingRun == false)) {
+			player.render(batch, delta);
 		}
 
-		if (Math.abs(girlHoseHydrant.getSpeed()) < 5f)
-			girlHoseHydrant.setSpeed(0);
-		if (Math.abs(girlHoseHydrantReversed.getSpeed()) < 5f)
-			girlHoseHydrantReversed.setSpeed(0);
+		if (Math.abs(playerHoseHydrant.getSpeed()) < 5f)
+			playerHoseHydrant.setSpeed(0);
+		if (Math.abs(playerHoseHydrantReversed.getSpeed()) < 5f)
+			playerHoseHydrantReversed.setSpeed(0);
 
-		if (girl.getX() >= 11750 && girlHoseStarted == false) {
-			girlHoseHydrant.setSpeed(6);
-			girlHoseStarted = true;
-			girlHoseHydrant.setAnimationTime(0.1f);
+		if (player.getX() >= 11750 && playerHoseStarted == false) {
+			playerHoseHydrant.setSpeed(6);
+			playerHoseStarted = true;
+			playerHoseHydrant.setAnimationTime(0.1f);
 		}
 
 	}
@@ -608,31 +615,31 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawTexts(float delta) {
-		if (girl.getX() > 0) {
+		if (player.getX() > 0) {
 			jump.start();
 		}
-		if (girl.getX() > 1300) {
+		if (player.getX() > 1300) {
 			jump.stop();
 			rideTruck.start();
 		}
-		if (girl.getX() > 9500) {
+		if (player.getX() > 9500) {
 			jump.start();
 			rideTruck.stop();
 		}
-		if (girl.getX() > 11400) {
+		if (player.getX() > 11400) {
 			jump.stop();
 			rideTruck.stop();
 			eclipseFire.start();
 		}
-		if (girl.getX() > 11800) {
+		if (player.getX() > 11800) {
 			jump.stop();
 			rideTruck.stop();
 			eclipseFire.stop();
 		}
-		if (girl.getX() > 11900) {
+		if (player.getX() > 11900) {
 			breakTheWall.start();
 		}
-		if (girl.getX() > 12650)
+		if (player.getX() > 12650)
 			breakTheWall.stop();
 
 		breakTheWall.render(batch, delta);
@@ -648,14 +655,14 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		if (girl.getX() >= 12550 && finishingRun == false) {
+		if (player.getX() >= 12550 && finishingRun == false) {
 
 			if (runButton.getSelection() == true) {
 				assetsManager.hit.start();
 			} else
 				assetsManager.hit.allowCompletion();
-			girl.setSpeed(1);
-			girl.setPosition(12550, (int) girl.getY());
+			player.setSpeed(1);
+			player.setPosition(12550, (int) player.getY());
 			if (setWallHitCounter == false) {
 				runButton.resetCounter();
 				setWallHitCounter = true;
@@ -665,57 +672,60 @@ public class MeetTheTrucksScreen implements Screen {
 
 		}
 
-		if (girl.getX() >= 14000)
-			girl.setPosition(14000, (int) girl.getY());
+		if (player.getX() >= 14000)
+			player.setPosition(14000, (int) player.getY());
 
-		if (girl.getX() > 10510 && girl.getX() < 10550 && girl.getY() == 35) {
-			girl.setSpeed(girl.getSpeed() * 0.3f);
-			if (Math.abs(girl.getSpeed()) < 1f)
-				girl.setSpeed(1);
+		if (player.getX() > 10510 && player.getX() < 10550
+				&& player.getY() == 35) {
+			player.setSpeed(player.getSpeed() * 0.3f);
+			if (Math.abs(player.getSpeed()) < 1f)
+				player.setSpeed(1);
 		}
-		if (girl.getX() > 10860 && girl.getX() < 10900 && girl.getY() == 35) {
-			girl.setSpeed(girl.getSpeed() * 0.3f);
+		if (player.getX() > 10860 && player.getX() < 10900
+				&& player.getY() == 35) {
+			player.setSpeed(player.getSpeed() * 0.3f);
 
-			if (Math.abs(girl.getSpeed()) < 1f)
-				girl.setSpeed(1);
+			if (Math.abs(player.getSpeed()) < 1f)
+				player.setSpeed(1);
 		}
-		if (girl.getX() > 11210 && girl.getX() < 11250 && girl.getY() == 35) {
-			girl.setSpeed(girl.getSpeed() * 0.3f);
+		if (player.getX() > 11210 && player.getX() < 11250
+				&& player.getY() == 35) {
+			player.setSpeed(player.getSpeed() * 0.3f);
 
-			if (Math.abs(girl.getSpeed()) < 1f)
-				girl.setSpeed(1);
+			if (Math.abs(player.getSpeed()) < 1f)
+				player.setSpeed(1);
 		}
 
-		if (girl.getY() == 35) {
+		if (player.getY() == 35) {
 			runningPositionTimer += delta;
 
-			if (runningPositionTimer > 1 / girl.getSpeed() + 0.2f) {
-				assetsManager.running
-						.setPosition(girl.getX() + 10, girl.getY());
+			if (runningPositionTimer > 1 / player.getSpeed() + 0.2f) {
+				assetsManager.running.setPosition(player.getX() + 10,
+						player.getY());
 				runningPositionTimer = 0;
 			} else
-				assetsManager.running
-						.setPosition(girl.getX() + 90, girl.getY());
+				assetsManager.running.setPosition(player.getX() + 90,
+						player.getY());
 
 			assetsManager.running.start();
 		} else
 			assetsManager.running.allowCompletion();
 
-		if (girl.getY() != 35 && girl.getY() != 110) {
+		if (player.getY() != 35 && player.getY() != 110) {
 			pat = false;
 		} else if (pat == false) {
-			assetsManager.hit.setPosition(girl.getX() + 55, girl.getY());
+			assetsManager.hit.setPosition(player.getX() + 55, player.getY());
 			assetsManager.hit.start();
 			pat = true;
 		}
-		if (girl.getX() < 2270 && truckPart == false) {
+		if (player.getX() < 2270 && truckPart == false) {
 			truck.setSpeed(-0.001f);
 			truck.setPosition(1550, 35);
 		} else if (eclipsePart == false) {
 			speedBar.setVisibility(true);
 			truckPart = true;
-			girl.setPosition((int) truck.getX() + 720, 35);
-			girl.setSpeed(truck.getSpeed());
+			player.setPosition((int) truck.getX() + 720, 35);
+			player.setSpeed(truck.getSpeed());
 			if (truck.getSpeed() >= 0)
 				truck.setSpeed(-0.001f);
 
@@ -723,26 +733,23 @@ public class MeetTheTrucksScreen implements Screen {
 
 			inputInterpreter.setRunButtonSecond(runButton);
 			inputInterpreter.setRunButton(null);
-
 			inputInterpreter.setControlledTruck(truck);
 			inputInterpreter.setControlledHuman(truck);
 		}
-
 		if (truck.getX() >= 9000) {
 			truck.setFriction(30);
 		}
-
 		if (truck.getX() >= 9000 && Math.abs(truck.getSpeed()) < 0.9f
 				&& eclipsePart == false) {
 			eclipsePart = true;
 
 			inputInterpreter.setRunButton(runButton);
-			inputInterpreter.setControlledHuman(girl);
+			inputInterpreter.setControlledHuman(player);
 			inputInterpreter.setControlledTruck(null);
 			inputInterpreter.setRunButtonSecond(null);
 
 			speedBar.setVisibility(false);
-			girl.setSpeed(5);
+			player.setSpeed(5);
 			runButton.setDontRespond(false);
 		}
 
@@ -750,7 +757,7 @@ public class MeetTheTrucksScreen implements Screen {
 			truck.setSpeed(-0.001f);
 		}
 
-		if (jumpAlpha > 0 && girl.getX() >= 1400 && eclipsePart == false) {
+		if (jumpAlpha > 0 && player.getX() >= 1400 && eclipsePart == false) {
 			jumpAlpha -= delta;
 			if (jumpAlpha < 0)
 				jumpAlpha = 0;
@@ -758,7 +765,7 @@ public class MeetTheTrucksScreen implements Screen {
 			up.setAlpha(jumpAlpha);
 		}
 
-		if (eclipsePart == true && girl.getX() < 11650) {
+		if (eclipsePart == true && player.getX() < 11650) {
 			jumpAlpha += delta;
 			if (jumpAlpha > 0.5f)
 				jumpAlpha = 0.5f;
@@ -766,7 +773,7 @@ public class MeetTheTrucksScreen implements Screen {
 			up.setAlpha(jumpAlpha);
 		}
 
-		if (girl.getX() >= 11750) {
+		if (player.getX() >= 11750) {
 
 			if (truckBackDoorPosition < 260)
 				truckBackDoorPosition += 40 * delta;
@@ -778,49 +785,50 @@ public class MeetTheTrucksScreen implements Screen {
 			up.setAlpha(jumpAlpha);
 		}
 
-		girl.setPosition((int) girl.getX(),
-				(int) girl.getY() + (int) girl.getAccelerationJump());
+		player.setPosition((int) player.getX(), (int) player.getY()
+				+ (int) player.getAccelerationJump());
 
-		girl.setAccelerationJump(girl.getAccelerationJump() - delta * 50);
+		player.setAccelerationJump(player.getAccelerationJump() - delta * 50);
 
-		if (girl.getAccelerationJump() < -10)
-			girl.setAccelerationJump(-10);
+		if (player.getAccelerationJump() < -10)
+			player.setAccelerationJump(-10);
 
 		// 350,430
-		if (girl.getX() >= 270 && girl.getX() < 280 && girl.getY() < 110) {
-			girl.setPosition(270, (int) girl.getY());
+		if (player.getX() >= 270 && player.getX() < 280 && player.getY() < 110) {
+			player.setPosition(270, (int) player.getY());
 		}
-		if (girl.getX() > 270 && girl.getX() < 435) {
-			if (girl.getY() < 110)
-				girl.setPosition((int) girl.getX(), 110);
+		if (player.getX() > 270 && player.getX() < 435) {
+			if (player.getY() < 110)
+				player.setPosition((int) player.getX(), 110);
 		}
 
 		// 750,830
-		if (girl.getX() >= 670 && girl.getX() < 680 && girl.getY() < 110) {
-			girl.setPosition(670, (int) girl.getY());
+		if (player.getX() >= 670 && player.getX() < 680 && player.getY() < 110) {
+			player.setPosition(670, (int) player.getY());
 		}
-		if (girl.getX() > 670 && girl.getX() < 835) {
-			if (girl.getY() < 110)
-				girl.setPosition((int) girl.getX(), 110);
+		if (player.getX() > 670 && player.getX() < 835) {
+			if (player.getY() < 110)
+				player.setPosition((int) player.getX(), 110);
 		}
 		// 1150,1230
-		if (girl.getX() >= 1070 && girl.getX() < 1080 && girl.getY() < 110) {
-			girl.setPosition(1070, (int) girl.getY());
+		if (player.getX() >= 1070 && player.getX() < 1080
+				&& player.getY() < 110) {
+			player.setPosition(1070, (int) player.getY());
 		}
-		if (girl.getX() > 1070 && girl.getX() < 1235) {
-			if (girl.getY() < 110)
-				girl.setPosition((int) girl.getX(), 110);
+		if (player.getX() > 1070 && player.getX() < 1235) {
+			if (player.getY() < 110)
+				player.setPosition((int) player.getX(), 110);
 		}
 
-		if (girl.getY() < 35)
-			girl.setPosition((int) girl.getX(), 35);
+		if (player.getY() < 35)
+			player.setPosition((int) player.getX(), 35);
 
-		if (girl.getX() >= 14000 && secondDialogueClicked == false) {
+		if (player.getX() >= 14000 && secondDialogueClicked == false) {
 			secondDialogueClicked = true;
 			dialogueWindow.popUp();
 			assetsManager.stars.start();
-			// girl.setSpeed(0);
-			// girl.resetStateTime();
+			// player.setSpeed(0);
+			// player.resetStateTime();
 		}
 
 		if (firstDialogueClicked == false
@@ -833,7 +841,7 @@ public class MeetTheTrucksScreen implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		if (girl.getX() >= 14000 && exit == false
+		if (player.getX() >= 14000 && exit == false
 				&& secondDialogueClicked == true
 				&& dialogueWindow.isVisibile() == false) {
 			exit = true;
@@ -842,19 +850,19 @@ public class MeetTheTrucksScreen implements Screen {
 
 		truck.setPosition((int) truck.getX(), 35);
 		updateCameraLogics(delta);
-		updateGirlAction(delta);
+		updateplayerAction(delta);
 
 	}
 
 	void updateCameraLogics(double delta) {
-		if (girl.getX() >= 395 && girl.getX() < 5750 && truckPart == false) {
-			camera.position.x = (girl.getX());
+		if (player.getX() >= 395 && player.getX() < 5750 && truckPart == false) {
+			camera.position.x = (player.getX());
 		}
 		if (truckPart == true) {
 			camera.position.x = truck.getX() + 720;
 		}
-		if (eclipsePart == true && girl.getX() <= 13500) {
-			camera.position.x = girl.getX();
+		if (eclipsePart == true && player.getX() <= 13500) {
+			camera.position.x = player.getX();
 		} else if (eclipsePart == true) {
 			camera.position.x = 13500;
 		}
@@ -864,16 +872,16 @@ public class MeetTheTrucksScreen implements Screen {
 	void drawFootmarks(float delta) {
 
 		footmarkSpawnTimer += delta;
-		if (footmarkSpawnTimer > 0.1f && girl.getY() == 35
-				&& Math.abs(girl.getSpeed()) > 1f
+		if (footmarkSpawnTimer > 0.1f && player.getY() == 35
+				&& Math.abs(player.getSpeed()) > 1f
 				&& Math.abs(truck.getSpeed()) < 1) {
 			footmarkSpawnTimer = 0;
 			Sprite s = new Sprite(assetsManager.foot);
 			if (leftFoot == true) {
-				s.setPosition(girl.getX() + 10 + girl.getSpeed(), 37);
+				s.setPosition(player.getX() + 10 + player.getSpeed(), 37);
 				leftFoot = false;
 			} else {
-				s.setPosition(girl.getX() + 10 + girl.getSpeed(), 32);
+				s.setPosition(player.getX() + 10 + player.getSpeed(), 32);
 				leftFoot = true;
 			}
 
@@ -902,68 +910,68 @@ public class MeetTheTrucksScreen implements Screen {
 		drawTrees(delta);
 		drawStars(delta);
 
-		if (girl.getX() <= 1200) {
+		if (player.getX() <= 1200) {
 
 			batch.draw(assetsManager.parkBackgrounds[0], -10, 0);
 		}
-		if (girl.getX() <= 2000) {
+		if (player.getX() <= 2000) {
 			batch.draw(assetsManager.parkBackgrounds[1], 789, 0);
 		}
-		if (girl.getX() >= 1200 && girl.getX() < 2600) {
+		if (player.getX() >= 1200 && player.getX() < 2600) {
 
 			batch.draw(assetsManager.parkBackgrounds[2], 1589, 0);
 		}
-		if (girl.getX() >= 1600 && girl.getX() < 3100) {
+		if (player.getX() >= 1600 && player.getX() < 3100) {
 			batch.draw(assetsManager.parkBackgrounds[5], 2049, 0);
 			pointer.setPosition(2290, pointersPosition + 200);
 			pointer.draw(batch);
 		}
-		if (girl.getX() >= 2100 && girl.getX() < 4600)
+		if (player.getX() >= 2100 && player.getX() < 4600)
 			batch.draw(assetsManager.parkBackgrounds[4], 2514, 0);
-		if (girl.getX() >= 2600 && girl.getX() < 5100)
+		if (player.getX() >= 2600 && player.getX() < 5100)
 			batch.draw(assetsManager.parkBackgrounds[3], 3314, 0);
 
-		if (girl.getX() >= 3100 && girl.getX() < 7100)
+		if (player.getX() >= 3100 && player.getX() < 7100)
 			batch.draw(assetsManager.parkBackgrounds[0], 4109, 0);
-		if (girl.getX() >= 3600 && girl.getX() < 7600)
+		if (player.getX() >= 3600 && player.getX() < 7600)
 			batch.draw(assetsManager.parkBackgrounds[1], 4908, 0);
-		if (girl.getX() >= 4100 && girl.getX() < 8100)
+		if (player.getX() >= 4100 && player.getX() < 8100)
 			batch.draw(assetsManager.parkBackgrounds[2], 5708, 0);
 
-		if (girl.getX() >= 4600 && girl.getX() < 8600)
+		if (player.getX() >= 4600 && player.getX() < 8600)
 			batch.draw(assetsManager.parkBackgrounds[5], 6170, 0);
-		if (girl.getX() >= 5100 && girl.getX() < 9100)
+		if (player.getX() >= 5100 && player.getX() < 9100)
 			batch.draw(assetsManager.parkBackgrounds[4], 6635, 0);
-		if (girl.getX() >= 6600 && girl.getX() < 9600)
+		if (player.getX() >= 6600 && player.getX() < 9600)
 			batch.draw(assetsManager.parkBackgrounds[3], 7435, 0);
 
-		if (girl.getX() >= 7100 && girl.getX() < 10100)
+		if (player.getX() >= 7100 && player.getX() < 10100)
 			batch.draw(assetsManager.parkBackgrounds[0], 8230, 0);
-		if (girl.getX() >= 7600 && girl.getX() < 10600)
+		if (player.getX() >= 7600 && player.getX() < 10600)
 			batch.draw(assetsManager.parkBackgrounds[1], 9010, 0);
-		if (girl.getX() >= 8100 && girl.getX() < 11100)
+		if (player.getX() >= 8100 && player.getX() < 11100)
 			batch.draw(assetsManager.parkBackgrounds[2], 9800, 0);
 
-		if (girl.getX() >= 9600 && girl.getX() < 12100) {
+		if (player.getX() >= 9600 && player.getX() < 12100) {
 			batch.draw(assetsManager.parkBackgrounds[5], 10260, 0);
 		}
-		if (girl.getX() >= 10100 && girl.getX() < 12500)
+		if (player.getX() >= 10100 && player.getX() < 12500)
 			batch.draw(assetsManager.parkBackgrounds[4], 10720, 0);
 
-		if (girl.getX() >= 10600 && girl.getX() < 13000) {
+		if (player.getX() >= 10600 && player.getX() < 13000) {
 			batch.draw(assetsManager.parkBackgrounds[3], 11520, 0);
 			batch.draw(assetsManager.truckBack, 11400, 35);
 			batch.draw(assetsManager.truckBackDoor, 11451,
 					(int) truckBackDoorPosition - 13);
 		}
-		if (girl.getX() >= 11600)
+		if (player.getX() >= 11600)
 			batch.draw(assetsManager.parkBackgrounds[0], 12315, 0);
-		if (girl.getX() >= 11800)
+		if (player.getX() >= 11800)
 			batch.draw(assetsManager.parkBackgrounds[1], 13113, 0);
-		if (girl.getX() >= 12000)
+		if (player.getX() >= 12000)
 			batch.draw(assetsManager.parkBackgrounds[2], 13910, 0);
 
-		if (girl.getX() < 1200) {
+		if (player.getX() < 1200) {
 			batch.draw(assetsManager.barrel, 350, 35);
 			batch.draw(assetsManager.barrel, 390, 35);
 			batch.draw(assetsManager.barrel, 430, 35);
@@ -974,7 +982,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 			batch.draw(assetsManager.sign, 150, 48);
 		}
-		if (girl.getX() < 2000) {
+		if (player.getX() < 2000) {
 			batch.draw(assetsManager.barrel, 750, 35);
 			batch.draw(assetsManager.barrel, 790, 35);
 			batch.draw(assetsManager.barrel, 830, 35);
@@ -1036,25 +1044,25 @@ public class MeetTheTrucksScreen implements Screen {
 				fireAnimationScales[2].y = 0;
 		}
 
-		if (girl.getX() > 10600 && girl.getX() < 12500) {
+		if (player.getX() > 10600 && player.getX() < 12500) {
 			fireAnimationBiggest.render(batch, delta);
 			fireAnimationBig.render(batch, delta);
 			fireAnimation.render(batch, delta);
 		}
-		if (girl.getX() <= 11750) {
+		if (player.getX() <= 11750) {
 			batch.draw(assetsManager.hoseHydrant, 11700, 38);
 		}
 		if (reverseHoseAnimation == true
-				&& girlHoseHydrantReversed.getSpeed() == 0) {
+				&& playerHoseHydrantReversed.getSpeed() == 0) {
 			batch.draw(assetsManager.hoseHydrant, 11700, 38);
 		}
 
-		if (girl.getX() > 11750 && truckBackDoorPosition > 140)
+		if (player.getX() > 11750 && truckBackDoorPosition > 140)
 			drawWater(delta);
 
-		if (girl.getX() > 12000 && finishingRun == false)
+		if (player.getX() > 12000 && finishingRun == false)
 			batch.draw(assetsManager.wall[0], 12600, 45);
-		if (girl.getX() >= 12550) {
+		if (player.getX() >= 12550) {
 			if (runButton.getCounter() > 7 && runButton.getCounter() < 16)
 				batch.draw(assetsManager.wall[1], 12600, 45);
 			if (runButton.getCounter() > 15)
@@ -1063,7 +1071,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	}
 
-	void updateGirlAction(double delta) {
+	void updateplayerAction(double delta) {
 
 	}
 
@@ -1084,8 +1092,8 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.draw(assetsManager.speedBar, 160, 440);
 
-		boyHead.setPosition(160 + girl.getX() * 0.0285f, 410);
-		boyHead.draw(batch);
+		playerHead.setPosition(160 + player.getX() * 0.0285f, 410);
+		playerHead.draw(batch);
 
 		fireMiniature.setPosition(495, 410);
 		fireMiniature.draw(batch);
@@ -1093,7 +1101,7 @@ public class MeetTheTrucksScreen implements Screen {
 		if (truckPart == false)
 			truckMiniature.setPosition(225, 410);
 		else if (eclipsePart == false)
-			truckMiniature.setPosition(160 + girl.getX() * 0.0285f, 410);
+			truckMiniature.setPosition(160 + player.getX() * 0.0285f, 410);
 
 		truckMiniature.draw(batch);
 
@@ -1147,7 +1155,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawPointers(float delta) {
 
-		if (girl.getX() < 2000) {
+		if (player.getX() < 2000) {
 
 			pointer.setPosition(390, pointersPosition + 100);
 			pointer.draw(batch);
@@ -1191,8 +1199,8 @@ public class MeetTheTrucksScreen implements Screen {
 				&& fireAnimationScales[0].y < 0.05f
 				&& reverseHoseAnimation == false) {
 			reverseHoseAnimation = true;
-			girlHoseHydrantReversed.setSpeed(6);
-			girl.setSpeed(2.5f);
+			playerHoseHydrantReversed.setSpeed(6);
+			player.setSpeed(2.5f);
 		}
 
 		if (runButton.getSelection() == true)
@@ -1231,26 +1239,27 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawBushes(float delta) {
 
-		float girlSpeed = Math.abs(girl.getSpeed());
-		if (Math.abs(girl.getSpeed()) > 3)
-			girlSpeed = 3;
+		float playerSpeed = Math.abs(player.getSpeed());
+		if (Math.abs(player.getSpeed()) > 3)
+			playerSpeed = 3;
 
 		for (int a = 0; a < bushes.size; a++) {
 
-			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
-					|| girl.getX() >= 13500
-					|| (bushes.get(a).getX() - girl.getX() < 400 && bushes.get(
-							a).getWidth()
-							+ bushes.get(a).getX() - girl.getX() > -400)) {
+			if ((player.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| player.getX() >= 13500
+					|| (bushes.get(a).getX() - player.getX() < 400 && bushes
+							.get(a).getWidth()
+							+ bushes.get(a).getX()
+							- player.getX() > -400)) {
 				bushes.get(a).draw(batch);
 
-				if (girl.getX() >= 395
-						&& (girlPositionLastFrame != girl.getX())
-						&& girl.getX() <= 13500 && delta != 0)
+				if (player.getX() >= 395
+						&& (playerPositionLastFrame != player.getX())
+						&& player.getX() <= 13500 && delta != 0)
 
 					bushes.get(a).setPosition(
 							(float) (bushes.get(a).getX() + (bushes.get(a)
-									.getY() / 30) * girlSpeed * 0.1f),
+									.getY() / 30) * playerSpeed * 0.1f),
 							bushes.get(a).getY());
 			}
 		}
@@ -1258,27 +1267,28 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawLakes(float delta) {
 
-		float girlSpeed = Math.abs(girl.getSpeed());
-		if (Math.abs(girl.getSpeed()) > 3)
-			girlSpeed = 3;
+		float playerSpeed = Math.abs(player.getSpeed());
+		if (Math.abs(player.getSpeed()) > 3)
+			playerSpeed = 3;
 
 		for (int a = 0; a < lakes.size; a++) {
 
-			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
-					|| girl.getX() >= 13500
-					|| (lakes.get(a).getX() - girl.getX() < 400 && lakes.get(a)
-							.getWidth() + lakes.get(a).getX() - girl.getX() > -400)) {
+			if ((player.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| player.getX() >= 13500
+					|| (lakes.get(a).getX() - player.getX() < 400 && lakes.get(
+							a).getWidth()
+							+ lakes.get(a).getX() - player.getX() > -400)) {
 				lakes.get(a).draw(batch);
 
-				if (girl.getX() >= 395
-						&& (girlPositionLastFrame != girl.getX())
-						&& girl.getX() <= 13500 && delta != 0)
+				if (player.getX() >= 395
+						&& (playerPositionLastFrame != player.getX())
+						&& player.getX() <= 13500 && delta != 0)
 
 					lakes.get(a)
 							.setPosition(
 									(float) (lakes.get(a).getX() + (lakes
 											.get(a).getY() / 30)
-											* girlSpeed
+											* playerSpeed
 											* 0.1f), lakes.get(a).getY());
 			}
 		}
@@ -1289,14 +1299,15 @@ public class MeetTheTrucksScreen implements Screen {
 		for (int a = 0; a < stars.size; a++) {
 			float starAlpha = 1;
 			starAlpha = stars.get(a).getColor().a;
-			if ((girl.getX() <= 395 && stars.get(a).getX() < 800)
-					|| girl.getX() >= 13500
-					|| (stars.get(a).getX() - girl.getX() < 400 && stars.get(a)
-							.getWidth() + stars.get(a).getX() - girl.getX() > -400)) {
+			if ((player.getX() <= 395 && stars.get(a).getX() < 800)
+					|| player.getX() >= 13500
+					|| (stars.get(a).getX() - player.getX() < 400 && stars.get(
+							a).getWidth()
+							+ stars.get(a).getX() - player.getX() > -400)) {
 				stars.get(a).draw(batch);
 			}
 
-			if (girl.getX() + 50 > stars.get(a).getX()) {
+			if (player.getX() + 50 > stars.get(a).getX()) {
 				starsCollected++;
 				stars.get(a).setPosition(stars.get(a).getX(),
 						stars.get(a).getY() + delta * 430);
@@ -1319,26 +1330,26 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawGrassFlowers(float delta) {
 
-		float girlSpeed = Math.abs(girl.getSpeed());
-		if (Math.abs(girl.getSpeed()) > 3)
-			girlSpeed = 3;
+		float playerSpeed = Math.abs(player.getSpeed());
+		if (Math.abs(player.getSpeed()) > 3)
+			playerSpeed = 3;
 
 		for (int a = 0; a < grassFlowers.size; a++) {
-			if ((girl.getX() <= 395 && bushes.get(a).getX() < 800)
-					|| girl.getX() >= 13500
-					|| (grassFlowers.get(a).getX() - girl.getX() < 400 && grassFlowers
+			if ((player.getX() <= 395 && bushes.get(a).getX() < 800)
+					|| player.getX() >= 13500
+					|| (grassFlowers.get(a).getX() - player.getX() < 400 && grassFlowers
 							.get(a).getWidth()
 							+ grassFlowers.get(a).getX()
-							- girl.getX() > -400)) {
+							- player.getX() > -400)) {
 				grassFlowers.get(a).draw(batch);
 
-				if (girl.getX() >= 395
-						&& (girlPositionLastFrame != girl.getX())
-						&& girl.getX() <= 13500 && delta != 0)
+				if (player.getX() >= 395
+						&& (playerPositionLastFrame != player.getX())
+						&& player.getX() <= 13500 && delta != 0)
 
 					grassFlowers.get(a).setPosition(
 							(float) (grassFlowers.get(a).getX() + (grassFlowers
-									.get(a).getY() / 30) * girlSpeed * 0.1f),
+									.get(a).getY() / 30) * playerSpeed * 0.1f),
 							grassFlowers.get(a).getY());
 			}
 		}
@@ -1346,27 +1357,28 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawTrees(float delta) {
 
-		float girlSpeed = Math.abs(girl.getSpeed());
-		if (Math.abs(girl.getSpeed()) > 3)
-			girlSpeed = 3;
+		float playerSpeed = Math.abs(player.getSpeed());
+		if (Math.abs(player.getSpeed()) > 3)
+			playerSpeed = 3;
 
 		for (int a = 0; a < trees.size; a++) {
 
-			if ((girl.getX() <= 395 && trees.get(a).getX() < 800)
-					|| girl.getX() >= 13500
-					|| (trees.get(a).getX() - girl.getX() < 400 && trees.get(a)
-							.getWidth() + trees.get(a).getX() - girl.getX() > -400)) {
+			if ((player.getX() <= 395 && trees.get(a).getX() < 800)
+					|| player.getX() >= 13500
+					|| (trees.get(a).getX() - player.getX() < 400 && trees.get(
+							a).getWidth()
+							+ trees.get(a).getX() - player.getX() > -400)) {
 				trees.get(a).draw(batch);
 
-				if (girl.getX() >= 395
-						&& (girlPositionLastFrame != girl.getX())
-						&& girl.getX() <= 13500 && delta != 0)
+				if (player.getX() >= 395
+						&& (playerPositionLastFrame != player.getX())
+						&& player.getX() <= 13500 && delta != 0)
 
 					trees.get(a)
 							.setPosition(
 									(float) (trees.get(a).getX() + (trees
 											.get(a).getY() / 30)
-											* girlSpeed
+											* playerSpeed
 											* 0.1f), trees.get(a).getY());
 			}
 		}
@@ -1378,12 +1390,12 @@ public class MeetTheTrucksScreen implements Screen {
 		for (int a = 0; a < skies.size; a++) {
 			if (skies.get(a).getX() <= 801 && skies.get(a).getX() > -801)
 				skies.get(a).draw(batch);
-			if (girl.getX() > 395 && girlPositionLastFrame != girl.getX()
-					&& girl.getX() <= 135000) {
+			if (player.getX() > 395 && playerPositionLastFrame != player.getX()
+					&& player.getX() <= 135000) {
 				if (Math.abs(truck.getSpeed()) < 0.5f)
 					skies.get(a).setPosition(
 							skies.get(a).getX() - delta * 1.95f
-									* girl.getSpeed(), skies.get(a).getY());
+									* player.getSpeed(), skies.get(a).getY());
 				else
 					skies.get(a).setPosition(
 							skies.get(a).getX() + delta * 1.95f
@@ -1391,18 +1403,18 @@ public class MeetTheTrucksScreen implements Screen {
 
 			}
 		}
-		girlPositionTimer += delta;
-		if (girlPositionTimer > 0.1f) {
-			girlPositionLastFrame = girl.getX();
-			girlPositionTimer = 0;
+		playerPositionTimer += delta;
+		if (playerPositionTimer > 0.1f) {
+			playerPositionLastFrame = player.getX();
+			playerPositionTimer = 0;
 		}
 
 	}
 
 	void drawNonGuiBars(float delta) {
-		if (girl.getX() == 12550)
+		if (player.getX() == 12550)
 			wallHits.setVisibility(true);
-		if (girl.getX() > 12550)
+		if (player.getX() > 12550)
 			wallHits.setVisibility(false);
 		wallHits.render(batch, delta, runButton.getCounter());
 	}
@@ -1421,7 +1433,7 @@ public class MeetTheTrucksScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
-				60, 463);
+		assetsManager.fontLittle.draw(batch,
+				Integer.toString(starsCollected + starsAll), 60, 463);
 	}
 }

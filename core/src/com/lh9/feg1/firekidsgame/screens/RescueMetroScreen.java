@@ -26,23 +26,30 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueMetroScreen implements Screen {
 
-	Sprite ball;
-	ArrayList<Vector3> ballEffect;
-	Vector3 ballPosition;
-	Truck truck;
-	Sprite[] damage;
 	Button[] hitboxes;
-	int starsAll;
-	DataOrganizer dataOrganizer;
-	FPSManager fpsManager;
-	Bar speedBar;
-	Sprite rescueMetroSadPeople;
-	Sprite[] girlAnimation;
 	Button pause;
 	Button runButton;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
+
+	Sprite[] damage;
+	Sprite[] playerAnimation;
+	Sprite[] metroDoor;
+	Sprite ball;
+	Sprite guiStar;
+	Sprite rescueMetroSadPeople;
+	
+	ArrayList<Vector3> ballEffect;
+	Vector3 ballPosition;
+	
+	Bar timeBar;
+	Bar progressBar;
+	Bar speedBar;
+	
+	Truck truck;
+	DataOrganizer dataOrganizer;
+	FPSManager fpsManager;
 	MenuWindow menuWindow;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
@@ -51,33 +58,30 @@ public class RescueMetroScreen implements Screen {
 	Camera camera;
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
-	InputInterpreter inputInterpreter;
-	Bar timeBar;
-	Bar progressBar;
-	Sprite[] metroDoor;
+	InputInterpreter inputInterpreter;	
 
-	boolean finishDialogue;
-	boolean moveLeft;
-	boolean readyToPlay;
-	boolean afterMinigameWindow;
-	boolean zoomOut;
 	float spawnBallTimer;
-	float timerSpeedGirl;
-	boolean[] selectedHitbox;
-	float[] hitboxesAlpha;
-	int minigameCounter = 20;
 	float minigameTimeLeft = 1;
+	float timerSpeedGirl;
+	float[] hitboxesAlpha;
+	
+	boolean[] selectedHitbox;
 	boolean exit;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
 	boolean minigameRunning;
-
-	Sprite guiStar;
 	boolean enlargeStar;
-	int starsCollected = 0;
+	boolean finishDialogue;
+	boolean moveLeft;
+	boolean readyToPlay;
+	boolean afterMinigameWindow;
+	boolean zoomOut;
+	
+	int minigameCounter = 20;
+	int starsAll;
+	int starsCollected;
 	int starsCollectedLastFrame;
-
 	
 	final Starter game;
 
@@ -122,22 +126,22 @@ public class RescueMetroScreen implements Screen {
 		truck.downLane();
 		truck.setFriction(0.5f);
 
-		girlAnimation = new Sprite[2];
+		playerAnimation = new Sprite[2];
 
 		if(dataOrganizer.getGender() == true){
-		girlAnimation[0] = new Sprite(assetsManager.girlHammer[0]);
-		girlAnimation[1] = new Sprite(assetsManager.girlHammer[1]);
+		playerAnimation[0] = new Sprite(assetsManager.girlHammer[0]);
+		playerAnimation[1] = new Sprite(assetsManager.girlHammer[1]);
 		}
 		else
 		{
-			girlAnimation[0] = new Sprite(assetsManager.boyHammer[0]);
-			girlAnimation[1] = new Sprite(assetsManager.boyHammer[1]);	
+			playerAnimation[0] = new Sprite(assetsManager.boyHammer[0]);
+			playerAnimation[1] = new Sprite(assetsManager.boyHammer[1]);	
 		}
-		girlAnimation[0].setScale(0.3f);
-		girlAnimation[1].setScale(0.3f);
+		playerAnimation[0].setScale(0.3f);
+		playerAnimation[1].setScale(0.3f);
 
-		girlAnimation[0].setPosition(360, -230);
-		girlAnimation[1].setPosition(295, -230);
+		playerAnimation[0].setPosition(360, -230);
+		playerAnimation[1].setPosition(295, -230);
 
 		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
@@ -315,9 +319,9 @@ public class RescueMetroScreen implements Screen {
 	void drawCharacters(float delta) {
 
 		if (zoomOut == false)
-			girlAnimation[0].draw(batch);
+			playerAnimation[0].draw(batch);
 		else
-			girlAnimation[1].draw(batch);
+			playerAnimation[1].draw(batch);
 
 		truck.render(batch, delta);
 	}

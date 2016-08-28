@@ -24,24 +24,23 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 public class FoodsScreen implements Screen {
 
 	Sprite guiStar;
-
-	int starsCollectedLastFrame;
-	boolean enlargeStar;
-	int starsCollected = 0;
-	int starsAll = 0;
-	Arrow playerHead;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
+	Sprite currentFood;
 	Sprite windowCounter;
+	
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
-	MenuWindow menuWindow;
 	Button pause;
 	Button yes;
 	Button no;
+	
 	Bar timeBar;
 	Bar counterBar;
+	
+	Arrow playerHead;
+	FPSManager fpsManager;
+	DataOrganizer dataOrganizer;
+	MenuWindow menuWindow;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
 	Variables variables;
@@ -50,22 +49,23 @@ public class FoodsScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	Sprite currentFood;
 
+	static final int healthyFood[] = { 0, 1, 4, 7 };
 	float timerSpeedGirl;
 	float timeBarTimer;
 	int minigameCounter = 10;
 	int currentFoodID;
-
-	static final int healthyFood[] = { 0, 1, 4, 7 };
-
-	boolean checkedAnswer = true;
+	int starsCollectedLastFrame;
+	int starsCollected;
+	int starsAll;
+	boolean enlargeStar;
 	boolean minigameRunning;
 	boolean exit;
-	boolean firstDialogueClicked = false;
-	boolean secondDialogueClicked = false;
-	boolean finish = false;
-	boolean clicked = false;
+	boolean firstDialogueClicked;
+	boolean secondDialogueClicked;
+	boolean finish;
+	boolean clicked;
+	boolean checkedAnswer = true;
 
 	final Starter game;
 
@@ -300,9 +300,7 @@ public class FoodsScreen implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		
 		updateCameraLogics(delta);
-
 	}
 
 	void updateCameraLogics(double delta) {
@@ -437,7 +435,6 @@ public class FoodsScreen implements Screen {
 						currentFood.getY());
 			yes.setDontRespond(true);
 			no.setDontRespond(true);
-			
 		}
 		currentFood.draw(batch);
 
@@ -478,7 +475,6 @@ public class FoodsScreen implements Screen {
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
 		} else if (guiStar.getScaleX() > 0.75f)
 			guiStar.setScale(guiStar.getScaleX() - delta * 3);
-
 		if (guiStar.getScaleX() < 0.75f)
 			guiStar.setScale(0.75f);
 		if (guiStar.getScaleX() > 0.9f) {
