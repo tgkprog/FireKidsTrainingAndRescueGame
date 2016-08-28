@@ -247,7 +247,6 @@ public class MeetTheTrucksScreen implements Screen {
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				260, 10, 20);
 		speedBar.setVisibility(false);
-		speedBar.setSpeedometer(assetsManager.speedometer);
 
 		assetsManager.hit.scaleEffect(0.333f);
 

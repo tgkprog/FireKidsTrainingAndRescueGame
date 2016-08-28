@@ -171,13 +171,9 @@ public class MenuScreen implements Screen {
 
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-		System.out.println(game.getCollectedStars());
-
 		if (game.getCollectedStars() == 0) {
 			game.setCollectedStars(dataOrganizer.getScore());
-			System.out.println("setting collected stars");
 		} else {
-			System.out.println("setting new score");
 			dataOrganizer.setScore(game.getCollectedStars());
 		}
 	}
@@ -299,7 +295,7 @@ public class MenuScreen implements Screen {
 				.getMeetTheTrucks()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new MeetTheTrucksScreen(game));
+				game.setScreen(new RescueMetroScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables

@@ -26,30 +26,30 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class ElevatorScreen implements Screen {
 
-	int starsCollectedLastFrame;
-	boolean enlargeStar;
-	int starsCollected = 0;
-	Sprite guiStar;
-	ArrayList<Vector3> ballEffect;
-	Vector3 ballPosition;
-	Sprite dogsGirl;
-	Sprite[] damage;
-	Button[] hitboxes;
 	Bar timeBar;
-	Sprite dogsGirlHappy;
 	Bar progressBar;
-	Sprite elevatorDoor[];
-	DataOrganizer dataOrganizer;
-	FPSManager fpsManager;
 	Bar speedBar;
-	Sprite rescueMetroSadPeople;
-	Human girl;
-	Human dogHappy;
+	
+	Sprite dogSad;
+	Sprite dogHappy;
+	Sprite elevatorDoor[];
+	Sprite ball;
+	Sprite guiStar;
+	Sprite[] damage;
+	
+	Human player;
+	
+	Button[] hitboxes;
 	Button pause;
 	Button runButton;
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
+
+	ArrayList<Vector3> ballEffect;
+	Vector3 ballPosition;
+	DataOrganizer dataOrganizer;
+	FPSManager fpsManager;
 	MenuWindow menuWindow;
 	Dialogue dialogueWindow;
 	CloudManager cloudManager;
@@ -59,22 +59,25 @@ public class ElevatorScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	Sprite ball;
+
+	int starsCollectedLastFrame;
+	int starsCollected;
+	int minigameCounter = 20;
 	float spawnBallTimer;
-	float dogsGirlY = -50;
+	float dogsplayerY = -50;
 	float leftDoorPosition;
 	float rightDoorPosition;
-	boolean zoomDogGirl;
-	boolean zoomOut;
-	boolean[] selectedHitbox;
 	float[] hitboxesAlpha;
-	int minigameCounter = 20;
 	float minigameTimeLeft = 1;
 	float doorAlpha;
-	float timerSpeedGirl;
+	float timerSpeedplayer;
 	float dogSadTimer;
+	float dogsplayerAlpha = 1;
+	boolean enlargeStar;
+	boolean zoomDogplayer;
+	boolean zoomOut;
+	boolean[] selectedHitbox;	
 	boolean turned;
-	float dogsGirlAlpha = 1;
 	boolean exit;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
@@ -83,6 +86,7 @@ public class ElevatorScreen implements Screen {
 	boolean afterMinigameWindow;
 	boolean finishDialogue;
 	boolean startedClouds;
+	
 	final Starter game;
 
 	public ElevatorScreen(final Starter gam) {
@@ -107,18 +111,15 @@ public class ElevatorScreen implements Screen {
 				assetsManager.runButton);
 		runButton.goUp((int) variables.getRunButtonPosition().y);
 
-		girl = new Human();
+		player = new Human();
 		if (dataOrganizer.getGender() == true)
-			girl.create(assetsManager.girlHammer, 1, 2, 2, 400, 405);
+			player.create(assetsManager.girlHammer, 1, 2, 2, 400, 405);
 		else
-			girl.create(assetsManager.boyHammer, 1, 2, 2, 400, 405);
+			player.create(assetsManager.boyHammer, 1, 2, 2, 400, 405);
 
-		girl.setAnimationOnly(true);
-		girl.setOnceOnly();
-		girl.setSpeed(1);
-
-		dogHappy = new Human();
-		dogHappy.create(assetsManager.dogHappy, 2, 1, 2, 400, 500);
+		player.setAnimationOnly(true);
+		player.setOnceOnly();
+		player.setSpeed(1);
 
 		menuButton = new Button(400, 110, assetsManager.menu);
 		playButton = new Button(450, 110, assetsManager.playButton);
@@ -161,15 +162,12 @@ public class ElevatorScreen implements Screen {
 				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
-		inputInterpreter.setControlledHuman(girl);
+		inputInterpreter.setControlledHuman(player);
 		inputInterpreter.setMenuWindow(menuWindow);
 		inputInterpreter.setHitboxes(hitboxes);
 
 		cloudManager.stop();
 
-		rescueMetroSadPeople = new Sprite(assetsManager.rescueMetroSadPeople);
-		rescueMetroSadPeople.setPosition(580, 155);
-		rescueMetroSadPeople.setScale(0.35f);
 
 		camera.reset();
 
@@ -211,14 +209,14 @@ public class ElevatorScreen implements Screen {
 		timeBar.setVisibility(false);
 		progressBar.setVisibility(false);
 
-		dogsGirl = new Sprite(assetsManager.dogsGirl);
-		dogsGirl.setScale(0.7f, 0.9f);
+		dogSad = new Sprite(assetsManager.dogsGirl);
+		dogSad.setScale(0.7f, 0.9f);
 
 		ballEffect = new ArrayList<Vector3>();
 		ball = new Sprite(assetsManager.runButton);
 
-		dogsGirlHappy = new Sprite(assetsManager.womanHappy);
-		dogsGirlHappy.setScale(0.7f, 0.9f);
+		dogHappy = new Sprite(assetsManager.womanHappy);
+		dogHappy.setScale(0.7f, 0.9f);
 
 		guiStar = new Sprite(assetsManager.star);
 		guiStar.setScale(0.75f);
@@ -331,11 +329,11 @@ public class ElevatorScreen implements Screen {
 
 		drawElevatorDoor(delta);
 
-		girl.render(batch, delta);
+		player.render(batch, delta);
 
-		dogsGirl.draw(batch);
-		if (zoomDogGirl == true)
-			dogsGirlHappy.draw(batch);
+		dogSad.draw(batch);
+		if (zoomDogplayer == true)
+			dogHappy.draw(batch);
 	}
 
 	void drawButtons(double delta) {
@@ -361,20 +359,20 @@ public class ElevatorScreen implements Screen {
 			cloudManager.start();
 		}
 
-		if (zoomDogGirl == false) {
-			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha), -50);
-			dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha), -50);
+		if (zoomDogplayer == false) {
+			dogSad.setPosition((int) (1800 - 130 * doorAlpha), -50);
+			dogHappy.setPosition((int) (1800 - 130 * doorAlpha), -50);
 
 		} else {
-			dogsGirl.setPosition((int) (1800 - 130 * doorAlpha)
-					- (dogsGirlY - camera.zoom) * 100,
-					(dogsGirlY - camera.zoom) * 200 - 50);
-			dogsGirlHappy.setPosition((int) (1800 - 130 * doorAlpha)
-					- (dogsGirlY - camera.zoom) * 100,
-					(dogsGirlY - camera.zoom) * 200 - 50);
+			dogSad.setPosition((int) (1800 - 130 * doorAlpha)
+					- (dogsplayerY - camera.zoom) * 100,
+					(dogsplayerY - camera.zoom) * 200 - 50);
+			dogHappy.setPosition((int) (1800 - 130 * doorAlpha)
+					- (dogsplayerY - camera.zoom) * 100,
+					(dogsplayerY - camera.zoom) * 200 - 50);
 
 		}
-		girl.setPosition((int) (220 + 130 * doorAlpha), 150);
+		player.setPosition((int) (220 + 130 * doorAlpha), 150);
 
 		if (minigameCounter == 0) {
 			if (leftDoorPosition > 320)
@@ -390,23 +388,23 @@ public class ElevatorScreen implements Screen {
 				rightDoorPosition = 1735;
 		}
 
-		if (zoomDogGirl == true) {
-			dogsGirlAlpha -= delta;
-			if (dogsGirlAlpha < 0)
-				dogsGirlAlpha = 0;
-			dogsGirl.setAlpha(dogsGirlAlpha);
-			dogsGirlHappy.setAlpha(1 - dogsGirlAlpha);
+		if (zoomDogplayer == true) {
+			dogsplayerAlpha -= delta;
+			if (dogsplayerAlpha < 0)
+				dogsplayerAlpha = 0;
+			dogSad.setAlpha(dogsplayerAlpha);
+			dogHappy.setAlpha(1 - dogsplayerAlpha);
 
 		}
 
 		if (rightDoorPosition == 1735 && leftDoorPosition == 320
-				&& zoomDogGirl == false) {
+				&& zoomDogplayer == false) {
 
-			dogsGirlY = camera.zoom;
+			dogsplayerY = camera.zoom;
 			camera.zoom(1.5f, 3);
 			camera.moveX(1605, 2, 2, 4);
 			camera.moveY(660, 2, 2, 4);
-			zoomDogGirl = true;
+			zoomDogplayer = true;
 		}
 
 		if (zoomOut == true) {
@@ -573,8 +571,8 @@ public class ElevatorScreen implements Screen {
 					damage[minigameCounter].setAlpha(1);
 					hitboxes[a].setDontRespond(true);
 					selectedHitbox[a] = false;
-					girl.resetStateTime();
-					girl.setSpeed(2);
+					player.resetStateTime();
+					player.setSpeed(2);
 					zoomOut = true;
 					assetsManager.hit.setPosition(hitboxes[a].getX() + 75,
 							hitboxes[a].getY() + 75);

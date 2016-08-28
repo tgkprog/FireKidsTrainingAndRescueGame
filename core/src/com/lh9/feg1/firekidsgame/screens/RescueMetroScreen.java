@@ -38,7 +38,6 @@ public class RescueMetroScreen implements Screen {
 	Sprite[] metroDoor;
 	Sprite ball;
 	Sprite guiStar;
-	Sprite rescueMetroSadPeople;
 	
 	ArrayList<Vector3> ballEffect;
 	Vector3 ballPosition;
@@ -185,10 +184,6 @@ public class RescueMetroScreen implements Screen {
 		inputInterpreter.setHitboxes(hitboxes);
 
 		cloudManager.stop();
-
-		rescueMetroSadPeople = new Sprite(assetsManager.rescueMetroSadPeople);
-		rescueMetroSadPeople.setPosition(580, 155);
-		rescueMetroSadPeople.setScale(0.35f);
 
 		camera.zoom = 0.4f;
 		camera.position.x = 1070;
@@ -392,7 +387,7 @@ public class RescueMetroScreen implements Screen {
 	void drawBackground() {
 		batch.draw(assetsManager.rescueMetro[0], 0, 0);
 		batch.draw(assetsManager.rescueMetro[1], 797, 0);
-		rescueMetroSadPeople.draw(batch);
+//		rescueMetroSadPeople.draw(batch);
 
 		if (minigameCounter < 19 && minigameCounter > 0) {
 			metroDoor[0].setScale(0.625f, 0.66f);

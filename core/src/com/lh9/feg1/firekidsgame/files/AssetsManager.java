@@ -14,6 +14,8 @@ public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
 
+	public Texture[] peopleSad;
+	public Texture[] peopleHappy;
 	public Texture starButton;
 	public Texture starButtonEmpty;
 	public Texture fireStationComplete;
@@ -43,13 +45,13 @@ public class AssetsManager extends Thread {
 	public Texture ground;
 	public Texture graphicsText;
 	public Texture trainMiniature;
-	public Texture speedometer;
+//	public Texture speedometer;
 	public Texture elevatorMiniature;
 	public Texture elevatorButton;
 	public Texture elevatorButton_desaturated;
 	public Texture hoseHydrant;
 	public Texture dogsGirl;
-	public Texture damage;
+	//public Texture damage;
 	public Texture sign;
 	public Texture breakTheWallText;
 	public Texture eclipseFireText;
@@ -89,7 +91,7 @@ public class AssetsManager extends Thread {
 	public Texture lane;
 	public Texture boyTorso;
 	public Texture authors;
-	public Texture rescueMetroSadPeople;
+//	public Texture rescueMetroSadPeople;
 	public Texture settingsText;
 	public Texture authorsText;
 	public Texture arrow;
@@ -124,7 +126,6 @@ public class AssetsManager extends Thread {
 	public Texture hoseAnimationReversed[];
 	public Texture fireMiniature;
 	public Texture truckBlank[];
-	public Texture levelBackgrounds[];
 	public Texture fitnessBackground[];
 	public Texture bigRoad[];
 	public Texture clouds[];
@@ -135,9 +136,9 @@ public class AssetsManager extends Thread {
 	public Texture runButtonLittle;
 	public Texture handwheelNoHand;
 	public Texture wheel;
-	public Texture boyMainMenu;
+	// public Texture boyMainMenu;
 	public Texture girlMainMenu;
-	public Texture boyMenuHand;
+	// public Texture boyMenuHand;
 	public Texture[] spritesheetGirlRunning;
 	public Texture[] spritesheetBoyRunning;
 	public Texture boyWaving[];
@@ -145,15 +146,15 @@ public class AssetsManager extends Thread {
 	public Texture spritesheetGirlElliptical[];
 	public Texture spritesheetGirlWeights[];
 	public Texture spritesheetBoyWeights[];
-	public Texture fireBar;
+	//public Texture fireBar;
 	public Texture pointer;
 	public Texture bar;
 	public Texture settings;
 	public Texture boyHeadBig;
 	public Texture girlHeadBig;
 	public Texture barrel;
-	public Texture girlHead;
-	public Texture boyHead;
+	// public Texture girlHead;
+	// public Texture boyHead;
 	public Texture switchButton;
 	public Texture speedBar;
 	public Texture playButton;
@@ -299,8 +300,6 @@ public class AssetsManager extends Thread {
 		boltButton = new Texture("buttons/buttonBolt.png");
 		oil = new Texture("others/Oil.png");
 		bolt = new Texture("others/Bolt.png");
-		rescueMetroSadPeople = new Texture(
-				"backgrounds/Rescue-metro-sad-people.png");
 
 		spritesheetBoyRunning = new Texture[31];
 		for (int a = 0; a < 11; a++) {
@@ -371,7 +370,7 @@ public class AssetsManager extends Thread {
 		runButtonGreen = new Texture("buttons/Button-1.png");
 		settings = new Texture("buttons/settings.png");
 		pointer = new Texture("others/this.png");
-		speedometer = new Texture("others/speedometer.png");
+	//	speedometer = new Texture("others/speedometer.png");
 		dialogueWindow = new Texture("windows/windowPlaceholder.png");
 		starButton = new Texture("buttons/starButton.png");
 		starButtonEmpty = new Texture("buttons/starButtonEmpty.png");
@@ -395,11 +394,10 @@ public class AssetsManager extends Thread {
 		catHappy = new Texture("spritesheets/cat/Cat-happy.png");
 		catSad = new Texture("spritesheets/cat/Cat-worried.png");
 		wheel = new Texture("others/wheel.png");
-		fireBar = new Texture("others/fireBar.png");
-		girlHead = new Texture("girl/girlHead.png");
+		//fireBar = new Texture("others/fireBar.png");
+		// girlHead = new Texture("girl/girlHead.png");
 		basket = new Texture("spritesheets/basket.png");
 		roadPart = new Texture("backgrounds/roadPart.png");
-		boyHead = new Texture("boy/boyHead.png");
 		voiceText = new Texture("texts/Voice-text.png");
 		vibrationsText = new Texture("texts/Vibrations-text.png");
 		textureFilteringText = new Texture("texts/Texture-filtering-text.png");
@@ -441,7 +439,7 @@ public class AssetsManager extends Thread {
 		catMiniature = new Texture("buttons/catMiniature.png");
 		boyButton = new Texture("buttons/Boy-button.png");
 		girlButton = new Texture("buttons/Girl-button.png");
-		damage = new Texture("others/damage.png");
+		//damage = new Texture("others/damage.png");
 		peopleGround = new Texture("spritesheets/peopleGround.png");
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
 		barFilled = new Texture("others/barFilled.png");
@@ -453,9 +451,9 @@ public class AssetsManager extends Thread {
 		yellowSectionLeft = new Texture("buttons/yellowSection2.png");
 		boyTorso = new Texture("boy/boyTorso.png");
 		boyHeadBigBlonde = new Texture("boy/boyHeadBigBlonde.png");
-		boyMainMenu = new Texture("boy/boyMainMenu.png");
+		// boyMainMenu = new Texture("boy/boyMainMenu.png");
 		girlMainMenu = new Texture("girl/girlMainMenu.png");
-		boyMenuHand = new Texture("boy/boyMenuHand.png");
+		// boyMenuHand = new Texture("boy/boyMenuHand.png");
 		handSpritesheet = new Texture("others/spritesheetPress.png");
 		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
 		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
@@ -479,6 +477,15 @@ public class AssetsManager extends Thread {
 
 		elevatorDoor[0] = new Texture("backgrounds/elevator/door1.png");
 		elevatorDoor[1] = new Texture("backgrounds/elevator/door2.png");
+
+		peopleSad = new Texture[4];
+		for (int a = 0; a < peopleSad.length; a++) {
+			peopleSad[a] = new Texture("people/sad/" + (a + 1) + ".png");
+		}
+		peopleHappy = new Texture[4];
+		for (int a = 0; a < peopleHappy.length; a++) {
+			peopleHappy[a] = new Texture("people/happy/" + (a + 1) + ".png");
+		}
 
 		spritesheetGirlWeights = new Texture[3];
 		spritesheetGirlElliptical = new Texture[7];
@@ -797,10 +804,6 @@ public class AssetsManager extends Thread {
 		truckCockpit[2] = new Texture("backgrounds/truckCockpit3.png");
 		truckCockpit[3] = new Texture("backgrounds/truckCockpit4.png");
 
-		levelBackgrounds = new Texture[1];
-		levelBackgrounds[0] = new Texture(
-				"backgrounds/Station-meet-trucks_0.png");
-
 		hoseAnimation = new Texture[15];
 		hoseAnimation[0] = new Texture("girl/hoseAnimation/1.png");
 		hoseAnimation[1] = new Texture("girl/hoseAnimation/2.png");
@@ -890,9 +893,7 @@ public class AssetsManager extends Thread {
 			trainBasketAnimation[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
-		for (int a = 0; a < 1; a++) {
-			levelBackgrounds[a].setFilter(textureFilter, textureFilter);
-		}
+		
 		for (int a = 0; a < 2; a++) {
 			dogWorried[a].setFilter(textureFilter, textureFilter);
 		}
@@ -903,6 +904,12 @@ public class AssetsManager extends Thread {
 		}
 		for (int a = 0; a < 2; a++) {
 			girlHammer[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < peopleSad.length; a++) {
+			peopleSad[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < peopleHappy.length; a++) {
+			peopleHappy[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
 			girlHammer_16_percent[a].setFilter(textureFilter, textureFilter);
@@ -1002,7 +1009,7 @@ public class AssetsManager extends Thread {
 
 		pause.setFilter(textureFilter, textureFilter);
 		hoseHydrant.setFilter(textureFilter, textureFilter);
-		speedometer.setFilter(textureFilter, textureFilter);
+	//	speedometer.setFilter(textureFilter, textureFilter);
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
 		grassFlowers.setFilter(textureFilter, textureFilter);
@@ -1016,7 +1023,6 @@ public class AssetsManager extends Thread {
 		catHappy.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
 		truckMiniature.setFilter(textureFilter, textureFilter);
-		rescueMetroSadPeople.setFilter(textureFilter, textureFilter);
 		fireStation.setFilter(textureFilter, textureFilter);
 		boyButton.setFilter(textureFilter, textureFilter);
 		girlButton.setFilter(textureFilter, textureFilter);
@@ -1052,7 +1058,6 @@ public class AssetsManager extends Thread {
 		starButtonEmpty.setFilter(textureFilter, textureFilter);
 		screenAwakeText.setFilter(textureFilter, textureFilter);
 		textureFilteringText.setFilter(textureFilter, textureFilter);
-		damage.setFilter(textureFilter, textureFilter);
 		voiceText.setFilter(textureFilter, textureFilter);
 		barFilledBlue.setFilter(textureFilter, textureFilter);
 		programmingText.setFilter(textureFilter, textureFilter);
@@ -1082,7 +1087,6 @@ public class AssetsManager extends Thread {
 		fireStationComplete.setFilter(textureFilter, textureFilter);
 		truckBack.setFilter(textureFilter, textureFilter);
 		truckBackDoor.setFilter(textureFilter, textureFilter);
-		fireBar.setFilter(textureFilter, textureFilter);
 		daniel.setFilter(textureFilter, textureFilter);
 		nevena.setFilter(textureFilter, textureFilter);
 		tushar.setFilter(textureFilter, textureFilter);
@@ -1122,7 +1126,7 @@ public class AssetsManager extends Thread {
 		fireMiniature.setFilter(textureFilter, textureFilter);
 		elevatorButton.setFilter(textureFilter, textureFilter);
 		elevatorButton_desaturated.setFilter(textureFilter, textureFilter);
-		boyMainMenu.setFilter(textureFilter, textureFilter);
+		// boyMainMenu.setFilter(textureFilter, textureFilter);
 		girlMainMenu.setFilter(textureFilter, textureFilter);
 		oilButton.setFilter(textureFilter, textureFilter);
 		boltButton.setFilter(textureFilter, textureFilter);
@@ -1130,7 +1134,7 @@ public class AssetsManager extends Thread {
 		tree.setFilter(textureFilter, textureFilter);
 		catMiniature.setFilter(textureFilter, textureFilter);
 		bolt.setFilter(textureFilter, textureFilter);
-		boyMenuHand.setFilter(textureFilter, textureFilter);
+		// boyMenuHand.setFilter(textureFilter, textureFilter);
 		truckNoBasket[0].setFilter(textureFilter, textureFilter);
 		truckBlank[0].setFilter(textureFilter, textureFilter);
 		authors.setFilter(textureFilter, textureFilter);

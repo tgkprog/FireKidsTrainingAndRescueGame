@@ -815,7 +815,6 @@ public class BigRoadRescueScreen implements Screen {
 						girlHoseReversed.setSpeed(2);
 					}
 				}
-
 			}
 
 			if (delayFire < 1) {
