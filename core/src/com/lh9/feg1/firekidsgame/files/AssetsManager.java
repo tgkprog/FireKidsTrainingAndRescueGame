@@ -13,7 +13,10 @@ import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 public class AssetsManager extends Thread {
 
 	DataOrganizer dataOrganizer;
-
+	
+	public Texture frameCollectibles;
+	public Texture starSummary;
+	public Texture starSummaryDesaturated;
 	public Texture[] buildings;
 	public Texture noPrompts;
 	public Texture train;
@@ -48,13 +51,13 @@ public class AssetsManager extends Thread {
 	public Texture ground;
 	public Texture graphicsText;
 	public Texture trainMiniature;
-//	public Texture speedometer;
+	// public Texture speedometer;
 	public Texture elevatorMiniature;
 	public Texture elevatorButton;
 	public Texture elevatorButton_desaturated;
 	public Texture hoseHydrant;
 	public Texture dogsGirl;
-	//public Texture damage;
+	// public Texture damage;
 	public Texture sign;
 	public Texture breakTheWallText;
 	public Texture eclipseFireText;
@@ -94,7 +97,7 @@ public class AssetsManager extends Thread {
 	public Texture lane;
 	public Texture boyTorso;
 	public Texture authors;
-//	public Texture rescueMetroSadPeople;
+	// public Texture rescueMetroSadPeople;
 	public Texture settingsText;
 	public Texture authorsText;
 	public Texture arrow;
@@ -133,7 +136,8 @@ public class AssetsManager extends Thread {
 	public Texture bigRoad[];
 	public Texture clouds[];
 	public Texture trainBasketAnimation[];
-	public Texture dialogueWindow;
+	public Texture dialogueWindowBoy;
+	public Texture dialogueWindowGirl;
 	public Texture parkBackgrounds[];
 	public Texture runButton;
 	public Texture runButtonLittle;
@@ -149,7 +153,7 @@ public class AssetsManager extends Thread {
 	public Texture spritesheetGirlElliptical[];
 	public Texture spritesheetGirlWeights[];
 	public Texture spritesheetBoyWeights[];
-	//public Texture fireBar;
+	// public Texture fireBar;
 	public Texture pointer;
 	public Texture bar;
 	public Texture settings;
@@ -373,8 +377,9 @@ public class AssetsManager extends Thread {
 		runButtonGreen = new Texture("buttons/Button-1.png");
 		settings = new Texture("buttons/settings.png");
 		pointer = new Texture("others/this.png");
-	//	speedometer = new Texture("others/speedometer.png");
-		dialogueWindow = new Texture("windows/windowPlaceholder.png");
+		// speedometer = new Texture("others/speedometer.png");
+		dialogueWindowBoy = new Texture("windows/dialog_frame_boy.png");
+		dialogueWindowGirl = new Texture("windows/dialog_frame_girl.png");
 		starButton = new Texture("buttons/starButton.png");
 		starButtonEmpty = new Texture("buttons/starButtonEmpty.png");
 		fireStation = new Texture("buttons/fireStation.png");
@@ -398,7 +403,7 @@ public class AssetsManager extends Thread {
 		catHappy = new Texture("spritesheets/cat/Cat-happy.png");
 		catSad = new Texture("spritesheets/cat/Cat-worried.png");
 		wheel = new Texture("others/wheel.png");
-		//fireBar = new Texture("others/fireBar.png");
+		// fireBar = new Texture("others/fireBar.png");
 		// girlHead = new Texture("girl/girlHead.png");
 		basket = new Texture("spritesheets/basket.png");
 		roadPart = new Texture("backgrounds/roadPart.png");
@@ -443,13 +448,15 @@ public class AssetsManager extends Thread {
 		catMiniature = new Texture("buttons/catMiniature.png");
 		boyButton = new Texture("buttons/Boy-button.png");
 		girlButton = new Texture("buttons/Girl-button.png");
-		//damage = new Texture("others/damage.png");
+		// damage = new Texture("others/damage.png");
 		peopleGround = new Texture("spritesheets/peopleGround.png");
 		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
 		barFilled = new Texture("others/barFilled.png");
 		train = new Texture("others/train.png");
 		grassFlowers = new Texture("backgrounds/grassFlowers.png");
 		star = new Texture("particles/star.png");
+		starSummaryDesaturated = new Texture("others/star_summary_desaturated.png");
+		starSummary = new Texture("others/star_summary.png");
 		barNotFilled = new Texture("others/barNotFilled.png");
 		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
 		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
@@ -568,6 +575,7 @@ public class AssetsManager extends Thread {
 		rescueCat = new Texture("buttons/rescueCat.png");
 		fitness = new Texture("buttons/fitness.png");
 		rescueTrain = new Texture("buttons/rescueTrain.png");
+		frameCollectibles = new Texture("windows/frame_collectibles.png");
 
 		bigRoadRescue_desaturated = new Texture(
 				"buttons/bigRoadRescue_desaturated.png");
@@ -603,9 +611,9 @@ public class AssetsManager extends Thread {
 		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
 
 		buildings = new Texture[1];
-for(int a =0;a<buildings.length;a++)
-		buildings[a] = new Texture("buildings/" + (a+1) + ".png");
-		
+		for (int a = 0; a < buildings.length; a++)
+			buildings[a] = new Texture("buildings/" + (a + 1) + ".png");
+
 		cloudyBackgroundClose = new Texture("backgrounds/rescueCat/close.png");
 		cloudyBackgroundFar = new Texture("backgrounds/rescueCat/far.png");
 
@@ -902,7 +910,7 @@ for(int a =0;a<buildings.length;a++)
 			trainBasketAnimation[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
-		
+
 		for (int a = 0; a < 2; a++) {
 			dogWorried[a].setFilter(textureFilter, textureFilter);
 		}
@@ -1021,11 +1029,13 @@ for(int a =0;a<buildings.length;a++)
 
 		pause.setFilter(textureFilter, textureFilter);
 		hoseHydrant.setFilter(textureFilter, textureFilter);
-	//	speedometer.setFilter(textureFilter, textureFilter);
+		// speedometer.setFilter(textureFilter, textureFilter);
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
 		grassFlowers.setFilter(textureFilter, textureFilter);
 		star.setFilter(textureFilter, textureFilter);
+		starSummary.setFilter(textureFilter, textureFilter);
+		starSummaryDesaturated.setFilter(textureFilter, textureFilter);
 		barNotFilled.setFilter(textureFilter, textureFilter);
 		longButton.setFilter(textureFilter, textureFilter);
 		foot.setFilter(textureFilter, textureFilter);
@@ -1034,6 +1044,8 @@ for(int a =0;a<buildings.length;a++)
 		button.setFilter(textureFilter, textureFilter);
 		catHappy.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
+		dialogueWindowGirl.setFilter(textureFilter, textureFilter);
+		dialogueWindowBoy.setFilter(textureFilter, textureFilter);	
 		truckMiniature.setFilter(textureFilter, textureFilter);
 		fireStation.setFilter(textureFilter, textureFilter);
 		boyButton.setFilter(textureFilter, textureFilter);
@@ -1063,6 +1075,7 @@ for(int a =0;a<buildings.length;a++)
 		carBlueButton.setFilter(textureFilter, textureFilter);
 		carGreenButton.setFilter(textureFilter, textureFilter);
 
+		frameCollectibles.setFilter(textureFilter, textureFilter);
 		retryButton.setFilter(textureFilter, textureFilter);
 		playButton.setFilter(textureFilter, textureFilter);
 		vibrationsText.setFilter(textureFilter, textureFilter);

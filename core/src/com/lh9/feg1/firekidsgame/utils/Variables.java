@@ -4,6 +4,39 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Variables {
 
+	//For the pop up windows:
+	//Max lines with fontLittle : 3
+	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"  Meet the","   Trucks!"};
+	
+	static final public String[] FOODS_POP_UP_1 = {"   Pick only","healthy food!"};
+	
+	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Fitness","one"};
+	
+	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Fitness","two"};
+	
+	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"fitness","three"};
+	
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"training","one"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"click pointed", "buttons"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_3 = {"Good! Now click", "red button"};
+	
+	
+	static final public String[] TRAINING_SCREEN_TWO_POP_UP_1 = {"Training","two"};
+	
+	static final public String[] PRE_ELEVATOR_SCREEN_POP_UP_1 = {"Pre","elevator"};
+	
+	static final public String[] ELEVATOR_SCREEN_POP_UP_1 = {"elevator","popup"};
+	
+	static final public String[] PRE_RESCUE_CAT_POP_UP_1 = {"Pre","cat"};
+	
+	static final public String[] RESCUE_CAT_POP_UP_1 = {"cat","popup"};
+	
+	static final public String[] PRE_RESCUE_METRO_POP_UP_1 = {"Pre","metro"};
+	
+	static final public String[] RESCUE_METRO_POP_UP_1 = {"Rescue","metro"};
+	
+	static final public String[] BIG_ROAD_RESCUE_POP_UP_1 = {"Big road","rescue"};
+	
 	static final String MENU_SCREEN = "Menu Screen";
 	static final String MEET_THE_TRUCKS = "Meet The Trucks";
 	static final String FITNESS_SCREEN_ONE = "Fitness Screen One";
@@ -22,7 +55,7 @@ public class Variables {
 	static final double MAX_LOGO_SCALE = 0.5f;
 	static final double DELAY_CHANGING_SCREENS = 0f;
 
-	static final Vector2 LOGO_POSITION = new Vector2(130, -150);
+	static final Vector2 LOGO_POSITION = new Vector2(128, -150);
 	static final Vector2 RUN_BUTTON_POSITION = new Vector2(650, 220);
 	static final Vector2 PAUSE_BUTTON_POSITION = new Vector2(710, 400);
 

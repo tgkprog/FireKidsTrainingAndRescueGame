@@ -44,14 +44,17 @@ public class TrainingScreenOne implements Screen {
 	boolean exit;
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
+	boolean victory;
+	float totalTimeSpent;
 	float timerSpeedGirl;
 	float timerFrontTruck;
 	float endingPointerScale;
 	float shakeScreenTimer;
 	float timerSirene;
 	float timerSecondWindow;
-	float minigameTimeLeft = 2f;
+	float minigameTimeLeft = 3.5f;
 	int minigameCounter = 30;
+	int starsCollected = 0;
 
 	Sprite windowCounter;
 	Sprite yellowSectionMiddlePointer;
@@ -184,6 +187,9 @@ public class TrainingScreenOne implements Screen {
 				-100, assetsManager.yellowSectionUp);
 		yellowSectionUpRight.goUp((int) yellowSectionUpRightPosition.y);
 
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
+
 		yellowSectionMiddle.setAlpha(0);
 		yellowSectionLeft.setAlpha(0);
 		yellowSectionUpLeft.setAlpha(0);
@@ -205,16 +211,25 @@ public class TrainingScreenOne implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTRAINING_SCREEN_ONE());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getTRAINING_SCREEN_ONE());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		// inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+		if (dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.TRAINING_SCREEN_ONE_POP_UP_1,
+					assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.TRAINING_SCREEN_ONE_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setControlledHuman(boy);
@@ -283,8 +298,6 @@ public class TrainingScreenOne implements Screen {
 		counterLeftBar = new Bar(assetsManager.barFilledBlue,
 				assetsManager.barNotFilledBlue, 250, 425, minigameCounter);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 	}
 
@@ -401,15 +414,18 @@ public class TrainingScreenOne implements Screen {
 
 	void updateLogics(float delta) {
 
+		if (dialogueWindow.isVisibile() == false)
+			totalTimeSpent += delta;
+
 		managePointers(delta);
 
 		if (afterMinigameWindow == true && dialogueWindow.isVisibile() == false) {
 			runButton.setDontRespond(false);
-			if(endingPointerScale < 1)
-			endingPointerScale += 4*delta;
-			if(endingPointerScale > 1)
+			if (endingPointerScale < 1)
+				endingPointerScale += 4 * delta;
+			if (endingPointerScale > 1)
 				endingPointerScale = 1;
-			
+
 		}
 
 		if (secondDialogueClicked == true
@@ -417,6 +433,30 @@ public class TrainingScreenOne implements Screen {
 			minigameTimeLeft -= delta;
 			randomizeMinigame();
 			drawTime = true;
+
+			if (minigameTimeLeft <= 0 && minigameRunning == true) {
+				victory = false;
+				minigameRunning = false;
+				minigameCounter = 0;
+				dialogueWindow.drawLevelSummary(assetsManager.star,
+						assetsManager.starSummary,
+						assetsManager.starSummaryDesaturated, 0,
+						starsCollected, false);
+				dialogueWindow.popUp();
+			}
+		}
+
+		if(minigameCounter ==0 && victory == false){
+			timeLeftBar.setVisibility(false);
+			counterLeftBar.setVisibility(false);
+		}
+		
+		System.out.println(starsCollected);
+		
+		if (dialogueWindow.isVisibile() == false && victory == false
+				&& minigameRunning == false && minigameCounter == 0 && sirene == false && starsCollected < 30)  {
+			cloudManager.start();
+			sirene = true;
 		}
 
 		if (firstDialogueClicked == true)
@@ -437,6 +477,18 @@ public class TrainingScreenOne implements Screen {
 			timerSecondWindow += delta;
 		}
 		if (timerSecondWindow > 2 && thirdDialogueClicked == false) {
+			int goldenStars = 1;
+			if (totalTimeSpent < 25)
+				goldenStars = 2;
+			if (totalTimeSpent < 20)
+				goldenStars = 3;
+			
+			dialogueWindow.drawLevelSummary(assetsManager.star,
+					assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, goldenStars,
+					starsCollected, true);
+			victory = true;
+	
 			dialogueWindow.popUp();
 			thirdDialogueClicked = true;
 		}
@@ -445,9 +497,7 @@ public class TrainingScreenOne implements Screen {
 			cloudManager.start();
 			finish = true;
 		}
-		if (cloudManager.getAllScalesEqualOne() == true && sirene == true) {
-			game.setScreen(new TrainingScreenTwo(game));
-		}
+
 	}
 
 	void updateCameraLogics(double delta) {
@@ -545,6 +595,8 @@ public class TrainingScreenOne implements Screen {
 						.setAlpha((float) timerFrontTruck - 1.5f);
 			}
 			if (timerFrontTruck > 2.5f && secondDialogueClicked == false) {
+				dialogueWindow
+						.setDialogueText(Variables.TRAINING_SCREEN_ONE_POP_UP_2);
 				dialogueWindow.popUp();
 				secondDialogueClicked = true;
 			}
@@ -611,6 +663,7 @@ public class TrainingScreenOne implements Screen {
 
 	void randomizeMinigame() {
 		if (minigameRunning == false && minigameCounter > 0) {
+			starsCollected++;
 			minigameCounter--;
 			minigameRunning = true;
 
@@ -622,6 +675,8 @@ public class TrainingScreenOne implements Screen {
 
 			if (minigameCounter == 0) {
 				if (minigameCounter == 0 && afterMinigameWindow == false) {
+	
+					dialogueWindow.setDialogueText(Variables.TRAINING_SCREEN_ONE_POP_UP_3);
 					dialogueWindow.popUp();
 					afterMinigameWindow = true;
 				}
@@ -648,7 +703,7 @@ public class TrainingScreenOne implements Screen {
 		}
 
 		if (allPointersScaleZero == true && minigameRunning == true) {
-			minigameTimeLeft = 2f;
+			minigameTimeLeft = 3.5f;
 			minigameRunning = false;
 		}
 
@@ -661,7 +716,8 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionMiddle.getSelection() == true) {
 				yellowButtons[0] = false;
-				assetsManager.hit.setPosition(yellowSectionMiddle.getX()+50, yellowSectionMiddle.getY());
+				assetsManager.hit.setPosition(yellowSectionMiddle.getX() + 50,
+						yellowSectionMiddle.getY());
 				assetsManager.hit.allowCompletion();
 				assetsManager.hit.start();
 
@@ -681,7 +737,8 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionLeft.getSelection() == true) {
 				yellowButtons[1] = false;
-				assetsManager.hit.setPosition(yellowSectionLeft.getX(), yellowSectionLeft.getY());
+				assetsManager.hit.setPosition(yellowSectionLeft.getX(),
+						yellowSectionLeft.getY());
 				assetsManager.hit.allowCompletion();
 				assetsManager.hit.start();
 			}
@@ -700,7 +757,8 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionUpLeft.getSelection() == true) {
 				yellowButtons[2] = false;
-				assetsManager.hit.setPosition(yellowSectionUpLeft.getX(), yellowSectionUpLeft.getY());
+				assetsManager.hit.setPosition(yellowSectionUpLeft.getX(),
+						yellowSectionUpLeft.getY());
 				assetsManager.hit.allowCompletion();
 				assetsManager.hit.start();
 			}
@@ -720,10 +778,11 @@ public class TrainingScreenOne implements Screen {
 			}
 			if (yellowSectionUpRight.getSelection() == true) {
 				yellowButtons[3] = false;
-				assetsManager.hit.setPosition(yellowSectionUpRight.getX(), yellowSectionUpRight.getY());
+				assetsManager.hit.setPosition(yellowSectionUpRight.getX(),
+						yellowSectionUpRight.getY());
 				assetsManager.hit.allowCompletion();
 				assetsManager.hit.start();
-				
+
 			}
 		} else if (yellowSectionUpRightPointer.getScaleX() > 0) {
 			yellowSectionUpRightPointer.setScale(yellowSectionUpRightPointer
@@ -735,10 +794,20 @@ public class TrainingScreenOne implements Screen {
 	}
 
 	void manageSelectingScreen() {
+
+		if (cloudManager.getAllScalesEqualOne() == true && sirene == true
+				&& victory == false) {
+			game.setScreen(new TrainingScreenOne(game));
+		}
+
+		if (cloudManager.getAllScalesEqualOne() == true && sirene == true && victory == true) {
+			game.setScreenPlayed(2);
+			game.setCollectedStars(dataOrganizer.getScore() + starsCollected);
+			game.setScreen(new TrainingScreenTwo(game));
+		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setScreenPlayed(2);
 				game.setScreen(new MenuScreen(game));
 			}
 		}

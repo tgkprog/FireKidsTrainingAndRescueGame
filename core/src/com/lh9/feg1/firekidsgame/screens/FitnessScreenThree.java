@@ -57,6 +57,7 @@ public class FitnessScreenThree implements Screen {
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
+	boolean victory;
 
 	final Starter game;
 
@@ -86,9 +87,9 @@ public class FitnessScreenThree implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getFITNESS_SCREEN_TWO());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getFITNESS_SCREEN_TWO());
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -121,8 +122,16 @@ public class FitnessScreenThree implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+		if (dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.FITNESS_SCREEN_THREE_POP_UP_1,
+					assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.FITNESS_SCREEN_THREE_POP_UP_1, assetsManager.fontLittle);
+		
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
@@ -267,15 +276,19 @@ public class FitnessScreenThree implements Screen {
 			firstDialogueClicked = true;
 		}
 		if (player.getCounter() == 60 && finish == false) {
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
 			assetsManager.stars.start();
+			victory = true;
 		}
 		if (npc.getCounter() == 60 && finish == false) {
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
+			victory = false;
 		}
 		if (finish == true) {
 			npc.setSpeed(0);
@@ -291,12 +304,6 @@ public class FitnessScreenThree implements Screen {
 				&& exit == false) {
 			cloudManager.start();
 			exit = true;
-		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setCollectedStars(starsCollected);
-			game.setScreenPlayed(1);
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreen(new MenuScreen(game));
 		}
 
 	}
@@ -341,6 +348,17 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void manageSelectingScreen() {
+		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+
+			if (victory == true) {
+				game.setScreenPlayed(1);
+				game.setScreen(new MenuScreen(game));
+			} else {
+				game.setScreen(new FitnessScreenThree(game));
+			}
+
+			game.setCollectedStars(starsCollected + starsAll);
+		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
@@ -366,6 +384,9 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles,10,385);
+		
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);

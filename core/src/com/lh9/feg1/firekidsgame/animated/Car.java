@@ -1,11 +1,12 @@
 package com.lh9.feg1.firekidsgame.animated;
 
-
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.math.Rectangle;
 
 public class Car extends Truck {
 
 	boolean goAutomatically;
+	boolean dontCheckCollision;
 	double timerGoAutomatically;
 	double wait = 4;
 
@@ -71,4 +72,34 @@ public class Car extends Truck {
 		wait = 0;
 		speed = 0;
 	}
+
+	public void dontCheckCollision() {
+		dontCheckCollision = true;
+	}
+
+	public boolean checkCollision(float x, float y) {
+		if (dontCheckCollision == false) {
+			truck.setPosition(x, y);
+			bounds.setPosition(this.x, this.y);
+			if (truck.overlaps(bounds)) {
+				bump();
+				return true;
+			} else
+				return false;
+		} else
+			return false;
+	}
+
+	public boolean checkCollision(Rectangle bounds) {
+		if (dontCheckCollision == false) {
+			truck.setPosition(x, y);
+			if (truck.overlaps(bounds)) {
+				return true;
+			} else
+				return false;
+		} else
+			return false;
+
+	}
+
 }

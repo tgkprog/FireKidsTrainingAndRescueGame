@@ -148,7 +148,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 		up = new Button(10, -200, assetsManager.arrowUp);
 		up.goUp(250);
-		up.setAlpha(0.5f);
+		up.setAlpha(0.75f);
 
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
@@ -157,7 +157,7 @@ public class MeetTheTrucksScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+		menuWindow = new MenuWindow(null,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getMEET_THE_TRUCKS());
 
@@ -225,8 +225,16 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+
+		if(dataOrganizer.getGender() == true)
+		dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+				assetsManager.darkScreen, 250f, 150f,
+				Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
+				
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
@@ -857,7 +865,15 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if (player.getX() >= 14000 && secondDialogueClicked == false) {
 			secondDialogueClicked = true;
+			//dialogueWindow.setDialogueText(Variables.MEET_THE_TRUCKS_POP_UP_2);
+			int goldenStars = 0;
+			if(player.getX() > train.getX())
+				goldenStars = 3;
+			else
+				goldenStars = 2;
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, goldenStars, starsCollected,true);
 			dialogueWindow.popUp();
+			
 			assetsManager.stars.start();
 			// player.setSpeed(0);
 			// player.resetStateTime();
@@ -956,10 +972,10 @@ public class MeetTheTrucksScreen implements Screen {
 		}
 		if (player.getX() >= 1600 && player.getX() < 3100) {
 			batch.draw(assetsManager.parkBackgrounds[5], 2049, 0);
-			
-			if(dataOrganizer.getPrompts() == false){
-			pointer.setPosition(2290, pointersPosition + 200);
-			pointer.draw(batch);
+
+			if (dataOrganizer.getPrompts() == false) {
+				pointer.setPosition(2290, pointersPosition + 200);
+				pointer.draw(batch);
 			}
 		}
 		if (player.getX() >= 2100 && player.getX() < 4600)
@@ -1126,21 +1142,21 @@ public class MeetTheTrucksScreen implements Screen {
 
 		speedBar.render(batch, delta, Math.abs(truck.getSpeed()));
 
-		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.speedBar, 200, 440);
 
-		playerHead.setPosition(160 + player.getX() * 0.0285f, 410);
+		playerHead.setPosition(200 + player.getX() * 0.0285f, 410);
 		playerHead.draw(batch);
 
-		fireMiniature.setPosition(495, 410);
+		fireMiniature.setPosition(535, 410);
 		fireMiniature.draw(batch);
 
-		trainMiniature.setPosition(160 + train.getX() * 0.0285f, 410);
+		trainMiniature.setPosition(200 + train.getX() * 0.0285f, 410);
 		trainMiniature.draw(batch);
 
 		if (truckPart == false)
-			truckMiniature.setPosition(225, 410);
+			truckMiniature.setPosition(265, 410);
 		else if (eclipsePart == false)
-			truckMiniature.setPosition(160 + player.getX() * 0.0285f, 410);
+			truckMiniature.setPosition(200 + player.getX() * 0.0285f, 410);
 
 		truckMiniature.draw(batch);
 
@@ -1462,6 +1478,8 @@ public class MeetTheTrucksScreen implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles,10,435);
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);

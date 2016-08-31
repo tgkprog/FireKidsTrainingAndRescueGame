@@ -35,7 +35,7 @@ public class TrainingScreenTwo implements Screen {
 	Sprite pointer;
 	Sprite playerHead;
 	Sprite truckLed;
-	
+
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
@@ -43,14 +43,14 @@ public class TrainingScreenTwo implements Screen {
 	Button down;
 	Button pause;
 	Button runButton;
-	
+
 	StaticAnimation peopleGround;
 	StaticAnimation peopleBuilding;
-	
+
 	Array<Star> stars;
 	ArrayList<StaticAnimation> fire;
 	ArrayList<Car> cars;
-	
+
 	Truck truck;
 	MenuWindow menuWindow;
 	FPSManager fpsManager;
@@ -65,7 +65,7 @@ public class TrainingScreenTwo implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	
+
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -76,6 +76,8 @@ public class TrainingScreenTwo implements Screen {
 	boolean secondDialogueClicked;
 	boolean finish;
 	boolean enlargeStar;
+	float totalTimeSpent;
+	float currentCollisionTimer;
 	float timerSpeedGirl;
 	float timerSpawnCar;
 	float timerLastPopUp;
@@ -86,12 +88,15 @@ public class TrainingScreenTwo implements Screen {
 	int starsAll;
 	int starsCollected;
 	int starsCollectedLastFrame;
-	
+
 	final Starter game;
 
 	public TrainingScreenTwo(final Starter gam) {
 
 		this.game = gam;
+
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
 
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
@@ -114,8 +119,18 @@ public class TrainingScreenTwo implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+
+		if (dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.TRAINING_SCREEN_TWO_POP_UP_1,
+					assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.TRAINING_SCREEN_TWO_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 
@@ -235,14 +250,12 @@ public class TrainingScreenTwo implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTRAINING_SCREEN_TWO());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getTRAINING_SCREEN_TWO());
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		if (dataOrganizer.getGender() == false)
@@ -253,7 +266,7 @@ public class TrainingScreenTwo implements Screen {
 		playerHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.fireMiniature);
 		fireMiniature.setScale(0.5f);
-		fireMiniature.setPosition(160, 410);
+		fireMiniature.setPosition(200, 410);
 
 		stars = new Array<Star>();
 
@@ -277,7 +290,7 @@ public class TrainingScreenTwo implements Screen {
 	public void render(float delta) {
 
 		inputInterpreter.checkKeyboardInput();
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -429,9 +442,22 @@ public class TrainingScreenTwo implements Screen {
 							if (b != a)
 								cars.get(b).waitSec();
 						}
-						truck.bump();
+						currentCollisionTimer += delta;
+						if (currentCollisionTimer > 1f)
+						{
+							truck.setSpeed(1);
+							cars.get(a).dontCheckCollision();
+						}
+						else
+							truck.bump();
+
 						break;
+					} else {
+
+						if(Math.abs(truck.getSpeed()) > 0.5f)
+						currentCollisionTimer = 0;
 					}
+
 				}
 
 		} else if (closestCarLane == 210) {
@@ -447,9 +473,22 @@ public class TrainingScreenTwo implements Screen {
 						if (b != a)
 							cars.get(b).waitSec();
 					}
-					truck.bump();
+					currentCollisionTimer += delta;
+					if (currentCollisionTimer > 1f)
+					{
+						truck.setSpeed(1);
+						cars.get(a).dontCheckCollision();
+					}
+					else
+						truck.bump();
+
 					break;
+				} else {
+
+					if(Math.abs(truck.getSpeed()) > 0.5f)
+					currentCollisionTimer = 0;
 				}
+
 			}
 			truck.render(batch, delta);
 		} else {
@@ -464,9 +503,22 @@ public class TrainingScreenTwo implements Screen {
 						if (b != a)
 							cars.get(b).waitSec();
 					}
-					truck.bump();
+					currentCollisionTimer += delta;
+					if (currentCollisionTimer > 1f)
+					{
+						truck.setSpeed(1);
+						cars.get(a).dontCheckCollision();
+					}
+					else
+						truck.bump();
+
 					break;
+				} else {
+
+					if(Math.abs(truck.getSpeed()) > 0.5f)
+					currentCollisionTimer = 0;
 				}
+
 			}
 
 			truck.render(batch, delta);
@@ -509,6 +561,12 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void updateLogics(float delta) {
+
+		if (menuWindow.isVisibile() == false
+				&& dialogueWindow.isVisibile() == false) {
+			totalTimeSpent += delta;
+		}
+
 		pointer.setScale((float) pointerScale);
 
 		if (menuWindow.isVisibile() == true) {
@@ -538,6 +596,17 @@ public class TrainingScreenTwo implements Screen {
 		}
 
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
+			
+			int goldenStars = 1;
+			if(totalTimeSpent< 25)
+				goldenStars = 2;
+			if(totalTimeSpent< 20)
+				goldenStars = 3;
+			
+			dialogueWindow.drawLevelSummary(assetsManager.star,
+					assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, goldenStars,
+					starsCollected, true);
 			dialogueWindow.popUp();
 			lastWindowPopUp = true;
 		}
@@ -701,9 +770,9 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void drawBars(float delta) {
-		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.speedBar, 200, 440);
 
-		playerHead.setPosition(530 + truck.getX() * 0.0255f, 410);
+		playerHead.setPosition(570 + truck.getX() * 0.0255f, 410);
 		playerHead.draw(batch);
 
 		fireMiniature.draw(batch);
@@ -829,6 +898,9 @@ public class TrainingScreenTwo implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+		
+		batch.draw(assetsManager.frameCollectibles,10,435);
+
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);

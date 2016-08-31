@@ -57,7 +57,8 @@ public class FitnessScreenTwo implements Screen {
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
-
+	boolean victory;
+	
 	final Starter game;
 
 	public FitnessScreenTwo(final Starter gam) {
@@ -103,9 +104,16 @@ public class FitnessScreenTwo implements Screen {
 		npc.setFriction(1.35f);
 		player.setFriction(1.35f);
 
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
-
+		if(dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.FITNESS_SCREEN_TWO_POP_UP_1, assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.FITNESS_SCREEN_TWO_POP_UP_1, assetsManager.fontLittle);
+		
+		
 		menuButton = new Button(400, 0, assetsManager.menu);
 		playButton = new Button(450, 0, assetsManager.playButton);
 		retryButton = new Button(500, 0, assetsManager.retryButton);
@@ -113,7 +121,7 @@ public class FitnessScreenTwo implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+		menuWindow = new MenuWindow(null,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getFITNESS_SCREEN_TWO());
 
@@ -271,12 +279,16 @@ public class FitnessScreenTwo implements Screen {
 			firstDialogueClicked = true;
 		}
 		if (player.getCounter() == 60 && finish == false) {
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
 			assetsManager.stars.start();
+			victory = true;
 		}
 		if (npc.getCounter() == 60 && finish == false) {
+			victory = false;
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
@@ -292,10 +304,7 @@ public class FitnessScreenTwo implements Screen {
 			cloudManager.start();
 			exit = true;
 		}
-		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreen(new FitnessScreenThree(game));
-		}
+		
 		updateCameraLogics(delta);
 		updatenpcAction(delta);
 
@@ -342,6 +351,14 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void manageSelectingScreen() {
+		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+		if(victory == true)
+			game.setScreen(new FitnessScreenThree(game));
+		else
+			game.setScreen(new FitnessScreenTwo(game));
+		
+		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
@@ -367,6 +384,9 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+	
+		batch.draw(assetsManager.frameCollectibles,10,385);
+		
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);

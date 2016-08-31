@@ -128,7 +128,7 @@ public class ElevatorScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+		menuWindow = new MenuWindow(null,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getRESCUE_METRO_SCREEN());
 
@@ -158,8 +158,15 @@ public class ElevatorScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+		if(dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.ELEVATOR_SCREEN_POP_UP_1, assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.ELEVATOR_SCREEN_POP_UP_1, assetsManager.fontLittle);
+				
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setControlledHuman(player);
@@ -352,6 +359,7 @@ public class ElevatorScreen implements Screen {
 				&& minigameCounter == 0) {
 			dialogueWindow.popUp();
 			finishDialogue = true;
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 		}
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false
 				&& startedClouds == false) {

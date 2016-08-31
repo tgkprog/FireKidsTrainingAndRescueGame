@@ -4,6 +4,7 @@ import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -59,6 +60,7 @@ public class FitnessScreenOne implements Screen {
 	Button pause;
 	Button runButton;
 
+	boolean victory;
 	boolean exit;
 	boolean firstDialogueClicked = false;
 	boolean secondDialogueClicked = false;
@@ -80,26 +82,33 @@ public class FitnessScreenOne implements Screen {
 	public FitnessScreenOne(final Starter gam) {
 
 		this.game = gam;
-
+		
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-
+		assetsManager.fontLittle.setColor(Color.WHITE);
 		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
 		runButton = new Button(685, -200, assetsManager.runButtonLittle);
 		runButton.goUp(30);
 		runButton.setAlpha(0.5f);
-
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
-
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
+		
+		if (dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.FITNESS_SCREEN_ONE_POP_UP_1, assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
+		
+		
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		player = new Human();
@@ -139,9 +148,9 @@ public class FitnessScreenOne implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getFITNESS_SCREEN_ONE());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getFITNESS_SCREEN_ONE());
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -375,7 +384,6 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void drawWindows(float delta) {
-
 		menuWindow.draw(batch, delta);
 		dialogueWindow.draw(batch, delta);
 	}
@@ -401,13 +409,18 @@ public class FitnessScreenOne implements Screen {
 		}
 		if (player.getX() > 4000 && finish == false) {
 			pause.setDontRespond(true);
+			victory = true;
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
 			assetsManager.stars.start();
+		
 		}
 		if (npc.getX() > 4000 && finish == false) {
+			victory = false;
 			pause.setDontRespond(true);
+			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
@@ -497,10 +510,10 @@ public class FitnessScreenOne implements Screen {
 
 	void drawBars(float delta) {
 
-		batch.draw(assetsManager.speedBar, 160, 440);
+		batch.draw(assetsManager.speedBar, 200, 440);
 
-		playerHead.setPosition(165 + player.getX() * 0.1f, 410);
-		npcHead.setPosition(165 + npc.getX() * 0.1f, 410);
+		playerHead.setPosition(205 + player.getX() * 0.1f, 410);
+		npcHead.setPosition(205 + npc.getX() * 0.1f, 410);
 
 		playerHead.draw(batch);
 		npcHead.draw(batch);
@@ -511,7 +524,11 @@ public class FitnessScreenOne implements Screen {
 	void manageSelectingScreen() {
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			game.setCollectedStars(starsCollected + starsAll);
+		if(victory == true)
 			game.setScreen(new FitnessScreenTwo(game));
+		else
+			game.setScreen(new FitnessScreenOne(game));
+				
 		}
 
 		if (inputInterpreter.getSelectedScreenName() == variables
@@ -707,6 +724,8 @@ public class FitnessScreenOne implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles,10,435);
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);

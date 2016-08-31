@@ -13,7 +13,7 @@ public class MenuWindow extends Dialogue {
 	
 	public MenuWindow(Texture windowTexture, Texture dark, double x, double y, Button menu,
 			Button retry, Button play, String screen) {
-		super(null, dark, x, y, null);
+		super(null, dark, x, y, null, null);
 		this.menu = menu;
 		this.retry = retry;
 		this.play = play;

@@ -122,6 +122,8 @@ public class BigRoadRescueScreen implements Screen {
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
+		dataOrganizer = new DataOrganizer();
+		dataOrganizer.loadData();
 
 		pause = new Button(710, 120, assetsManager.pause);
 		pause.goUp(400);
@@ -155,7 +157,7 @@ public class BigRoadRescueScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(assetsManager.dialogueWindow,
+		menuWindow = new MenuWindow(null,
 				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
 				playButton, variables.getBIG_ROAD_RESCUE_SCREEN());
 
@@ -171,8 +173,16 @@ public class BigRoadRescueScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindow,
-				assetsManager.darkScreen, 250f, 150f, assetsManager.button);
+		if(dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.BIG_ROAD_RESCUE_POP_UP_1, assetsManager.fontLittle);
+		else
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.BIG_ROAD_RESCUE_POP_UP_1, assetsManager.fontLittle);
+	
+				
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runLeft);
 		inputInterpreter.setRunButtonSecond(runRight);
@@ -225,8 +235,6 @@ public class BigRoadRescueScreen implements Screen {
 
 		truckLed = new Sprite(assetsManager.truckLed);
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		if (dataOrganizer.getGender() == false)
@@ -455,7 +463,7 @@ public class BigRoadRescueScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		if (minigameCounter == 1 && finish == false) {
+		if (minigameCounter < 1 && finish == false) {
 			dialogueWindow.popUp();
 			finish = true;
 			assetsManager.stars.start();
@@ -757,6 +765,8 @@ public class BigRoadRescueScreen implements Screen {
 			fireBar.setVisibility(true);
 			if (minigameCounter == 0) {
 				if (minigameCounter == 0 && afterMinigameWindow == false) {
+					
+					dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 					dialogueWindow.popUp();
 					afterMinigameWindow = true;
 				}
