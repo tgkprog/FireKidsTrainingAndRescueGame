@@ -5,6 +5,7 @@ import com.badlogic.gdx.Preferences;
 
 public class DataOrganizer {
 
+	boolean[] screensPlayed;
 	boolean voice;
 	boolean textureFiltering;
 	boolean fps;
@@ -17,10 +18,18 @@ public class DataOrganizer {
 	int score;
 	int experience;
 
+	public boolean[] getScreensPlayed() {
+		return screensPlayed;
+	}
+
+	public void setScreensPlayed(boolean[] screensPlayed) {
+		this.screensPlayed = screensPlayed;
+	}
+
 	public int getScore() {
 		return score;
 	}
-	
+
 	public boolean getPrompts() {
 		return prompts;
 	}
@@ -101,10 +110,21 @@ public class DataOrganizer {
 		preferences.putBoolean("gender", gender);
 		preferences.putInteger("experience", experience);
 		preferences.putInteger("score", score);
+		preferences.putBoolean(Variables.FOODS_SCREEN, screensPlayed[0]);
+		preferences
+				.putBoolean(Variables.FITNESS_SCREEN_THREE, screensPlayed[1]);
+		preferences.putBoolean(Variables.TRAINING_SCREEN_ONE, screensPlayed[2]);
+		preferences.putBoolean(Variables.TRAINING_SCREEN_TWO, screensPlayed[3]);
+		preferences.putBoolean(Variables.CAT_RESCUE_SCREEN, screensPlayed[4]);
+		preferences.putBoolean(Variables.RESCUE_METRO_SCREEN, screensPlayed[5]);
+		preferences.putBoolean(Variables.ELEVATOR_SCREEN, screensPlayed[6]);
 		preferences.flush();
 	}
 
 	public void loadData() {
+
+		screensPlayed = new boolean[7];
+
 		Preferences preferences = Gdx.app
 				.getPreferences("Application prefferences");
 		voice = preferences.getBoolean("voice", true);
@@ -116,5 +136,19 @@ public class DataOrganizer {
 		screenAwake = preferences.getBoolean("screenAwake", true);
 		experience = preferences.getInteger("experience", 0);
 		score = preferences.getInteger("score", 0);
+		screensPlayed[0] = preferences
+				.getBoolean(Variables.FOODS_SCREEN, false);
+		screensPlayed[1] = preferences.getBoolean(
+				Variables.FITNESS_SCREEN_THREE, false);
+		screensPlayed[2] = preferences.getBoolean(
+				Variables.TRAINING_SCREEN_ONE, false);
+		screensPlayed[3] = preferences.getBoolean(
+				Variables.TRAINING_SCREEN_TWO, false);
+		screensPlayed[4] = preferences.getBoolean(Variables.CAT_RESCUE_SCREEN,
+				false);
+		screensPlayed[5] = preferences.getBoolean(
+				Variables.RESCUE_METRO_SCREEN, false);
+		screensPlayed[6] = preferences.getBoolean(Variables.ELEVATOR_SCREEN,
+				false);
 	}
 }

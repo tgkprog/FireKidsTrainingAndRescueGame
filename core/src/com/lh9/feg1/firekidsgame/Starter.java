@@ -28,11 +28,12 @@ public class Starter extends Game {
 	CloudManager cloudManager;
 
 	int collectedStars;
+	int cogs;
 	boolean[] screensPlayed;
 
 	@Override
 	public void create() {
-		screensPlayed = new boolean[8];
+		screensPlayed = new boolean[7];
 
 		cloudManager = new CloudManager();
 		assetsManager = new AssetsManager();
@@ -106,6 +107,9 @@ public class Starter extends Game {
 	public void setScreenPlayed(int id) {
 		screensPlayed[id] = true;
 	}
+	public void setScreenPlayed(boolean[] screensPlayed) {
+		this.screensPlayed = screensPlayed;
+	}
 
 	public int getCollectedStars() {
 		return collectedStars;
@@ -113,5 +117,11 @@ public class Starter extends Game {
 
 	public void setCollectedStars(int collectedStars) {
 		this.collectedStars = collectedStars;
+	}
+	public int getCogs(){
+		return cogs;
+	}
+	public void setCogs(int cogs){
+		this.cogs = cogs;
 	}
 }

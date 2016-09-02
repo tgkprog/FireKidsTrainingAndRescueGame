@@ -11,6 +11,7 @@ import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
+import com.lh9.feg1.firekidsgame.graphics.Arrow;
 import com.lh9.feg1.firekidsgame.graphics.Bar;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.FPSManager;
@@ -24,6 +25,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class RescueCatScreen implements Screen {
 
+	Arrow catFalling;
+	
 	Button pause;
 	Button menuButton;
 	Button retryButton;
@@ -32,6 +35,8 @@ public class RescueCatScreen implements Screen {
 	Button down;
 	Button runLeft;
 	Button runRight;
+	
+	Sprite catHappy;
 	Sprite guiStar;
 	Sprite cloudsFar;
 	Sprite cloudsClose;
@@ -54,12 +59,16 @@ public class RescueCatScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	float catGroundY = 45;
+	float catFallingY = 1157;
 	float missionTime = 20;
 	float cloudPositionAdder = 100;
 	float buttonsAlpha;
 	float rotation;
 	float timerWin = 0;
 	float greenTimer = 1;
+	boolean finalAnimationStarted;
+	boolean finalAnimationFinished;
 	boolean exit;
 	boolean startedClouds;
 	boolean firstDialogueClicked;
@@ -205,6 +214,11 @@ public class RescueCatScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+	
+		catHappy = new Sprite(assetsManager.catHappy);
+		catFalling = new Arrow(1230, (int)catFallingY, assetsManager.catFalling, -10, 10);
+		catFalling.setAlpha(1);
+		catFalling.setScale(1);
 	}
 
 	@Override
@@ -291,7 +305,15 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void drawCharacters(float delta) {
+		if(finish == false)
 		batch.draw(assetsManager.catSad, 1265, 1157);
+		else if(victory == true)
+		{
+			catHappy.setPosition(truck.getX()+ 180 - (50 - Math.abs(rotation)*9f), truck.getY() + 350 + Math.abs(rotation)*12);
+			catHappy.setRotation(rotation);
+			catHappy.draw(batch);
+		}
+		
 		basket.setRotation(rotation);
 		basket.setScale(2.2f);
 		basket.setPosition(truck.getX() + 400 + Math.abs(rotation * 6),
@@ -299,6 +321,15 @@ public class RescueCatScreen implements Screen {
 		basket.setColor(greenTimer, 1, greenTimer, 1);
 		basket.draw(batch);
 		truck.render(batch, delta);
+	
+		if(victory == false && finish == true && catFallingY != 45){
+			catFalling.setPosition(catFalling.getX(), (int)catFallingY);
+			catFalling.render(batch, delta);
+		}
+		if(victory ==false && finish == true && catFallingY == 45){
+			batch.draw(assetsManager.catSad, 1285, catGroundY);			
+		}
+		
 	}
 
 	void drawButtons(float delta) {
@@ -317,9 +348,50 @@ public class RescueCatScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		if (missionTime <= 0 && victory == false && secondDialogueClicked == false) {
+		if(finish == true && finalAnimationFinished == false && finalAnimationStarted == false){
+			camera.reset();
+			if(victory == true){
+				camera.zoom(1.3f,5f);
+				camera.moveX(camera.position.x - 200, 2, 2, 10);
+				camera.moveY(camera.position.y + 200, 2, 2, 10);
+			}
+			if(victory == false){
+				camera.zoom(1.3f,6.5f);
+				camera.moveY(camera.position.y - 200, 1.8f, 1.8f, 8);	
+			}
+			finalAnimationStarted = true;
+		}
+		if(camera.zoom < 1.35f && finalAnimationStarted == true)
+		{
+			finalAnimationFinished = true;
+		}
+		if(catFallingY == 45 && victory == false){
+			finalAnimationFinished = true;
+		}
+		
+		if(missionTime <= 0){
+			finish = true;
+		up.setDontRespond(true);
+		down.setDontRespond(true);
+		runLeft.setDontRespond(true);
+		runRight.setDontRespond(true);
+		if(catFallingY > 45)
+		catFallingY -= delta*350;
+		if(catFallingY < 45)
+			catFallingY = 45;
+
+		if(catFallingY == 45){
+			if(catGroundY < 210)
+				catGroundY += delta*150;
+			if(catGroundY > 210)
+				catGroundY = 210;
+		}
+		}
+		
+		if (missionTime <= 0 && victory == false && secondDialogueClicked == false && finalAnimationFinished == true) {
+
 			dialogueWindow.popUp();
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
 					false);
@@ -346,7 +418,7 @@ public class RescueCatScreen implements Screen {
 		}
 
 		if (finish == true && buttonsAlpha == 0
-				&& secondDialogueClicked == false) {
+				&& secondDialogueClicked == false && finalAnimationFinished == true) {
 			secondDialogueClicked = true;
 			dialogueWindow.popUp();
 
@@ -356,8 +428,7 @@ public class RescueCatScreen implements Screen {
 			if (missionTime > 6)
 				goldenStars = 2;
 
-			victory = true;
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars,
 					starsCollected, true);
@@ -384,6 +455,7 @@ public class RescueCatScreen implements Screen {
 		}
 
 		if (timerWin >= 6) {
+			victory = true;
 			finish = true;
 			assetsManager.stars.start();
 			runLeft.setDontRespond(true);
@@ -472,6 +544,7 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void drawBars(float delta) {
+		
 		timeLeftBar.render(batch, delta, missionTime);
 		timerGreenBar.render(batch, delta, timerWin);
 	}
@@ -482,6 +555,7 @@ public class RescueCatScreen implements Screen {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				if (victory == true) {
 					game.setCollectedStars(starsCollected + starsAll);
+					game.setCogs(game.getCogs() + 1);
 					game.setScreenPlayed(4);
 					game.setScreen(new MenuScreen(game));
 				} else {

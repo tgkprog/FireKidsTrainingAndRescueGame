@@ -603,7 +603,7 @@ public class TrainingScreenTwo implements Screen {
 			if(totalTimeSpent< 20)
 				goldenStars = 3;
 			
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars,
 					starsCollected, true);
@@ -821,12 +821,12 @@ public class TrainingScreenTwo implements Screen {
 			car.setPosition((int) car.getX(), 210);
 		}
 
-		car.setMaxSpeed(6);
+		car.setMaxSpeed(0.5f);
 		car.setMaxPositions(-30350, 1550);
 		car.loadWheel(assetsManager.wheel);
 		car.goRight();
 		car.goAutomatically(true);
-		car.setSpeed(10f);
+		car.setSpeed(0.5f);
 		cars.add(car);
 
 		lastTimeCarLane = random;
@@ -837,6 +837,7 @@ public class TrainingScreenTwo implements Screen {
 				&& lastWindowPopUp == true) {
 			game.setScreenPlayed(2);
 			game.setScreenPlayed(3);
+			game.setCogs(game.getCogs() + 1);
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new MenuScreen(game));
 		}

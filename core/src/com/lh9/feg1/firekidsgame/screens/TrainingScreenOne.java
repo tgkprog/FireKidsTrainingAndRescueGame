@@ -438,7 +438,7 @@ public class TrainingScreenOne implements Screen {
 				victory = false;
 				minigameRunning = false;
 				minigameCounter = 0;
-				dialogueWindow.drawLevelSummary(assetsManager.star,
+				dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 						assetsManager.starSummary,
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
@@ -483,7 +483,7 @@ public class TrainingScreenOne implements Screen {
 			if (totalTimeSpent < 20)
 				goldenStars = 3;
 			
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars,
 					starsCollected, true);
@@ -802,6 +802,7 @@ public class TrainingScreenOne implements Screen {
 
 		if (cloudManager.getAllScalesEqualOne() == true && sirene == true && victory == true) {
 			game.setScreenPlayed(2);
+			game.setCogs(game.getCogs() + 1);
 			game.setCollectedStars(dataOrganizer.getScore() + starsCollected);
 			game.setScreen(new TrainingScreenTwo(game));
 		}

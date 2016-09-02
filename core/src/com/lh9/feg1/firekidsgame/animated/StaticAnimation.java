@@ -7,6 +7,7 @@ import com.badlogic.gdx.math.Vector3;
 
 public class StaticAnimation extends Animated {
 
+	float rotation;
 	boolean continous = true;
 	boolean start;
 	boolean withPreviousFrame;
@@ -29,6 +30,7 @@ public class StaticAnimation extends Animated {
 			}
 
 			frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime, true));
+			frameSprite.setRotation(rotation);
 			frameSprite.setPosition(x, y);
 			frameSprite.setColor(color.x, color.y, color.z, 1);
 			frameSprite.setScale(scale.x, scale.y);
@@ -37,6 +39,7 @@ public class StaticAnimation extends Animated {
 			if (withPreviousFrame == true && stateTime > animationTime) {
 				frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime
 						- animationTime, true));
+				frameSprite.setRotation(rotation);
 				frameSprite.setColor(color.x, color.y, color.z, 0.5f);
 				frameSprite.setPosition(x, y);
 				frameSprite.setScale(scale.x, scale.y);
@@ -55,6 +58,7 @@ public class StaticAnimation extends Animated {
 
 			frameSprite = new Sprite(frames[(int) (stateTime / animationTime)]);
 			frameSprite.setPosition(x, y);
+			frameSprite.setRotation(rotation);
 			frameSprite.setScale(scale.x, scale.y);
 			frameSprite.draw(batch);
 		}
@@ -96,6 +100,8 @@ public class StaticAnimation extends Animated {
 	public void red() {
 		color = new Vector3(1, 0, 0);
 	}
-
+	public void setRotation(float rotation){
+		this.rotation = rotation;
+	}
 
 }

@@ -6,8 +6,11 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 
 public class Arrow {
 
-	//This is used for rotating of the objects in some order
-	
+	// This is used for rotating of the objects in some order
+
+	int x;
+	int y;
+
 	Sprite arrow;
 	double rotation;
 	double rotationMin;
@@ -27,6 +30,9 @@ public class Arrow {
 		this.setAlpha(0);
 		this.arrow.setRotation(0f);
 		rotation = 0f;
+		this.x = x;
+		this.y = y;
+
 	}
 
 	public void render(SpriteBatch batch, float delta) {
@@ -78,5 +84,19 @@ public class Arrow {
 
 	public void setScale(float scale) {
 		arrow.setScale(scale);
+	}
+
+	public void setPosition(int x, int y) {
+		this.x = x;
+		this.y = y;
+		arrow.setPosition(x, y);
+	};
+
+	public int getX() {
+		return x;
+	}
+
+	public int getY() {
+		return y;
 	}
 }

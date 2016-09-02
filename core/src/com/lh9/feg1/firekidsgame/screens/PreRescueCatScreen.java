@@ -786,12 +786,12 @@ public class PreRescueCatScreen implements Screen {
 			car.setPosition((int) car.getX(), 210);
 		}
 
-		car.setMaxSpeed(6);
+		car.setMaxSpeed(0.5f);
 		car.setMaxPositions(-30350, 1550);
 		car.loadWheel(assetsManager.wheel);
 		car.goRight();
 		car.goAutomatically(true);
-		car.setSpeed(10f);
+		car.setSpeed(0.5f);
 		cars.add(car);
 
 		lastTimeCarLane = random;

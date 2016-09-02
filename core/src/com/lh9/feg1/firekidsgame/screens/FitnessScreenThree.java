@@ -276,7 +276,7 @@ public class FitnessScreenThree implements Screen {
 			firstDialogueClicked = true;
 		}
 		if (player.getCounter() == 60 && finish == false) {
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
@@ -284,7 +284,7 @@ public class FitnessScreenThree implements Screen {
 			victory = true;
 		}
 		if (npc.getCounter() == 60 && finish == false) {
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
@@ -352,6 +352,7 @@ public class FitnessScreenThree implements Screen {
 
 			if (victory == true) {
 				game.setScreenPlayed(1);
+				game.setCogs(game.getCogs() + 1);
 				game.setScreen(new MenuScreen(game));
 			} else {
 				game.setScreen(new FitnessScreenThree(game));

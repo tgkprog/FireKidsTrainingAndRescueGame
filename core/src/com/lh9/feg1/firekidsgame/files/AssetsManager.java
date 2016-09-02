@@ -12,8 +12,10 @@ import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 
 public class AssetsManager extends Thread {
 
-	DataOrganizer dataOrganizer;
+	public DataOrganizer dataOrganizer;
 	
+	public Texture catFalling;
+	public Texture cog;
 	public Texture frameCollectibles;
 	public Texture starSummary;
 	public Texture starSummaryDesaturated;
@@ -226,7 +228,7 @@ public class AssetsManager extends Thread {
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
-
+		
 		loadFonts();
 		loadParticles();
 		loadTextures();
@@ -476,6 +478,8 @@ public class AssetsManager extends Thread {
 		graphicsText = new Texture("texts/Graphics.png");
 		truckMiniature = new Texture("buttons/truckMiniature.png");
 		sign = new Texture("texts/Sign.png");
+		cog = new Texture("others/cog.png");
+		catFalling = new Texture("others/catFalling.png");
 		breakTheWallText = new Texture("texts/Break-the-wall.png");
 		eclipseFireText = new Texture("texts/Elipse-fire.png");
 		jumpText = new Texture("texts/Jump.png");
@@ -1043,6 +1047,8 @@ public class AssetsManager extends Thread {
 		arrow.setFilter(textureFilter, textureFilter);
 		button.setFilter(textureFilter, textureFilter);
 		catHappy.setFilter(textureFilter, textureFilter);
+		cog.setFilter(textureFilter, textureFilter);
+		catFalling.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
 		dialogueWindowGirl.setFilter(textureFilter, textureFilter);
 		dialogueWindowBoy.setFilter(textureFilter, textureFilter);	

@@ -41,17 +41,17 @@ public class Window {
 	public void updateTimers(double delta) {
 		if (visible == true) {
 			if (fullscale == false) {
-				if (scale < 1.2f) {
+				if (scale < 1.35f) {
 					scale += delta * 2;
 				}
-				if (scale > 1.2f) {
-					scale = 1.2f;
+				if (scale > 1.35f) {
+					scale = 1.35f;
 					fullscale = true;
 				}
-			} else if (scale > 1.0f) {
+			} else if (scale > 1.1f) {
 				scale -= delta;
-				if (scale < 1) {
-					scale = 1;
+				if (scale < 1.1f) {
+					scale = 1.1f;
 					readyToClose = true;
 				}
 			}

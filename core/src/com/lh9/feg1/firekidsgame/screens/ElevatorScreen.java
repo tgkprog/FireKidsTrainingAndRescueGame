@@ -29,16 +29,16 @@ public class ElevatorScreen implements Screen {
 	Bar timeBar;
 	Bar progressBar;
 	Bar speedBar;
-	
+
 	Sprite dogSad;
 	Sprite dogHappy;
 	Sprite elevatorDoor[];
 	Sprite ball;
 	Sprite guiStar;
 	Sprite[] damage;
-	
+
 	Human player;
-	
+
 	Button[] hitboxes;
 	Button pause;
 	Button runButton;
@@ -60,15 +60,15 @@ public class ElevatorScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
-	int starsCollectedLastFrame;
-	int starsCollected;
+	int starsCollectedInTotal;
+	int starsCollected = -1;
 	int minigameCounter = 20;
 	float spawnBallTimer;
 	float dogsplayerY = -50;
 	float leftDoorPosition;
 	float rightDoorPosition;
 	float[] hitboxesAlpha;
-	float minigameTimeLeft = 1;
+	float minigameTimeLeft = 3;
 	float doorAlpha;
 	float timerSpeedplayer;
 	float dogSadTimer;
@@ -76,7 +76,7 @@ public class ElevatorScreen implements Screen {
 	boolean enlargeStar;
 	boolean zoomDogplayer;
 	boolean zoomOut;
-	boolean[] selectedHitbox;	
+	boolean[] selectedHitbox;
 	boolean turned;
 	boolean exit;
 	boolean firstDialogueClicked;
@@ -86,7 +86,8 @@ public class ElevatorScreen implements Screen {
 	boolean afterMinigameWindow;
 	boolean finishDialogue;
 	boolean startedClouds;
-	
+	boolean victory;
+
 	final Starter game;
 
 	public ElevatorScreen(final Starter gam) {
@@ -128,9 +129,9 @@ public class ElevatorScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(null,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getRESCUE_METRO_SCREEN());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getRESCUE_METRO_SCREEN());
 
 		hitboxes = new Button[6];
 		selectedHitbox = new boolean[6];
@@ -147,7 +148,6 @@ public class ElevatorScreen implements Screen {
 			damage[a].setScale(MathUtils.random(0.1f, 0.3f));
 		}
 		for (int a = 0; a < 6; a++) {
-
 			hitboxes[a] = new Button(800, 0, assetsManager.runButton);
 			hitboxes[a].goUp(1150 - a * 150);
 			hitboxes[a].setAlpha(0);
@@ -158,15 +158,17 @@ public class ElevatorScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		if(dataOrganizer.getGender() == true)
+		if (dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.ELEVATOR_SCREEN_POP_UP_1, assetsManager.fontLittle);
+					Variables.ELEVATOR_SCREEN_POP_UP_1,
+					assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.ELEVATOR_SCREEN_POP_UP_1, assetsManager.fontLittle);
-				
+					Variables.ELEVATOR_SCREEN_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setControlledHuman(player);
@@ -174,7 +176,6 @@ public class ElevatorScreen implements Screen {
 		inputInterpreter.setHitboxes(hitboxes);
 
 		cloudManager.stop();
-
 
 		camera.reset();
 
@@ -229,14 +230,14 @@ public class ElevatorScreen implements Screen {
 		guiStar.setScale(0.75f);
 		guiStar.setPosition(0, 430);
 
-		starsCollected = game.getCollectedStars();
+		starsCollectedInTotal = game.getCollectedStars();
 	}
 
 	@Override
 	public void render(float delta) {
 
 		inputInterpreter.checkKeyboardInput();
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -355,11 +356,29 @@ public class ElevatorScreen implements Screen {
 
 	void updateLogics(float delta) {
 
+		if (minigameCounter > 0 && minigameTimeLeft <= 0
+				&& finishDialogue == false) {
+			dialogueWindow.popUp();
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
+					assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, 0, starsCollected,
+					false);
+			victory = false;
+			finishDialogue = true;
+			for(int a=0;a<hitboxes.length;a++){
+				hitboxes[a].setDontRespond(true);
+			}
+		}
+
 		if (camera.zoom <= 1.55 && finishDialogue == false
 				&& minigameCounter == 0) {
 			dialogueWindow.popUp();
 			finishDialogue = true;
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			victory = true;
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
+					assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, 3, starsCollected,
+					true);
 		}
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false
 				&& startedClouds == false) {
@@ -473,22 +492,28 @@ public class ElevatorScreen implements Screen {
 
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setCollectedStars(starsCollected);
-				game.setScreenPlayed(6);
-				game.setScreen(new MenuScreen(game));
+				if (victory == true) {
+					game.setCollectedStars(starsCollected + starsCollectedInTotal);
+					game.setScreenPlayed(6);
+					game.setCogs(game.getCogs() + 1);
+					game.setScreen(new MenuScreen(game));
+				} else {
+					game.setCollectedStars(starsCollected + starsCollectedInTotal);
+					game.setScreen(new ElevatorScreen(game));
+				}
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setCollectedStars(starsCollected);
+				game.setCollectedStars(starsCollected + starsCollectedInTotal);
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getRESCUE_METRO_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				game.setCollectedStars(starsCollected);
+				game.setCollectedStars(starsCollected + starsCollectedInTotal);
 				game.setScreen(new ElevatorScreen(game));
 			}
 		}
@@ -520,11 +545,11 @@ public class ElevatorScreen implements Screen {
 
 	void randomizeMinigame() {
 		if (minigameRunning == false && minigameCounter > 0) {
-
+			starsCollected++;
 			timeBar.setVisibility(true);
 			progressBar.setVisibility(true);
 
-			minigameTimeLeft = 1;
+			minigameTimeLeft = 3;
 			minigameCounter--;
 			minigameRunning = true;
 
@@ -571,6 +596,7 @@ public class ElevatorScreen implements Screen {
 					hitboxes[a].setPosition(hitboxes[a].getX() + delta * 550,
 							hitboxes[a].getY() - delta * 550);
 				hitboxesAlpha[a] += delta * 10;
+				if(finishDialogue == false)
 				hitboxes[a].setDontRespond(false);
 				if (hitboxesAlpha[a] > 1)
 					hitboxesAlpha[a] = 1;
@@ -622,6 +648,9 @@ public class ElevatorScreen implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles,10,435);
+
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
@@ -635,7 +664,7 @@ public class ElevatorScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected),
+		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsCollectedInTotal),
 				60, 463);
 	}
 

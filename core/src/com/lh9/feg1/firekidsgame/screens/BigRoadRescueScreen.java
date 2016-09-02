@@ -763,15 +763,15 @@ public class BigRoadRescueScreen implements Screen {
 						(int) firePositions[randomFire][a].y);
 			}
 			fireBar.setVisibility(true);
-			if (minigameCounter == 0) {
+		
 				if (minigameCounter == 0 && afterMinigameWindow == false) {
 					
-					dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+					dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 					dialogueWindow.popUp();
 					afterMinigameWindow = true;
 				}
 			}
-		}
+		
 	}
 
 	void manageFire(float delta) {
@@ -858,6 +858,7 @@ public class BigRoadRescueScreen implements Screen {
 
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new MenuScreen(game));
+			game.setCogs(game.getCogs() + 1);
 		}
 
 		if (inputInterpreter.getSelectedScreenName() == variables

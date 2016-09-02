@@ -164,6 +164,7 @@ public class LogoScreen implements Screen {
 		if (changeScreen == true && Gdx.graphics.getRawDeltaTime() < 0.04f
 				&& logoScale == 0
 				&& cloudManager.getAllScalesEqualOne() == true) {
+			game.setScreenPlayed(assetsManager.dataOrganizer.getScreensPlayed());
 			game.setScreen(new MenuScreen(game));
 		}
 	}

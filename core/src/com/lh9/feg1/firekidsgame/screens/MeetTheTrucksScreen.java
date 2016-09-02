@@ -871,7 +871,7 @@ public class MeetTheTrucksScreen implements Screen {
 				goldenStars = 3;
 			else
 				goldenStars = 2;
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, goldenStars, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, goldenStars, starsCollected,true);
 			dialogueWindow.popUp();
 			
 			assetsManager.stars.start();

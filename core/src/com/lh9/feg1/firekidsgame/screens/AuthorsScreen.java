@@ -19,6 +19,7 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class AuthorsScreen implements Screen {
 
+	// StaticAnimation hand;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
 	Arrow truckFrontHand;
@@ -41,7 +42,7 @@ public class AuthorsScreen implements Screen {
 	Button daniel;
 	Button programming;
 	Button graphics;
-	
+
 	boolean blinked;
 
 	final Starter game;
@@ -70,17 +71,18 @@ public class AuthorsScreen implements Screen {
 
 		tushar = new Button(280, -250, assetsManager.tushar);
 		tushar.goUp(430);
-		
+
 		graphics = new Button(485, -250, assetsManager.graphicsText);
 		graphics.goUp(100);
-		
+
 		programming = new Button(125, -250, assetsManager.programmingText);
 		programming.goUp(100);
-		
+
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
 		inputInterpreter.setCloudManager(cloudManager);
+		inputInterpreter.setWebButton(tushar);
 		cloudManager.stop();
 
 		camera.reset();
@@ -121,6 +123,14 @@ public class AuthorsScreen implements Screen {
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		// hand = new StaticAnimation();
+		// hand.create(assetsManager.handSpritesheet, 2, 2, 3, 250, 250, 0.25f);
+		// hand.setContinous(true);
+		// hand.setScale(new Vector2(0.2f,0.2f));
+		// hand.setRotation(180);
+		// hand.start();
+		// A hand that 'clicks' the web button, looks ugly though
 	}
 
 	@Override
@@ -201,6 +211,7 @@ public class AuthorsScreen implements Screen {
 		programming.render(batch, delta);
 		graphics.render(batch, delta);
 		authorsText.render(batch, delta);
+		// hand.render(batch, delta);
 	}
 
 	void updateLogics(double delta) {

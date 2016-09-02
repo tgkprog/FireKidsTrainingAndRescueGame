@@ -11,6 +11,7 @@ import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
+import com.lh9.feg1.firekidsgame.graphics.Arrow;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.graphics.FPSManager;
 import com.lh9.feg1.firekidsgame.ui.Button;
@@ -20,6 +21,8 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class MenuScreen implements Screen {
 
+	Arrow star;
+	Arrow cog;
 	Human buzzer;
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
@@ -39,6 +42,7 @@ public class MenuScreen implements Screen {
 	Button[] starsCounterButtons;
 	Button[] levelButtons;
 	String collectedStarsInString;
+	String cogsInString;
 	Sprite frameCollectibles;
 
 	float positions = -1000;
@@ -180,9 +184,36 @@ public class MenuScreen implements Screen {
 		} else {
 			dataOrganizer.setScore(game.getCollectedStars());
 		}
+		if (game.getCogs() == 0) {
+			game.setCogs(dataOrganizer.getScore());
+		} else {
+			dataOrganizer.setExperience(game.getCogs());
+		}
+
 		frameCollectibles = new Sprite(assetsManager.frameCollectibles);
 		
 		collectedStarsInString = new String(Integer.toString(dataOrganizer.getScore()));
+		cogsInString = new String(Integer.toString(dataOrganizer.getExperience()));
+		
+		int numberOfZerosToCompleteStarsString = 7 - collectedStarsInString.length();
+		for(int a =0;a<numberOfZerosToCompleteStarsString;a++){
+			collectedStarsInString = "0" + collectedStarsInString;
+		}
+		numberOfZerosToCompleteStarsString = 7 - cogsInString.length();
+		for(int a =0;a<numberOfZerosToCompleteStarsString;a++){
+			cogsInString = "0" + cogsInString;
+		}
+			
+		dataOrganizer.setScreensPlayed(game.getScreensPlayed());
+		dataOrganizer.saveData();
+	
+		star = new Arrow(270, 415, assetsManager.star, -72, 60);
+		star.setAlpha(1);
+		star.setScale(1);
+
+		cog = new Arrow(480, 415, assetsManager.cog, -72, 60);
+		cog.setAlpha(1);
+		cog.setScale(1.2f);
 	}
 
 	@Override
@@ -262,8 +293,10 @@ public class MenuScreen implements Screen {
 
 		assetsManager.fontLittle.setColor(Color.WHITE);
 		assetsManager.fontLittle.draw(batch, collectedStarsInString, 330, 448);
-		batch.draw(assetsManager.star, 270, 415);
+		assetsManager.fontLittle.draw(batch, cogsInString, 540, 448);
 		
+		star.render(batch, delta*0.75f);
+		cog.render(batch, delta*0.75f);
 		gender.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
@@ -302,7 +335,7 @@ public class MenuScreen implements Screen {
 				.getMEET_THE_TRUCKS()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
-				game.setScreen(new RescueCatScreen(game));
+				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
@@ -397,6 +430,8 @@ public class MenuScreen implements Screen {
 
 		frameCollectibles.setScale(3, 3);
 		frameCollectibles.setPosition(800, 1030);
+		frameCollectibles.draw(batch);
+		frameCollectibles.setPosition(1300, 1030);
 		frameCollectibles.draw(batch);
 
 	}

@@ -20,6 +20,7 @@ public class InputInterpreter implements GestureListener {
 
 	boolean[] screensPlayed;
 	String selectedScreen = "No button clicked";
+	Button webButton;
 	Button jump;
 	Button gender;
 	Button[] hitboxes;
@@ -289,6 +290,11 @@ public class InputInterpreter implements GestureListener {
 					settingsButtons[5].blink();
 					dataOrganizer.setPrompts(!dataOrganizer
 							.getPrompts());
+				}
+			}
+			if (webButton != null) {
+				if (webButton.checkCollision((int) x, (int) y) == true) {
+					webButtonAction();
 				}
 			}
 			if (retryButton != null) {
@@ -610,6 +616,9 @@ public class InputInterpreter implements GestureListener {
 
 	}
 
+	public void setWebButton(Button webButton){
+		this.webButton = webButton;
+	}
 	void eclipseFireAction() {
 		if (eclipseFire != null && eclipseFire.isBlockedFromInteraction() == false)
 			eclipseFire.blink();
@@ -629,6 +638,13 @@ public class InputInterpreter implements GestureListener {
 			menuWindow.popUp();
 		}
 	}
+	
+void webButtonAction(){
+	if (webButton != null && webButton.isBlockedFromInteraction() == false) {
+		webButton.blink();
+		Gdx.net.openURI(Variables.MR_TUSHAR_WEBSITE);
+	}
+}
 
 	void upAction() {
 		if (up != null && up.isBlockedFromInteraction() == false) {

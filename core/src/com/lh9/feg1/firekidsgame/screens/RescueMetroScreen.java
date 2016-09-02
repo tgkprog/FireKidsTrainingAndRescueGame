@@ -344,7 +344,7 @@ public class RescueMetroScreen implements Screen {
 			dialogueWindow.popUp();
 			assetsManager.stars.start();
 			finishDialogue = true;
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 		}
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false
 				&& finish == false) {
@@ -427,6 +427,7 @@ public class RescueMetroScreen implements Screen {
 		if (finish == true && cloudManager.getAllScalesEqualOne() == true) {
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreenPlayed(5);
+			game.setCogs(game.getCogs() + 1);
 			game.setScreen(new MenuScreen(game));
 		}
 

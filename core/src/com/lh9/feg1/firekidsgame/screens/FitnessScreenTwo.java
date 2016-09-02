@@ -279,7 +279,7 @@ public class FitnessScreenTwo implements Screen {
 			firstDialogueClicked = true;
 		}
 		if (player.getCounter() == 60 && finish == false) {
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
@@ -288,7 +288,7 @@ public class FitnessScreenTwo implements Screen {
 		}
 		if (npc.getCounter() == 60 && finish == false) {
 			victory = false;
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);

@@ -161,9 +161,9 @@ public class FoodsScreen implements Screen {
 		windowCounter.setScale(0);
 
 		timeBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 5);
+				260, 10, 3.5f);
 		timeBar.setVisibility(false);
-		timeBarTimer = 5;
+		timeBarTimer = 3.5f;
 
 		counterBar = new Bar(assetsManager.barFilledBlue,
 				assetsManager.barNotFilledBlue, 260, 450, 10);
@@ -280,7 +280,7 @@ public class FoodsScreen implements Screen {
 			minigameCounter = 0;
 			minigameRunning = false;
 			finish = true;
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
 					false);
@@ -313,7 +313,7 @@ public class FoodsScreen implements Screen {
 			if(totalSpentTime < 15)
 				goldenStars = 3;
 			
-			dialogueWindow.drawLevelSummary(assetsManager.star,
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars, starsCollected,
 					true);
@@ -373,7 +373,7 @@ public class FoodsScreen implements Screen {
 			assetsManager.hit.setPosition(90, 110);
 			assetsManager.hit.start();
 			clicked = true;
-			timeBarTimer = 5;
+			timeBarTimer = 3.5f;
 			if (checkAnswer() == true)
 				starsCollected++;
 			else {
@@ -381,7 +381,7 @@ public class FoodsScreen implements Screen {
 				minigameRunning = false;
 				finish = true;
 				victory = false;
-				dialogueWindow.drawLevelSummary(assetsManager.star,
+				dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 						assetsManager.starSummary,
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
@@ -393,7 +393,7 @@ public class FoodsScreen implements Screen {
 			assetsManager.hit.setPosition(700, 110);
 			assetsManager.hit.start();
 			clicked = true;
-			timeBarTimer = 5;
+			timeBarTimer = 3.5f;
 
 			if (checkAnswer() == true)
 				starsCollected++;
@@ -402,7 +402,7 @@ public class FoodsScreen implements Screen {
 				minigameRunning = false;
 				finish = true;
 				victory = false;
-				dialogueWindow.drawLevelSummary(assetsManager.star,
+				dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 						assetsManager.starSummary,
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
@@ -440,6 +440,7 @@ public class FoodsScreen implements Screen {
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			if (victory == true) {
 				game.setScreenPlayed(0);
+				game.setCogs(game.getCogs() + 1);
 				game.setScreen(new MenuScreen(game));
 			} else
 				game.setScreen(new FoodsScreen(game));

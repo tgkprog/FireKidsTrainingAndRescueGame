@@ -410,7 +410,7 @@ public class FitnessScreenOne implements Screen {
 		if (player.getX() > 4000 && finish == false) {
 			pause.setDontRespond(true);
 			victory = true;
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
 			finish = true;
@@ -420,7 +420,7 @@ public class FitnessScreenOne implements Screen {
 		if (npc.getX() > 4000 && finish == false) {
 			victory = false;
 			pause.setDontRespond(true);
-			dialogueWindow.drawLevelSummary(assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,false);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;
 			runButton.setDontRespond(true);
