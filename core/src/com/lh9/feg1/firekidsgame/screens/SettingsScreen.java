@@ -31,7 +31,7 @@ public class SettingsScreen implements Screen {
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
-	
+
 	Button menu;
 	Button settingsText;
 	Button fps;
@@ -46,6 +46,8 @@ public class SettingsScreen implements Screen {
 	Button vibrationsText;
 	Button screenAwake;
 	Button screenAwakeText;
+	Button resetGame;
+	Button resetGameText;
 
 	boolean blinked;
 
@@ -67,21 +69,26 @@ public class SettingsScreen implements Screen {
 
 		textureFiltering = new Button(265, -450, assetsManager.switchButton);
 		textureFiltering.goUp(25);
-		
+
 		screenAwake = new Button(265, -450, assetsManager.switchButton);
 		screenAwake.goUp(120);
-		
+
 		voice = new Button(535, -450, assetsManager.switchButton);
 		voice.goUp(205);
-		
+
 		noPrompts = new Button(265, -450, assetsManager.switchButton);
 		noPrompts.goUp(205);
 		noPromptsText = new Button(0, -450, assetsManager.noPrompts);
 		noPromptsText.goUp(225);
-		
+
+		resetGame = new Button(265, -450, assetsManager.switchButton);
+		resetGame.goUp(290);
+		resetGameText = new Button(0, -450, assetsManager.resetGame);
+		resetGameText.goUp(310);
+
 		vibrations = new Button(535, -450, assetsManager.switchButton);
 		vibrations.goUp(120);
-		
+
 		fps = new Button(535, -450, assetsManager.switchButton);
 		fps.goUp(25);
 
@@ -115,7 +122,7 @@ public class SettingsScreen implements Screen {
 		inputInterpreter.setMenu(menu);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setSettingsButtons(fps, textureFiltering, voice,
-				vibrations, screenAwake, noPrompts,dataOrganizer);
+				vibrations, screenAwake, noPrompts, resetGame, dataOrganizer);
 
 		cloudManager.stop();
 
@@ -177,7 +184,7 @@ public class SettingsScreen implements Screen {
 		drawFps();
 
 		batch.end();
-		
+
 		manageSelectingScreen();
 
 	}
@@ -226,6 +233,14 @@ public class SettingsScreen implements Screen {
 		screenAwake.render(batch, delta);
 		menu.render(batch, delta);
 		noPrompts.render(batch, delta);
+		resetGame.render(batch, delta);
+
+		if(resetGame.getSelection() == true){
+			game.setCogs(0);
+			game.setCollectedStars(0);
+			boolean[] screensPlayed = new boolean[7];
+			game.setScreenPlayed(screensPlayed);
+		}
 	}
 
 	void drawTexts(float delta) {
@@ -236,6 +251,7 @@ public class SettingsScreen implements Screen {
 		screenAwakeText.render(batch, delta);
 		settingsText.render(batch, delta);
 		noPromptsText.render(batch, delta);
+		resetGameText.render(batch, delta);
 	}
 
 	void updateLogics(double delta) {

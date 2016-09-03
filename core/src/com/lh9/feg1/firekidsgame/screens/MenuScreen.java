@@ -45,8 +45,11 @@ public class MenuScreen implements Screen {
 	String cogsInString;
 	Sprite frameCollectibles;
 
+	long bellSoundID;
 	float positions = -1000;
+	float bellsVolume = 1;
 	boolean madeShakeScreen;
+	boolean startedBells;
 
 	final Starter game;
 
@@ -289,7 +292,6 @@ public class MenuScreen implements Screen {
 	}
 
 	void drawButtons(float delta) {
-		
 
 		assetsManager.fontLittle.setColor(Color.WHITE);
 		assetsManager.fontLittle.draw(batch, collectedStarsInString, 330, 448);
@@ -307,7 +309,7 @@ public class MenuScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
-
+		
 		if (positions < 0)
 			positions += delta * 100 + Math.abs(positions) * 0.025f;
 		if (positions > 0)
@@ -423,11 +425,24 @@ public class MenuScreen implements Screen {
 		buzzer.setPosition(1410, 400);
 		buzzer.render(batch, delta);
 
-		if (inputInterpreter.getSelectedScreenName() != "No button clicked")
+		if (inputInterpreter.getSelectedScreenName() != "No button clicked"){
 			buzzer.setSpeed(10f);
-		if (positions < 0)
+			if(startedBells == false){
+			bellSoundID = assetsManager.bell.play();
+			startedBells = true;
+			}
+		}
+			if (positions < 0)
 			buzzer.setSpeed(0f);
 
+			if(startedBells == true){
+			assetsManager.bell.setVolume(bellSoundID, bellsVolume);
+			if(bellsVolume > 0)
+				bellsVolume -= delta*0.55f;
+			if(bellsVolume < 0)
+				bellsVolume = 0;
+			}
+			
 		frameCollectibles.setScale(3, 3);
 		frameCollectibles.setPosition(800, 1030);
 		frameCollectibles.draw(batch);

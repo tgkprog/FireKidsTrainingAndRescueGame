@@ -291,6 +291,11 @@ public class InputInterpreter implements GestureListener {
 					dataOrganizer.setPrompts(!dataOrganizer
 							.getPrompts());
 				}
+				if (settingsButtons[6].checkCollision((int) x, (int) y) == true) {
+					settingsButtons[6].blink();
+					dataOrganizer.resetGame();
+				}
+				
 			}
 			if (webButton != null) {
 				if (webButton.checkCollision((int) x, (int) y) == true) {
@@ -538,15 +543,16 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	public void setSettingsButtons(Button fps, Button textureFiltering,
-			Button voice, Button vibrations, Button screenAwake, Button noPrompts,
+			Button voice, Button vibrations, Button screenAwake, Button noPrompts, Button resetGame,
 			DataOrganizer dataOrganizer) {
-		settingsButtons = new Button[6];
+		settingsButtons = new Button[7];
 		settingsButtons[0] = fps;
 		settingsButtons[1] = textureFiltering;
 		settingsButtons[2] = voice;
 		settingsButtons[3] = vibrations;
 		settingsButtons[4] = screenAwake;
 		settingsButtons[5] = noPrompts;
+		settingsButtons[6] = resetGame;
 		
 		this.dataOrganizer = dataOrganizer;
 	}

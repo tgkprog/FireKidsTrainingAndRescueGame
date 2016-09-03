@@ -33,19 +33,19 @@ public class RescueMetroScreen implements Screen {
 	Button retryButton;
 	Button playButton;
 
-	Sprite[] damage;
+	Sprite[] peopleSad;
+	Sprite[] peopleHappy;
 	Sprite[] playerAnimation;
 	Sprite[] metroDoor;
 	Sprite ball;
 	Sprite guiStar;
-	
+
 	ArrayList<Vector3> ballEffect;
 	Vector3 ballPosition;
-	
+
 	Bar timeBar;
 	Bar progressBar;
-	Bar speedBar;
-	
+
 	Truck truck;
 	DataOrganizer dataOrganizer;
 	FPSManager fpsManager;
@@ -57,13 +57,14 @@ public class RescueMetroScreen implements Screen {
 	Camera camera;
 	OrthographicCamera guiCamera;
 	SpriteBatch batch;
-	InputInterpreter inputInterpreter;	
+	InputInterpreter inputInterpreter;
 
 	float spawnBallTimer;
-	float minigameTimeLeft = 1;
+	float minigameTimeLeft = 1.5f;
 	float timerSpeedGirl;
 	float[] hitboxesAlpha;
-	
+
+	boolean finalAnimationFinished;
 	boolean[] selectedHitbox;
 	boolean exit;
 	boolean firstDialogueClicked;
@@ -76,30 +77,30 @@ public class RescueMetroScreen implements Screen {
 	boolean readyToPlay;
 	boolean afterMinigameWindow;
 	boolean zoomOut;
-	
+	boolean victory;
+
 	int minigameCounter = 20;
 	int starsAll;
 	int starsCollected;
 	int starsCollectedLastFrame;
-	
+
 	final Starter game;
 
 	public RescueMetroScreen(final Starter gam) {
 
 		this.game = gam;
 
-	
 		cloudManager = game.getCloudManager();
 		camera = game.getCamera();
 		guiCamera = game.getGuiCamera();
 		batch = game.getBatch();
 		assetsManager = game.getAssetsManager();
 		variables = new Variables();
-		
+
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
-				
+
 		pause = new Button((int) variables.getPAUSE_BUTTON_POSITION().x, 120,
 				assetsManager.pause);
 		pause.goUp((int) variables.getPAUSE_BUTTON_POSITION().y);
@@ -127,39 +128,40 @@ public class RescueMetroScreen implements Screen {
 
 		playerAnimation = new Sprite[2];
 
-		if(dataOrganizer.getGender() == true){
-		playerAnimation[0] = new Sprite(assetsManager.girlHammer[0]);
-		playerAnimation[1] = new Sprite(assetsManager.girlHammer[1]);
-		}
-		else
-		{
+		if (dataOrganizer.getGender() == true) {
+			playerAnimation[0] = new Sprite(assetsManager.girlHammer[0]);
+			playerAnimation[1] = new Sprite(assetsManager.girlHammer[1]);
+		} else {
 			playerAnimation[0] = new Sprite(assetsManager.boyHammer[0]);
-			playerAnimation[1] = new Sprite(assetsManager.boyHammer[1]);	
+			playerAnimation[1] = new Sprite(assetsManager.boyHammer[1]);
 		}
 		playerAnimation[0].setScale(0.3f);
 		playerAnimation[1].setScale(0.3f);
 
-		playerAnimation[0].setPosition(360, -230);
-		playerAnimation[1].setPosition(295, -230);
+		playerAnimation[0].setPosition(390, -230);
+		playerAnimation[1].setPosition(325, -230);
 
-		menuWindow = new MenuWindow(null,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getRESCUE_METRO_SCREEN());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getRESCUE_METRO_SCREEN());
 
 		hitboxes = new Button[6];
 		selectedHitbox = new boolean[6];
 		hitboxesAlpha = new float[6];
 
-		damage = new Sprite[20];
+		peopleSad = new Sprite[4];
+		peopleHappy = new Sprite[4];
 
-		for (int a = 0; a < 20; a++) {
-			damage[a] = new Sprite(assetsManager.clouds[1]);
-			damage[a].setPosition(MathUtils.random(1000, 1400),
-					MathUtils.random(350, 1000));
-			damage[a].setRotation(MathUtils.random(0, 360));
-			damage[a].setColor(0, 0, 0, 0);
-			damage[a].setScale(MathUtils.random(0.1f, 0.3f));
+		for (int a = 0; a < 4; a++) {
+			peopleSad[a] = new Sprite(assetsManager.peopleSad[a]);
+			peopleHappy[a] = new Sprite(assetsManager.peopleHappy[a]);
+			peopleSad[a].setPosition(1000 + 60 * a, 120);
+			peopleSad[a].setScale(0.8f);
+			peopleHappy[a].setPosition(1000 + 60 * a, 120);
+			peopleHappy[a].setScale(0.8f);
+
 		}
+
 		for (int a = 0; a < 6; a++) {
 			if (a % 2 == 0)
 				hitboxes[a] = new Button(630, -100,
@@ -176,7 +178,7 @@ public class RescueMetroScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		if(dataOrganizer.getGender() == true)
+		if (dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
 					assetsManager.darkScreen, 250f, 150f,
 					Variables.RESCUE_METRO_POP_UP_1, assetsManager.fontLittle);
@@ -184,7 +186,7 @@ public class RescueMetroScreen implements Screen {
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
 					Variables.RESCUE_METRO_POP_UP_1, assetsManager.fontLittle);
-	
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
@@ -204,10 +206,6 @@ public class RescueMetroScreen implements Screen {
 
 		assetsManager.stars.setPosition(400, 480);
 
-		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				260, 10, 8);
-
-
 		timeBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
 				250, 460, minigameTimeLeft);
 
@@ -220,10 +218,10 @@ public class RescueMetroScreen implements Screen {
 		ballEffect = new ArrayList<Vector3>();
 		ball = new Sprite(assetsManager.runButton);
 
-		metroDoor = new Sprite[2];
+		metroDoor = new Sprite[3];
 		metroDoor[0] = new Sprite(assetsManager.metroDoor[0]);
 		metroDoor[1] = new Sprite(assetsManager.metroDoor[1]);
-
+		metroDoor[2] = new Sprite(assetsManager.metroDoor[2]);
 
 		guiStar = new Sprite(assetsManager.star);
 		guiStar.setScale(0.75f);
@@ -320,10 +318,25 @@ public class RescueMetroScreen implements Screen {
 
 	void drawCharacters(float delta) {
 
+		for (int a = 0; a < 4; a++) {
+			if (minigameCounter > 0)
+				peopleSad[a].draw(batch);
+			else
+				peopleHappy[a].draw(batch);
+		}
+
+		batch.draw(assetsManager.metroDoor[3], 930, 140);
+
 		if (zoomOut == false)
 			playerAnimation[0].draw(batch);
 		else
 			playerAnimation[1].draw(batch);
+
+		if (minigameCounter == 0) {
+			metroDoor[1].setScale(0.66f, 0.68f);
+			metroDoor[1].setPosition(585, 40);
+			metroDoor[1].draw(batch);
+		}
 
 		truck.render(batch, delta);
 	}
@@ -340,12 +353,56 @@ public class RescueMetroScreen implements Screen {
 
 	void updateLogics(float delta) {
 
-		if (minigameCounter == 0 && finishDialogue == false) {
+		if(minigameTimeLeft <= 0 && minigameCounter > 0 && finishDialogue == false){
+			finalAnimationFinished = true;
+			victory = false;
+			minigameRunning = false;
+			finishDialogue = true;
+			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
+					assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, 0, starsCollected,
+					false);
+			dialogueWindow.popUp();
+		}
+		
+		
+		if (minigameCounter == 0) {
+			
+			if (camera.zoom < 0.8)
+				finalAnimationFinished = true;
+			
+			camera.zoom(0.6f, 1);
+	
+			for (int a = 0; a < 4; a++) {
+
+				if (peopleHappy[a].getX() >= 765 - a * 30
+						&& peopleHappy[a].getY() >= 60)
+					peopleHappy[a].setPosition(peopleHappy[a].getX() - delta
+							* 120 - delta * a * 10, peopleHappy[a].getY());
+
+				if (peopleHappy[a].getX() <= 700 - a * 30) {
+					if (peopleHappy[a].getY() > 0)
+						peopleHappy[a].setPosition(peopleHappy[a].getX(),
+								peopleHappy[a].getY() - delta * 100);
+
+				}
+			}
+		}
+
+		if (minigameCounter == 0 && finishDialogue == false
+				&& finalAnimationFinished == true && camera.zoom  < 1.18f) {
 			dialogueWindow.popUp();
 			assetsManager.stars.start();
 			finishDialogue = true;
-			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,
+					assetsManager.star, assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, 3, starsCollected,
+					true);
+			timeBar.setVisibility(false);
+			progressBar.setVisibility(false);
+			victory = true;
 		}
+		
 		if (finishDialogue == true && dialogueWindow.isVisibile() == false
 				&& finish == false) {
 			finish = true;
@@ -361,16 +418,16 @@ public class RescueMetroScreen implements Screen {
 			camera.reset();
 			camera.moveX(800, 2, 2, 4);
 		}
-
-		if (zoomOut == true) {
-			camera.zoom(1.3f, 10);
+		if (finish == false) {
+			if (zoomOut == true) {
+				camera.zoom(1.3f, 10);
+			}
+			if (camera.zoom >= 1.25f) {
+				zoomOut = false;
+				camera.zoom(1.1f, 10);
+			}
 		}
-		if (camera.zoom >= 1.25f) {
-			zoomOut = false;
-			camera.zoom(1.1f, 10);
-		}
-
-		if (camera.zoom > 1.0f && readyToPlay == true) {
+		if (camera.zoom > 1.0f && readyToPlay == true && finish == false) {
 			randomizeMinigame();
 			manageHitboxes(delta);
 		}
@@ -394,19 +451,21 @@ public class RescueMetroScreen implements Screen {
 
 	void drawBackground() {
 		batch.draw(assetsManager.rescueMetro[0], 0, 0);
-		batch.draw(assetsManager.rescueMetro[1], 797, 0);
-//		rescueMetroSadPeople.draw(batch);
+		batch.draw(assetsManager.rescueMetro[1], 840, 0);
 
+		if (minigameCounter == 19 || minigameCounter == 20) {
+			batch.draw(assetsManager.metroDoor[4], 655, 135);
+		}
 		if (minigameCounter < 19 && minigameCounter > 0) {
-			metroDoor[0].setScale(0.625f, 0.66f);
-			metroDoor[0].setPosition(540, 40);
+			metroDoor[0].setScale(0.66f, 0.68f);
+			metroDoor[0].setPosition(585, 40);
 			metroDoor[0].draw(batch);
 		}
 		if (minigameCounter == 0) {
-			metroDoor[1].setScale(0.625f, 0.66f);
-			metroDoor[1].setPosition(540, 40);
-			metroDoor[1].draw(batch);
 
+			metroDoor[2].setPosition(682, 42);
+			metroDoor[2].setScale(0.66f, 0.68f);
+			metroDoor[2].draw(batch);
 		}
 
 	}
@@ -425,11 +484,16 @@ public class RescueMetroScreen implements Screen {
 
 	void manageSelectingScreen() {
 		if (finish == true && cloudManager.getAllScalesEqualOne() == true) {
+			if(victory == true){
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreenPlayed(5);
 			game.setCogs(game.getCogs() + 1);
 			game.setScreen(new MenuScreen(game));
-		}
+			}
+			else
+				game.setScreen(new RescueMetroScreen(game));
+					
+			}
 
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
@@ -461,12 +525,12 @@ public class RescueMetroScreen implements Screen {
 
 	void randomizeMinigame() {
 
-		if (minigameRunning == false && minigameCounter > 0) {
+		if (minigameRunning == false && minigameCounter > 0 && minigameTimeLeft >0) {
 
 			timeBar.setVisibility(true);
 			progressBar.setVisibility(true);
 
-			minigameTimeLeft = 1;
+			minigameTimeLeft = 1.5f;
 			minigameCounter--;
 			minigameRunning = true;
 
@@ -484,7 +548,7 @@ public class RescueMetroScreen implements Screen {
 			}
 
 			if (minigameCounter == 0) {
-				if (minigameCounter == 0 && afterMinigameWindow == false) {
+				if (afterMinigameWindow == false) {
 					afterMinigameWindow = true;
 					timeBar.setVisibility(false);
 					progressBar.setVisibility(false);
@@ -492,6 +556,10 @@ public class RescueMetroScreen implements Screen {
 			}
 
 		}
+		else
+		{
+			timeBar.setVisibility(true);
+			progressBar.setVisibility(true);}
 	}
 
 	void manageHitboxes(float delta) {
@@ -513,12 +581,12 @@ public class RescueMetroScreen implements Screen {
 				// hitboxes[a].setPosition(hitboxes[a].getX() + delta * 550,
 				// hitboxes[a].getY() - delta * 550);
 				hitboxesAlpha[a] += delta * 10;
+				if(finish == false)
 				hitboxes[a].setDontRespond(false);
 				if (hitboxesAlpha[a] > 1)
 					hitboxesAlpha[a] = 1;
 
 				if (hitboxes[a].getSelection() == true) {
-					damage[minigameCounter].setAlpha(1);
 					hitboxes[a].setDontRespond(true);
 					selectedHitbox[a] = false;
 					zoomOut = true;
@@ -571,8 +639,10 @@ public class RescueMetroScreen implements Screen {
 
 	}
 
-
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles, 10, 435);
+
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
@@ -586,8 +656,8 @@ public class RescueMetroScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
-				60, 463);
+		assetsManager.fontLittle.draw(batch,
+				Integer.toString(starsCollected + starsAll), 60, 463);
 	}
 
 }

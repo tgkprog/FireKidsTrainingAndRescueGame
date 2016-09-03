@@ -1,6 +1,7 @@
 package com.lh9.feg1.firekidsgame.files;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
@@ -13,7 +14,9 @@ import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 public class AssetsManager extends Thread {
 
 	public DataOrganizer dataOrganizer;
-	
+
+	public Sound bell;
+	public Texture resetGame;
 	public Texture catFalling;
 	public Texture cog;
 	public Texture frameCollectibles;
@@ -228,7 +231,7 @@ public class AssetsManager extends Thread {
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
-		
+
 		loadFonts();
 		loadParticles();
 		loadTextures();
@@ -406,6 +409,7 @@ public class AssetsManager extends Thread {
 		catSad = new Texture("spritesheets/cat/Cat-worried.png");
 		wheel = new Texture("others/wheel.png");
 		// fireBar = new Texture("others/fireBar.png");
+		bell = Gdx.audio.newSound(Gdx.files.internal("sounds/bell.mp3"));
 		// girlHead = new Texture("girl/girlHead.png");
 		basket = new Texture("spritesheets/basket.png");
 		roadPart = new Texture("backgrounds/roadPart.png");
@@ -457,7 +461,8 @@ public class AssetsManager extends Thread {
 		train = new Texture("others/train.png");
 		grassFlowers = new Texture("backgrounds/grassFlowers.png");
 		star = new Texture("particles/star.png");
-		starSummaryDesaturated = new Texture("others/star_summary_desaturated.png");
+		starSummaryDesaturated = new Texture(
+				"others/star_summary_desaturated.png");
 		starSummary = new Texture("others/star_summary.png");
 		barNotFilled = new Texture("others/barNotFilled.png");
 		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
@@ -480,6 +485,7 @@ public class AssetsManager extends Thread {
 		sign = new Texture("texts/Sign.png");
 		cog = new Texture("others/cog.png");
 		catFalling = new Texture("others/catFalling.png");
+		resetGame = new Texture("texts/Reset-game.png");
 		breakTheWallText = new Texture("texts/Break-the-wall.png");
 		eclipseFireText = new Texture("texts/Elipse-fire.png");
 		jumpText = new Texture("texts/Jump.png");
@@ -654,9 +660,14 @@ public class AssetsManager extends Thread {
 		boyHammer_16_percent[0] = new Texture("boy/boy_hammer/1_16_percent.png");
 		boyHammer_16_percent[1] = new Texture("boy/boy_hammer/2_16_percent.png");
 
-		metroDoor = new Texture[2];
+		metroDoor = new Texture[5];
 		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
 		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
+		metroDoor[2] = new Texture("backgrounds/rescueMetro/metroDoor3.png");
+		metroDoor[3] = new Texture(
+				"backgrounds/rescueMetro/train_blank_window.png");
+		metroDoor[4] = new Texture(
+				"backgrounds/rescueMetro/train_doors_not_broken.png");
 
 		bushes = new Texture[3];
 		bushes[0] = new Texture("backgrounds/bushes1.png");
@@ -941,7 +952,7 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 2; a++) {
 			boyHammer_16_percent[a].setFilter(textureFilter, textureFilter);
 		}
-		for (int a = 0; a < 2; a++) {
+		for (int a = 0; a < metroDoor.length; a++) {
 			metroDoor[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 3; a++) {
@@ -1049,9 +1060,10 @@ public class AssetsManager extends Thread {
 		catHappy.setFilter(textureFilter, textureFilter);
 		cog.setFilter(textureFilter, textureFilter);
 		catFalling.setFilter(textureFilter, textureFilter);
+		resetGame.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
 		dialogueWindowGirl.setFilter(textureFilter, textureFilter);
-		dialogueWindowBoy.setFilter(textureFilter, textureFilter);	
+		dialogueWindowBoy.setFilter(textureFilter, textureFilter);
 		truckMiniature.setFilter(textureFilter, textureFilter);
 		fireStation.setFilter(textureFilter, textureFilter);
 		boyButton.setFilter(textureFilter, textureFilter);

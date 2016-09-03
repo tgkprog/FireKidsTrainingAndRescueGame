@@ -22,6 +22,40 @@ public class DataOrganizer {
 		return screensPlayed;
 	}
 
+	public void resetGame() {
+
+		screensPlayed = new boolean[7];
+		voice = false;
+		textureFiltering = true;
+		fps = false;
+		vibrations = false;
+		screenAwake = false;
+		gender = false;
+		prompts = true;
+		score = 0;
+		experience = 0;
+
+		Preferences preferences = Gdx.app
+				.getPreferences("Application prefferences");
+		preferences.putBoolean("voice", false);
+		preferences.putBoolean("textureFiltering", true);
+		preferences.putBoolean("fps", false);
+		preferences.putBoolean("prompts", false);
+		preferences.putBoolean("vibrations", false);
+		preferences.putBoolean("screenAwake", false);
+		preferences.putBoolean("gender", false);
+		preferences.putInteger("experience", 0);
+		preferences.putInteger("score", 0);
+		preferences.putBoolean(Variables.FOODS_SCREEN, false);
+		preferences.putBoolean(Variables.FITNESS_SCREEN_THREE, false);
+		preferences.putBoolean(Variables.TRAINING_SCREEN_ONE, false);
+		preferences.putBoolean(Variables.TRAINING_SCREEN_TWO, false);
+		preferences.putBoolean(Variables.CAT_RESCUE_SCREEN, false);
+		preferences.putBoolean(Variables.RESCUE_METRO_SCREEN, false);
+		preferences.putBoolean(Variables.ELEVATOR_SCREEN, false);
+		preferences.flush();
+	}
+
 	public void setScreensPlayed(boolean[] screensPlayed) {
 		this.screensPlayed = screensPlayed;
 	}

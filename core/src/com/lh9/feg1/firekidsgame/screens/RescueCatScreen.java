@@ -377,9 +377,10 @@ public class RescueCatScreen implements Screen {
 		runRight.setDontRespond(true);
 		if(catFallingY > 45)
 		catFallingY -= delta*350;
-		if(catFallingY < 45)
+		if(catFallingY < 45){
+			camera.shakeScreen();
 			catFallingY = 45;
-
+		}
 		if(catFallingY == 45){
 			if(catGroundY < 210)
 				catGroundY += delta*150;
@@ -588,9 +589,9 @@ public class RescueCatScreen implements Screen {
 	}
 
 	void checkCollisions(float delta) {
-		if (rotation < -21 && rotation > -29 && truck.getX() > 815
-				&& truck.getX() < 945 && finish == false) {
-			timerWin += delta;
+		if (rotation < -18 && rotation > -33 && truck.getX() > 800
+				&& truck.getX() < 960 && finish == false) {
+			timerWin += delta*3;
 			if (greenTimer > 0)
 				greenTimer -= delta;
 			if (greenTimer < 0)

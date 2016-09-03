@@ -91,7 +91,7 @@ public class Dialogue extends Window {
 						
 				font.draw(batch, starsCollectedInString, (float) x + 230,
 						(float) y + 35);
-				font.draw(batch, "1", (float) x + 160,
+				font.draw(batch, "1", (float) x + 163,
 						(float) y + 35);
 			
 				
