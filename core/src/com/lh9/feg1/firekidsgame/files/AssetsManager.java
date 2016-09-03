@@ -15,7 +15,16 @@ public class AssetsManager extends Thread {
 
 	public DataOrganizer dataOrganizer;
 
+	public Sound hitSound;
+	public Sound skid;
 	public Sound bell;
+	public Sound click;
+	public Sound fireHose;
+	public Sound backgroundBoy;
+	public Sound backgroundGirl;
+	public Sound truckStartingUp;
+	public Sound truckDriving;
+	
 	public Texture resetGame;
 	public Texture catFalling;
 	public Texture cog;
@@ -223,6 +232,7 @@ public class AssetsManager extends Thread {
 	public BitmapFont font;
 	public BitmapFont fontLittle;
 
+	public boolean backgroundPlayed;
 	boolean assetsLoaded;
 
 	public void run() {
@@ -410,6 +420,15 @@ public class AssetsManager extends Thread {
 		wheel = new Texture("others/wheel.png");
 		// fireBar = new Texture("others/fireBar.png");
 		bell = Gdx.audio.newSound(Gdx.files.internal("sounds/bell.mp3"));
+		click = Gdx.audio.newSound(Gdx.files.internal("sounds/click.mp3"));
+		backgroundBoy = Gdx.audio.newSound(Gdx.files.internal("sounds/backgroundBoy.mp3"));
+		backgroundGirl = Gdx.audio.newSound(Gdx.files.internal("sounds/backgroundGirl.mp3"));
+		truckStartingUp = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_starting_up.mp3"));
+		truckDriving = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_drive.mp3"));
+		skid = Gdx.audio.newSound(Gdx.files.internal("sounds/skid.mp3"));
+		hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
+		fireHose = Gdx.audio.newSound(Gdx.files.internal("sounds/fire_hose.mp3"));
+		
 		// girlHead = new Texture("girl/girlHead.png");
 		basket = new Texture("spritesheets/basket.png");
 		roadPart = new Texture("backgrounds/roadPart.png");

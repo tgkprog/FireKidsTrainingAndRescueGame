@@ -94,12 +94,14 @@ public class MeetTheTrucksScreen implements Screen {
 	int starsCollectedLastFrame;
 	int starsCollected = 0;
 	int starsAll = 0;
-	int wallHitCounter = 24;
+	int wallHitCounter = 12;
+	boolean fireHoseSoundStarted;
 	boolean leftFoot;
 	boolean pat = true;
 	boolean exit;
 	boolean pointersGoUp;
 	boolean firstDialogueClicked;
+	boolean hitOnBarrels;
 	boolean secondDialogueClicked;
 	boolean finish;
 	boolean truckPart;
@@ -107,8 +109,10 @@ public class MeetTheTrucksScreen implements Screen {
 	boolean playerHoseStarted;
 	boolean finishingRun;
 	boolean reverseHoseAnimation;
+	boolean engineStarted;
 	boolean setWallHitCounter;
 	boolean enlargeStar;
+	boolean deccelarating;
 	float footmarkSpawnTimer;
 	float PositionTimer = 0;
 	float spawnWaterTimer;
@@ -251,7 +255,7 @@ public class MeetTheTrucksScreen implements Screen {
 		camera.zoom(0.98f, 100f);
 
 		dialogueWindow.popUp();
-
+		assetsManager.click.play();
 		assetsManager.stars.setPosition(400, 480);
 
 		speedBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
@@ -312,7 +316,7 @@ public class MeetTheTrucksScreen implements Screen {
 		truckMiniature.setScale(0.5f);
 
 		wallHits = new Bar(assetsManager.barNotFilled, assetsManager.barFilled,
-				12490, 290, 20);
+				12490, 290, 12);
 
 		cartoonWater = new Sprite(assetsManager.clouds[0]);
 		cartoonWater.setScale(0.05f);
@@ -701,9 +705,8 @@ public class MeetTheTrucksScreen implements Screen {
 				runButton.resetCounter();
 				setWallHitCounter = true;
 			}
-			if (runButton.getCounter() >= 20)
+			if (runButton.getCounter() >= 12)
 				finishingRun = true;
-
 		}
 
 		if (player.getX() >= 14000)
@@ -758,8 +761,10 @@ public class MeetTheTrucksScreen implements Screen {
 		} else if (eclipsePart == false) {
 			speedBar.setVisibility(true);
 			truckPart = true;
+			
 			player.setPosition((int) truck.getX() + 720, 35);
 			player.setSpeed(truck.getSpeed());
+
 			if (truck.getSpeed() >= 0)
 				truck.setSpeed(-0.001f);
 
@@ -770,8 +775,18 @@ public class MeetTheTrucksScreen implements Screen {
 			inputInterpreter.setControlledTruck(truck);
 			inputInterpreter.setControlledHuman(truck);
 		}
+		if(eclipsePart == false && truckPart == true && engineStarted == false){
+			assetsManager.truckStartingUp.play(0.7f);
+			assetsManager.truckDriving.loop(0.7f);
+			
+			engineStarted = true;
+		}
+		if(truck.getX() >= 8500 && deccelarating == false)
 		if (truck.getX() >= 9000) {
+			deccelarating = true;
+			assetsManager.skid.play(0.3f);
 			truck.setFriction(30);
+			assetsManager.truckDriving.stop();
 		}
 		if (truck.getX() >= 9000 && Math.abs(truck.getSpeed()) < 0.9f
 				&& eclipsePart == false) {
@@ -840,6 +855,12 @@ public class MeetTheTrucksScreen implements Screen {
 		if (player.getX() > 270 && player.getX() < 435) {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
+		
+			if(hitOnBarrels == false){
+			assetsManager.hitSound.play();
+			hitOnBarrels = true;
+			}
+			
 		}
 
 		// 750,830
@@ -849,6 +870,11 @@ public class MeetTheTrucksScreen implements Screen {
 		if (player.getX() > 670 && player.getX() < 835) {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
+
+			if(hitOnBarrels == false){
+			assetsManager.hitSound.play();
+			hitOnBarrels = true;
+			}
 		}
 		// 1150,1230
 		if (player.getX() >= 1070 && player.getX() < 1080
@@ -858,12 +884,18 @@ public class MeetTheTrucksScreen implements Screen {
 		if (player.getX() > 1070 && player.getX() < 1235) {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
+			if(hitOnBarrels == false){
+			assetsManager.hitSound.play();
+			hitOnBarrels = true;
+			}
 		}
 
-		if (player.getY() < 35)
+		if (player.getY() < 35){
 			player.setPosition((int) player.getX(), 35);
-
+		hitOnBarrels = false;
+		}
 		if (player.getX() >= 14000 && secondDialogueClicked == false) {
+	assetsManager.click.play();
 			secondDialogueClicked = true;
 			//dialogueWindow.setDialogueText(Variables.MEET_THE_TRUCKS_POP_UP_2);
 			int goldenStars = 0;
@@ -1064,34 +1096,34 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if (waterRange > 1.4f && waterRange < 1.7f) {
 			if (fireAnimationScales[0].x > 0)
-				fireAnimationScales[0].x -= delta;
+				fireAnimationScales[0].x -= delta*2;
 			if (fireAnimationScales[0].x < 0)
 				fireAnimationScales[0].x = 0;
 
 			if (fireAnimationScales[0].y > 0)
-				fireAnimationScales[0].y -= delta;
+				fireAnimationScales[0].y -= delta*2;
 			if (fireAnimationScales[0].y < 0)
 				fireAnimationScales[0].y = 0;
 		}
 		if (waterRange > 1.7f && waterRange < 2.2f) {
 			if (fireAnimationScales[1].x > 0)
-				fireAnimationScales[1].x -= delta;
+				fireAnimationScales[1].x -= delta*2;
 			if (fireAnimationScales[1].x < 0)
 				fireAnimationScales[1].x = 0;
 
 			if (fireAnimationScales[1].y > 0)
-				fireAnimationScales[1].y -= delta;
+				fireAnimationScales[1].y -= delta*2;
 			if (fireAnimationScales[1].y < 0)
 				fireAnimationScales[1].y = 0;
 		}
 		if (waterRange > 2.2f && waterRange < 2.55f) {
 			if (fireAnimationScales[2].x > 0)
-				fireAnimationScales[2].x -= delta;
+				fireAnimationScales[2].x -= delta*2;
 			if (fireAnimationScales[2].x < 0)
 				fireAnimationScales[2].x = 0;
 
 			if (fireAnimationScales[2].y > 0)
-				fireAnimationScales[2].y -= delta;
+				fireAnimationScales[2].y -= delta*2;
 			if (fireAnimationScales[2].y < 0)
 				fireAnimationScales[2].y = 0;
 		}
@@ -1110,8 +1142,16 @@ public class MeetTheTrucksScreen implements Screen {
 		}
 
 		if (player.getX() > 11750 && truckBackDoorPosition > 140)
+		{
+			if(fireHoseSoundStarted == false){
+			fireHoseSoundStarted = true;
+			assetsManager.fireHose.loop(0.4f);
+			}
 			drawWater(delta);
-
+		}
+		if(player.getX() > 11755)
+			assetsManager.fireHose.stop();
+		
 		if (player.getX() > 12000 && finishingRun == false)
 			batch.draw(assetsManager.wall[0], 12600, 45);
 		if (player.getX() >= 12550) {
@@ -1183,6 +1223,7 @@ public class MeetTheTrucksScreen implements Screen {
 		}
 		if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
 			camera.reset();
+			game.setCogs(game.getCogs() + 1);
 			game.setCollectedStars(starsCollected + starsAll);
 			assetsManager.hit.scaleEffect(3f);
 			game.setScreen(new FoodsScreen(game));

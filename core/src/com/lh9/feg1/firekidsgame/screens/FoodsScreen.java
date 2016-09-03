@@ -152,7 +152,7 @@ public class FoodsScreen implements Screen {
 		camera.moveY(720, 100, 100, 100);
 
 		dialogueWindow.popUp();
-
+		assetsManager.click.play();
 		assetsManager.stars.setPosition(400, 480);
 		// assetsManager.leaf.setPosition(-100, 200);
 		// Not using this
@@ -285,6 +285,7 @@ public class FoodsScreen implements Screen {
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
 					false);
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 		}
 
 		if (firstDialogueClicked == true) {
@@ -320,6 +321,7 @@ public class FoodsScreen implements Screen {
 			dialogueWindow.popUp();
 			assetsManager.stars.start();
 			victory = true;
+			assetsManager.click.play();
 		}
 
 		if (firstDialogueClicked == false
@@ -386,6 +388,7 @@ public class FoodsScreen implements Screen {
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
 				dialogueWindow.popUp();
+				assetsManager.click.play();
 			}
 		}
 		if (yes.getSelection() == true && minigameRunning == true
@@ -407,6 +410,7 @@ public class FoodsScreen implements Screen {
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
 				dialogueWindow.popUp();
+				assetsManager.click.play();
 			}
 		}
 		// assetsManager.leaf.update(delta);

@@ -188,28 +188,31 @@ public class MenuScreen implements Screen {
 			dataOrganizer.setScore(game.getCollectedStars());
 		}
 		if (game.getCogs() == 0) {
-			game.setCogs(dataOrganizer.getScore());
+			game.setCogs(dataOrganizer.getExperience());
 		} else {
 			dataOrganizer.setExperience(game.getCogs());
 		}
 
 		frameCollectibles = new Sprite(assetsManager.frameCollectibles);
-		
-		collectedStarsInString = new String(Integer.toString(dataOrganizer.getScore()));
-		cogsInString = new String(Integer.toString(dataOrganizer.getExperience()));
-		
-		int numberOfZerosToCompleteStarsString = 7 - collectedStarsInString.length();
-		for(int a =0;a<numberOfZerosToCompleteStarsString;a++){
+
+		collectedStarsInString = new String(Integer.toString(dataOrganizer
+				.getScore()));
+		cogsInString = new String(Integer.toString(dataOrganizer
+				.getExperience()));
+
+		int numberOfZerosToCompleteStarsString = 7 - collectedStarsInString
+				.length();
+		for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
 			collectedStarsInString = "0" + collectedStarsInString;
 		}
 		numberOfZerosToCompleteStarsString = 7 - cogsInString.length();
-		for(int a =0;a<numberOfZerosToCompleteStarsString;a++){
+		for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
 			cogsInString = "0" + cogsInString;
 		}
-			
+
 		dataOrganizer.setScreensPlayed(game.getScreensPlayed());
 		dataOrganizer.saveData();
-	
+
 		star = new Arrow(270, 415, assetsManager.star, -72, 60);
 		star.setAlpha(1);
 		star.setScale(1);
@@ -296,9 +299,9 @@ public class MenuScreen implements Screen {
 		assetsManager.fontLittle.setColor(Color.WHITE);
 		assetsManager.fontLittle.draw(batch, collectedStarsInString, 330, 448);
 		assetsManager.fontLittle.draw(batch, cogsInString, 540, 448);
-		
-		star.render(batch, delta*0.75f);
-		cog.render(batch, delta*0.75f);
+
+		star.render(batch, delta * 0.75f);
+		cog.render(batch, delta * 0.75f);
 		gender.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
@@ -309,12 +312,21 @@ public class MenuScreen implements Screen {
 	}
 
 	void updateLogics(double delta) {
-		
+
 		if (positions < 0)
 			positions += delta * 100 + Math.abs(positions) * 0.025f;
 		if (positions > 0)
 			positions = 0;
 
+		if (assetsManager.backgroundPlayed == false) {
+			if (dataOrganizer.getGender() == false) {
+				assetsManager.backgroundBoy.loop();
+			}
+			if (dataOrganizer.getGender() == true) {
+				assetsManager.backgroundBoy.loop();
+			}
+			assetsManager.backgroundPlayed = true;
+		}
 		if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
 			gender.setTexture(assetsManager.boyButton);
 			dataOrganizer.setGender(false);
@@ -425,24 +437,25 @@ public class MenuScreen implements Screen {
 		buzzer.setPosition(1410, 400);
 		buzzer.render(batch, delta);
 
-		if (inputInterpreter.getSelectedScreenName() != "No button clicked"){
+		if (inputInterpreter.getSelectedScreenName() != "No button clicked") {
 			buzzer.setSpeed(10f);
-			if(startedBells == false){
-			bellSoundID = assetsManager.bell.play();
-			startedBells = true;
+			if (startedBells == false) {
+				assetsManager.click.play();
+				bellSoundID = assetsManager.bell.play();
+				startedBells = true;
 			}
 		}
-			if (positions < 0)
+		if (positions < 0)
 			buzzer.setSpeed(0f);
 
-			if(startedBells == true){
+		if (startedBells == true) {
 			assetsManager.bell.setVolume(bellSoundID, bellsVolume);
-			if(bellsVolume > 0)
-				bellsVolume -= delta*0.55f;
-			if(bellsVolume < 0)
+			if (bellsVolume > 0)
+				bellsVolume -= delta * 0.55f;
+			if (bellsVolume < 0)
 				bellsVolume = 0;
-			}
-			
+		}
+
 		frameCollectibles.setScale(3, 3);
 		frameCollectibles.setPosition(800, 1030);
 		frameCollectibles.draw(batch);

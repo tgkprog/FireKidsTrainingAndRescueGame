@@ -319,11 +319,9 @@ public class FitnessScreenThree implements Screen {
 	}
 
 	void updatenpcAction(double delta) {
-		if (npc.getCounter() < player.getCounter() - 3)
-			timerSpeednpc += delta * 6;
 		if (firstDialogueClicked == true)
 			timerSpeednpc += delta;
-		if (timerSpeednpc > 0.18) {
+		if (timerSpeednpc > 0.24) {
 			timerSpeednpc = 0;
 			if (firstDialogueClicked == true && finish == false)
 				npc.move();
