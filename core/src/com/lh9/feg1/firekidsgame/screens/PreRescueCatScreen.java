@@ -66,6 +66,7 @@ public class PreRescueCatScreen implements Screen {
 	InputInterpreter inputInterpreter;
 	Array<Star> stars;
 
+	boolean engineStarted;
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -156,7 +157,6 @@ public class PreRescueCatScreen implements Screen {
 		truck.setMaxPositions(-17000, 1550);
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
-		truck.setSpeed(5);
 
 		cars = new ArrayList<Car>();
 		for (int a = 0; a < 10; a++) {
@@ -283,6 +283,9 @@ public class PreRescueCatScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+	
+		assetsManager.click.play();
+		assetsManager.truckDriving.loop(0.35f);
 	}
 
 	@Override
@@ -557,6 +560,13 @@ public class PreRescueCatScreen implements Screen {
 	}
 
 	void updateLogics(float delta) {
+	
+		if(engineStarted == false && Math.abs(truck.getSpeed()) > 0.5f)
+		{
+			engineStarted = true;
+			assetsManager.truckStartingUp.play();
+		}
+		
 		pointer.setScale((float) pointerScale);
 
 		if (menuWindow.isVisibile() == true) {
@@ -585,11 +595,6 @@ public class PreRescueCatScreen implements Screen {
 			}
 		}
 
-		if (cloudManager.getAllScalesEqualOne() == true
-				&& lastWindowPopUp == true) {
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreen(new MenuScreen(game));
-		}
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
 			dialogueWindow.popUp();
 			lastWindowPopUp = true;
@@ -798,8 +803,17 @@ public class PreRescueCatScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
+
+		if (cloudManager.getAllScalesEqualOne() == true
+				&& lastWindowPopUp == true) {
+			assetsManager.truckDriving.stop();
+			game.setCollectedStars(starsCollected + starsAll);
+			game.setScreen(new MenuScreen(game));
+		}
+		
 		if (cameraFirstZoom == true
 				&& cloudManager.getAllScalesEqualOne() == true) {
+			assetsManager.truckDriving.stop();
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new RescueCatScreen(game));
 		}
@@ -807,6 +821,7 @@ public class PreRescueCatScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
@@ -815,6 +830,7 @@ public class PreRescueCatScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new PreRescueCatScreen(game));
 			}

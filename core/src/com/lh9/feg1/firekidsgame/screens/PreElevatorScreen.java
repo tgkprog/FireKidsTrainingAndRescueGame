@@ -76,6 +76,7 @@ public class PreElevatorScreen implements Screen {
 	boolean firstDialogueClicked;
 	boolean secondDialogueClicked;
 	boolean finish;
+	boolean engineStarted;
 	boolean goForward;
 	float timerSpeedGirl;
 	float timerSpawnCar;
@@ -161,7 +162,6 @@ public class PreElevatorScreen implements Screen {
 		truck.setMaxPositions(-17000, 1550);
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
-		truck.setSpeed(5);
 
 		cars = new Array<Car>();
 		for (int a = 0; a < 10; a++) {
@@ -287,6 +287,8 @@ public class PreElevatorScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+		assetsManager.click.play();
+		assetsManager.truckDriving.loop(0.3f);
 	}
 
 	@Override
@@ -446,19 +448,17 @@ public class PreElevatorScreen implements Screen {
 						}
 
 						currentCollisionTimer += delta;
-						if (currentCollisionTimer > 1f)
-						{
+						if (currentCollisionTimer > 1f) {
 							truck.setSpeed(1);
 							cars.get(a).dontCheckCollision();
-						}
-						else
+						} else
 							truck.bump();
 
 						break;
 					} else {
 
-						if(Math.abs(truck.getSpeed()) > 0.5f)
-						currentCollisionTimer = 0;
+						if (Math.abs(truck.getSpeed()) > 0.5f)
+							currentCollisionTimer = 0;
 					}
 
 				}
@@ -477,19 +477,17 @@ public class PreElevatorScreen implements Screen {
 							cars.get(b).waitSec();
 					}
 					currentCollisionTimer += delta;
-					if (currentCollisionTimer > 1f)
-					{
+					if (currentCollisionTimer > 1f) {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
-					}
-					else
+					} else
 						truck.bump();
 
 					break;
 				} else {
 
-					if(Math.abs(truck.getSpeed()) > 0.5f)
-					currentCollisionTimer = 0;
+					if (Math.abs(truck.getSpeed()) > 0.5f)
+						currentCollisionTimer = 0;
 				}
 			}
 			truck.render(batch, delta);
@@ -506,19 +504,17 @@ public class PreElevatorScreen implements Screen {
 							cars.get(b).waitSec();
 					}
 					currentCollisionTimer += delta;
-					if (currentCollisionTimer > 1f)
-					{
+					if (currentCollisionTimer > 1f) {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
-					}
-					else
+					} else
 						truck.bump();
 
 					break;
 				} else {
 
-					if(Math.abs(truck.getSpeed()) > 0.5f)
-					currentCollisionTimer = 0;
+					if (Math.abs(truck.getSpeed()) > 0.5f)
+						currentCollisionTimer = 0;
 				}
 			}
 
@@ -564,6 +560,11 @@ public class PreElevatorScreen implements Screen {
 	void updateLogics(float delta) {
 		pointer.setScale((float) pointerScale);
 
+		if(engineStarted == false && Math.abs(truck.getSpeed()) > 0.5f){
+			engineStarted = true;
+			assetsManager.truckStartingUp.play();
+		}
+		
 		if (menuWindow.isVisibile() == true) {
 			runButton.setDontRespond(true);
 			up.setDontRespond(true);
@@ -590,11 +591,6 @@ public class PreElevatorScreen implements Screen {
 			}
 		}
 
-		if (cloudManager.getAllScalesEqualOne() == true
-				&& lastWindowPopUp == true) {
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreen(new MenuScreen(game));
-		}
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
 			dialogueWindow.popUp();
 			lastWindowPopUp = true;
@@ -805,9 +801,17 @@ public class PreElevatorScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
+
+		if (cloudManager.getAllScalesEqualOne() == true
+				&& lastWindowPopUp == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+			assetsManager.truckDriving.stop();
+			game.setScreen(new MenuScreen(game));
+		}
 		if (cameraFirstZoom == true
 				&& cloudManager.getAllScalesEqualOne() == true) {
 			game.setCollectedStars(starsCollected + starsAll);
+			assetsManager.truckDriving.stop();
 			game.setScreen(new ElevatorScreen(game));
 		}
 
@@ -815,7 +819,7 @@ public class PreElevatorScreen implements Screen {
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
-
+				assetsManager.truckDriving.stop();
 				game.setScreen(new MenuScreen(game));
 			}
 		}
@@ -823,9 +827,8 @@ public class PreElevatorScreen implements Screen {
 				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
-
+				assetsManager.truckDriving.stop();
 				game.setScreen(new PreElevatorScreen(game));
-
 			}
 		}
 	}
@@ -872,7 +875,7 @@ public class PreElevatorScreen implements Screen {
 
 	void drawGuiStarsCounter(float delta) {
 
-		batch.draw(assetsManager.frameCollectibles,10,435);
+		batch.draw(assetsManager.frameCollectibles, 10, 435);
 
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)

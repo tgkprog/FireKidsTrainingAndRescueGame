@@ -24,6 +24,7 @@ public class AssetsManager extends Thread {
 	public Sound backgroundGirl;
 	public Sound truckStartingUp;
 	public Sound truckDriving;
+	public Sound crash;
 	
 	public Texture resetGame;
 	public Texture catFalling;
@@ -426,6 +427,7 @@ public class AssetsManager extends Thread {
 		truckStartingUp = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_starting_up.mp3"));
 		truckDriving = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_drive.mp3"));
 		skid = Gdx.audio.newSound(Gdx.files.internal("sounds/skid.mp3"));
+		crash = Gdx.audio.newSound(Gdx.files.internal("sounds/crash.mp3"));
 		hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
 		fireHose = Gdx.audio.newSound(Gdx.files.internal("sounds/fire_hose.mp3"));
 		

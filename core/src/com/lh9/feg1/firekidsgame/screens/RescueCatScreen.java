@@ -219,6 +219,9 @@ public class RescueCatScreen implements Screen {
 		catFalling = new Arrow(1230, (int)catFallingY, assetsManager.catFalling, -10, 10);
 		catFalling.setAlpha(1);
 		catFalling.setScale(1);
+
+		assetsManager.click.play();
+		assetsManager.truckDriving.loop(0.2f);
 	}
 
 	@Override
@@ -423,6 +426,8 @@ public class RescueCatScreen implements Screen {
 			secondDialogueClicked = true;
 			dialogueWindow.popUp();
 
+			assetsManager.click.play();
+			assetsManager.click.play();
 			int goldenStars = 1;
 			if (missionTime > 13)
 				goldenStars = 3;
@@ -557,6 +562,7 @@ public class RescueCatScreen implements Screen {
 				if (victory == true) {
 					game.setCollectedStars(starsCollected + starsAll);
 					game.setCogs(game.getCogs() + 1);
+					assetsManager.truckDriving.stop();
 					game.setScreenPlayed(4);
 					game.setScreen(new MenuScreen(game));
 				} else {
@@ -568,12 +574,14 @@ public class RescueCatScreen implements Screen {
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
+				assetsManager.truckDriving.stop();
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getCAT_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new RescueCatScreen(game));
 			}

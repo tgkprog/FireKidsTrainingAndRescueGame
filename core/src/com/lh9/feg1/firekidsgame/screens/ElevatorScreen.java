@@ -231,6 +231,8 @@ public class ElevatorScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsCollectedInTotal = game.getCollectedStars();
+
+		assetsManager.click.play();
 	}
 
 	@Override
@@ -359,6 +361,7 @@ public class ElevatorScreen implements Screen {
 		if (minigameCounter > 0 && minigameTimeLeft <= 0
 				&& finishDialogue == false) {
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
@@ -373,6 +376,7 @@ public class ElevatorScreen implements Screen {
 		if (camera.zoom <= 1.55 && finishDialogue == false
 				&& minigameCounter == 0) {
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 			finishDialogue = true;
 			victory = true;
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,

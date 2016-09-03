@@ -232,6 +232,7 @@ public class TrainingScreenOne implements Screen {
 
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
+		inputInterpreter.setAssetsManager(assetsManager);
 		inputInterpreter.setControlledHuman(boy);
 		inputInterpreter.setMenuWindow(menuWindow);
 		inputInterpreter.setYellowSectionButtons(yellowSectionMiddle,
@@ -248,7 +249,8 @@ public class TrainingScreenOne implements Screen {
 		camera.zoom(3.175f, 100f);
 
 		dialogueWindow.popUp();
-
+		assetsManager.click.play();
+		
 		laneManager = new LaneManager(assetsManager.lane, 1320, 1450);
 		laneManager.setAlpha(1);
 		middleLeds = new LedManager(assetsManager.ledCockpit);
@@ -299,6 +301,8 @@ public class TrainingScreenOne implements Screen {
 				assetsManager.barNotFilledBlue, 250, 425, minigameCounter);
 
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+
+		assetsManager.truckDriving.loop(0.25f);
 	}
 
 	@Override
@@ -443,6 +447,7 @@ public class TrainingScreenOne implements Screen {
 						assetsManager.starSummaryDesaturated, 0,
 						starsCollected, false);
 				dialogueWindow.popUp();
+				assetsManager.click.play();
 			}
 		}
 
@@ -450,8 +455,6 @@ public class TrainingScreenOne implements Screen {
 			timeLeftBar.setVisibility(false);
 			counterLeftBar.setVisibility(false);
 		}
-		
-		System.out.println(starsCollected);
 		
 		if (dialogueWindow.isVisibile() == false && victory == false
 				&& minigameRunning == false && minigameCounter == 0 && sirene == false && starsCollected < 30)  {
@@ -488,7 +491,7 @@ public class TrainingScreenOne implements Screen {
 					assetsManager.starSummaryDesaturated, goldenStars,
 					starsCollected, true);
 			victory = true;
-	
+			assetsManager.click.play();
 			dialogueWindow.popUp();
 			thirdDialogueClicked = true;
 		}
@@ -599,6 +602,7 @@ public class TrainingScreenOne implements Screen {
 						.setDialogueText(Variables.TRAINING_SCREEN_ONE_POP_UP_2);
 				dialogueWindow.popUp();
 				secondDialogueClicked = true;
+				assetsManager.click.play();
 			}
 		}
 		if (timerFrontTruck <= 1.5f) {
@@ -678,6 +682,7 @@ public class TrainingScreenOne implements Screen {
 	
 					dialogueWindow.setDialogueText(Variables.TRAINING_SCREEN_ONE_POP_UP_3);
 					dialogueWindow.popUp();
+					assetsManager.click.play();
 					afterMinigameWindow = true;
 				}
 			}
@@ -797,6 +802,7 @@ public class TrainingScreenOne implements Screen {
 
 		if (cloudManager.getAllScalesEqualOne() == true && sirene == true
 				&& victory == false) {
+			assetsManager.truckDriving.stop();
 			game.setScreen(new TrainingScreenOne(game));
 		}
 
@@ -804,17 +810,20 @@ public class TrainingScreenOne implements Screen {
 			game.setScreenPlayed(2);
 			game.setCogs(game.getCogs() + 1);
 			game.setCollectedStars(dataOrganizer.getScore() + starsCollected);
+			assetsManager.truckDriving.stop();
 			game.setScreen(new TrainingScreenTwo(game));
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTRAINING_SCREEN_ONE()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setScreen(new TrainingScreenOne(game));
 			}
 		}

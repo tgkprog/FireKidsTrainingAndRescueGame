@@ -66,6 +66,7 @@ public class TrainingScreenTwo implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	boolean engineStarted;
 	boolean ledRed;
 	boolean lastWindowPopUp;
 	boolean peopleRescued;
@@ -150,7 +151,7 @@ public class TrainingScreenTwo implements Screen {
 		camera.zoom(1.9f, 100f);
 
 		dialogueWindow.popUp();
-
+		assetsManager.click.play();
 		truck = new Truck();
 
 		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
@@ -284,6 +285,9 @@ public class TrainingScreenTwo implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+	
+		assetsManager.truckDriving.stop();
+		assetsManager.truckDriving.loop(0.4f);
 	}
 
 	@Override
@@ -448,9 +452,11 @@ public class TrainingScreenTwo implements Screen {
 							truck.setSpeed(1);
 							cars.get(a).dontCheckCollision();
 						}
-						else
+						else{
 							truck.bump();
-
+						if(currentCollisionTimer == 0)
+							assetsManager.crash.play();
+						}
 						break;
 					} else {
 
@@ -479,9 +485,11 @@ public class TrainingScreenTwo implements Screen {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
 					}
-					else
+					else{
 						truck.bump();
-
+						if(currentCollisionTimer == 0)
+						assetsManager.crash.play();
+					}
 					break;
 				} else {
 
@@ -509,9 +517,11 @@ public class TrainingScreenTwo implements Screen {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
 					}
-					else
+					else{
 						truck.bump();
-
+						if(currentCollisionTimer == 0)
+						assetsManager.crash.play();
+					}
 					break;
 				} else {
 
@@ -562,6 +572,12 @@ public class TrainingScreenTwo implements Screen {
 
 	void updateLogics(float delta) {
 
+		if(Math.abs(truck.getSpeed()) > 0.3f && engineStarted == false){
+		engineStarted = true;
+		assetsManager.truckStartingUp.play();
+		}
+
+		
 		if (menuWindow.isVisibile() == false
 				&& dialogueWindow.isVisibile() == false) {
 			totalTimeSpent += delta;
@@ -608,6 +624,7 @@ public class TrainingScreenTwo implements Screen {
 					assetsManager.starSummaryDesaturated, goldenStars,
 					starsCollected, true);
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 			lastWindowPopUp = true;
 		}
 
@@ -778,7 +795,6 @@ public class TrainingScreenTwo implements Screen {
 		fireMiniature.draw(batch);
 
 		speedBar.render(batch, delta, truck.getSpeed());
-
 	}
 
 	void drawParticles(float delta) {
@@ -835,6 +851,7 @@ public class TrainingScreenTwo implements Screen {
 	void manageSelectingScreen() {
 		if (cloudManager.getAllScalesEqualOne() == true
 				&& lastWindowPopUp == true) {
+			assetsManager.truckDriving.stop();
 			game.setScreenPlayed(2);
 			game.setScreenPlayed(3);
 			game.setCogs(game.getCogs() + 1);
@@ -844,6 +861,7 @@ public class TrainingScreenTwo implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
@@ -851,6 +869,7 @@ public class TrainingScreenTwo implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new TrainingScreenTwo(game));
 			}
@@ -898,8 +917,7 @@ public class TrainingScreenTwo implements Screen {
 		starsCollectedLastFrame = starsCollected;
 	}
 
-	void drawGuiStarsCounter(float delta) {
-		
+	void drawGuiStarsCounter(float delta) {	
 		batch.draw(assetsManager.frameCollectibles,10,435);
 
 		if (enlargeStar == true) {
@@ -918,5 +936,4 @@ public class TrainingScreenTwo implements Screen {
 		assetsManager.fontLittle.draw(batch,
 				Integer.toString(starsCollected + starsAll), 60, 463);
 	}
-
 }

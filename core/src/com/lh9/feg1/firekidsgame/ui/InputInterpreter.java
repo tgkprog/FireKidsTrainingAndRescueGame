@@ -10,6 +10,7 @@ import com.badlogic.gdx.math.Vector3;
 import com.lh9.feg1.firekidsgame.animated.Human;
 import com.lh9.feg1.firekidsgame.animated.Truck;
 import com.lh9.feg1.firekidsgame.camera.Camera;
+import com.lh9.feg1.firekidsgame.files.AssetsManager;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 import com.lh9.feg1.firekidsgame.utils.Variables;
@@ -18,6 +19,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	AssetsManager assetsManager;
+	
 	boolean[] screensPlayed;
 	String selectedScreen = "No button clicked";
 	Button webButton;
@@ -341,17 +344,18 @@ public class InputInterpreter implements GestureListener {
 
 				if (yellowSectionMiddle.checkCollision((int) x, (int) y) == true) {
 					yellowSectionMiddle.blink();
+					assetsManager.click.play();
 				}
 				if (yellowSectionLeft.checkCollision((int) x, (int) y) == true) {
-
+					assetsManager.click.play();
 					yellowSectionLeft.blink();
 				}
 				if (yellowSectionUpLeft.checkCollision((int) x, (int) y) == true) {
-
+					assetsManager.click.play();
 					yellowSectionUpLeft.blink();
 				}
 				if (yellowSectionUpRight.checkCollision((int) x, (int) y) == true) {
-
+					assetsManager.click.play();
 					yellowSectionUpRight.blink();
 				}
 
@@ -729,6 +733,9 @@ void webButtonAction(){
 				camera.zoom(0.98f, 1);
 			}
 		}
+	}
+	public void setAssetsManager(AssetsManager assetsManager){
+		this.assetsManager = assetsManager;
 	}
 }
 /*

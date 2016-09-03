@@ -228,6 +228,9 @@ public class RescueMetroScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
+	
+		assetsManager.truckDriving.play();
+		assetsManager.click.play();
 	}
 
 	@Override
@@ -363,6 +366,7 @@ public class RescueMetroScreen implements Screen {
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
 					false);
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 		}
 		
 		
@@ -392,6 +396,7 @@ public class RescueMetroScreen implements Screen {
 		if (minigameCounter == 0 && finishDialogue == false
 				&& finalAnimationFinished == true && camera.zoom  < 1.18f) {
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 			assetsManager.stars.start();
 			finishDialogue = true;
 			dialogueWindow.drawLevelSummary(assetsManager.cog,

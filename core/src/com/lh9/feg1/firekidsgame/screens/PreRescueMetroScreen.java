@@ -31,13 +31,13 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 public class PreRescueMetroScreen implements Screen {
 
 	Array<Star> stars;
-	
+
 	Sprite guiStar;
 	Sprite fireMiniature;
 	Sprite truckLed;
 	Sprite playerHead;
 	Sprite pointer;
-	
+
 	Button menuButton;
 	Button retryButton;
 	Button playButton;
@@ -45,13 +45,13 @@ public class PreRescueMetroScreen implements Screen {
 	Button down;
 	Button pause;
 	Button runButton;
-	
+
 	StaticAnimation peopleGround;
 	StaticAnimation peopleBuilding;
-	
+
 	ArrayList<StaticAnimation> fire;
 	StaticAnimation fountains[];
-	
+
 	ArrayList<Car> cars;
 	Truck truck;
 	MenuWindow menuWindow;
@@ -67,6 +67,7 @@ public class PreRescueMetroScreen implements Screen {
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
+	boolean engineStarted;
 	boolean enlargeStar;
 	boolean ledRed;
 	boolean lastWindowPopUp;
@@ -89,7 +90,7 @@ public class PreRescueMetroScreen implements Screen {
 	int starsAll;
 	int starsCollected;
 	int starsCollectedLastFrame;
-		
+
 	final Starter game;
 
 	public PreRescueMetroScreen(final Starter gam) {
@@ -115,23 +116,23 @@ public class PreRescueMetroScreen implements Screen {
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
-		
-		
+
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		
-		if(dataOrganizer.getGender() == true)
+
+		if (dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.PRE_RESCUE_METRO_POP_UP_1, assetsManager.fontLittle);
+					Variables.PRE_RESCUE_METRO_POP_UP_1,
+					assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.PRE_RESCUE_METRO_POP_UP_1, assetsManager.fontLittle);
-	
-			
+					Variables.PRE_RESCUE_METRO_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 
@@ -151,7 +152,7 @@ public class PreRescueMetroScreen implements Screen {
 		camera.zoom(1.9f, 100f);
 
 		dialogueWindow.popUp();
-
+		assetsManager.click.play();
 		truck = new Truck();
 
 		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
@@ -160,7 +161,7 @@ public class PreRescueMetroScreen implements Screen {
 		truck.loadWheel(assetsManager.wheel);
 		truck.goLeft();
 		truck.setSpeed(5);
-		
+
 		cars = new ArrayList<Car>();
 		for (int a = 0; a < 10; a++) {
 			spawnRandomCar(a);
@@ -252,25 +253,23 @@ public class PreRescueMetroScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(null,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getTRAINING_SCREEN_TWO());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getTRAINING_SCREEN_TWO());
 
 		inputInterpreter.setMenuWindow(menuWindow);
 
-		
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-		if(dataOrganizer.getGender() == false)
-		playerHead = new Sprite(assetsManager.boyButton);
+		if (dataOrganizer.getGender() == false)
+			playerHead = new Sprite(assetsManager.boyButton);
 		else
 			playerHead = new Sprite(assetsManager.girlButton);
-		
-			playerHead.setScale(0.5f);
+
+		playerHead.setScale(0.5f);
 		fireMiniature = new Sprite(assetsManager.trainMiniature);
 		fireMiniature.setScale(0.5f);
 		fireMiniature.setPosition(160, 410);
-
 
 		stars = new Array<Star>();
 
@@ -288,14 +287,15 @@ public class PreRescueMetroScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
-	
+
+		assetsManager.truckDriving.loop(0.3f);
 	}
 
 	@Override
 	public void render(float delta) {
 
 		inputInterpreter.checkKeyboardInput();
-		
+
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
 			delta = 0;
@@ -304,6 +304,7 @@ public class PreRescueMetroScreen implements Screen {
 
 		if (menuWindow.isVisibile() == true)
 			delta = 0;
+
 		checkCarsCollisions();
 		updateLogics(delta);
 
@@ -447,19 +448,17 @@ public class PreRescueMetroScreen implements Screen {
 								cars.get(b).waitSec();
 						}
 						currentCollisionTimer += delta;
-						if (currentCollisionTimer > 1f)
-						{
+						if (currentCollisionTimer > 1f) {
 							truck.setSpeed(1);
 							cars.get(a).dontCheckCollision();
-						}
-						else
+						} else
 							truck.bump();
 
 						break;
 					} else {
 
-						if(Math.abs(truck.getSpeed()) > 0.5f)
-						currentCollisionTimer = 0;
+						if (Math.abs(truck.getSpeed()) > 0.5f)
+							currentCollisionTimer = 0;
 					}
 
 				}
@@ -478,19 +477,17 @@ public class PreRescueMetroScreen implements Screen {
 							cars.get(b).waitSec();
 					}
 					currentCollisionTimer += delta;
-					if (currentCollisionTimer > 1f)
-					{
+					if (currentCollisionTimer > 1f) {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
-					}
-					else
+					} else
 						truck.bump();
 
 					break;
 				} else {
 
-					if(Math.abs(truck.getSpeed()) > 0.5f)
-					currentCollisionTimer = 0;
+					if (Math.abs(truck.getSpeed()) > 0.5f)
+						currentCollisionTimer = 0;
 				}
 
 			}
@@ -508,19 +505,17 @@ public class PreRescueMetroScreen implements Screen {
 							cars.get(b).waitSec();
 					}
 					currentCollisionTimer += delta;
-					if (currentCollisionTimer > 1f)
-					{
+					if (currentCollisionTimer > 1f) {
 						truck.setSpeed(1);
 						cars.get(a).dontCheckCollision();
-					}
-					else
+					} else
 						truck.bump();
 
 					break;
 				} else {
 
-					if(Math.abs(truck.getSpeed()) > 0.5f)
-					currentCollisionTimer = 0;
+					if (Math.abs(truck.getSpeed()) > 0.5f)
+						currentCollisionTimer = 0;
 				}
 
 			}
@@ -567,6 +562,11 @@ public class PreRescueMetroScreen implements Screen {
 	void updateLogics(float delta) {
 		pointer.setScale((float) pointerScale);
 
+		if (engineStarted == false && Math.abs(truck.getSpeed()) > 0.5f) {
+			assetsManager.truckStartingUp.play();
+			engineStarted = true;
+		}
+
 		if (menuWindow.isVisibile() == true) {
 			runButton.setDontRespond(true);
 			up.setDontRespond(true);
@@ -576,7 +576,7 @@ public class PreRescueMetroScreen implements Screen {
 			up.setDontRespond(false);
 			down.setDontRespond(false);
 		}
-		
+
 		if (ledRed == true) {
 			if (truckLed.getColor().r < 1) {
 				truckLed.setColor(truckLed.getColor().r + delta, 1, 1, 1);
@@ -593,13 +593,9 @@ public class PreRescueMetroScreen implements Screen {
 			}
 		}
 
-		if (cloudManager.getAllScalesEqualOne() == true
-				&& lastWindowPopUp == true){
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreen(new MenuScreen(game));
-		}
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
 			dialogueWindow.popUp();
+			assetsManager.click.play();
 			lastWindowPopUp = true;
 		}
 
@@ -632,18 +628,18 @@ public class PreRescueMetroScreen implements Screen {
 		if (truck.getX() <= -16000) {
 
 			if (cameraFirstZoom == false) {
-	
+
 				camera.reset();
 				camera.zoom(-1.5f, 25);
-			//	camera.moveX(camera.position.x + 200, 10, 10, 10);
-			//	camera.moveY(camera.position.y + 150, 10, 10, 10);
+				// camera.moveX(camera.position.x + 200, 10, 10, 10);
+				// camera.moveY(camera.position.y + 150, 10, 10, 10);
 				cameraFirstZoom = true;
-			
+
 				cloudManager.start();
 			}
 			speedBar.setVisibility(false);
 			runButton.setDontRespond(true);
-			
+
 			for (int a = 0; a < 10; a++) {
 				cars.get(a).setSpeed(0);
 			}
@@ -662,7 +658,8 @@ public class PreRescueMetroScreen implements Screen {
 	}
 
 	void updateCameraLogics(double delta) {
-		if (truck.getX() <= 500 && cameraFirstZoom == false && truck.getX() > -15500)
+		if (truck.getX() <= 500 && cameraFirstZoom == false
+				&& truck.getX() > -15500)
 			camera.position.x = truck.getX() + 300;
 	}
 
@@ -805,21 +802,33 @@ public class PreRescueMetroScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
-	if(cameraFirstZoom == true && cloudManager.getAllScalesEqualOne()== true){
-		game.setCollectedStars(starsCollected + starsAll);
-		game.setScreen(new RescueMetroScreen(game));
-	}
-		
+
+		if (cloudManager.getAllScalesEqualOne() == true
+				&& lastWindowPopUp == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+			assetsManager.truckDriving.stop();
+			game.setScreen(new MenuScreen(game));
+		}
+
+		if (cameraFirstZoom == true
+				&& cloudManager.getAllScalesEqualOne() == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+			assetsManager.truckDriving.stop();
+			game.setScreen(new RescueMetroScreen(game));
+		}
+
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				game.setCollectedStars(starsCollected + starsAll);
+				assetsManager.truckDriving.stop();
 				game.setScreen(new MenuScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getTRAINING_SCREEN_TWO()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new PreRescueMetroScreen(game));
 			}
@@ -837,6 +846,7 @@ public class PreRescueMetroScreen implements Screen {
 	void drawClosestCarPointer() {
 		pointer.draw(batch);
 	}
+
 	void drawStars(float delta) {
 
 		for (int a = 0; a < stars.size; a++) {
@@ -852,7 +862,7 @@ public class PreRescueMetroScreen implements Screen {
 			if ((truck.getX() - 50 < stars.get(a).getX()
 					&& truck.getX() + 900 > stars.get(a).getX() && Math
 					.abs(truck.getY() - stars.get(a).getY()) < 10)) {
-				
+
 				if (stars.get(a).getHit() == false) {
 					starsCollected++;
 					stars.get(a).setHit();
@@ -867,8 +877,8 @@ public class PreRescueMetroScreen implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
-		
-		batch.draw(assetsManager.frameCollectibles,10,435);
+
+		batch.draw(assetsManager.frameCollectibles, 10, 435);
 
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
@@ -883,7 +893,7 @@ public class PreRescueMetroScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
-				60, 463);
+		assetsManager.fontLittle.draw(batch,
+				Integer.toString(starsCollected + starsAll), 60, 463);
 	}
 }

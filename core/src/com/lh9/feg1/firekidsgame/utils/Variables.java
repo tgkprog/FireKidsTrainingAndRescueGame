@@ -4,6 +4,8 @@ import com.badlogic.gdx.math.Vector2;
 
 public class Variables {
 
+	static final public String VERSION = "version 1.0";
+	
 	static final public String MR_TUSHAR_WEBSITE = "www.google.com";
 	
 	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"Run through the","training ground and", "complete training!"};

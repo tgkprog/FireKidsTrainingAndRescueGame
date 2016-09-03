@@ -85,6 +85,7 @@ public class BigRoadRescueScreen implements Screen {
 	int randomFire;
 	int fireCounter;
 
+	boolean engineStarted;
 	boolean goMenu;
 	boolean ledRed;
 	boolean minigameRunning;
@@ -105,7 +106,7 @@ public class BigRoadRescueScreen implements Screen {
 	Sprite guiStar;
 	boolean enlargeStar;
 	int starsCollected = 0;
-	int starsAll ;
+	int starsAll;
 	int starsCollectedLastFrame;
 
 	final Starter game;
@@ -157,9 +158,9 @@ public class BigRoadRescueScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(null,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getBIG_ROAD_RESCUE_SCREEN());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getBIG_ROAD_RESCUE_SCREEN());
 
 		truck = new Truck();
 		truck.create(assetsManager.truckBlank, 3, 3, 1, 1550, 135);
@@ -173,16 +174,17 @@ public class BigRoadRescueScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
-		if(dataOrganizer.getGender() == true)
+		if (dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.BIG_ROAD_RESCUE_POP_UP_1, assetsManager.fontLittle);
+					Variables.BIG_ROAD_RESCUE_POP_UP_1,
+					assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.BIG_ROAD_RESCUE_POP_UP_1, assetsManager.fontLittle);
-	
-				
+					Variables.BIG_ROAD_RESCUE_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runLeft);
 		inputInterpreter.setRunButtonSecond(runRight);
@@ -271,8 +273,13 @@ public class BigRoadRescueScreen implements Screen {
 		guiStar.setPosition(0, 430);
 
 		starsAll = game.getCollectedStars();
-	
+
 		eclipseFire.setDontRespond(true);
+
+		assetsManager.click.play();
+
+		assetsManager.truckDriving.loop(0.3f);
+
 	}
 
 	@Override
@@ -463,10 +470,16 @@ public class BigRoadRescueScreen implements Screen {
 
 	void updateLogics(float delta) {
 
+		if (engineStarted == false && Math.abs(truck.getSpeed()) > 0.5f) {
+			engineStarted = true;
+			assetsManager.truckStartingUp.play();
+		}
+
 		if (minigameCounter < 1 && finish == false) {
 			dialogueWindow.popUp();
 			finish = true;
 			assetsManager.stars.start();
+			assetsManager.click.play();
 		}
 		if (finish == true && dialogueWindow.isVisibile() == false
 				&& goMenu == false) {
@@ -538,12 +551,6 @@ public class BigRoadRescueScreen implements Screen {
 		randomizeMinigame();
 		manageFire(delta);
 
-		if (cloudManager.getAllScalesEqualOne() == true
-				&& lastWindowPopUp == true){
-			game.setCollectedStars(starsCollected + starsAll);
-			game.setScreenPlayed(7);
-			game.setScreen(new MenuScreen(game));
-		}
 		if (timerLastPopUp > 8 && lastWindowPopUp == false) {
 			dialogueWindow.popUp();
 			lastWindowPopUp = true;
@@ -763,15 +770,18 @@ public class BigRoadRescueScreen implements Screen {
 						(int) firePositions[randomFire][a].y);
 			}
 			fireBar.setVisibility(true);
-		
-				if (minigameCounter == 0 && afterMinigameWindow == false) {
-					
-					dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
-					dialogueWindow.popUp();
-					afterMinigameWindow = true;
-				}
+
+			if (minigameCounter == 0 && afterMinigameWindow == false) {
+
+				dialogueWindow.drawLevelSummary(assetsManager.cog,
+						assetsManager.star, assetsManager.starSummary,
+						assetsManager.starSummaryDesaturated, 3,
+						starsCollected, true);
+				dialogueWindow.popUp();
+				afterMinigameWindow = true;
 			}
-		
+		}
+
 	}
 
 	void manageFire(float delta) {
@@ -812,7 +822,7 @@ public class BigRoadRescueScreen implements Screen {
 					&& truck.getX() < fireRange[randomFire].x - 110) {
 				truck.setSpeed(0);
 				eclipseFire.setDontRespond(false);
-				
+
 				girlTimer += delta;
 
 				if (girlTimer > 0.1f) {
@@ -854,8 +864,17 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
+		if (cloudManager.getAllScalesEqualOne() == true
+				&& lastWindowPopUp == true) {
+			game.setCollectedStars(starsCollected + starsAll);
+			game.setScreenPlayed(7);
+			assetsManager.truckDriving.stop();
+			game.setScreen(new MenuScreen(game));
+		}
+
 		if (cloudManager.getAllScalesEqualOne() == true && goMenu == true) {
 
+			assetsManager.truckDriving.stop();
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreen(new MenuScreen(game));
 			game.setCogs(game.getCogs() + 1);
@@ -865,6 +884,7 @@ public class BigRoadRescueScreen implements Screen {
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new MenuScreen(game));
 			}
@@ -873,6 +893,7 @@ public class BigRoadRescueScreen implements Screen {
 				.getBIG_ROAD_RESCUE_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 
+				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);
 				game.setScreen(new BigRoadRescueScreen(game));
 			}
@@ -1113,7 +1134,7 @@ public class BigRoadRescueScreen implements Screen {
 			if ((truck.getX() - 50 < stars.get(a).getX()
 					&& truck.getX() + 900 > stars.get(a).getX() && Math
 					.abs(truck.getY() - stars.get(a).getY()) < 10)) {
-				
+
 				if (stars.get(a).getHit() == false) {
 					starsCollected++;
 					stars.get(a).setHit();
@@ -1128,6 +1149,9 @@ public class BigRoadRescueScreen implements Screen {
 	}
 
 	void drawGuiStarsCounter(float delta) {
+
+		batch.draw(assetsManager.frameCollectibles, 10, 435);
+
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
@@ -1141,7 +1165,7 @@ public class BigRoadRescueScreen implements Screen {
 			enlargeStar = false;
 		}
 		guiStar.draw(batch);
-		assetsManager.fontLittle.draw(batch, Integer.toString(starsCollected + starsAll),
-				60, 463);
+		assetsManager.fontLittle.draw(batch,
+				Integer.toString(starsCollected + starsAll), 60, 463);
 	}
 }

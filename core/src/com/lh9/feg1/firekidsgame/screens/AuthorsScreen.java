@@ -159,6 +159,7 @@ public class AuthorsScreen implements Screen {
 
 		drawButtons(delta);
 		drawClouds(delta);
+		assetsManager.fontLittle.draw(batch, Variables.VERSION,10,30);
 		drawFps();
 
 		batch.end();

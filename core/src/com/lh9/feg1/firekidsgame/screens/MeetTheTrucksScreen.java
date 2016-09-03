@@ -857,10 +857,9 @@ public class MeetTheTrucksScreen implements Screen {
 				player.setPosition((int) player.getX(), 110);
 		
 			if(hitOnBarrels == false){
-			assetsManager.hitSound.play();
+			//assetsManager.hitSound.play();
 			hitOnBarrels = true;
-			}
-			
+			}	
 		}
 
 		// 750,830
@@ -872,7 +871,7 @@ public class MeetTheTrucksScreen implements Screen {
 				player.setPosition((int) player.getX(), 110);
 
 			if(hitOnBarrels == false){
-			assetsManager.hitSound.play();
+			//assetsManager.hitSound.play();
 			hitOnBarrels = true;
 			}
 		}
@@ -885,7 +884,7 @@ public class MeetTheTrucksScreen implements Screen {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
 			if(hitOnBarrels == false){
-			assetsManager.hitSound.play();
+		//	assetsManager.hitSound.play();
 			hitOnBarrels = true;
 			}
 		}
@@ -1145,7 +1144,7 @@ public class MeetTheTrucksScreen implements Screen {
 		{
 			if(fireHoseSoundStarted == false){
 			fireHoseSoundStarted = true;
-			assetsManager.fireHose.loop(0.4f);
+			assetsManager.fireHose.loop(0.25f);
 			}
 			drawWater(delta);
 		}
