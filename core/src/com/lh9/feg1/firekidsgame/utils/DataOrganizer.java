@@ -1,9 +1,18 @@
 package com.lh9.feg1.firekidsgame.utils;
 
+import java.nio.charset.StandardCharsets;
+import java.util.Base64;
+
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
+import com.badlogic.gdx.utils.Json;
+import com.googlecode.gwt.crypto.client.AESCipher;
+import com.googlecode.gwt.crypto.client.TripleDesKeyGenerator;
+import com.lh9.feg1.firekidsgame.models.GameStateSave;
 
 public class DataOrganizer {
+
+	AESCipher encryptor;
 
 	boolean[] screensPlayed;
 	boolean voice;
@@ -17,6 +26,21 @@ public class DataOrganizer {
 	// True is for girl
 	int score;
 	int experience;
+
+	public DataOrganizer() {
+		TripleDesKeyGenerator generator = new TripleDesKeyGenerator();
+		byte[] key = generator
+				.decodeKey("04578a8f0be3a7109d9e5e86839e3bc41654927034df92ec"); // you
+																				// can
+																				// pass
+																				// your
+																				// own
+																				// string
+																				// here
+
+		encryptor = new AESCipher();
+		encryptor.setKey(key);
+	}
 
 	public boolean[] getScreensPlayed() {
 		return screensPlayed;
@@ -35,24 +59,27 @@ public class DataOrganizer {
 		score = 0;
 		experience = 0;
 
+		GameStateSave model = new GameStateSave();
+		model.setVoice(false);
+		model.setTextureFiltering(true);
+		model.setFps(false);
+		model.setPrompts(true);
+		model.setVibrations(false);
+		model.setScreenAwake(true);
+		model.setGender(false);
+		model.setExperience(0);
+		model.setScore(0);
+		model.setScreensPlayed(screensPlayed);
+
+		Json json = new Json();
+		String dataSaveInJson = json.toJson(model);
+
+		String encryptedGameStateSaveInString = encryptString(dataSaveInJson);
+
 		Preferences preferences = Gdx.app
 				.getPreferences("Application prefferences");
-		preferences.putBoolean("voice", false);
-		preferences.putBoolean("textureFiltering", true);
-		preferences.putBoolean("fps", false);
-		preferences.putBoolean("prompts", false);
-		preferences.putBoolean("vibrations", false);
-		preferences.putBoolean("screenAwake", false);
-		preferences.putBoolean("gender", false);
-		preferences.putInteger("experience", 0);
-		preferences.putInteger("score", 0);
-		preferences.putBoolean(Variables.FOODS_SCREEN, false);
-		preferences.putBoolean(Variables.FITNESS_SCREEN_THREE, false);
-		preferences.putBoolean(Variables.TRAINING_SCREEN_ONE, false);
-		preferences.putBoolean(Variables.TRAINING_SCREEN_TWO, false);
-		preferences.putBoolean(Variables.CAT_RESCUE_SCREEN, false);
-		preferences.putBoolean(Variables.RESCUE_METRO_SCREEN, false);
-		preferences.putBoolean(Variables.ELEVATOR_SCREEN, false);
+		preferences.putString("encryptedGameStateSave",
+				encryptedGameStateSaveInString);
 		preferences.flush();
 	}
 
@@ -133,56 +160,93 @@ public class DataOrganizer {
 	}
 
 	public void saveData() {
+
+		GameStateSave model = new GameStateSave();
+		model.setVoice(voice);
+		model.setTextureFiltering(textureFiltering);
+		model.setFps(fps);
+		model.setPrompts(prompts);
+		model.setVibrations(vibrations);
+		model.setScreenAwake(screenAwake);
+		model.setGender(gender);
+		model.setExperience(experience);
+		model.setScore(score);
+		model.setScreensPlayed(screensPlayed);
+
+		Json json = new Json();
+		String dataSaveInJson = json.toJson(model);
+		String encryptedGameStateSaveInString = encryptString(dataSaveInJson);
+
 		Preferences preferences = Gdx.app
 				.getPreferences("Application prefferences");
-		preferences.putBoolean("voice", voice);
-		preferences.putBoolean("textureFiltering", textureFiltering);
-		preferences.putBoolean("fps", fps);
-		preferences.putBoolean("prompts", prompts);
-		preferences.putBoolean("vibrations", vibrations);
-		preferences.putBoolean("screenAwake", screenAwake);
-		preferences.putBoolean("gender", gender);
-		preferences.putInteger("experience", experience);
-		preferences.putInteger("score", score);
-		preferences.putBoolean(Variables.FOODS_SCREEN, screensPlayed[0]);
-		preferences
-				.putBoolean(Variables.FITNESS_SCREEN_THREE, screensPlayed[1]);
-		preferences.putBoolean(Variables.TRAINING_SCREEN_ONE, screensPlayed[2]);
-		preferences.putBoolean(Variables.TRAINING_SCREEN_TWO, screensPlayed[3]);
-		preferences.putBoolean(Variables.CAT_RESCUE_SCREEN, screensPlayed[4]);
-		preferences.putBoolean(Variables.RESCUE_METRO_SCREEN, screensPlayed[5]);
-		preferences.putBoolean(Variables.ELEVATOR_SCREEN, screensPlayed[6]);
+		preferences.putString("encryptedGameStateSave",
+				encryptedGameStateSaveInString);
 		preferences.flush();
 	}
 
 	public void loadData() {
 
 		screensPlayed = new boolean[7];
+		String encryptedGameStateSaveInString = " ";
+		String decryptedGameStateSaveInString = " ";
 
 		Preferences preferences = Gdx.app
 				.getPreferences("Application prefferences");
-		voice = preferences.getBoolean("voice", true);
-		textureFiltering = preferences.getBoolean("textureFiltering", true);
-		fps = preferences.getBoolean("fps", false);
-		gender = preferences.getBoolean("gender", false);
-		prompts = preferences.getBoolean("prompts", false);
-		vibrations = preferences.getBoolean("vibrations", true);
-		screenAwake = preferences.getBoolean("screenAwake", true);
-		experience = preferences.getInteger("experience", 0);
-		score = preferences.getInteger("score", 0);
-		screensPlayed[0] = preferences
-				.getBoolean(Variables.FOODS_SCREEN, false);
-		screensPlayed[1] = preferences.getBoolean(
-				Variables.FITNESS_SCREEN_THREE, false);
-		screensPlayed[2] = preferences.getBoolean(
-				Variables.TRAINING_SCREEN_ONE, false);
-		screensPlayed[3] = preferences.getBoolean(
-				Variables.TRAINING_SCREEN_TWO, false);
-		screensPlayed[4] = preferences.getBoolean(Variables.CAT_RESCUE_SCREEN,
-				false);
-		screensPlayed[5] = preferences.getBoolean(
-				Variables.RESCUE_METRO_SCREEN, false);
-		screensPlayed[6] = preferences.getBoolean(Variables.ELEVATOR_SCREEN,
-				false);
+		encryptedGameStateSaveInString = preferences.getString(
+				"encryptedGameStateSave", " ");
+
+		if (!encryptedGameStateSaveInString.equals(" ")) {
+
+			decryptedGameStateSaveInString = decryptString(encryptedGameStateSaveInString);
+
+			System.out.println("encrypted:");
+			System.out.println(encryptedGameStateSaveInString);
+
+			System.out.println("decrypted:");
+			System.out.println(decryptedGameStateSaveInString);
+
+			Json json = new Json();
+
+			GameStateSave model = json.fromJson(GameStateSave.class,
+					decryptedGameStateSaveInString);
+
+			voice = model.getVoice();
+			textureFiltering = model.getTextureFiltering();
+			fps = model.getFps();
+			gender = model.getGender();
+			prompts = model.getPrompts();
+			vibrations = model.getVibrations();
+			screenAwake = model.getScreenAwake();
+			experience = model.getExperience();
+			score = model.getScore();
+			screensPlayed = model.getScreensPlayed();
+		} else {
+			resetGame();
+			System.out.println("string destinated to encrypt is empty");
+		}
+	}
+
+	private String encryptString(String string) {
+
+		System.out.println("I am now encrypting string: " + string);
+
+		String encoded = Base64.getEncoder().encodeToString(string.getBytes());
+
+		System.out.println("Now it's: " + encoded);
+		System.out.println("And again, after decryption: "
+				+ decryptString(encoded));
+
+		return encoded;
+	}
+
+	private String decryptString(String string) {
+
+		byte[] barr = Base64.getDecoder().decode(string);
+
+		System.out.println("Decrypted string, it's now:" + barr);
+
+		string = new String(barr, StandardCharsets.UTF_8);
+
+		return string;
 	}
 }
