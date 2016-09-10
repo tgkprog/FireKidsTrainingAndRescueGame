@@ -1,18 +1,19 @@
 package com.lh9.feg1.firekidsgame.utils;
 
-import java.nio.charset.StandardCharsets;
-import java.util.Base64;
+import java.nio.charset.Charset;
 
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Json;
-import com.googlecode.gwt.crypto.client.AESCipher;
+import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
+import com.googlecode.gwt.crypto.bouncycastle.util.encoders.Base64;
+import com.googlecode.gwt.crypto.client.TripleDesCipher;
 import com.googlecode.gwt.crypto.client.TripleDesKeyGenerator;
 import com.lh9.feg1.firekidsgame.models.GameStateSave;
 
 public class DataOrganizer {
 
-	AESCipher encryptor;
+	TripleDesCipher encryptor;
 
 	boolean[] screensPlayed;
 	boolean voice;
@@ -38,7 +39,7 @@ public class DataOrganizer {
 																				// string
 																				// here
 
-		encryptor = new AESCipher();
+		encryptor = new TripleDesCipher();
 		encryptor.setKey(key);
 	}
 
@@ -227,26 +228,34 @@ public class DataOrganizer {
 	}
 
 	private String encryptString(String string) {
+		byte[] base64TextToEncrypt = string.getBytes();
+		try {
+			base64TextToEncrypt = Base64.encode(base64TextToEncrypt);
 
-		System.out.println("I am now encrypting string: " + string);
+		} catch (DataLengthException e1) {
+			e1.printStackTrace();
+		} catch (IllegalStateException e1) {
+			e1.printStackTrace();
+		}
 
-		String encoded = Base64.getEncoder().encodeToString(string.getBytes());
+		String plainText = new String(base64TextToEncrypt,
+				Charset.forName("UTF8"));
 
-		System.out.println("Now it's: " + encoded);
-		System.out.println("And again, after decryption: "
-				+ decryptString(encoded));
-
-		return encoded;
+		return plainText;
 	}
 
 	private String decryptString(String string) {
+		byte[] base64TextToDecrypt = null;
+		try {
+			base64TextToDecrypt = Base64.decode(string);
+		} catch (DataLengthException e) {
+			e.printStackTrace();
+		} catch (IllegalStateException e) {
+			e.printStackTrace();
+		}
+		String plainText = new String(base64TextToDecrypt,
+				Charset.forName("UTF8"));
 
-		byte[] barr = Base64.getDecoder().decode(string);
-
-		System.out.println("Decrypted string, it's now:" + barr);
-
-		string = new String(barr, StandardCharsets.UTF_8);
-
-		return string;
+		return plainText;
 	}
 }
