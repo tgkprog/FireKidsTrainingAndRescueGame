@@ -40,6 +40,8 @@ public class Variables {
 	static final String ELEVATOR_SCREEN = "Elevator Screen";
 	static final String FOODS_SCREEN = "Foods Screen";
 
+	public static final String USER_INPUT_SCREEN = "User Input Screen";
+
 	static final double MAX_LOGO_SCALE = 0.5f;
 	static final double DELAY_CHANGING_SCREENS = 0f;
 

@@ -1,6 +1,7 @@
 package com.lh9.feg1.firekidsgame.files;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.audio.Music;
 import com.badlogic.gdx.audio.Sound;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
@@ -20,15 +21,31 @@ public class AssetsManager extends Thread {
 	public Sound bell;
 	public Sound click;
 	public Sound fireHose;
-	public Sound backgroundBoy;
-	public Sound backgroundGirl;
+	public Music backgroundBoy;
+	public Music backgroundGirl;
 	public Sound truckStartingUp;
 	public Sound truckDriving;
 	public Sound crash;
 	
+	public Texture fireEngineGame;
+	public Texture userInformation;
+	public Texture email;
+	public Texture nick;
+	public Texture facebook;
+	public Texture google;
+	public Texture twitter;
+	public Texture website;
+	public Texture name;
+	public Texture infoFromServer;
+	public Texture moreFromServer;
+	
+	public Texture closeButton;
+	public Texture[] road;
+	public Texture userScreenButton;
 	public Texture resetGame;
 	public Texture catFalling;
 	public Texture cog;
+	public Texture frameCollectiblesLong;
 	public Texture frameCollectibles;
 	public Texture starSummary;
 	public Texture starSummaryDesaturated;
@@ -422,8 +439,9 @@ public class AssetsManager extends Thread {
 		// fireBar = new Texture("others/fireBar.png");
 		bell = Gdx.audio.newSound(Gdx.files.internal("sounds/bell.mp3"));
 		click = Gdx.audio.newSound(Gdx.files.internal("sounds/click.mp3"));
-		backgroundBoy = Gdx.audio.newSound(Gdx.files.internal("sounds/backgroundBoy.mp3"));
-		backgroundGirl = Gdx.audio.newSound(Gdx.files.internal("sounds/backgroundGirl.mp3"));
+	
+		backgroundBoy = Gdx.audio.newMusic(Gdx.files.internal("sounds/backgroundBoy.mp3"));
+		backgroundGirl = Gdx.audio.newMusic(Gdx.files.internal("sounds/backgroundGirl.mp3"));
 		truckStartingUp = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_starting_up.mp3"));
 		truckDriving = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_drive.mp3"));
 		skid = Gdx.audio.newSound(Gdx.files.internal("sounds/skid.mp3"));
@@ -507,6 +525,21 @@ public class AssetsManager extends Thread {
 		cog = new Texture("others/cog.png");
 		catFalling = new Texture("others/catFalling.png");
 		resetGame = new Texture("texts/Reset-game.png");
+		userScreenButton = new Texture("buttons/userScreenButton.png");
+		
+		userInformation = new Texture("texts/userInformation.png");
+		fireEngineGame = new Texture("texts/fireEngineGame.png");
+		email = new Texture("texts/email.png");
+		nick = new Texture("texts/nick.png");
+		facebook = new Texture("texts/facebook.png");
+		google = new Texture("texts/google.png");
+		twitter = new Texture("texts/twitter.png");
+		website = new Texture("texts/website.png");
+		infoFromServer = new Texture("texts/infoFromServer.png");
+		moreFromServer = new Texture("texts/moreFromServer.png");
+		name = new Texture("texts/name.png");
+		
+		
 		breakTheWallText = new Texture("texts/Break-the-wall.png");
 		eclipseFireText = new Texture("texts/Elipse-fire.png");
 		jumpText = new Texture("texts/Jump.png");
@@ -594,6 +627,8 @@ public class AssetsManager extends Thread {
 		spritesheetBoyElliptical[6] = new Texture(
 				"boy/fitnessEllipticalBoy/Eliptical-7.png");
 
+
+		closeButton = new Texture("buttons/Close-button.png");
 		bar = new Texture("others/bar.png");
 		glass = new Texture("backgrounds/glass.png");
 		handwheelBig = new Texture("others/handwheelBig.png");
@@ -607,6 +642,7 @@ public class AssetsManager extends Thread {
 		fitness = new Texture("buttons/fitness.png");
 		rescueTrain = new Texture("buttons/rescueTrain.png");
 		frameCollectibles = new Texture("windows/frame_collectibles.png");
+		frameCollectiblesLong = new Texture("windows/frame_collectibles_long.png");
 
 		bigRoadRescue_desaturated = new Texture(
 				"buttons/bigRoadRescue_desaturated.png");
@@ -641,7 +677,7 @@ public class AssetsManager extends Thread {
 		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
 		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
 
-		buildings = new Texture[1];
+		buildings = new Texture[8];
 		for (int a = 0; a < buildings.length; a++)
 			buildings[a] = new Texture("buildings/" + (a + 1) + ".png");
 
@@ -857,6 +893,12 @@ public class AssetsManager extends Thread {
 		truckCockpit[2] = new Texture("backgrounds/truckCockpit3.png");
 		truckCockpit[3] = new Texture("backgrounds/truckCockpit4.png");
 
+		road = new Texture[3];
+		
+		road[0] = new Texture("backgrounds/road.png");
+		road[1] = new Texture("backgrounds/road drive bg.png");
+		road[2] = new Texture("backgrounds/road drive bg reversed.png");
+		
 		hoseAnimation = new Texture[15];
 		hoseAnimation[0] = new Texture("girl/hoseAnimation/1.png");
 		hoseAnimation[1] = new Texture("girl/hoseAnimation/2.png");
@@ -1045,6 +1087,9 @@ public class AssetsManager extends Thread {
 		for (int a = 0; a < 15; a++) {
 			hoseAnimation[a].setFilter(textureFilter, textureFilter);
 		}
+		for (int a = 0; a < road.length; a++) {
+			road[a].setFilter(textureFilter, textureFilter);
+		}
 		hoseAnimationReversed = new Texture[15];
 		for (int a = 0; a < 15; a++) {
 			hoseAnimationReversed[a] = hoseAnimation[14 - a];
@@ -1068,6 +1113,7 @@ public class AssetsManager extends Thread {
 		// speedometer.setFilter(textureFilter, textureFilter);
 		menu.setFilter(textureFilter, textureFilter);
 		barFilled.setFilter(textureFilter, textureFilter);
+		closeButton.setFilter(textureFilter, textureFilter);
 		grassFlowers.setFilter(textureFilter, textureFilter);
 		star.setFilter(textureFilter, textureFilter);
 		starSummary.setFilter(textureFilter, textureFilter);
@@ -1082,6 +1128,7 @@ public class AssetsManager extends Thread {
 		cog.setFilter(textureFilter, textureFilter);
 		catFalling.setFilter(textureFilter, textureFilter);
 		resetGame.setFilter(textureFilter, textureFilter);
+		userScreenButton.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
 		dialogueWindowGirl.setFilter(textureFilter, textureFilter);
 		dialogueWindowBoy.setFilter(textureFilter, textureFilter);
@@ -1115,6 +1162,7 @@ public class AssetsManager extends Thread {
 		carGreenButton.setFilter(textureFilter, textureFilter);
 
 		frameCollectibles.setFilter(textureFilter, textureFilter);
+		frameCollectiblesLong.setFilter(textureFilter, textureFilter);
 		retryButton.setFilter(textureFilter, textureFilter);
 		playButton.setFilter(textureFilter, textureFilter);
 		vibrationsText.setFilter(textureFilter, textureFilter);
@@ -1191,6 +1239,19 @@ public class AssetsManager extends Thread {
 		roadPart.setFilter(textureFilter, textureFilter);
 		fireMiniature.setFilter(textureFilter, textureFilter);
 		elevatorButton.setFilter(textureFilter, textureFilter);
+		
+		fireEngineGame.setFilter(textureFilter, textureFilter);
+		userInformation.setFilter(textureFilter, textureFilter);
+		email.setFilter(textureFilter, textureFilter);
+		nick.setFilter(textureFilter, textureFilter);
+		facebook.setFilter(textureFilter, textureFilter);
+		google.setFilter(textureFilter, textureFilter);
+		twitter.setFilter(textureFilter, textureFilter);
+		website.setFilter(textureFilter, textureFilter);
+		name.setFilter(textureFilter, textureFilter);
+		infoFromServer.setFilter(textureFilter, textureFilter);
+		moreFromServer.setFilter(textureFilter, textureFilter);
+	
 		elevatorButton_desaturated.setFilter(textureFilter, textureFilter);
 		// boyMainMenu.setFilter(textureFilter, textureFilter);
 		girlMainMenu.setFilter(textureFilter, textureFilter);

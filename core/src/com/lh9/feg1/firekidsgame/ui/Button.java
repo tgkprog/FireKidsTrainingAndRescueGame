@@ -1,5 +1,6 @@
 package com.lh9.feg1.firekidsgame.ui;
 
+import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
@@ -188,6 +189,12 @@ public class Button {
 
 	public void red() {
 		color = new Vector3(1, 0, 0);
+	}
+	public boolean isHighlighted(){
+		if(color.z == 0)
+			return true;
+		else
+			return false;
 	}
 
 	public float getX() {

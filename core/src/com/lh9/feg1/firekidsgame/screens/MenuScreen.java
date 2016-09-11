@@ -39,6 +39,7 @@ public class MenuScreen implements Screen {
 	Button settings;
 	Button authors;
 	Button gender;
+	Button userScreenButton;
 	Button[] starsCounterButtons;
 	Button[] levelButtons;
 	String collectedStarsInString;
@@ -71,6 +72,7 @@ public class MenuScreen implements Screen {
 		settings = new Button(180, 100, assetsManager.settings);
 		authors = new Button(100, 105, assetsManager.authors);
 		meetTheTrucks = new Button(25, -200, assetsManager.meetTheTrucks);
+		userScreenButton = new Button(720, 100, assetsManager.userScreenButton);
 
 		if (dataOrganizer.getGender() == false)
 			gender = new Button(5, 105, assetsManager.boyButton);
@@ -80,7 +82,9 @@ public class MenuScreen implements Screen {
 		settings.goUp(405);
 		authors.goUp(405);
 		gender.goUp(390);
-
+		userScreenButton.goUp(405);
+		
+		
 		boy = new Human();
 		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
 		boy.setMaxSpeed(0.25f);
@@ -164,7 +168,8 @@ public class MenuScreen implements Screen {
 		inputInterpreter.setAuthors(authors);
 		inputInterpreter.setDataOrganizer(dataOrganizer);
 		inputInterpreter.setGenderButton(gender);
-		inputInterpreter.getScreensPlayed(game.getScreensPlayed());
+		inputInterpreter.setScreensPlayed(game.getScreensPlayed());
+		inputInterpreter.setUserScreenButton(userScreenButton);
 
 		cloudManager.stop();
 
@@ -220,6 +225,8 @@ public class MenuScreen implements Screen {
 		cog = new Arrow(480, 415, assetsManager.cog, -72, 60);
 		cog.setAlpha(1);
 		cog.setScale(1.2f);
+		
+		assetsManager.fontLittle.setColor(1,1,1,1);
 	}
 
 	@Override
@@ -303,6 +310,7 @@ public class MenuScreen implements Screen {
 		star.render(batch, delta * 0.75f);
 		cog.render(batch, delta * 0.75f);
 		gender.render(batch, delta);
+		userScreenButton.render(batch, delta);
 		meetTheTrucks.render(batch, (float) delta);
 		settings.render(batch, delta);
 		authors.render(batch, delta);
@@ -320,10 +328,12 @@ public class MenuScreen implements Screen {
 
 		if (assetsManager.backgroundPlayed == false) {
 			if (dataOrganizer.getGender() == false) {
-				assetsManager.backgroundBoy.loop();
+				assetsManager.backgroundBoy.play();	
+				assetsManager.backgroundBoy.setLooping(true);
 			}
 			if (dataOrganizer.getGender() == true) {
-				assetsManager.backgroundBoy.loop();
+				assetsManager.backgroundGirl.play();	
+				assetsManager.backgroundGirl.setLooping(true);
 			}
 			assetsManager.backgroundPlayed = true;
 		}
@@ -350,6 +360,12 @@ public class MenuScreen implements Screen {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				dataOrganizer.saveData();
 				game.setScreen(new MeetTheTrucksScreen(game));
+			}
+		}
+		if (inputInterpreter.getSelectedScreenName().equals(Variables.USER_INPUT_SCREEN)) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				dataOrganizer.saveData();
+				game.setScreen(new UserInputScreen(game));
 			}
 		}
 		if (inputInterpreter.getSelectedScreenName() == variables

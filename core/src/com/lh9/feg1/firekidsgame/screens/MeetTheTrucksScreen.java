@@ -1543,9 +1543,9 @@ public class MeetTheTrucksScreen implements Screen {
 				&& train.getX() < 14000)
 			train.setPosition(train.getX() + delta * 275, train.getY());
 
-		if (train.getX() - player.getX() < 400
-				&& train.getWidth() + train.getX() - player.getX() > -400)
-
+		if ((train.getX() - player.getX() < 400
+				&& train.getWidth() + train.getX() - player.getX() > -400) || player.getX() > 13000 )
 			train.draw(batch);
+		
 	}
 }

@@ -56,7 +56,7 @@ public class DataOrganizer {
 		vibrations = false;
 		screenAwake = false;
 		gender = false;
-		prompts = true;
+		prompts = false;
 		score = 0;
 		experience = 0;
 
@@ -64,7 +64,7 @@ public class DataOrganizer {
 		model.setVoice(false);
 		model.setTextureFiltering(true);
 		model.setFps(false);
-		model.setPrompts(true);
+		model.setPrompts(false);
 		model.setVibrations(false);
 		model.setScreenAwake(true);
 		model.setGender(false);

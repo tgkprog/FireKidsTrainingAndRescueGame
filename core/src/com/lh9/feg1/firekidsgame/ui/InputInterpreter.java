@@ -19,14 +19,17 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	MyTextInputListener textInputListener;
+	int selectedUserInputID = -1;
+	Button[] userInputButtons;
 	AssetsManager assetsManager;
-	
 	boolean[] screensPlayed;
 	String selectedScreen = "No button clicked";
 	Button webButton;
 	Button jump;
 	Button gender;
 	Button[] hitboxes;
+	Button userScreenButton;
 	DataOrganizer dataOrganizer;
 	MenuWindow menuWindow;
 	Button[] settingsButtons;
@@ -266,6 +269,37 @@ public class InputInterpreter implements GestureListener {
 					dataOrganizer.setGender(!dataOrganizer.getGender());
 				}
 			}
+
+			if (userInputButtons != null) {
+
+				boolean anyCollision = false;
+				for (int a = 0; a < userInputButtons.length; a++) {
+					if (userInputButtons[a].checkCollision((int) x, (int) y) == true) {
+						textInputListener.start();
+						userInputButtons[a].blink();
+						for (int b = 0; b < userInputButtons.length; b++) {
+							userInputButtons[b].normal();
+						}
+						userInputButtons[a].red();
+						anyCollision = true;
+						selectedUserInputID = a;
+					}
+				}
+				if (anyCollision == false) {
+				//	selectedUserInputID = -1;
+					for (int b = 0; b < userInputButtons.length; b++) {
+						userInputButtons[b].normal();
+					}
+				}
+			}
+
+			if (userScreenButton != null) {
+				if (userScreenButton.checkCollision((int) x, (int) y) == true) {
+					userScreenButton.blink();
+					cloudManager.start();
+					selectedScreen = Variables.USER_INPUT_SCREEN;
+				}
+			}
 			if (settingsButtons != null) {
 				if (settingsButtons[0].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[0].blink();
@@ -291,14 +325,13 @@ public class InputInterpreter implements GestureListener {
 				}
 				if (settingsButtons[5].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[5].blink();
-					dataOrganizer.setPrompts(!dataOrganizer
-							.getPrompts());
+					dataOrganizer.setPrompts(!dataOrganizer.getPrompts());
 				}
 				if (settingsButtons[6].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[6].blink();
 					dataOrganizer.resetGame();
 				}
-				
+
 			}
 			if (webButton != null) {
 				if (webButton.checkCollision((int) x, (int) y) == true) {
@@ -431,7 +464,8 @@ public class InputInterpreter implements GestureListener {
 							cloudManager.start();
 						}
 						if (a == 6 && screensPlayed[a] == true) {
-							selectedScreen = variables.getBIG_ROAD_RESCUE_SCREEN();
+							selectedScreen = variables
+									.getBIG_ROAD_RESCUE_SCREEN();
 							cloudManager.start();
 						}
 					}
@@ -477,6 +511,10 @@ public class InputInterpreter implements GestureListener {
 	public void pinchStop() {
 		// TODO Auto-generated method stub
 
+	}
+
+	public void setTextInputListener(MyTextInputListener textInputListener) {
+		this.textInputListener = textInputListener;
 	}
 
 	public void setFireStation(Button fireStation) {
@@ -547,8 +585,8 @@ public class InputInterpreter implements GestureListener {
 	}
 
 	public void setSettingsButtons(Button fps, Button textureFiltering,
-			Button voice, Button vibrations, Button screenAwake, Button noPrompts, Button resetGame,
-			DataOrganizer dataOrganizer) {
+			Button voice, Button vibrations, Button screenAwake,
+			Button noPrompts, Button resetGame, DataOrganizer dataOrganizer) {
 		settingsButtons = new Button[7];
 		settingsButtons[0] = fps;
 		settingsButtons[1] = textureFiltering;
@@ -557,7 +595,7 @@ public class InputInterpreter implements GestureListener {
 		settingsButtons[4] = screenAwake;
 		settingsButtons[5] = noPrompts;
 		settingsButtons[6] = resetGame;
-		
+
 		this.dataOrganizer = dataOrganizer;
 	}
 
@@ -574,8 +612,12 @@ public class InputInterpreter implements GestureListener {
 		this.yellowSectionUpRight = yellowSectionUpRight;
 	}
 
-	public void getScreensPlayed(boolean screensPlayed[]) {
+	public void setScreensPlayed(boolean screensPlayed[]) {
 		this.screensPlayed = screensPlayed;
+	}
+
+	public void setUserScreenButton(Button userScreenButton) {
+		this.userScreenButton = userScreenButton;
 	}
 
 	void manageNonGuiCollisions(float x, float y) {
@@ -626,11 +668,22 @@ public class InputInterpreter implements GestureListener {
 
 	}
 
-	public void setWebButton(Button webButton){
+	public void setUserInputButtons(Button[] userInputButtons) {
+		this.userInputButtons = userInputButtons;
+	}
+
+	public int getUserInputID() {
+		return selectedUserInputID;
+	}
+
+	
+	public void setWebButton(Button webButton) {
 		this.webButton = webButton;
 	}
+
 	void eclipseFireAction() {
-		if (eclipseFire != null && eclipseFire.isBlockedFromInteraction() == false)
+		if (eclipseFire != null
+				&& eclipseFire.isBlockedFromInteraction() == false)
 			eclipseFire.blink();
 	}
 
@@ -648,13 +701,13 @@ public class InputInterpreter implements GestureListener {
 			menuWindow.popUp();
 		}
 	}
-	
-void webButtonAction(){
-	if (webButton != null && webButton.isBlockedFromInteraction() == false) {
-		webButton.blink();
-		Gdx.net.openURI(Variables.MR_TUSHAR_WEBSITE);
+
+	void webButtonAction() {
+		if (webButton != null && webButton.isBlockedFromInteraction() == false) {
+			webButton.blink();
+			Gdx.net.openURI(Variables.MR_TUSHAR_WEBSITE);
+		}
 	}
-}
 
 	void upAction() {
 		if (up != null && up.isBlockedFromInteraction() == false) {
@@ -734,7 +787,8 @@ void webButtonAction(){
 			}
 		}
 	}
-	public void setAssetsManager(AssetsManager assetsManager){
+
+	public void setAssetsManager(AssetsManager assetsManager) {
 		this.assetsManager = assetsManager;
 	}
 }
