@@ -272,8 +272,12 @@ public class InputInterpreter implements GestureListener {
 
 			if (userInputButtons != null) {
 
+				if(userInputButtons[userInputButtons.length-1].checkCollision((int)x, (int)y) == true){
+					userInputButtons[userInputButtons.length-1].blink();
+				}
+				
 				boolean anyCollision = false;
-				for (int a = 0; a < userInputButtons.length; a++) {
+				for (int a = 0; a < userInputButtons.length - 1; a++) {
 					if (userInputButtons[a].checkCollision((int) x, (int) y) == true) {
 						textInputListener.start();
 						userInputButtons[a].blink();

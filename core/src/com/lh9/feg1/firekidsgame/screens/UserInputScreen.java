@@ -96,6 +96,9 @@ public class UserInputScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
 		inputInterpreter.setCloudManager(cloudManager);
+		// I assign it to any of the buttons, doesn't matter which, I just need
+		// to
+		// check if it's clicked
 		cloudManager.stop();
 
 		buildingsCamera = new OrthographicCamera(800, 480);
@@ -103,13 +106,13 @@ public class UserInputScreen implements Screen {
 
 		camera.reset();
 
-		camera.zoom = 0.44f;
-		camera.position.x = 500;
-		camera.position.y = 32;
+		camera.zoom = 1f;
+		camera.position.x = 1275;
+		camera.position.y = 533;
 
-		camera.moveX(500, 0, 0, 100);
-		camera.moveY(32, 0, 0, 100);
-		camera.zoom(0.44f, 100f);
+		camera.moveX(1275, 0, 0, 100);
+		camera.moveY(533, 0, 0, 100);
+		camera.zoom(1f, 100f);
 
 		dataOrganizer = new DataOrganizer();
 		dataOrganizer.loadData();
@@ -193,7 +196,7 @@ public class UserInputScreen implements Screen {
 		}
 		assetsManager.fontLittle.setColor(1, 1, 1, 0);
 
-		Button[] inputButtons = new Button[7];
+		Button[] inputButtons = new Button[8];
 		inputButtons[0] = email;
 		inputButtons[1] = nick;
 		inputButtons[2] = facebook;
@@ -201,12 +204,16 @@ public class UserInputScreen implements Screen {
 		inputButtons[4] = twitter;
 		inputButtons[5] = website;
 		inputButtons[6] = name;
+		inputButtons[7] = closeButton;
 		inputInterpreter.setUserInputButtons(inputButtons);
 		inputInterpreter.setTextInputListener(textInputListener);
 	}
 
 	@Override
 	public void render(float delta) {
+
+		camera.zoom = 2f;
+		camera.position.x = 1700;
 
 		if (Gdx.graphics.getRawDeltaTime() > 0.05f
 				&& Gdx.graphics.getDeltaTime() > 0.05f)
@@ -230,8 +237,7 @@ public class UserInputScreen implements Screen {
 		batch.setProjectionMatrix(buildingsCamera.combined);
 		batch.begin();
 
-		drawBuildings(delta);
-		drawCars(delta);
+		//
 
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
@@ -323,14 +329,23 @@ public class UserInputScreen implements Screen {
 
 	void updateLogics(double delta) {
 
+		if (closeButton.getSelection() == true) {
 
-		if (inputInterpreter.getUserInputID() != -1) {
-				if (textInputListener.getInput() != "")
-			userInput[inputInterpreter.getUserInputID()] = textInputListener
-					.getInput();
+			textInputListener = new MyTextInputListener();
+			inputInterpreter.setTextInputListener(textInputListener);
+
+			for (int a = 0; a < 7; a++) {
+				userInput[a] = new String("click to type");
+			}
 		}
 
-		fontAlpha += delta;
+		if (inputInterpreter.getUserInputID() != -1) {
+			if (textInputListener.getInput() != "")
+				userInput[inputInterpreter.getUserInputID()] = textInputListener
+						.getInput();
+		}
+
+		fontAlpha += 1.1 * delta;
 		if (fontAlpha > 2)
 			assetsManager.fontLittle.setColor(1, 1, 1, fontAlpha - 2);
 		if (fontAlpha > 3)
@@ -379,19 +394,10 @@ public class UserInputScreen implements Screen {
 	}
 
 	void drawBackground(float delta) {
-		for (int a = 0; a < roadBackground.length; a++) {
-			roadBackground[a].setPosition(
-					roadBackground[a].getX() - delta * 15, 0);
-			if (roadBackground[a].getX() <= -948)
-				roadBackground[a].setPosition(948, 0);
-			roadBackground[a].draw(batch);
-		}
-		for (int a = 0; a < road.length; a++) {
-			road[a].setPosition(road[a].getX() - delta * 55, -100);
-			if (road[a].getX() <= -274)
-				road[a].setPosition(3 * 275, -100);
-			road[a].draw(batch);
-		}
+		batch.draw(assetsManager.userInputBackground[0], 533, 533);
+		batch.draw(assetsManager.userInputBackground[1], 1275, 533);
+		batch.draw(assetsManager.userInputBackground[2], 533, 0);
+		batch.draw(assetsManager.userInputBackground[3], 1275, 0);
 	}
 
 	void drawFps() {

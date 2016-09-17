@@ -52,6 +52,7 @@ public class AssetsManager extends Thread {
 	public Texture[] buildings;
 	public Texture noPrompts;
 	public Texture train;
+	public Texture[] userInputBackground;
 	public Texture[] peopleSad;
 	public Texture[] peopleHappy;
 	public Texture starButton;
@@ -450,6 +451,10 @@ public class AssetsManager extends Thread {
 		fireHose = Gdx.audio.newSound(Gdx.files.internal("sounds/fire_hose.mp3"));
 		
 		// girlHead = new Texture("girl/girlHead.png");
+		userInputBackground = new Texture[4];
+		for(int a =0;a<4;a++){
+			userInputBackground[a] = new Texture("backgrounds/userInputBackground/" + (a+1) + ".png");
+		}
 		basket = new Texture("spritesheets/basket.png");
 		roadPart = new Texture("backgrounds/roadPart.png");
 		voiceText = new Texture("texts/Voice-text.png");
@@ -1005,6 +1010,9 @@ public class AssetsManager extends Thread {
 		}
 		for (int a = 0; a < peopleHappy.length; a++) {
 			peopleHappy[a].setFilter(textureFilter, textureFilter);
+		}
+		for (int a = 0; a < userInputBackground.length; a++) {
+			userInputBackground[a].setFilter(textureFilter, textureFilter);
 		}
 		for (int a = 0; a < 2; a++) {
 			girlHammer_16_percent[a].setFilter(textureFilter, textureFilter);
