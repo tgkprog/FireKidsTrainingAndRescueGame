@@ -5,6 +5,7 @@ import java.nio.charset.Charset;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Json;
+import com.badlogic.gdx.utils.SerializationException;
 import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
 import com.googlecode.gwt.crypto.bouncycastle.util.encoders.Base64;
 import com.googlecode.gwt.crypto.client.TripleDesCipher;
@@ -14,6 +15,8 @@ import com.lh9.feg1.firekidsgame.models.GameStateSave;
 public class DataOrganizer {
 
 	TripleDesCipher encryptor;
+
+	GameStateSave gameStateSave;
 
 	boolean[] screensPlayed;
 	boolean voice;
@@ -47,7 +50,7 @@ public class DataOrganizer {
 		return screensPlayed;
 	}
 
-	public void resetGame() {
+	public void resetGameState() {
 
 		screensPlayed = new boolean[7];
 		voice = false;
@@ -208,21 +211,28 @@ public class DataOrganizer {
 
 			Json json = new Json();
 
-			GameStateSave model = json.fromJson(GameStateSave.class,
-					decryptedGameStateSaveInString);
+			gameStateSave = new GameStateSave();
 
-			voice = model.getVoice();
-			textureFiltering = model.getTextureFiltering();
-			fps = model.getFps();
-			gender = model.getGender();
-			prompts = model.getPrompts();
-			vibrations = model.getVibrations();
-			screenAwake = model.getScreenAwake();
-			experience = model.getExperience();
-			score = model.getScore();
-			screensPlayed = model.getScreensPlayed();
+			try {
+				gameStateSave = json.fromJson(GameStateSave.class,
+						decryptedGameStateSaveInString);
+	
+				voice = gameStateSave.getVoice();
+				textureFiltering = gameStateSave.getTextureFiltering();
+				fps = gameStateSave.getFps();
+				gender = gameStateSave.getGender();
+				prompts = gameStateSave.getPrompts();
+				vibrations = gameStateSave.getVibrations();
+				screenAwake = gameStateSave.getScreenAwake();
+				experience = gameStateSave.getExperience();
+				score = gameStateSave.getScore();
+				screensPlayed = gameStateSave.getScreensPlayed();
+		
+			} catch (SerializationException e) {
+				resetGameState();
+			}
 		} else {
-			resetGame();
+			resetGameState();
 			System.out.println("string destinated to encrypt is empty");
 		}
 	}

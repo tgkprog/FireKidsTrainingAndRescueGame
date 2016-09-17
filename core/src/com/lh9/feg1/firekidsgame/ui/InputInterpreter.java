@@ -329,7 +329,7 @@ public class InputInterpreter implements GestureListener {
 				}
 				if (settingsButtons[6].checkCollision((int) x, (int) y) == true) {
 					settingsButtons[6].blink();
-					dataOrganizer.resetGame();
+					dataOrganizer.resetGameState();
 				}
 
 			}
