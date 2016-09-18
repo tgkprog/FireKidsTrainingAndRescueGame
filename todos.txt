@@ -1,10 +1,10 @@
 1. game play, progress across restarts and reset game
 
-2. user menu
+2. user menu, for user menu clean and reset game is it possible to add a are you sure Yes/ no? Same for payment too. 
 
 3. ads after each section, no ads if paid. not full page ads. jsut bottom of screen along with how you did (1-3 stars). when section ends due to completion or time out -  section end screen with ads paid fn returns false
 
-4. about page (webView and ads) simple native html controls.
+4. about page (webView http://lh9.in/feg/about/ and ads) simple native html controls.
 
 5. animation smoothing where needed
 
@@ -18,8 +18,10 @@
 
 Explanation on ladder and payment UI
 
-** Ladder training, User Form, Payment Check only, Pay form with label and  button to initiate, Payment post screen (label only failed or pass),
+** Ladder training, User Form, Payment Check only, Pay form with label, small text box and two button(yes to initiate and No to go back to main menu), Payment post screen (label only failed or pass), 
 Can you add the ladder training after the cabin? Just naturally flow from one to the other, no sub menu?
+
+I want a big label here where I will show a small math question like 4+ 5 and a text box. In text box dont write "Click here" in user screen also only in first as user understands after first what to do. does not simply have to delete the default text and then type own. We will upload a video on game too. and link it in the about page.
 
 ** Before the ladder training, cat, metro, dog rescue add check for payment made with below function.
 So do not need to call google API, just base it on the what is saved from the USer UI screen.
