@@ -1,0 +1,62 @@
+1. game play, progress across restarts and reset game
+
+2. user menu
+
+3. ads after each section, no ads if paid. not full page ads. jsut bottom of screen along with how you did (1-3 stars). when section ends due to completion or time out -  section end screen with ads paid fn returns false
+
+4. about page (webView and ads) simple native html controls.
+
+5. animation smoothing where needed
+
+6. Sound : need 3 buttons a. Background, b. Sfx and C. Voice prompts
+
+7. also can we change the time of the warning of oncoming cars so the red arrow appears 1 second before than it does now? means i think now it appears 2 seconds before the car? make it 3. if already 3 make it 4. This looks like its done.
+
+8. cat rescue - very difficult . area to make green - has to be more. and time to keep it green - just 5 ssecondsand should move less when its near cat so easier to position. if its near cat then jsut lock it in position after 10 seconds of user trying.
+
+9. Ladder training
+
+Explanation on ladder and payment UI
+
+** Ladder training, User Form, Payment Check only, Pay form with label and  button to initiate, Payment post screen (label only failed or pass),
+Can you add the ladder training after the cabin? Just naturally flow from one to the other, no sub menu?
+
+** Before the ladder training, cat, metro, dog rescue add check for payment made with below function.
+So do not need to call google API, just base it on the what is saved from the USer UI screen.
+
+So the last resuce - buildings will be enabled as soon as cabin is done.
+
+** If not paid a simple form to start payment. then after 2 seconds the return form with success or failure - just a label with own free font.
+   To decode if success or failure - use a random number and decide if success or fail. Point is just to test the UI and make sure UI will work once the google api's are in place.
+
+
+boolean isPaid(){
+final String u = (settings.getUserId() + "").toLowerCase()  ;
+return  (u.equals("danny" || u.equals("avyan"));
+}
+
+No need to call google api. For now the success or fail - just do it randomly. means if user id is empty, then dont allow to play the paid levels. On click of pay, wait 1 second then use
+int i = random.nextInt(2);
+if i == 0 { userId = "danny";// dummy is paid}
+Have to use random as user id would not change on click of google play, unless you show a text box there for testing and then enter "danny" to make it pay true, you can choose either way to test both flows.
+
+Success form : Show a simple form with "Congrajulations, all levels unlocked. Thank you." Or "Payment failed. Please try again." And the Menu button to back to main menu.
+
+Ladder Training
+First player is standing a bit awawy from truck, to the right of it. Ladder-training-mode = 1
+Player has to press left button to come close the truck
+When near the truck,  Ladder-training-mode = 2 when position is near truck and image changes to next image :-
+ Player is on lowest ladder: Train-basket-1.png
+
+ Press up one time then Train-basket-2.png
+ Press up twice to show Train-basket-3.png (as we only have few images, press twice to go to next)
+ Press up twice to show Train-basket-4.png
+ Play victory sound, Ladder-training-mode = 3
+
+Then come down click down 5 times
+now Ladder-training-mode =4 this level is passed (but game stays here till he presses menu button or 100 seconds up)
+
+Its a training to show kid how ladder works. If time up 100 seconds then play level lost music and restart.
+No cat or anything, that is why only need to use 1-4 images.
+
+No other mission. Then we done with game!
