@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
+import com.badlogic.gdx.graphics.Cursor;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.g2d.Sprite;
@@ -501,11 +502,18 @@ public class FitnessScreenOne implements Screen {
 	void drawParticlesNonGui(float delta) {
 	}
 
+	int lastd = 0;
 	void drawPointer(float delta) {
-		if (player.getX() >= npc.getX())
-			batch.draw(assetsManager.pointer, player.getX() + 25, 180);
-		if (npc.getX() > player.getX())
-			batch.draw(assetsManager.pointer, npc.getX() + 25, 180);
+		lastd += delta;
+		if(lastd > .1){
+			System.out.println("x "  + player.getX());
+		}
+		if (player.getX() < 200)
+		batch.draw(assetsManager.pointer, 200, 180);
+		//if (player.getX() >= npc.getX())
+		//	batch.draw(assetsManager.pointer, player.getX() + 25, 180);
+		//if (npc.getX() > player.getX())
+		//	batch.draw(assetsManager.pointer, npc.getX() + 25, 180);
 	}
 
 	void drawBars(float delta) {

@@ -21,7 +21,7 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenThree implements Screen {
-
+	final int TargetCount = 90;
 	Sprite guiStar;
 	Sprite windowCounter;
 
@@ -109,14 +109,14 @@ public class FitnessScreenThree implements Screen {
 			npc.create(assetsManager.spritesheetBoyElliptical, 4, 2, 7, 300, 50);
 		}
 
-		player.setMaxSpeed(1.6f);
+		player.setMaxSpeed(1.7f);
 		npc.setMaxSpeed(1.6f);
 		player.setAnimationOnly(true);
 		npc.setAnimationOnly(true);
-		player.setSpeedAdder(0.3f);
-		npc.setSpeedAdder(0.3f);
+		player.setSpeedAdder(0.33f);
+		npc.setSpeedAdder(0.31f);
 		npc.setFriction(1.25f);
-		player.setFriction(1.25f);
+		player.setFriction(1.24f);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -154,9 +154,9 @@ public class FitnessScreenThree implements Screen {
 		windowCounter.setScale(0);
 
 		playerBar = new Bar(assetsManager.barFilled,
-				assetsManager.barNotFilled, 340, 430, 60);
+				assetsManager.barNotFilled, 340, 430, TargetCount);
 		npcBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				10, 430, 60);
+				10, 430, TargetCount);
 		playerBar.setVisibility(true);
 		npcBar.setVisibility(true);
 
@@ -214,37 +214,37 @@ public class FitnessScreenThree implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		/// nada
 
 	}
 
@@ -275,7 +275,7 @@ public class FitnessScreenThree implements Screen {
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
 		}
-		if (player.getCounter() == 60 && finish == false) {
+		if (player.getCounter() == TargetCount && finish == false) {
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
@@ -283,7 +283,7 @@ public class FitnessScreenThree implements Screen {
 			assetsManager.stars.start();
 			victory = true;
 		}
-		if (npc.getCounter() == 60 && finish == false) {
+		if (npc.getCounter() == TargetCount && finish == false) {
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
 			finish = true;

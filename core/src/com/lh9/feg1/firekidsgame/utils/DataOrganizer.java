@@ -6,15 +6,15 @@ import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Json;
 import com.badlogic.gdx.utils.SerializationException;
-import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
-import com.googlecode.gwt.crypto.bouncycastle.util.encoders.Base64;
-import com.googlecode.gwt.crypto.client.TripleDesCipher;
-import com.googlecode.gwt.crypto.client.TripleDesKeyGenerator;
+//import com.googlecode.gwt.crypto.bouncycastle.DataLengthException;
+//import com.googlecode.gwt.crypto.bouncycastle.util.encoders.Base64;
+//import com.googlecode.gwt.crypto.client.TripleDesCipher;
+//import com.googlecode.gwt.crypto.client.TripleDesKeyGenerator;
 import com.lh9.feg1.firekidsgame.models.GameStateSave;
 
 public class DataOrganizer {
 
-	TripleDesCipher encryptor;
+	//TripleDesCipher encryptor;
 
 	GameStateSave gameStateSave;
 
@@ -32,9 +32,9 @@ public class DataOrganizer {
 	int experience;
 
 	public DataOrganizer() {
-		TripleDesKeyGenerator generator = new TripleDesKeyGenerator();
-		byte[] key = generator
-				.decodeKey("04578a8f0be3a7109d9e5e86839e3bc41654927034df92ec"); // you
+		//TripleDesKeyGenerator generator = new TripleDesKeyGenerator();
+		//byte[] key = generator
+		//		.decodeKey("04578a8f0be3a7109d9e5e86839e3bc41654927034df92ec"); // you
 																				// can
 																				// pass
 																				// your
@@ -42,8 +42,8 @@ public class DataOrganizer {
 																				// string
 																				// here
 
-		encryptor = new TripleDesCipher();
-		encryptor.setKey(key);
+		//encryptor = new TripleDesCipher();
+		//encryptor.setKey(key);
 	}
 
 	public boolean[] getScreensPlayed() {
@@ -238,7 +238,7 @@ public class DataOrganizer {
 	}
 
 	private String encryptString(String string) {
-		byte[] base64TextToEncrypt = string.getBytes();
+	/*	byte[] base64TextToEncrypt = string.getBytes();
 		try {
 			base64TextToEncrypt = Base64.encode(base64TextToEncrypt);
 
@@ -251,11 +251,12 @@ public class DataOrganizer {
 		String plainText = new String(base64TextToEncrypt,
 				Charset.forName("UTF8"));
 
-		return plainText;
+		return plainText;*/
+		return string;
 	}
 
 	private String decryptString(String string) {
-		byte[] base64TextToDecrypt = null;
+		/*byte[] base64TextToDecrypt = null;
 		try {
 			base64TextToDecrypt = Base64.decode(string);
 		} catch (DataLengthException e) {
@@ -264,8 +265,9 @@ public class DataOrganizer {
 			e.printStackTrace();
 		}
 		String plainText = new String(base64TextToDecrypt,
-				Charset.forName("UTF8"));
+				Charset.forName("UTF8"));*/
 
-		return plainText;
+		//return plainText;
+		return string;
 	}
 }

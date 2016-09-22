@@ -8,22 +8,22 @@ public class Variables {
 	
 	static final public String MR_TUSHAR_WEBSITE = "www.google.com";
 	
-	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"Run through the","training ground and", "complete training!"};
+	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"To move truck","& player: red button", "& arrow keys!"};
 	static final public String[] FOODS_POP_UP_1 = {"Pick only healthy","food to become a", "strong firefighter!"};
-	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your opponent!"};
-	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish excercises","faster than your", "opponent!"};
-	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish excercises","faster than your", "opponent!"};
-	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"Driving so heavy", "machine is not a","piece of cake!"};
-	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"Click buttons", "with a red arrow to", "turn on the sirene!"};
-	static final public String[] TRAINING_SCREEN_ONE_POP_UP_3 = {"Good! Now click", " the red button to", "turn on the sirene!"};
-	static final public String[] TRAINING_SCREEN_TWO_POP_UP_1 = {"Drive the truck","to the building","which is on fire!"};
-	static final public String[] PRE_ELEVATOR_SCREEN_POP_UP_1 = {"Drive the truck","to building where","elevator jammed!"};
+	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your spot!"};
+	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","faster than your", "spot!"};
+	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish exercises","faster than your", "spot!"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"Driving a heavy", "machine is not a","piece of cake!"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"Learn the controls", "to your truckas", "Press as indicated!"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_3 = {"Good! Now click", " the red button to", "turn on the siren!"};
+	static final public String[] TRAINING_SCREEN_TWO_POP_UP_1 = {"Drive the truck","to the building","on fire!"};
+	static final public String[] PRE_ELEVATOR_SCREEN_POP_UP_1 = {"Drive the truck","to building with","a jammed elevator!"};
 	static final public String[] ELEVATOR_SCREEN_POP_UP_1 = {"Hit the doors","with the hammer", "untill they open!"};
-	static final public String[] PRE_RESCUE_CAT_POP_UP_1 = {"Drive the truck"," to the tree where"," the cat has stuck!"};
-	static final public String[] RESCUE_CAT_POP_UP_1 = {"Lift the basket","high enough so the","cat could get down!"};
-	static final public String[] PRE_RESCUE_METRO_POP_UP_1 = {"Drive the truck","to the metro station","to help people!"};
-	static final public String[] RESCUE_METRO_POP_UP_1 = {"Hit the doors","with the hammer to","open jammed doors!"};	
-	static final public String[] BIG_ROAD_RESCUE_POP_UP_1 = {"Drive through the","city and put off the", "fire from buldings!"};
+	static final public String[] PRE_RESCUE_CAT_POP_UP_1 = {"Drive the truck"," to the tree where"," the cat is stuck."};
+	static final public String[] RESCUE_CAT_POP_UP_1 = {"Get the cat down by","raising the basket,","to the right height."};
+	static final public String[] PRE_RESCUE_METRO_POP_UP_1 = {"Drive the truck","to the metro station","to rescue people!"};
+	static final public String[] RESCUE_METRO_POP_UP_1 = {"Break open the","door with","the hammer!"};
+	static final public String[] BIG_ROAD_RESCUE_POP_UP_1 = {"Drive through the","city. Mind oil &", "on coming traffic!"};
 	
 	static final String MENU_SCREEN = "Menu Screen";
 	static final String MEET_THE_TRUCKS = "Meet The Trucks";

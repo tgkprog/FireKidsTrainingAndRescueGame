@@ -21,7 +21,7 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class FitnessScreenTwo implements Screen {
-
+	final int TargetCount = 90;
 	Sprite guiStar;
 	Sprite windowCounter;
 	
@@ -61,7 +61,10 @@ public class FitnessScreenTwo implements Screen {
 	
 	final Starter game;
 
+
+
 	public FitnessScreenTwo(final Starter gam) {
+		System.err.println("FitnessScreenTwo 2 start.");
 
 		this.game = gam;
 
@@ -95,14 +98,14 @@ public class FitnessScreenTwo implements Screen {
 			npc.create(assetsManager.spritesheetBoyWeights, 2, 2, 3, 300, 50);
 		}
 		
-		player.setMaxSpeed(1.6f);
+		player.setMaxSpeed(2.1f);
 		npc.setMaxSpeed(1.6f);
 		player.setAnimationOnly(true);
 		npc.setAnimationOnly(true);
-		player.setSpeedAdder(0.25f);
+		player.setSpeedAdder(0.31f);
 		npc.setSpeedAdder(0.25f);
 		npc.setFriction(1.35f);
-		player.setFriction(1.35f);
+		player.setFriction(1.31f);
 
 		if(dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
@@ -156,9 +159,9 @@ public class FitnessScreenTwo implements Screen {
 		windowCounter.setScale(0);
 
 		playerBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				340, 430, 60);
+				340, 430, TargetCount);
 		npcBar = new Bar(assetsManager.barFilled, assetsManager.barNotFilled,
-				10, 430, 60);
+				10, 430, TargetCount);
 		playerBar.setVisibility(true);
 		npcBar.setVisibility(true);
 
@@ -182,6 +185,7 @@ public class FitnessScreenTwo implements Screen {
 
 		if (menuWindow.isVisibile() == true)
 			delta = 0;
+		//if(delta > 0)delta += 0.025;
 
 		updateLogics(delta);
 
@@ -216,37 +220,37 @@ public class FitnessScreenTwo implements Screen {
 
 	@Override
 	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
 	@Override
 	public void show() {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
 	@Override
 	public void hide() {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
 	@Override
 	public void pause() {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
 	@Override
 	public void resume() {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
 	@Override
 	public void dispose() {
-		// TODO Auto-generated method stub
+		// nada
 
 	}
 
@@ -278,7 +282,7 @@ public class FitnessScreenTwo implements Screen {
 				&& dialogueWindow.isVisibile() == false) {
 			firstDialogueClicked = true;
 		}
-		if (player.getCounter() == 60 && finish == false) {
+		if (player.getCounter() == TargetCount && finish == false) {
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 3, starsCollected,true);
 			dialogueWindow.popUp();
 			runButton.setDontRespond(true);
@@ -286,7 +290,7 @@ public class FitnessScreenTwo implements Screen {
 			assetsManager.stars.start();
 			victory = true;
 		}
-		if (npc.getCounter() == 60 && finish == false) {
+		if (npc.getCounter() == TargetCount && finish == false) {
 			victory = false;
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, 0, starsCollected,false);
 			dialogueWindow.popUp();
@@ -321,6 +325,7 @@ public class FitnessScreenTwo implements Screen {
 	}
 
 	void updatenpcAction(double delta) {
+
 		if (firstDialogueClicked == true)
 			timerSpeednpc += delta;
 		if (timerSpeednpc > 0.24) {
