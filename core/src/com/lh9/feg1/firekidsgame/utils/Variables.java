@@ -10,11 +10,11 @@ public class Variables {
 	
 	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"To move truck and","player use: red button", " and arrow keys on side"};
 	static final public String[] FOODS_POP_UP_1 = {"Pick only healthy","food to become a", "strong firefighter!"};
-	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your spot!"};
-	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","faster than your", "spot!"};
-	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish exercises","faster than your", "spot!"};
+	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your partner!"};
+	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","faster than your", "partner!"};
+	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish exercises","faster than your", "partner!"};
 	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"Driving a heavy", "machine is not a","piece of cake!"};
-	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"Learn the controls", "to your truckas", "Press as indicated!"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"Learn the controls", "to your trucks", "Press as indicated!"};
 	static final public String[] TRAINING_SCREEN_ONE_POP_UP_3 = {"Good! Now click", " the red button to", "turn on the siren!"};
 	static final public String[] TRAINING_SCREEN_TWO_POP_UP_1 = {"Drive the truck","to the building","on fire!"};
 	static final public String[] PRE_ELEVATOR_SCREEN_POP_UP_1 = {"Drive the truck","to building with","a jammed elevator!"};

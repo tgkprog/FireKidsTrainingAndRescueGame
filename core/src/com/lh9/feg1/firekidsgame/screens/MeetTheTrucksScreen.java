@@ -232,11 +232,11 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if(dataOrganizer.getGender() == true)
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
-				assetsManager.darkScreen, 250f, 150f,
+				assetsManager.darkScreen, 150f, 150f,
 				Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
-					assetsManager.darkScreen, 250f, 150f,
+					assetsManager.darkScreen, 150f, 150f,
 					Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
 				
 		inputInterpreter.setDialogueWindow(dialogueWindow);
