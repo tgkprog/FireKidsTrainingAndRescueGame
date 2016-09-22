@@ -8,7 +8,7 @@ public class Variables {
 	
 	static final public String MR_TUSHAR_WEBSITE = "www.google.com";
 	
-	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"To move truck","& player: red button", "& arrow keys!"};
+	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"To move truck and","player use: red button", " and arrow keys on side"};
 	static final public String[] FOODS_POP_UP_1 = {"Pick only healthy","food to become a", "strong firefighter!"};
 	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your spot!"};
 	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","faster than your", "spot!"};

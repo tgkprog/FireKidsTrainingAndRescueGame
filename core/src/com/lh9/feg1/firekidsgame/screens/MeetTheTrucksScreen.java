@@ -536,6 +536,14 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+		final float half = runButton.getX() / 2;
+		float yy = (float) (runButton.getY() + (runButton.getBounds().getHeight() * 1.1));
+		if (player.getX() < half) {
+			batch.draw(assetsManager.pointer, runButton.getX(), yy);
+			yy = (float) (up.getY() + (up.getBounds().getHeight() * 1.1));
+			batch.draw(assetsManager.pointer, up.getX(), yy);
+
+		}
 
 		drawBackground(delta);
 		drawFootmarks(delta);

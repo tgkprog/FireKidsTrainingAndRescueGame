@@ -504,12 +504,17 @@ public class FitnessScreenOne implements Screen {
 
 	int lastd = 0;
 	void drawPointer(float delta) {
-		lastd += delta;
-		if(lastd > .1){
-			System.out.println("x "  + player.getX());
+		lastd += 1;
+		final float half = runButton.getX() / 2;
+		final float yy = (float) (runButton.getY() + (runButton.getBounds().getHeight() * 1.1));
+		if(lastd > 7){
+			System.out.println("x "  + player.getX() + ", " + runButton.getX() + ", y " + yy);
+			lastd = 0;
 		}
-		if (player.getX() < 200)
-		batch.draw(assetsManager.pointer, 200, 180);
+
+		if (player.getX() < half) {
+			batch.draw(assetsManager.pointer, runButton.getX(), yy);
+		}
 		//if (player.getX() >= npc.getX())
 		//	batch.draw(assetsManager.pointer, player.getX() + 25, 180);
 		//if (npc.getX() > player.getX())

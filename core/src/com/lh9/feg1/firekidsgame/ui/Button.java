@@ -205,7 +205,12 @@ public class Button {
 		return image.getY();
 	}
 
+	public Rectangle getBounds(){
+		return bounds;
+	}
+
 	public boolean isBlockedFromInteraction() {
 		return dontRespond;
 	}
+
 }
