@@ -443,6 +443,12 @@ public class InputInterpreter implements GestureListener {
 					if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
 						levelButtons[a].blink();
 
+						if(a >= 3 && screensPlayed[a] == true && dataOrganizer.isFullVersionUnlocked() == false){
+							selectedScreen = Variables.UNLOCK_GAME_SCREEN;
+							cloudManager.start();	
+							break;
+						}
+						
 						if (a == 0 && screensPlayed[a] == true) {
 							selectedScreen = variables.getFITNESS_SCREEN_ONE();
 							cloudManager.start();

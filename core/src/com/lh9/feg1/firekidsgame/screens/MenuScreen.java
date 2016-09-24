@@ -368,6 +368,12 @@ public class MenuScreen implements Screen {
 				game.setScreen(new UserInputScreen(game));
 			}
 		}
+		if (inputInterpreter.getSelectedScreenName().equals(Variables.UNLOCK_GAME_SCREEN)) {
+			if (cloudManager.getAllScalesEqualOne() == true) {
+				dataOrganizer.saveData();
+				game.setScreen(new UnlockGameScreen(game));
+			}
+		}
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getELEVATOR_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {

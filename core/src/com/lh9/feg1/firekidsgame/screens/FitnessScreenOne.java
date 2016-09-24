@@ -319,7 +319,7 @@ public class FitnessScreenOne implements Screen {
 		drawBackground(delta);
 		drawFootmarks(delta);
 		drawCharacters(delta);
-		drawPointer(delta);
+		//drawPointer(delta);
 
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
