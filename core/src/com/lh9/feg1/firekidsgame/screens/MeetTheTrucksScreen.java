@@ -232,11 +232,11 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if(dataOrganizer.getGender() == true)
 		dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
-				assetsManager.darkScreen, 150f, 150f,
+				assetsManager.darkScreen, 250f, 150f,
 				Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
-					assetsManager.darkScreen, 150f, 150f,
+					assetsManager.darkScreen, 250f, 150f,
 					Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
 				
 		inputInterpreter.setDialogueWindow(dialogueWindow);
@@ -536,14 +536,6 @@ public class MeetTheTrucksScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-		final float half = runButton.getX() / 2;
-		float yy = (float) (runButton.getY() + (runButton.getBounds().getHeight() * 1.1));
-		if (player.getX() < half) {
-			batch.draw(assetsManager.pointer, runButton.getX(), yy);
-			yy = (float) (up.getY() + (up.getBounds().getHeight() * 1.1));
-			batch.draw(assetsManager.pointer, up.getX(), yy);
-
-		}
 
 		drawBackground(delta);
 		drawFootmarks(delta);

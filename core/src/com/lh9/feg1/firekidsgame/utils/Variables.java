@@ -1,13 +1,10 @@
 package com.lh9.feg1.firekidsgame.utils;
-
 import com.badlogic.gdx.math.Vector2;
-
 public class Variables {
-
 	static final public String VERSION = "version 1.0";
 	
 	static final public String MR_TUSHAR_WEBSITE = "http://lh9.in/about";
-	
+
 	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"Move truck and","player. Press", "repeatedly :round red", "and arrow keys."};
 	static final public String[] FOODS_POP_UP_1 = {"Pick only healthy","become a", "strong firefighter!"};
 	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your partner!"};
@@ -39,97 +36,72 @@ public class Variables {
 	static final String FITNESS_SCREEN_THREE = "Fitness Screen Three";
 	static final String ELEVATOR_SCREEN = "Elevator Screen";
 	static final String FOODS_SCREEN = "Foods Screen";
-
 	public static final String USER_INPUT_SCREEN = "User Input Screen";
-
 	public static final String UNLOCK_GAME_SCREEN = "Unlock Game Screen";
-
 
 	static final double MAX_LOGO_SCALE = 0.5f;
 	static final double DELAY_CHANGING_SCREENS = 0f;
-
 	static final Vector2 LOGO_POSITION = new Vector2(128, -150);
 	static final Vector2 RUN_BUTTON_POSITION = new Vector2(650, 220);
 	static final Vector2 PAUSE_BUTTON_POSITION = new Vector2(710, 400);
-
 	static final boolean DEBUG_MODE = false;
-
 	public boolean getDEBUG_MODE() {
 		return DEBUG_MODE;
 	}
-
 	public double getMAX_LOGO_SCALE() {
 		return MAX_LOGO_SCALE;
 	}
-
 	public double getDELAY_CHANGING_SCREENS() {
 		return DELAY_CHANGING_SCREENS;
 	}
-
 	public Vector2 getLOGO_POSITION() {
 		return LOGO_POSITION;
 	}
-
 	public Vector2 getRUN_BUTTON_POSITION() {
 		return RUN_BUTTON_POSITION;
 	}
-
 	public Vector2 getPAUSE_BUTTON_POSITION() {
 		return PAUSE_BUTTON_POSITION;
 	}
-
 	public String getMEET_THE_TRUCKS() {
 		return MEET_THE_TRUCKS;
 	}
-
 	public String getFITNESS_SCREEN_ONE() {
 		return FITNESS_SCREEN_ONE;
 	}
-
 	public String getTRAINING_SCREEN_ONE() {
 		return TRAINING_SCREEN_ONE;
 	}
-
 	public String getTRAINING_SCREEN_TWO() {
 		return TRAINING_SCREEN_TWO;
 	}
-
 	public String getRESCUE_METRO_SCREEN() {
 		return RESCUE_METRO_SCREEN;
 	}
-
 	public String getBIG_ROAD_RESCUE_SCREEN() {
 		return BIG_ROAD_RESCUE_SCREEN;
 	}
-
 	public String getSETTINGS_SCREEN() {
 		return SETTINGS_SCREEN;
 	}
-
 	public String getMENU_SCREEN() {
 		return MENU_SCREEN;
 	}
-
 	public String getAUTHORS_SCREEN() {
 		return AUTHORS_SCREEN;
 	}
-
 	public String getCAT_RESCUE_SCREEN() {
 		return CAT_RESCUE_SCREEN;
 	}
-
 	public String getFITNESS_SCREEN_TWO() {
 		return FITNESS_SCREEN_TWO;
 	}
-
 	public String getFITNESS_SCREEN_THREE() {
 		return FITNESS_SCREEN_THREE;
 	}
-
 	public String getELEVATOR_SCREEN() {
 		return ELEVATOR_SCREEN;
 	}
-
 	public String getFOODS_SCREEN() {
 		return FOODS_SCREEN;
 	}

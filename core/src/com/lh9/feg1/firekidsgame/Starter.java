@@ -60,6 +60,11 @@ public class Starter extends Game {
 	}
 
 	void loadBasicTextures() {
+		
+		
+		String s = "12345";
+		System.out.println(s.charAt(0));
+		
 		logo = new Texture("others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);

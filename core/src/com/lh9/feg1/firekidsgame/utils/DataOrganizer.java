@@ -1,7 +1,5 @@
 package com.lh9.feg1.firekidsgame.utils;
 
-import java.nio.charset.Charset;
-
 import com.badlogic.gdx.Gdx;
 import com.badlogic.gdx.Preferences;
 import com.badlogic.gdx.utils.Json;
@@ -14,7 +12,7 @@ import com.lh9.feg1.firekidsgame.models.GameStateSave;
 
 public class DataOrganizer {
 
-	//TripleDesCipher encryptor;
+	// TripleDesCipher encryptor;
 
 	GameStateSave gameStateSave;
 
@@ -26,24 +24,30 @@ public class DataOrganizer {
 	boolean screenAwake;
 	boolean gender;
 	boolean prompts;
+	boolean unlockedFullVersion;
 	// False is for boy
 	// True is for girl
 	int score;
 	int experience;
 
-	public DataOrganizer() {
-		//TripleDesKeyGenerator generator = new TripleDesKeyGenerator();
-		//byte[] key = generator
-		//		.decodeKey("04578a8f0be3a7109d9e5e86839e3bc41654927034df92ec"); // you
-																				// can
-																				// pass
-																				// your
-																				// own
-																				// string
-																				// here
+	public boolean isFullVersionUnlocked() {
+		return unlockedFullVersion;
+	}
 
-		//encryptor = new TripleDesCipher();
-		//encryptor.setKey(key);
+	public DataOrganizer() {
+		// TripleDesKeyGenerator generator = new TripleDesKeyGenerator();
+		// byte[] key = generator
+		// .decodeKey("04578a8f0be3a7109d9e5e86839e3bc41654927034df92ec"); //
+		// you
+		// can
+		// pass
+		// your
+		// own
+		// string
+		// here
+
+		// encryptor = new TripleDesCipher();
+		// encryptor.setKey(key);
 	}
 
 	public boolean[] getScreensPlayed() {
@@ -216,7 +220,7 @@ public class DataOrganizer {
 			try {
 				gameStateSave = json.fromJson(GameStateSave.class,
 						decryptedGameStateSaveInString);
-	
+
 				voice = gameStateSave.getVoice();
 				textureFiltering = gameStateSave.getTextureFiltering();
 				fps = gameStateSave.getFps();
@@ -227,7 +231,7 @@ public class DataOrganizer {
 				experience = gameStateSave.getExperience();
 				score = gameStateSave.getScore();
 				screensPlayed = gameStateSave.getScreensPlayed();
-		
+
 			} catch (SerializationException e) {
 				resetGameState();
 			}
@@ -238,36 +242,31 @@ public class DataOrganizer {
 	}
 
 	private String encryptString(String string) {
-	/*	byte[] base64TextToEncrypt = string.getBytes();
-		try {
-			base64TextToEncrypt = Base64.encode(base64TextToEncrypt);
-
-		} catch (DataLengthException e1) {
-			e1.printStackTrace();
-		} catch (IllegalStateException e1) {
-			e1.printStackTrace();
-		}
-
-		String plainText = new String(base64TextToEncrypt,
-				Charset.forName("UTF8"));
-
-		return plainText;*/
+		/*
+		 * byte[] base64TextToEncrypt = string.getBytes(); try {
+		 * base64TextToEncrypt = Base64.encode(base64TextToEncrypt);
+		 * 
+		 * } catch (DataLengthException e1) { e1.printStackTrace(); } catch
+		 * (IllegalStateException e1) { e1.printStackTrace(); }
+		 * 
+		 * String plainText = new String(base64TextToEncrypt,
+		 * Charset.forName("UTF8"));
+		 * 
+		 * return plainText;
+		 */
 		return string;
 	}
 
 	private String decryptString(String string) {
-		/*byte[] base64TextToDecrypt = null;
-		try {
-			base64TextToDecrypt = Base64.decode(string);
-		} catch (DataLengthException e) {
-			e.printStackTrace();
-		} catch (IllegalStateException e) {
-			e.printStackTrace();
-		}
-		String plainText = new String(base64TextToDecrypt,
-				Charset.forName("UTF8"));*/
+		/*
+		 * byte[] base64TextToDecrypt = null; try { base64TextToDecrypt =
+		 * Base64.decode(string); } catch (DataLengthException e) {
+		 * e.printStackTrace(); } catch (IllegalStateException e) {
+		 * e.printStackTrace(); } String plainText = new
+		 * String(base64TextToDecrypt, Charset.forName("UTF8"));
+		 */
 
-		//return plainText;
+		// return plainText;
 		return string;
 	}
 }
