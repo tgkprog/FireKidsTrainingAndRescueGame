@@ -195,9 +195,9 @@ public class DataOrganizer {
 		String decryptedGameStateSaveInString = " ";
 
 		Preferences preferences = Gdx.app
-				.getPreferences("Application prefferences");
+				.getPreferences("FegPrefs1");
 		encryptedGameStateSaveInString = preferences.getString(
-				"encryptedGameStateSave", " ");
+				"FegPrefs2", " ");
 
 		if (!encryptedGameStateSaveInString.equals(" ")) {
 

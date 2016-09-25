@@ -229,6 +229,8 @@ public class MenuScreen implements Screen {
 		assetsManager.fontLittle.setColor(1,1,1,1);
 	}
 
+	static int timeArrow = 0;
+
 	@Override
 	public void render(float delta) {
 
@@ -246,11 +248,18 @@ public class MenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
-
 		drawBackground(delta);
 		drawTexts(delta);
 		drawCharacters(delta);
-
+		if(timeArrow < 600 ) {
+			timeArrow++;
+			final int tt = (int) timeArrow / 30;
+			if(tt % 2 == 0) {
+				final float yy = (float) (meetTheTrucks.getY() + (meetTheTrucks.getBounds().getHeight() * 1.1) + assetsManager.pointer.getHeight() );
+				final float xx = (float) (meetTheTrucks.getX() + 37 + (meetTheTrucks.getBounds().getWidth() * 0.65));
+				batch.draw(assetsManager.pointer, xx, yy);System.out.println("x  " + xx+ ", " + meetTheTrucks.getX() +  "  w " +  (meetTheTrucks.getBounds().getWidth()));
+			}
+		}
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
@@ -328,12 +337,15 @@ public class MenuScreen implements Screen {
 
 		if (assetsManager.backgroundPlayed == false) {
 			if (dataOrganizer.getGender() == false) {
-				assetsManager.backgroundBoy.play();	
-				assetsManager.backgroundBoy.setLooping(true);
+				assetsManager.backgroundBoy.play();
+				assetsManager.backgroundBoy.setVolume(.6f);
+				//assetsManager.backgroundBoy.setLooping(true);
 			}
 			if (dataOrganizer.getGender() == true) {
-				assetsManager.backgroundGirl.play();	
-				assetsManager.backgroundGirl.setLooping(true);
+				assetsManager.backgroundGirl.play();
+				assetsManager.backgroundGirl.setVolume(.6f);
+				//assetsManager.backgroundGirl.
+				// (true);
 			}
 			assetsManager.backgroundPlayed = true;
 		}
