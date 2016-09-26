@@ -7,6 +7,7 @@ import com.badlogic.gdx.Screen;
 import com.badlogic.gdx.graphics.Color;
 import com.badlogic.gdx.graphics.GL20;
 import com.badlogic.gdx.graphics.OrthographicCamera;
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.math.MathUtils;
@@ -30,6 +31,11 @@ import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class MeetTheTrucksScreen implements Screen {
+
+	// We use these textures only in this screen, therefore I load them here and
+	// dispose in the end
+	Texture clickToRun;
+	Texture clickToJump;
 
 	Truck truck;
 	FPSManager fpsManager;
@@ -124,6 +130,7 @@ public class MeetTheTrucksScreen implements Screen {
 	float playerPositionLastFrame;
 	float runningPositionTimer;
 	float playerPositionTimer;
+	float UIHelpAlpha = 0;
 
 	final Starter game;
 
@@ -161,9 +168,9 @@ public class MeetTheTrucksScreen implements Screen {
 		retryButton.goUp(300);
 		menuButton.goUp(300);
 
-		menuWindow = new MenuWindow(null,
-				assetsManager.darkScreen, 250, 200, menuButton, retryButton,
-				playButton, variables.getMEET_THE_TRUCKS());
+		menuWindow = new MenuWindow(null, assetsManager.darkScreen, 250, 200,
+				menuButton, retryButton, playButton,
+				variables.getMEET_THE_TRUCKS());
 
 		wallHitAnimation = new Sprite[2];
 		if (dataOrganizer.getGender() == true) {
@@ -230,15 +237,17 @@ public class MeetTheTrucksScreen implements Screen {
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
 
-		if(dataOrganizer.getGender() == true)
-		dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
-				assetsManager.darkScreen, 250f, 150f,
-				Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
+		if (dataOrganizer.getGender() == true)
+			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
+					assetsManager.darkScreen, 250f, 150f,
+					Variables.MEET_THE_TRUCKS_POP_UP_1,
+					assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
-					Variables.MEET_THE_TRUCKS_POP_UP_1, assetsManager.fontLittle);
-				
+					Variables.MEET_THE_TRUCKS_POP_UP_1,
+					assetsManager.fontLittle);
+
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 		inputInterpreter.setMenuWindow(menuWindow);
@@ -505,6 +514,8 @@ public class MeetTheTrucksScreen implements Screen {
 		 * Sprite monument = new Sprite(assetsManager.buildings[7]);
 		 * monument.setPosition(13000, 185); grassFlowers.add(monument);
 		 */
+		clickToRun = new Texture("texts/click-to-run.png");
+		clickToJump = new Texture("texts/click-to-jump.png");
 	}
 
 	@Override
@@ -552,6 +563,7 @@ public class MeetTheTrucksScreen implements Screen {
 		drawBars(delta);
 		drawTexts(delta);
 		drawButtons(deltaTemp);
+		drawUIHelp(delta);
 		drawWindows(deltaTemp);
 		drawClouds(deltaTemp);
 		drawFps();
@@ -761,7 +773,7 @@ public class MeetTheTrucksScreen implements Screen {
 		} else if (eclipsePart == false) {
 			speedBar.setVisibility(true);
 			truckPart = true;
-			
+
 			player.setPosition((int) truck.getX() + 720, 35);
 			player.setSpeed(truck.getSpeed());
 
@@ -775,19 +787,19 @@ public class MeetTheTrucksScreen implements Screen {
 			inputInterpreter.setControlledTruck(truck);
 			inputInterpreter.setControlledHuman(truck);
 		}
-		if(eclipsePart == false && truckPart == true && engineStarted == false){
+		if (eclipsePart == false && truckPart == true && engineStarted == false) {
 			assetsManager.truckStartingUp.play(0.7f);
 			assetsManager.truckDriving.loop(0.7f);
-			
+
 			engineStarted = true;
 		}
-		if(truck.getX() >= 8500 && deccelarating == false)
-		if (truck.getX() >= 9000) {
-			deccelarating = true;
-			assetsManager.skid.play(0.3f);
-			truck.setFriction(30);
-			assetsManager.truckDriving.stop();
-		}
+		if (truck.getX() >= 8500 && deccelarating == false)
+			if (truck.getX() >= 9000) {
+				deccelarating = true;
+				assetsManager.skid.play(0.3f);
+				truck.setFriction(30);
+				assetsManager.truckDriving.stop();
+			}
 		if (truck.getX() >= 9000 && Math.abs(truck.getSpeed()) < 0.9f
 				&& eclipsePart == false) {
 			eclipsePart = true;
@@ -855,11 +867,11 @@ public class MeetTheTrucksScreen implements Screen {
 		if (player.getX() > 270 && player.getX() < 435) {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
-		
-			if(hitOnBarrels == false){
-			//assetsManager.hitSound.play();
-			hitOnBarrels = true;
-			}	
+
+			if (hitOnBarrels == false) {
+				// assetsManager.hitSound.play();
+				hitOnBarrels = true;
+			}
 		}
 
 		// 750,830
@@ -870,9 +882,9 @@ public class MeetTheTrucksScreen implements Screen {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
 
-			if(hitOnBarrels == false){
-			//assetsManager.hitSound.play();
-			hitOnBarrels = true;
+			if (hitOnBarrels == false) {
+				// assetsManager.hitSound.play();
+				hitOnBarrels = true;
 			}
 		}
 		// 1150,1230
@@ -883,28 +895,31 @@ public class MeetTheTrucksScreen implements Screen {
 		if (player.getX() > 1070 && player.getX() < 1235) {
 			if (player.getY() < 110)
 				player.setPosition((int) player.getX(), 110);
-			if(hitOnBarrels == false){
-		//	assetsManager.hitSound.play();
-			hitOnBarrels = true;
+			if (hitOnBarrels == false) {
+				// assetsManager.hitSound.play();
+				hitOnBarrels = true;
 			}
 		}
 
-		if (player.getY() < 35){
+		if (player.getY() < 35) {
 			player.setPosition((int) player.getX(), 35);
-		hitOnBarrels = false;
+			hitOnBarrels = false;
 		}
 		if (player.getX() >= 14000 && secondDialogueClicked == false) {
-	assetsManager.click.play();
+			assetsManager.click.play();
 			secondDialogueClicked = true;
-			//dialogueWindow.setDialogueText(Variables.MEET_THE_TRUCKS_POP_UP_2);
+			// dialogueWindow.setDialogueText(Variables.MEET_THE_TRUCKS_POP_UP_2);
 			int goldenStars = 0;
-			if(player.getX() > train.getX())
+			if (player.getX() > train.getX())
 				goldenStars = 3;
 			else
 				goldenStars = 2;
-			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star, assetsManager.starSummary, assetsManager.starSummaryDesaturated, goldenStars, starsCollected,true);
+			dialogueWindow.drawLevelSummary(assetsManager.cog,
+					assetsManager.star, assetsManager.starSummary,
+					assetsManager.starSummaryDesaturated, goldenStars,
+					starsCollected, true);
 			dialogueWindow.popUp();
-			
+
 			assetsManager.stars.start();
 			// player.setSpeed(0);
 			// player.resetStateTime();
@@ -1095,34 +1110,34 @@ public class MeetTheTrucksScreen implements Screen {
 
 		if (waterRange > 1.4f && waterRange < 1.7f) {
 			if (fireAnimationScales[0].x > 0)
-				fireAnimationScales[0].x -= delta*2;
+				fireAnimationScales[0].x -= delta * 2;
 			if (fireAnimationScales[0].x < 0)
 				fireAnimationScales[0].x = 0;
 
 			if (fireAnimationScales[0].y > 0)
-				fireAnimationScales[0].y -= delta*2;
+				fireAnimationScales[0].y -= delta * 2;
 			if (fireAnimationScales[0].y < 0)
 				fireAnimationScales[0].y = 0;
 		}
 		if (waterRange > 1.7f && waterRange < 2.2f) {
 			if (fireAnimationScales[1].x > 0)
-				fireAnimationScales[1].x -= delta*2;
+				fireAnimationScales[1].x -= delta * 2;
 			if (fireAnimationScales[1].x < 0)
 				fireAnimationScales[1].x = 0;
 
 			if (fireAnimationScales[1].y > 0)
-				fireAnimationScales[1].y -= delta*2;
+				fireAnimationScales[1].y -= delta * 2;
 			if (fireAnimationScales[1].y < 0)
 				fireAnimationScales[1].y = 0;
 		}
 		if (waterRange > 2.2f && waterRange < 2.55f) {
 			if (fireAnimationScales[2].x > 0)
-				fireAnimationScales[2].x -= delta*2;
+				fireAnimationScales[2].x -= delta * 2;
 			if (fireAnimationScales[2].x < 0)
 				fireAnimationScales[2].x = 0;
 
 			if (fireAnimationScales[2].y > 0)
-				fireAnimationScales[2].y -= delta*2;
+				fireAnimationScales[2].y -= delta * 2;
 			if (fireAnimationScales[2].y < 0)
 				fireAnimationScales[2].y = 0;
 		}
@@ -1140,17 +1155,16 @@ public class MeetTheTrucksScreen implements Screen {
 			batch.draw(assetsManager.hoseHydrant, 11700, 38);
 		}
 
-		if (player.getX() > 11750 && truckBackDoorPosition > 140)
-		{
-			if(fireHoseSoundStarted == false){
-			fireHoseSoundStarted = true;
-			assetsManager.fireHose.loop(0.25f);
+		if (player.getX() > 11750 && truckBackDoorPosition > 140) {
+			if (fireHoseSoundStarted == false) {
+				fireHoseSoundStarted = true;
+				assetsManager.fireHose.loop(0.25f);
 			}
 			drawWater(delta);
 		}
-		if(player.getX() > 11755)
+		if (player.getX() > 11755)
 			assetsManager.fireHose.stop();
-		
+
 		if (player.getX() > 12000 && finishingRun == false)
 			batch.draw(assetsManager.wall[0], 12600, 45);
 		if (player.getX() >= 12550) {
@@ -1208,6 +1222,8 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
 				game.setCollectedStars(starsCollected + starsAll);
+				clickToRun.dispose();
+				clickToJump.dispose();
 				game.setScreen(new MenuScreen(game));
 			}
 		}
@@ -1217,6 +1233,8 @@ public class MeetTheTrucksScreen implements Screen {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
 				game.setCollectedStars(starsCollected + starsAll);
+				clickToRun.dispose();
+				clickToJump.dispose();
 				game.setScreen(new MeetTheTrucksScreen(game));
 			}
 		}
@@ -1225,6 +1243,8 @@ public class MeetTheTrucksScreen implements Screen {
 			game.setCogs(game.getCogs() + 1);
 			game.setCollectedStars(starsCollected + starsAll);
 			assetsManager.hit.scaleEffect(3f);
+			clickToRun.dispose();
+			clickToJump.dispose();
 			game.setScreen(new FoodsScreen(game));
 		}
 	}
@@ -1519,7 +1539,7 @@ public class MeetTheTrucksScreen implements Screen {
 
 	void drawGuiStarsCounter(float delta) {
 
-		batch.draw(assetsManager.frameCollectibles,10,435);
+		batch.draw(assetsManager.frameCollectibles, 10, 435);
 		if (enlargeStar == true) {
 			if (guiStar.getScaleX() < 0.9f)
 				guiStar.setScale(guiStar.getScaleX() + 3 * delta);
@@ -1543,9 +1563,40 @@ public class MeetTheTrucksScreen implements Screen {
 				&& train.getX() < 14000)
 			train.setPosition(train.getX() + delta * 275, train.getY());
 
-		if ((train.getX() - player.getX() < 400
-				&& train.getWidth() + train.getX() - player.getX() > -400) || player.getX() > 13000 )
+		if ((train.getX() - player.getX() < 400 && train.getWidth()
+				+ train.getX() - player.getX() > -400)
+				|| player.getX() > 13000)
 			train.draw(batch);
-		
+
+	}
+
+	void drawUIHelp(float delta) {
+		if (UIHelpAlpha > 0) {
+
+			batch.setColor(1,1,1,UIHelpAlpha);
+			batch.draw(clickToJump,220,345);
+			batch.draw(clickToRun,500,130);
+			batch.setColor(1,1,1,1);
+			
+			pointer.setPosition(150, 300);
+			pointer.setRotation(300);
+			pointer.draw(batch, UIHelpAlpha);
+
+			pointer.setPosition(650, 185);
+			pointer.setRotation(140);
+			pointer.draw(batch, UIHelpAlpha);
+		}
+		if (player.getX() < 400 && UIHelpAlpha < 1f
+				&& dialogueWindow.isVisibile() == false) {
+			UIHelpAlpha += delta;
+			if (UIHelpAlpha > 1f)
+				UIHelpAlpha = 1f;
+		}
+		if (player.getX() >= 400) {
+			UIHelpAlpha -= delta;
+			if (UIHelpAlpha < 0f)
+				UIHelpAlpha = 0f;
+		}
+
 	}
 }
