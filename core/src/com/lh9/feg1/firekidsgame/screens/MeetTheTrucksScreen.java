@@ -1597,6 +1597,6 @@ public class MeetTheTrucksScreen implements Screen {
 			if (UIHelpAlpha < 0f)
 				UIHelpAlpha = 0f;
 		}
-
+		pointer.setRotation(0);
 	}
 }

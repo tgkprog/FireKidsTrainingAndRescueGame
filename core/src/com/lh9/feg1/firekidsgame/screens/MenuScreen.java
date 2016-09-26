@@ -48,6 +48,7 @@ public class MenuScreen implements Screen {
 
 	long bellSoundID;
 	float positions = -1000;
+	float meetTheTrucksBlinkTimer;
 	float bellsVolume = 1;
 	boolean madeShakeScreen;
 	boolean startedBells;
@@ -229,8 +230,6 @@ public class MenuScreen implements Screen {
 		assetsManager.fontLittle.setColor(1,1,1,1);
 	}
 
-	static int timeArrow = 0;
-
 	@Override
 	public void render(float delta) {
 
@@ -248,18 +247,11 @@ public class MenuScreen implements Screen {
 
 		batch.setProjectionMatrix(camera.combined);
 		batch.begin();
+
 		drawBackground(delta);
 		drawTexts(delta);
 		drawCharacters(delta);
-		if(timeArrow < 600 ) {
-			timeArrow++;
-			final int tt = (int) timeArrow / 30;
-			if(tt % 2 == 0) {
-				final float yy = (float) (meetTheTrucks.getY() + (meetTheTrucks.getBounds().getHeight() * 1.1) + assetsManager.pointer.getHeight() );
-				final float xx = (float) (meetTheTrucks.getX() + 37 + (meetTheTrucks.getBounds().getWidth() * 0.65));
-				batch.draw(assetsManager.pointer, xx, yy);System.out.println("x  " + xx+ ", " + meetTheTrucks.getX() +  "  w " +  (meetTheTrucks.getBounds().getWidth()));
-			}
-		}
+
 		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
 		batch.begin();
@@ -330,6 +322,13 @@ public class MenuScreen implements Screen {
 
 	void updateLogics(double delta) {
 
+		if(game.getScreensPlayed()[0] == false)
+		meetTheTrucksBlinkTimer += delta;
+		if(meetTheTrucksBlinkTimer > 0.5f){
+			meetTheTrucksBlinkTimer = 0;
+			meetTheTrucks.blink();
+		}
+		
 		if (positions < 0)
 			positions += delta * 100 + Math.abs(positions) * 0.025f;
 		if (positions > 0)
@@ -337,15 +336,12 @@ public class MenuScreen implements Screen {
 
 		if (assetsManager.backgroundPlayed == false) {
 			if (dataOrganizer.getGender() == false) {
-				assetsManager.backgroundBoy.play();
-				assetsManager.backgroundBoy.setVolume(.6f);
-				//assetsManager.backgroundBoy.setLooping(true);
+				assetsManager.backgroundBoy.play();	
+				assetsManager.backgroundBoy.setLooping(true);
 			}
 			if (dataOrganizer.getGender() == true) {
-				assetsManager.backgroundGirl.play();
-				assetsManager.backgroundGirl.setVolume(.6f);
-				//assetsManager.backgroundGirl.
-				// (true);
+				assetsManager.backgroundGirl.play();	
+				assetsManager.backgroundGirl.setLooping(true);
 			}
 			assetsManager.backgroundPlayed = true;
 		}

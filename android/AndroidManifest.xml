@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="utf-8"?>
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.lh9.feg1.firekidsgame"
-    android:versionCode="4"
-    android:versionName="Alpha 0.04" >
+    android:versionCode="3"
+    android:versionName="Alpha0.30" >
 
     <uses-sdk android:minSdkVersion="8" android:targetSdkVersion="23" />
  	<uses-permission android:name="android.permission.INTERNET" />
