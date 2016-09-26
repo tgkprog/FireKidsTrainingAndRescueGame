@@ -68,10 +68,10 @@ public class Dialogue extends Window {
 				for (int a = 0; a < dialogueText.length; a++)
 					if(a == 0)
 					font.draw(batch, dialogueText[a], (float) x + 75,
-							(float) y + 130 - a * 40);
+							(float) y + 130 - a * 37);
 					else
 						font.draw(batch, dialogueText[a], (float) x + 15,
-								(float) y + 130 - a * 40);
+								(float) y + 130 - a * 37);
 							
 				font.setColor(1, 1, 1, fontPreviousAlpha);
 			}
