@@ -329,6 +329,11 @@ public class UserInputScreen implements Screen {
 
 	void updateLogics(double delta) {
 
+		if(menu.getCounter() > 0 && menu.isBlockedFromInteraction() == false){
+			assetsManager.click.play();
+			menu.setDontRespond(true);
+		}
+		
 		if (closeButton.getSelection() == true) {
 
 			textInputListener = new MyTextInputListener();

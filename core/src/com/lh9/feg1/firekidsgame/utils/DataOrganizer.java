@@ -24,14 +24,18 @@ public class DataOrganizer {
 	boolean screenAwake;
 	boolean gender;
 	boolean prompts;
-	boolean unlockedFullVersion;
+	boolean fullVersionUnlocked;
 	// False is for boy
 	// True is for girl
 	int score;
 	int experience;
+	
+	public void setFullVersionUnlocked(boolean fullVersionUnlocked){
+		this.fullVersionUnlocked = fullVersionUnlocked;
+	}
 
 	public boolean isFullVersionUnlocked() {
-		return unlockedFullVersion;
+		return fullVersionUnlocked;
 	}
 
 	public DataOrganizer() {
@@ -56,6 +60,7 @@ public class DataOrganizer {
 
 	public void resetGameState() {
 
+		fullVersionUnlocked = false;
 		screensPlayed = new boolean[7];
 		voice = false;
 		textureFiltering = true;
@@ -75,6 +80,7 @@ public class DataOrganizer {
 		model.setVibrations(false);
 		model.setScreenAwake(true);
 		model.setGender(false);
+		model.setFullVersionUnlocked(false);
 		model.setExperience(0);
 		model.setScore(0);
 		model.setScreensPlayed(screensPlayed);
@@ -171,6 +177,7 @@ public class DataOrganizer {
 
 		GameStateSave model = new GameStateSave();
 		model.setVoice(voice);
+		model.setFullVersionUnlocked(fullVersionUnlocked);
 		model.setTextureFiltering(textureFiltering);
 		model.setFps(fps);
 		model.setPrompts(prompts);
@@ -231,7 +238,8 @@ public class DataOrganizer {
 				experience = gameStateSave.getExperience();
 				score = gameStateSave.getScore();
 				screensPlayed = gameStateSave.getScreensPlayed();
-
+				fullVersionUnlocked = gameStateSave.isVullVersionUnlocked();
+				
 			} catch (SerializationException e) {
 				resetGameState();
 			}

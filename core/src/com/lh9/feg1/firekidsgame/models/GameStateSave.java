@@ -10,10 +10,18 @@ public class GameStateSave {
 	boolean screenAwake;
 	boolean gender;
 	boolean prompts;
-
+	boolean fullVersionUnlocked;
+	
 	int score;
 	int experience;
 
+	public boolean isVullVersionUnlocked(){
+		return fullVersionUnlocked;
+	}
+	public void setFullVersionUnlocked(boolean fullVersionUnlocked){
+		this.fullVersionUnlocked = fullVersionUnlocked;
+	}
+	
 	public boolean[] getScreensPlayed() {
 		return screensPlayed;
 	}

@@ -26,6 +26,7 @@ public class UnlockGameScreen implements Screen {
 	Texture unlockFull;
 	Texture unlock;
 	Texture continueAsFree;
+	Texture unlockedSuccessfully;
 
 	Texture thumbnailCat;
 	Texture thumbnailTrain;
@@ -41,6 +42,7 @@ public class UnlockGameScreen implements Screen {
 	Button textUnlockFull;
 	Button textUnlock;
 	Button textContinueAsFree;
+	Button textUnlockedSuccessfully;
 
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
@@ -56,6 +58,9 @@ public class UnlockGameScreen implements Screen {
 	Button buyButton;
 	Button menu;
 
+	float timerExit = 1.8f;
+	boolean exitCloudsStarted;
+	
 	final Starter game;
 
 	public UnlockGameScreen(final Starter gam) {
@@ -69,7 +74,7 @@ public class UnlockGameScreen implements Screen {
 		thumbnailRoadRescue = new Texture("thumbnails/thumbnailRoadRescue.png");
 		thumbnailRoadRescue.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
-		
+
 		this.game = gam;
 
 		cloudManager = game.getCloudManager();
@@ -88,6 +93,7 @@ public class UnlockGameScreen implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setMenu(menu);
 		inputInterpreter.setCloudManager(cloudManager);
+		inputInterpreter.setGeneralPurposeButton(buyButton);
 		cloudManager.stop();
 
 		buildingsCamera = new OrthographicCamera(800, 480);
@@ -109,10 +115,10 @@ public class UnlockGameScreen implements Screen {
 
 		textFireEngineGame = new Button(265, -100, assetsManager.fireEngineGame);
 		textFireEngineGame.goUp(440);
-		
+
 		cat = new Button(20, -100, thumbnailCat);
 		cat.goUp(235);
-		train = new Button(310,  -150, thumbnailTrain);
+		train = new Button(310, -150, thumbnailTrain);
 		train.goUp(235);
 		elevator = new Button(20, -200, thumbnailElevator);
 		elevator.goUp(95);
@@ -132,8 +138,12 @@ public class UnlockGameScreen implements Screen {
 		unlock.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		continueAsFree = new Texture("texts/continueAsFree.png");
 		continueAsFree.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		unlockedSuccessfully = new Texture("texts/unlocked_succesfully.png");
+		unlockedSuccessfully.setFilter(TextureFilter.Linear,
+				TextureFilter.Linear);
 
 		textUnlockFull = new Button(10, -100, unlockFull);
+		textUnlockedSuccessfully = new Button(150, -100, unlockedSuccessfully);
 		textUnlockFull.goUp(380);
 		textUnlock = new Button(80, -250, unlock);
 		textUnlock.goUp(20);
@@ -177,6 +187,7 @@ public class UnlockGameScreen implements Screen {
 
 		drawTexts(delta);
 		drawButtons(delta);
+		assetsManager.stars.draw(batch, delta);
 		drawClouds(delta);
 		drawFps();
 
@@ -225,11 +236,9 @@ public class UnlockGameScreen implements Screen {
 	void drawButtons(float delta) {
 		menu.render(batch, delta);
 		buyButton.render(batch, delta);
-
 	}
 
 	void drawTexts(float delta) {
-
 		cat.render(batch, delta);
 		train.render(batch, delta);
 		elevator.render(batch, delta);
@@ -240,26 +249,59 @@ public class UnlockGameScreen implements Screen {
 		textContinueAsFree.render(batch, delta);
 
 		textFireEngineGame.render(batch, delta);
-
+		if (buyButton.getCounter() > 0)
+			textUnlockedSuccessfully.render(batch, delta);
 	}
 
-	void updateLogics(double delta) {
+	void updateLogics(float delta) {
+
+		if(buyButton.getCounter() > 0)
+		{
+			timerExit -= delta;
+		}
+		if(timerExit <= 0 && exitCloudsStarted == false){
+			cloudManager.start();
+			exitCloudsStarted = true;
+		}
+		
+		if (menu.getCounter() > 0 && menu.isBlockedFromInteraction() == false) {
+			assetsManager.click.play();
+			menu.setDontRespond(true);
+		}
+		if (buyButton.getCounter() > 0
+				&& buyButton.isBlockedFromInteraction() == false) {
+			assetsManager.click.play();
+			buyButton.setDontRespond(true);
+			menu.setDontRespond(true);
+			textUnlockedSuccessfully.goUp(250);
+			assetsManager.stars.start();
+			assetsManager.stars.allowCompletion();
+			dataOrganizer.setFullVersionUnlocked(true);
+			cat.blink();
+			train.blink();
+			elevator.blink();
+			roadRescue.blink();
+		}
 	}
 
-	void manageSelectingScreen() {
+	void manageSelectingScreen() {	
 		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMENU_SCREEN()) {
+				.getMENU_SCREEN() || timerExit <= 0) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
 				for (int a = 0; a < 4; a++)
 					background[a].dispose();
 
-				 unlockFull.dispose();
-				 unlock.dispose();
-				 continueAsFree.dispose();
-				 thumbnailCat.dispose();
-				 thumbnailTrain.dispose();
-				 thumbnailElevator.dispose();
-				 thumbnailRoadRescue.dispose();
+				unlockFull.dispose();
+				unlock.dispose();
+				continueAsFree.dispose();
+				unlockedSuccessfully.dispose();
+				thumbnailCat.dispose();
+				thumbnailTrain.dispose();
+				thumbnailElevator.dispose();
+				thumbnailRoadRescue.dispose();
+
+				System.out.println(dataOrganizer.isFullVersionUnlocked());
+				dataOrganizer.saveData();
 				
 				game.setScreen(new MenuScreen(game));
 			}

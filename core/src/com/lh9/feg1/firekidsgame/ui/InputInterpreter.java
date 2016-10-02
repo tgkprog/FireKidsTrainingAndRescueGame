@@ -19,6 +19,8 @@ import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
 public class InputInterpreter implements GestureListener {
 
+	Button generalPurposeButton;
+	
 	MyTextInputListener textInputListener;
 	int selectedUserInputID = -1;
 	Button[] userInputButtons;
@@ -296,7 +298,12 @@ public class InputInterpreter implements GestureListener {
 					}
 				}
 			}
-
+			if (generalPurposeButton != null) {
+				if (generalPurposeButton.checkCollision((int) x, (int) y) == true) {
+					generalPurposeButton.blink();
+			
+				}
+			}
 			if (userScreenButton != null) {
 				if (userScreenButton.checkCollision((int) x, (int) y) == true) {
 					userScreenButton.blink();
@@ -554,6 +561,10 @@ public class InputInterpreter implements GestureListener {
 		this.settings = settings;
 	}
 
+	public void setGeneralPurposeButton(Button generalPurposeButton){
+		this.generalPurposeButton = generalPurposeButton;
+	}
+	
 	public void setAuthors(Button authors) {
 		this.authors = authors;
 	}
