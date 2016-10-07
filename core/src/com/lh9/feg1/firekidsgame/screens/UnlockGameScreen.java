@@ -27,6 +27,8 @@ public class UnlockGameScreen implements Screen {
 	Texture unlock;
 	Texture continueAsFree;
 	Texture unlockedSuccessfully;
+	Texture unlocking;
+	Texture unlockingFailed;
 
 	Texture thumbnailCat;
 	Texture thumbnailTrain;
@@ -43,6 +45,8 @@ public class UnlockGameScreen implements Screen {
 	Button textUnlock;
 	Button textContinueAsFree;
 	Button textUnlockedSuccessfully;
+	Button textUnlocking;
+	Button textUnlockingFailed;
 
 	FPSManager fpsManager;
 	DataOrganizer dataOrganizer;
@@ -58,9 +62,12 @@ public class UnlockGameScreen implements Screen {
 	Button buyButton;
 	Button menu;
 
-	float timerExit = 1.8f;
+	float timerExit = 2f;
+	float timerUnlock = 2f;
+
 	boolean exitCloudsStarted;
-	
+	boolean failed;
+
 	final Starter game;
 
 	public UnlockGameScreen(final Starter gam) {
@@ -141,14 +148,24 @@ public class UnlockGameScreen implements Screen {
 		unlockedSuccessfully = new Texture("texts/unlocked_succesfully.png");
 		unlockedSuccessfully.setFilter(TextureFilter.Linear,
 				TextureFilter.Linear);
+		unlocking = new Texture("texts/unlocking.png");
+		unlocking.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+		unlockingFailed = new Texture("texts/unlocking failed.png");
+		unlockingFailed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
 		textUnlockFull = new Button(10, -100, unlockFull);
 		textUnlockedSuccessfully = new Button(150, -100, unlockedSuccessfully);
+		textUnlockingFailed = new Button(150, -100, unlockingFailed);
+		textUnlocking = new Button(150, -100, unlocking);
 		textUnlockFull.goUp(380);
 		textUnlock = new Button(80, -250, unlock);
 		textUnlock.goUp(20);
 		textContinueAsFree = new Button(345, -250, continueAsFree);
 		textContinueAsFree.goUp(20);
+
+		textUnlocking.goUp(250);
+		textUnlockedSuccessfully.goUp(250);
+		textUnlockingFailed.goUp(250);
 	}
 
 	@Override
@@ -187,7 +204,6 @@ public class UnlockGameScreen implements Screen {
 
 		drawTexts(delta);
 		drawButtons(delta);
-		assetsManager.stars.draw(batch, delta);
 		drawClouds(delta);
 		drawFps();
 
@@ -250,33 +266,52 @@ public class UnlockGameScreen implements Screen {
 
 		textFireEngineGame.render(batch, delta);
 		if (buyButton.getCounter() > 0)
-			textUnlockedSuccessfully.render(batch, delta);
+			textUnlocking.render(batch, delta);
+		if (timerUnlock <= 0) {
+			if (failed == false)
+				textUnlockedSuccessfully.render(batch, delta);
+			else
+				textUnlockingFailed.render(batch, delta);
+
+		}
 	}
 
 	void updateLogics(float delta) {
 
-		if(buyButton.getCounter() > 0)
-		{
+		if (timerUnlock <= 0) {
 			timerExit -= delta;
 		}
-		if(timerExit <= 0 && exitCloudsStarted == false){
+
+		if (buyButton.getCounter() > 0) {
+			timerUnlock -= delta;
+		}
+		if (timerExit <= 0 && exitCloudsStarted == false) {
 			cloudManager.start();
 			exitCloudsStarted = true;
 		}
-		
+
 		if (menu.getCounter() > 0 && menu.isBlockedFromInteraction() == false) {
 			assetsManager.click.play();
 			menu.setDontRespond(true);
 		}
 		if (buyButton.getCounter() > 0
 				&& buyButton.isBlockedFromInteraction() == false) {
+
+			System.out.println(dataOrganizer.getUserInputScreenValues()[1]);
+
+			if (!dataOrganizer.getUserInputScreenValues()[1].equals("danny")) {
+				failed = true;
+			}
+
 			assetsManager.click.play();
 			buyButton.setDontRespond(true);
 			menu.setDontRespond(true);
-			textUnlockedSuccessfully.goUp(250);
 			assetsManager.stars.start();
 			assetsManager.stars.allowCompletion();
-			dataOrganizer.setFullVersionUnlocked(true);
+
+			if (failed == false)
+				dataOrganizer.setFullVersionUnlocked(true);
+
 			cat.blink();
 			train.blink();
 			elevator.blink();
@@ -284,7 +319,7 @@ public class UnlockGameScreen implements Screen {
 		}
 	}
 
-	void manageSelectingScreen() {	
+	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN() || timerExit <= 0) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
@@ -299,10 +334,12 @@ public class UnlockGameScreen implements Screen {
 				thumbnailTrain.dispose();
 				thumbnailElevator.dispose();
 				thumbnailRoadRescue.dispose();
+				unlocking.dispose();
+				unlockingFailed.dispose();
 
 				System.out.println(dataOrganizer.isFullVersionUnlocked());
 				dataOrganizer.saveData();
-				
+
 				game.setScreen(new MenuScreen(game));
 			}
 		}

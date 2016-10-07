@@ -34,7 +34,8 @@ public class DataOrganizer {
 	}
 
 	public boolean isFullVersionUnlocked() {
-		return fullVersionUnlocked;
+	//	return fullVersionUnlocked;
+	return false;
 	}
 
 	public DataOrganizer() {
