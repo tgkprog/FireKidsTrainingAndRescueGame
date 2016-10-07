@@ -11,17 +11,28 @@ public class GameStateSave {
 	boolean gender;
 	boolean prompts;
 	boolean fullVersionUnlocked;
-	
+
+	String[] userInputScreenValues;
+
 	int score;
 	int experience;
 
-	public boolean isVullVersionUnlocked(){
+	public String[] getUserInputScreenValues() {
+		return userInputScreenValues;
+	}
+
+	public void setUserInputScreenValues(String[] userInputScreenValues) {
+		this.userInputScreenValues = userInputScreenValues;
+	}
+
+	public boolean isVullVersionUnlocked() {
 		return fullVersionUnlocked;
 	}
-	public void setFullVersionUnlocked(boolean fullVersionUnlocked){
+
+	public void setFullVersionUnlocked(boolean fullVersionUnlocked) {
 		this.fullVersionUnlocked = fullVersionUnlocked;
 	}
-	
+
 	public boolean[] getScreensPlayed() {
 		return screensPlayed;
 	}

@@ -12,10 +12,9 @@ import com.lh9.feg1.firekidsgame.models.GameStateSave;
 
 public class DataOrganizer {
 
-	// TripleDesCipher encryptor;
-
 	GameStateSave gameStateSave;
 
+	String[] userInputScreenValues;
 	boolean[] screensPlayed;
 	boolean voice;
 	boolean textureFiltering;
@@ -29,8 +28,8 @@ public class DataOrganizer {
 	// True is for girl
 	int score;
 	int experience;
-	
-	public void setFullVersionUnlocked(boolean fullVersionUnlocked){
+
+	public void setFullVersionUnlocked(boolean fullVersionUnlocked) {
 		this.fullVersionUnlocked = fullVersionUnlocked;
 	}
 
@@ -60,6 +59,7 @@ public class DataOrganizer {
 
 	public void resetGameState() {
 
+		userInputScreenValues = new String[7];
 		fullVersionUnlocked = false;
 		screensPlayed = new boolean[7];
 		voice = false;
@@ -71,6 +71,10 @@ public class DataOrganizer {
 		prompts = false;
 		score = 0;
 		experience = 0;
+
+		for (int a = 0; a < 7; a++) {
+			userInputScreenValues[a] = "click to type";
+		}
 
 		GameStateSave model = new GameStateSave();
 		model.setVoice(false);
@@ -84,6 +88,7 @@ public class DataOrganizer {
 		model.setExperience(0);
 		model.setScore(0);
 		model.setScreensPlayed(screensPlayed);
+		model.setUserInputScreenValues(userInputScreenValues);
 
 		Json json = new Json();
 		String dataSaveInJson = json.toJson(model);
@@ -187,7 +192,8 @@ public class DataOrganizer {
 		model.setExperience(experience);
 		model.setScore(score);
 		model.setScreensPlayed(screensPlayed);
-
+		model.setUserInputScreenValues(userInputScreenValues);
+		
 		Json json = new Json();
 		String dataSaveInJson = json.toJson(model);
 		String encryptedGameStateSaveInString = encryptString(dataSaveInJson);
@@ -239,6 +245,7 @@ public class DataOrganizer {
 				score = gameStateSave.getScore();
 				screensPlayed = gameStateSave.getScreensPlayed();
 				fullVersionUnlocked = gameStateSave.isVullVersionUnlocked();
+				userInputScreenValues = gameStateSave.getUserInputScreenValues();
 				
 			} catch (SerializationException e) {
 				resetGameState();
@@ -276,5 +283,11 @@ public class DataOrganizer {
 
 		// return plainText;
 		return string;
+	}
+	public String[] getUserInputScreenValues(){
+		return userInputScreenValues;
+	}
+	public void setUserInputScreenValues(String[] userInputScreenValues){
+		this.userInputScreenValues = userInputScreenValues;
 	}
 }

@@ -192,8 +192,9 @@ public class UserInputScreen implements Screen {
 
 		userInput = new String[7];
 		for (int a = 0; a < 7; a++) {
-			userInput[a] = new String("click to type");
+			userInput[a] = dataOrganizer.getUserInputScreenValues()[a];
 		}
+		
 		assetsManager.fontLittle.setColor(1, 1, 1, 0);
 
 		Button[] inputButtons = new Button[8];
@@ -389,6 +390,8 @@ public class UserInputScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
+				dataOrganizer.setUserInputScreenValues(userInput);
+				dataOrganizer.saveData();
 				game.setScreen(new MenuScreen(game));
 			}
 		}

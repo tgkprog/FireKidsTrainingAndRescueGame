@@ -152,7 +152,7 @@ public class PreRescueCatScreen implements Screen {
 
 		truck = new Truck();
 
-		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
+		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1350, 135);
 		truck.setMaxSpeed(20);
 		truck.setMaxPositions(-17000, 1550);
 		truck.loadWheel(assetsManager.wheel);
