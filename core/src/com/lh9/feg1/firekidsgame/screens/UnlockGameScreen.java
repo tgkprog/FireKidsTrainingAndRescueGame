@@ -23,17 +23,14 @@ public class UnlockGameScreen implements Screen {
 
 	Texture[] background;
 
-	Texture unlockFull;
-	Texture unlock;
-	Texture continueAsFree;
-	Texture unlockedSuccessfully;
-	Texture unlocking;
-	Texture unlockingFailed;
-
+	// these textures go to button equivalents
 	Texture thumbnailCat;
 	Texture thumbnailTrain;
 	Texture thumbnailElevator;
 	Texture thumbnailRoadRescue;
+
+	// I made these thumbnails as button objects for 'clicking' effect when they
+	// come out
 
 	Button cat;
 	Button train;
@@ -48,22 +45,38 @@ public class UnlockGameScreen implements Screen {
 	Button textUnlocking;
 	Button textUnlockingFailed;
 
+	// Same here
+	Texture unlockFull;
+	Texture unlock;
+	Texture continueAsFree;
+	Texture unlockedSuccessfully;
+	Texture unlocking;
+	Texture unlockingFailed;
+
+	// For rendering fps when switched on
 	FPSManager fpsManager;
+	// For saving data
 	DataOrganizer dataOrganizer;
+	// For drawing clouds when in/out particular screen
 	CloudManager cloudManager;
+	// For constants
 	Variables variables;
+	// Assets that we loaded on appliaction start
 	AssetsManager assetsManager;
+	// Obvious
 	Camera camera;
 	OrthographicCamera guiCamera;
-	OrthographicCamera buildingsCamera;
 	SpriteBatch batch;
 	InputInterpreter inputInterpreter;
 
 	Button buyButton;
 	Button menu;
 
-	float timerExit = 2f;
+	// When clicked unlock, this is delay between 'waiting' and 'success'
 	float timerUnlock = 2f;
+	// When 'success' or 'failed', this is delay between automatic exiting
+	// screen
+	float timerExit = 2f;
 
 	boolean exitCloudsStarted;
 	boolean failed;
@@ -102,9 +115,6 @@ public class UnlockGameScreen implements Screen {
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setGeneralPurposeButton(buyButton);
 		cloudManager.stop();
-
-		buildingsCamera = new OrthographicCamera(800, 480);
-		buildingsCamera.zoom = 2;
 
 		camera.reset();
 
@@ -182,7 +192,6 @@ public class UnlockGameScreen implements Screen {
 
 		camera.update(delta);
 		guiCamera.update();
-		buildingsCamera.update();
 
 		Gdx.gl.glClearColor(1, 1f, 1f, 1);
 		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
@@ -193,13 +202,8 @@ public class UnlockGameScreen implements Screen {
 		drawBackground(delta);
 
 		batch.end();
-		batch.setProjectionMatrix(buildingsCamera.combined);
-		batch.begin();
-
-		//
-
-		batch.end();
 		batch.setProjectionMatrix(guiCamera.combined);
+
 		batch.begin();
 
 		drawTexts(delta);
@@ -255,6 +259,7 @@ public class UnlockGameScreen implements Screen {
 	}
 
 	void drawTexts(float delta) {
+
 		cat.render(batch, delta);
 		train.render(batch, delta);
 		elevator.render(batch, delta);
@@ -337,7 +342,8 @@ public class UnlockGameScreen implements Screen {
 				unlocking.dispose();
 				unlockingFailed.dispose();
 
-				System.out.println(dataOrganizer.isFullVersionUnlocked());
+				if (variables.getDEBUG_MODE() == true)
+					System.out.println(dataOrganizer.isFullVersionUnlocked());
 				dataOrganizer.saveData();
 
 				game.setScreen(new MenuScreen(game));

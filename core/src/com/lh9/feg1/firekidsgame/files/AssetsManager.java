@@ -169,6 +169,7 @@ public class AssetsManager extends Thread {
 	public Texture bigRoad[];
 	public Texture clouds[];
 	public Texture trainBasketAnimation[];
+	public Texture trainBasketAnimationGirl[];
 	public Texture dialogueWindowBoy;
 	public Texture dialogueWindowGirl;
 	public Texture parkBackgrounds[];
@@ -212,7 +213,6 @@ public class AssetsManager extends Thread {
 	public Texture peopleGround;
 	public Texture peopleBuilding;
 	public Texture handwheelBig;
-	public Texture spritesheetTruck;
 	public Texture mainBackground[];
 	public Texture arrowUp;
 	public Texture arrowDown;
@@ -637,7 +637,6 @@ public class AssetsManager extends Thread {
 		bar = new Texture("others/bar.png");
 		glass = new Texture("backgrounds/glass.png");
 		handwheelBig = new Texture("others/handwheelBig.png");
-		spritesheetTruck = new Texture("spritesheets/spritesheetTruck.png");
 
 		bigRoadRescue = new Texture("buttons/bigRoadRescue.png");
 		training = new Texture("buttons/training.png");
@@ -865,6 +864,37 @@ public class AssetsManager extends Thread {
 		trainBasketAnimation[13] = new Texture(
 				"spritesheets/trainBasket/Train-basket-14.png");
 
+		trainBasketAnimationGirl = new Texture[14];
+		trainBasketAnimationGirl[0] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-1.png");
+		trainBasketAnimationGirl[1] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-2.png");
+		trainBasketAnimationGirl[2] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-3.png");
+		trainBasketAnimationGirl[3] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-4.png");
+		trainBasketAnimationGirl[4] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-5.png");
+		trainBasketAnimationGirl[5] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-6.png");
+		trainBasketAnimationGirl[6] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-7.png");
+		trainBasketAnimationGirl[7] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-8.png");
+		trainBasketAnimationGirl[8] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-9.png");
+		trainBasketAnimationGirl[9] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-10.png");
+		trainBasketAnimationGirl[10] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-11.png");
+		trainBasketAnimationGirl[11] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-12.png");
+		trainBasketAnimationGirl[12] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-13.png");
+		trainBasketAnimationGirl[13] = new Texture(
+				"spritesheets/trainBasketGirl/Train-basket-14.png");
+
+
 		bigRoad = new Texture[24];
 		bigRoad[0] = new Texture("backgrounds/bigRoad/bigRoad1B.png");
 		bigRoad[1] = new Texture("backgrounds/bigRoad/bigRoad1A.png");
@@ -993,7 +1023,10 @@ public class AssetsManager extends Thread {
 			trainBasketAnimation[a].setFilter(textureFilter,
 					TextureFilter.Linear);
 		}
-
+		for (int a = 0; a < 9; a++) {
+			trainBasketAnimationGirl[a].setFilter(textureFilter,
+					TextureFilter.Linear);
+		}
 		for (int a = 0; a < 2; a++) {
 			dogWorried[a].setFilter(textureFilter, textureFilter);
 		}
@@ -1201,7 +1234,6 @@ public class AssetsManager extends Thread {
 		girlHeadBig.setFilter(textureFilter, textureFilter);
 		glass.setFilter(TextureFilter.Nearest, TextureFilter.Nearest);
 		handwheelBig.setFilter(textureFilter, textureFilter);
-		spritesheetTruck.setFilter(textureFilter, textureFilter);
 		wheel.setFilter(textureFilter, textureFilter);
 		arrowUp.setFilter(textureFilter, textureFilter);
 		arrowDown.setFilter(textureFilter, textureFilter);

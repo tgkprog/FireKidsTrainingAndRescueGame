@@ -120,18 +120,34 @@ public class TrainingScreenTwo implements Screen {
 		inputInterpreter.setCameras(camera, guiCamera);
 		inputInterpreter.setCloudManager(cloudManager);
 		inputInterpreter.setPauseButton(pause);
+		truck = new Truck();
 
-		if (dataOrganizer.getGender() == true)
+	
+		if (dataOrganizer.getGender() == true){
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
 					assetsManager.darkScreen, 250f, 150f,
 					Variables.TRAINING_SCREEN_TWO_POP_UP_1,
 					assetsManager.fontLittle);
-		else
+			
+		
+			truck.create(assetsManager.trainBasketAnimationGirl, 3, 3, 14, 1550, 135);
+			
+		}
+		else{
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
 					assetsManager.darkScreen, 250f, 150f,
 					Variables.TRAINING_SCREEN_TWO_POP_UP_1,
 					assetsManager.fontLittle);
-
+			
+			truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
+			
+		}
+		
+		truck.setMaxSpeed(20);
+		truck.setMaxPositions(-14350, 1550);
+		truck.loadWheel(assetsManager.wheel);
+		truck.goLeft();
+		
 		inputInterpreter.setDialogueWindow(dialogueWindow);
 		inputInterpreter.setRunButton(runButton);
 
@@ -152,13 +168,7 @@ public class TrainingScreenTwo implements Screen {
 
 		dialogueWindow.popUp();
 		assetsManager.click.play();
-		truck = new Truck();
-
-		truck.create(assetsManager.trainBasketAnimation, 3, 3, 14, 1550, 135);
-		truck.setMaxSpeed(20);
-		truck.setMaxPositions(-14350, 1550);
-		truck.loadWheel(assetsManager.wheel);
-		truck.goLeft();
+		
 
 		cars = new ArrayList<Car>();
 		for (int a = 0; a < 12; a++) {
