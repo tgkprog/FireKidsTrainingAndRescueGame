@@ -21,7 +21,7 @@ android {
     }
     defaultConfig {
         applicationId "com.lh9.feg1.firekidsgame"
-        minSdkVersion 8
+        minSdkVersion 16
         targetSdkVersion 24
     }
 }

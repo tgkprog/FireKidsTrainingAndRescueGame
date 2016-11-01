@@ -21,6 +21,8 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
+import java.security.SecureRandom;
+
 public class FoodsScreen implements Screen {
 
 	Sprite guiStar;
@@ -275,7 +277,8 @@ public class FoodsScreen implements Screen {
 		if(dialogueWindow.isVisibile() == false && menuWindow.isVisibile() == false)
 		totalSpentTime += delta;
 		
-		if (timeBarTimer <= 0) {
+		if (timeBarTimer <= 0 && timeBarTimer > -2000 && !finish) {
+			timeBarTimer = -3000;
 			victory = false;
 			minigameCounter = 0;
 			minigameRunning = false;
@@ -285,24 +288,15 @@ public class FoodsScreen implements Screen {
 					assetsManager.starSummaryDesaturated, 0, starsCollected,
 					false);
 			dialogueWindow.popUp();
-			assetsManager.click.play();
-		}
+			long id = assetsManager.click.play();
+			assetsManager.click.setLooping(id, false);
 
-		if (firstDialogueClicked == true) {
+		}else if (firstDialogueClicked == true) {
 			counterBar.setVisibility(true);
 			timeBar.setVisibility(true);
 		}
 
-		randomizeMinigame(delta);
 
-		if (menuWindow.isVisibile() == true) {
-			yes.setDontRespond(true);
-			no.setDontRespond(true);
-
-		} else {
-			yes.setDontRespond(false);
-			no.setDontRespond(false);
-		}
 
 		if (minigameCounter == 0 && finish == false) {
 			finish = true;
@@ -322,6 +316,17 @@ public class FoodsScreen implements Screen {
 			assetsManager.stars.start();
 			victory = true;
 			assetsManager.click.play();
+		}else if (!finish){
+			randomizeMinigame(delta);
+
+			if (menuWindow.isVisibile() == true) {
+				yes.setDontRespond(true);
+				no.setDontRespond(true);
+
+			} else {
+				yes.setDontRespond(false);
+				no.setDontRespond(false);
+			}
 		}
 
 		if (firstDialogueClicked == false
@@ -462,11 +467,13 @@ public class FoodsScreen implements Screen {
 		cloudManager.render(batch, delta);
 	}
 
+	SecureRandom sr = new SecureRandom();
 	void randomizeMinigame(float delta) {
 		if (firstDialogueClicked == true && minigameCounter > 0
 				&& minigameRunning == false && checkedAnswer == true) {
 			checkedAnswer = false;
-			currentFoodID = MathUtils.random(0, 7);
+			//currentFoodID = MathUtils.random(0, 7);
+			currentFoodID = sr.nextInt(8);
 			yes.setDontRespond(false);
 			no.setDontRespond(false);
 			currentFood = new Sprite(assetsManager.food[currentFoodID]);

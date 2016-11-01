@@ -479,7 +479,7 @@ public class FitnessScreenOne implements Screen {
 
 	void updatenpcAction(double delta) {
 		if (npc.getX() < player.getX() - 100)
-			timerSpeednpc += delta * 10;
+			timerSpeednpc += delta * 9;
 		if (firstDialogueClicked == true)
 			timerSpeednpc += delta;
 		if (timerSpeednpc > 0.4) {
