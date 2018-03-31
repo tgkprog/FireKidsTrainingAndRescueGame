@@ -277,18 +277,25 @@ public class UnlockGameScreen implements Screen {
             textUnlocking.render(batch, delta);
         if (timerUnlock <= 0) {
 
-
             if(!purchaseAttempt) {
                 if (game.getPlatformResolver().getPurchaseManager() != null) {
                     game.getPlatformResolver().requestPurchase(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION);
-                    if (game.fegPurchaseObserver.fullVersionBuyError && game.fegPurchaseObserver.fullVersionBuyAttempt)
+                    if (game.fegPurchaseObserver.fullVersionBuyError && game.fegPurchaseObserver.fullVersionBuyAttempt) {
                         Gdx.app.log("ERROR", "Full version buy error");
-                    if (!game.fegPurchaseObserver.fullVersionBuyError && game.fegPurchaseObserver.fullVersionBuyAttempt)
+                        failed = true;
+                    }
+                    if (!game.fegPurchaseObserver.fullVersionBuyError && game.fegPurchaseObserver.fullVersionBuyAttempt) {
                         Gdx.app.log("INFO", "Full version unlock success");
+                        dataOrganizer.setFullVersionUnlocked(true);
+                        failed = false;
+                    }
                 } else {
                     Gdx.app.log("WARN", "PurchaseManager == null, desktop?");
+                    failed = true;
                 }
                 purchaseAttempt = true;
+
+                game.fegPurchaseObserver.clear();
             }
 
             if (failed == false)
@@ -322,9 +329,9 @@ public class UnlockGameScreen implements Screen {
 
             System.out.println(dataOrganizer.getUserInputScreenValues()[1]);
 
-            if (!dataOrganizer.getUserInputScreenValues()[1].equals("danny")) {
-                failed = true;
-            }
+//            if (!dataOrganizer.getUserInputScreenValues()[1].equals("danny")) {
+//                failed = true;
+//            }
 
             assetsManager.click.play();
             buyButton.setDontRespond(true);
@@ -332,8 +339,8 @@ public class UnlockGameScreen implements Screen {
             assetsManager.stars.start();
             assetsManager.stars.allowCompletion();
 
-            if (failed == false)
-                dataOrganizer.setFullVersionUnlocked(true);
+//            if (failed == false)
+//                dataOrganizer.setFullVersionUnlocked(true);
 
             cat.blink();
             train.blink();
