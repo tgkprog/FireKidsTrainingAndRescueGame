@@ -3,6 +3,7 @@ package com.lh9.feg1.firekidsgame.animated;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 import com.badlogic.gdx.math.Vector2;
 
@@ -67,7 +68,7 @@ public class Truck extends Human {
 		if (this.fromTextureRegion == true) {
 
 			if (stateTime != previousStateTime || currentFrame == null)
-				currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+				currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
 			if (allowMovingReverse == false)
 				batch.draw(currentFrame, x, y);
 			else {
@@ -83,8 +84,13 @@ public class Truck extends Human {
 				stateTime = animationTime * frameNumber - animationTime * 0.5f;
 
 			if (allowMovingReverse == false) {
-				frameSprite = new Sprite(
-						frames[(int) (stateTime / animationTime)]);
+
+				try {
+					frameSprite = new Sprite(
+							frames[(int) (stateTime / animationTime)]);
+				} catch(ArrayIndexOutOfBoundsException e){
+					frameSprite = new Sprite(frames[frames.length - 1]);
+				}
 				frameSprite.setPosition(x, y);
 				frameSprite.setScale(scale);
 				frameSprite.draw(batch);
@@ -187,7 +193,7 @@ public class Truck extends Human {
 		bounds = new Rectangle();
 
 		if (this.fromTextureRegion == true)
-			bounds.setSize(this.walkAnimation.getKeyFrame(stateTime, true)
+			bounds.setSize(((TextureRegion) this.walkAnimation.getKeyFrame(stateTime, true))
 					.getTexture().getWidth(), 1);
 		else
 			bounds.setSize(this.frames[0].getWidth(), 1);

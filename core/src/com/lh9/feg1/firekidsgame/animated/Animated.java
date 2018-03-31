@@ -93,7 +93,7 @@ public class Animated {
 	public void render(SpriteBatch batch, float delta) {
 		stateTime += delta;
 		if (fromTextureRegion == true)
-			currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+			currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
 
 		batch.begin();
 		if (fromTextureRegion == true)

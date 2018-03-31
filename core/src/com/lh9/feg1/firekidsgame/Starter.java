@@ -6,14 +6,33 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.pay.Offer;
+import com.badlogic.gdx.pay.OfferType;
+import com.badlogic.gdx.pay.PurchaseManagerConfig;
+import com.badlogic.gdx.pay.PurchaseObserver;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
+import com.lh9.feg1.firekidsgame.gdxpay.FEGPurchaseObserver;
+import com.lh9.feg1.firekidsgame.gdxpay.PlatformResolver;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.screens.LogoScreen;
 
 public class Starter extends Game {
+
+    static PlatformResolver m_platformResolver;
+
+    // ----- app stores -------------------------
+    public static final int APPSTORE_UNDEFINED = 0;
+    public static final int APPSTORE_GOOGLE = 1;
+    public static final int APPSTORE_OUYA = 2;
+    public static final int APPSTORE_AMAZON = 3;
+    public static final int APPSTORE_DESKTOP = 4;
+
+    public static final int ISAPPSTORE = APPSTORE_GOOGLE;
+	public PurchaseManagerConfig purchaseManagerConfig;
+	public FEGPurchaseObserver fegPurchaseObserver = new FEGPurchaseObserver();
 
 	Texture logo;
 	Texture loading;
@@ -33,6 +52,13 @@ public class Starter extends Game {
 
 	@Override
 	public void create() {
+
+	    //
+        purchaseManagerConfig = new PurchaseManagerConfig();
+        purchaseManagerConfig.addOffer(new Offer().
+                setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
+
+        //
 		screensPlayed = new boolean[7];
 
 		cloudManager = new CloudManager();
@@ -60,15 +86,15 @@ public class Starter extends Game {
 	}
 
 	void loadBasicTextures() {
-		
-		
+
+
 		String s = "12345";
 		System.out.println(s.charAt(0));
-		
-		logo = new Texture("others/Pink-Engine-Front.png");
+
+		logo = new Texture("android/assets/others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
-		loading = new Texture("texts/loading.png");
+		loading = new Texture("android/assets/texts/loading.png");
 		loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		loadingSprite = new Sprite(loading);
 	}
@@ -129,4 +155,11 @@ public class Starter extends Game {
 	public void setCogs(int cogs){
 		this.cogs = cogs;
 	}
+
+    public PlatformResolver getPlatformResolver() {
+        return m_platformResolver;
+    }
+    public static void setPlatformResolver (PlatformResolver platformResolver) {
+        m_platformResolver = platformResolver;
+    }
 }

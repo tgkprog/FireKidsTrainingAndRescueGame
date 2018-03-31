@@ -1,6 +1,7 @@
 package com.lh9.feg1.firekidsgame.animated;
 
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Car extends Truck {
@@ -17,7 +18,7 @@ public class Car extends Truck {
 
 		if (this.fromTextureRegion == true) {
 			if (stateTime != previousStateTime || currentFrame == null)
-				currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+				currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
 
 			batch.draw(currentFrame, x, y);
 		} else {

@@ -1,9 +1,13 @@
 package com.lh9.feg1.firekidsgame.animated;
 
+import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Vector2;
 import com.badlogic.gdx.math.Vector3;
+
+import javax.xml.soap.Text;
 
 public class StaticAnimation extends Animated {
 
@@ -29,7 +33,7 @@ public class StaticAnimation extends Animated {
 				}
 			}
 
-			frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime, true));
+			frameSprite = new Sprite((TextureRegion) walkAnimation.getKeyFrame(stateTime, true));
 			frameSprite.setRotation(rotation);
 			frameSprite.setPosition(x, y);
 			frameSprite.setColor(color.x, color.y, color.z, 1);
@@ -37,7 +41,7 @@ public class StaticAnimation extends Animated {
 			frameSprite.draw(batch);
 
 			if (withPreviousFrame == true && stateTime > animationTime) {
-				frameSprite = new Sprite(walkAnimation.getKeyFrame(stateTime
+				frameSprite = new Sprite((TextureRegion) walkAnimation.getKeyFrame(stateTime
 						- animationTime, true));
 				frameSprite.setRotation(rotation);
 				frameSprite.setColor(color.x, color.y, color.z, 0.5f);

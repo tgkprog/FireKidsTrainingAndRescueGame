@@ -1,6 +1,9 @@
 package com.lh9.feg1.firekidsgame.animated;
 
+import com.badlogic.gdx.graphics.Texture;
+import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.graphics.g2d.TextureRegion;
 import com.badlogic.gdx.math.Rectangle;
 
 public class Human extends Animated {
@@ -37,10 +40,10 @@ public class Human extends Animated {
 
 		if (this.fromTextureRegion == true) {
 			if (animationTimeSet == false) {
-				currentFrame = walkAnimation.getKeyFrame(stateTime, true);
+				currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime, true);
 				batch.draw(currentFrame, x, y);
 			} else {
-				currentFrame = walkAnimation.getKeyFrame(stateTime*animationTime, true);
+				currentFrame = (TextureRegion) walkAnimation.getKeyFrame(stateTime*animationTime, true);
 				batch.draw(currentFrame, x, y);
 			}
 		} else {
@@ -49,7 +52,7 @@ public class Human extends Animated {
 		}
 		if (this.fromTextureRegion == true) {
 			if (stateTime > animationTime && speed > 1.5f) {
-				frameBefore = walkAnimation.getKeyFrame(stateTime
+				frameBefore = (TextureRegion) walkAnimation.getKeyFrame(stateTime
 						- animationTime, true);
 				// batch.setColor(1, 1, 1, 0.3f);
 				// batch.draw(frameBefore, x, y);
@@ -169,9 +172,9 @@ public class Human extends Animated {
 			bounds.setSize(this.frames[0].getWidth(),
 					this.frames[0].getHeight());
 		else
-			bounds.setSize(walkAnimation.getKeyFrame(stateTime, true)
+			bounds.setSize(((Sprite) walkAnimation.getKeyFrame(stateTime, true))
 					.getTexture().getWidth(),
-					walkAnimation.getKeyFrame(stateTime, true).getTexture()
+					((Sprite) walkAnimation.getKeyFrame(stateTime, true)).getTexture()
 							.getHeight());
 
 	}
