@@ -50,15 +50,19 @@ public class Starter extends Game {
 	int cogs;
 	boolean[] screensPlayed;
 
+	public Starter(){
+
+		//
+		purchaseManagerConfig = new PurchaseManagerConfig();
+		purchaseManagerConfig.addOffer(new Offer().
+				setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
+
+		//
+	}
+
 	@Override
 	public void create() {
 
-	    //
-        purchaseManagerConfig = new PurchaseManagerConfig();
-        purchaseManagerConfig.addOffer(new Offer().
-                setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
-
-        //
 		screensPlayed = new boolean[7];
 
 		cloudManager = new CloudManager();
