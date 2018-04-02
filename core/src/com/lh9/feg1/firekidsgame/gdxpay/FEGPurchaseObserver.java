@@ -22,7 +22,7 @@ public class FEGPurchaseObserver implements PurchaseObserver {
         boolean bought = false;
         for (int i = 0; i < transactions.length; i++) {
             if (transactions[i].getIdentifier().equals(FEG_PRODUCT_ID_FULL_VERSION)) {
-                bought = checkTransaction(transactions[i].getOrderId());
+                bought = checkTransaction(transactions[i].getIdentifier());
                 break;
             }
         }
