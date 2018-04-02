@@ -6,7 +6,7 @@ import com.lh9.feg1.firekidsgame.Starter;
 
 public class AndroidResolver extends PlatformResolver {
 
-	private final static String GOOGLEKEY = "..............................";
+	private final static String GOOGLEKEY = "AIzaSyCeevuIyXslM5LNHc1bZaU4Ge8V9h0C_4Q";
     static final int RC_REQUEST = 10001;	// (arbitrary) request code for the purchase flow
     
 	public AndroidApplication androidApplication;
