@@ -95,10 +95,10 @@ public class Starter extends Game {
 		String s = "12345";
 		System.out.println(s.charAt(0));
 
-		logo = new Texture("android/assets/others/Pink-Engine-Front.png");
+		logo = new Texture("others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
-		loading = new Texture("android/assets/texts/loading.png");
+		loading = new Texture("texts/loading.png");
 		loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		loadingSprite = new Sprite(loading);
 	}

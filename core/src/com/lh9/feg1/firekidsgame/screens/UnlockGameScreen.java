@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.OrthographicCamera;
 import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
+import com.badlogic.gdx.pay.PurchaseSystem;
 import com.lh9.feg1.firekidsgame.Starter;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
@@ -88,13 +89,14 @@ public class UnlockGameScreen implements Screen {
 
     public UnlockGameScreen(final Starter gam) {
 
-        thumbnailCat = new Texture("android/assets/thumbnails/thumbnailCat.png");
+
+        thumbnailCat = new Texture("thumbnails/thumbnailCat.png");
         thumbnailCat.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        thumbnailTrain = new Texture("android/assets/thumbnails/thumbnailTrain.png");
+        thumbnailTrain = new Texture("thumbnails/thumbnailTrain.png");
         thumbnailTrain.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        thumbnailElevator = new Texture("android/assets/thumbnails/thumbnailElevator.png");
+        thumbnailElevator = new Texture("thumbnails/thumbnailElevator.png");
         thumbnailElevator.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        thumbnailRoadRescue = new Texture("android/assets/thumbnails/thumbnailRoadRescue.png");
+        thumbnailRoadRescue = new Texture("thumbnails/thumbnailRoadRescue.png");
         thumbnailRoadRescue.setFilter(TextureFilter.Linear,
                 TextureFilter.Linear);
 
@@ -147,23 +149,23 @@ public class UnlockGameScreen implements Screen {
 
         background = new Texture[4];
         for (int a = 0; a < 4; a++) {
-            background[a] = new Texture("android/assets/backgrounds/UnlockGameScreen/"
+            background[a] = new Texture("backgrounds/UnlockGameScreen/"
                     + (a + 1) + ".png");
             background[a].setFilter(TextureFilter.Linear, TextureFilter.Linear);
         }
 
-        unlockFull = new Texture("android/assets/texts/unlockFull.png");
+        unlockFull = new Texture("texts/unlockFull.png");
         unlockFull.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        unlock = new Texture("android/assets/texts/unlock.png");
+        unlock = new Texture("texts/unlock.png");
         unlock.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        continueAsFree = new Texture("android/assets/texts/continueAsFree.png");
+        continueAsFree = new Texture("texts/continueAsFree.png");
         continueAsFree.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        unlockedSuccessfully = new Texture("android/assets/texts/unlocked_succesfully.png");
+        unlockedSuccessfully = new Texture("texts/unlocked_succesfully.png");
         unlockedSuccessfully.setFilter(TextureFilter.Linear,
                 TextureFilter.Linear);
-        unlocking = new Texture("android/assets/texts/unlocking.png");
+        unlocking = new Texture("texts/unlocking.png");
         unlocking.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-        unlockingFailed = new Texture("android/assets/texts/unlocking failed.png");
+        unlockingFailed = new Texture("texts/unlocking failed.png");
         unlockingFailed.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 
         textUnlockFull = new Button(10, -100, unlockFull);
@@ -179,6 +181,21 @@ public class UnlockGameScreen implements Screen {
         textUnlocking.goUp(250);
         textUnlockedSuccessfully.goUp(250);
         textUnlockingFailed.goUp(250);
+
+        Gdx.app.log("HANDLING RESTORE", "");
+
+        PurchaseSystem.purchaseRestore();
+        if(gam.fegPurchaseObserver.fullVersionBuyAttempt){
+            dataOrganizer.setFullVersionUnlocked(true);
+            dataOrganizer.saveData();
+            gam.fegPurchaseObserver.clear();
+            purchaseAttempt = true;
+            buyButton.blink();
+            failed = false;
+        }
+
+        Gdx.app.log("DONE HANDLING RESTORE", "");
+
     }
 
     @Override
@@ -287,6 +304,7 @@ public class UnlockGameScreen implements Screen {
                     if (!game.fegPurchaseObserver.fullVersionBuyError && game.fegPurchaseObserver.fullVersionBuyAttempt) {
                         Gdx.app.log("INFO", "Full version unlock success");
                         dataOrganizer.setFullVersionUnlocked(true);
+                        dataOrganizer.saveData();
                         failed = false;
                     }
                 } else {

@@ -614,8 +614,8 @@ public class AssetsManager extends Thread {
 				"girl/fitnessEllipticalGirl/Eliptical-Girl-5.png");
 		spritesheetGirlElliptical[5] = new Texture(
 				"girl/fitnessEllipticalGirl/Eliptical-Girl-6.png");
-		spritesheetGirlElliptical[6] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-7.png");
+			spritesheetGirlElliptical[6] = new Texture(
+					"girl/fitnessEllipticalGirl/Eliptical-Girl-7.png");
 
 		spritesheetBoyElliptical[0] = new Texture(
 				"boy/fitnessEllipticalBoy/Eliptical-1.png");

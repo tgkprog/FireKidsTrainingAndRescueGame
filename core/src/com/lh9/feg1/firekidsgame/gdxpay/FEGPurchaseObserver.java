@@ -17,9 +17,21 @@ public class FEGPurchaseObserver implements PurchaseObserver {
 
     @Override
     public void handleRestore(Transaction[] transactions) {
+
+        Gdx.app.log("FEG PURCHASE OBSERVER", "Restoring previous transactions");
+        boolean bought = false;
         for (int i = 0; i < transactions.length; i++) {
-            if (checkTransaction(transactions[i].getIdentifier()) == true) break;
+            if (transactions[i].getIdentifier().equals(FEG_PRODUCT_ID_FULL_VERSION)) {
+                bought = checkTransaction(transactions[i].getOrderId());
+                break;
+            }
         }
+
+        Gdx.app.log("FEG PURCHASE OBSERVER", "Found already done transaction? " + bought);
+        if (bought)
+            fullVersionBuyAttempt = true;
+
+
     }
 
     @Override
@@ -63,7 +75,7 @@ public class FEGPurchaseObserver implements PurchaseObserver {
     public void handlePurchaseCanceled() {
     }
 
-    public static final String FEG_PRODUCT_ID_FULL_VERSION = "";
+    public static final String FEG_PRODUCT_ID_FULL_VERSION = "feg1";
 
     protected boolean checkTransaction(String ID) {
         boolean returnbool = false;
