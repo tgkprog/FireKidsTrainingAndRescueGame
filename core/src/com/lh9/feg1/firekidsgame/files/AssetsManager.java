@@ -21,6 +21,7 @@ public class AssetsManager extends Thread {
 	public Sound bell;
 	public Sound click;
 	public Sound fireHose;
+	public Sound sirenSound;
 	public Music backgroundBoy;
 	public Music backgroundGirl;
 	public Sound truckStartingUp;
@@ -449,7 +450,7 @@ public class AssetsManager extends Thread {
 		crash = Gdx.audio.newSound(Gdx.files.internal("sounds/crash.mp3"));
 		hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
 		fireHose = Gdx.audio.newSound(Gdx.files.internal("sounds/fire_hose.mp3"));
-		
+		sirenSound = Gdx.audio.newSound(Gdx.files.internal("sounds/fire/emergency009.mp3"));
 		// girlHead = new Texture("girl/girlHead.png");
 		userInputBackground = new Texture[4];
 		for(int a =0;a<4;a++){

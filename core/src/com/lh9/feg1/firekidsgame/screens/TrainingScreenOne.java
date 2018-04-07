@@ -55,6 +55,7 @@ public class TrainingScreenOne implements Screen {
 	float minigameTimeLeft = 3.5f;
 	int minigameCounter = 30;
 	int starsCollected = 0;
+	boolean sirenPlayed = false;
 
 	Sprite windowCounter;
 	Sprite yellowSectionMiddlePointer;
@@ -497,6 +498,7 @@ public class TrainingScreenOne implements Screen {
 		}
 		if (sirene == true && timerSecondWindow > 2
 				&& dialogueWindow.isVisibile() == false && finish == false) {
+			assetsManager.sirenSound.play();
 			cloudManager.start();
 			finish = true;
 		}
@@ -529,6 +531,10 @@ public class TrainingScreenOne implements Screen {
 				yellowSectionLeft.red();
 				yellowSectionUpLeft.red();
 				yellowSectionUpRight.red();
+				if(sirenPlayed == false) {
+					assetsManager.sirenSound.play();
+					sirenPlayed = true;
+				}
 			} else {
 				batch.setColor(1, 1, 1, 1);
 				laneManager.normal();
