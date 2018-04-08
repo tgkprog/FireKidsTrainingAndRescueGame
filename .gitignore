@@ -1,5 +1,6 @@
 ## Java
 /**/feg*.apk
+android/*.apk
 local_docs/
 android/android-release.apk
 *.class

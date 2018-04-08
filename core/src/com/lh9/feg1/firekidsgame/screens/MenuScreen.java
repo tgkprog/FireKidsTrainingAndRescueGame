@@ -54,6 +54,7 @@ public class MenuScreen implements Screen {
 	boolean startedBells;
 
 	final Starter game;
+	static int backGroundMusicWhich = 0;
 
 	public MenuScreen(final Starter gam) {
 
@@ -329,11 +330,22 @@ public class MenuScreen implements Screen {
 			meetTheTrucks.blink();
 		}
 		
-		if (positions < 0)
+		if (positions < 0) {
 			positions += delta * 100 + Math.abs(positions) * 0.025f;
-		if (positions > 0)
+		}
+		if (positions > 0) {
 			positions = 0;
-
+		}
+		if(assetsManager.backgroundGirl.isPlaying() == false && assetsManager.backgroundBoy.isPlaying() == false ) {
+			if (backGroundMusicWhich == 0) {
+				backGroundMusicWhich = 1;
+				assetsManager.backgroundGirl.play();
+			} else {
+				backGroundMusicWhich = 0;
+				assetsManager.backgroundBoy.play();
+			}
+		}
+		/*
 		if (assetsManager.backgroundPlayed == false) {
 			if (dataOrganizer.getGender() == false) {
 				assetsManager.backgroundBoy.play();	
@@ -344,7 +356,7 @@ public class MenuScreen implements Screen {
 				assetsManager.backgroundGirl.setLooping(true);
 			}
 			assetsManager.backgroundPlayed = true;
-		}
+		}*/
 		if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
 			gender.setTexture(assetsManager.boyButton);
 			dataOrganizer.setGender(false);

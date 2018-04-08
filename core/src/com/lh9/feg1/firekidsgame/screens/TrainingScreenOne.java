@@ -53,7 +53,8 @@ public class TrainingScreenOne implements Screen {
 	float timerSirene;
 	float timerSecondWindow;
 	float minigameTimeLeft = 3.5f;
-	int minigameCounter = 30;
+	final int MAX_M = 11;
+	int minigameCounter = MAX_M + 1;
 	int starsCollected = 0;
 	boolean sirenPlayed = false;
 
@@ -222,12 +223,12 @@ public class TrainingScreenOne implements Screen {
 		// inputInterpreter.setPauseButton(pause);
 		if (dataOrganizer.getGender() == true)
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowGirl,
-					assetsManager.darkScreen, 250f, 150f,
+					assetsManager.darkScreen, 200f, 150f,
 					Variables.TRAINING_SCREEN_ONE_POP_UP_1,
 					assetsManager.fontLittle);
 		else
 			dialogueWindow = new Dialogue(assetsManager.dialogueWindowBoy,
-					assetsManager.darkScreen, 250f, 150f,
+					assetsManager.darkScreen, 200f, 150f,
 					Variables.TRAINING_SCREEN_ONE_POP_UP_1,
 					assetsManager.fontLittle);
 
@@ -304,6 +305,7 @@ public class TrainingScreenOne implements Screen {
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		assetsManager.truckDriving.loop(0.25f);
+		assetsManager.sirenSound.play(0.3f);
 	}
 
 	@Override
@@ -458,7 +460,7 @@ public class TrainingScreenOne implements Screen {
 		}
 		
 		if (dialogueWindow.isVisibile() == false && victory == false
-				&& minigameRunning == false && minigameCounter == 0 && sirene == false && starsCollected < 30)  {
+				&& minigameRunning == false && minigameCounter == 0 && sirene == false && starsCollected < MAX_M)  {
 			cloudManager.start();
 			sirene = true;
 		}
@@ -486,7 +488,12 @@ public class TrainingScreenOne implements Screen {
 				goldenStars = 2;
 			if (totalTimeSpent < 20)
 				goldenStars = 3;
-			
+
+			if(sirenPlayed == false) {
+				assetsManager.sirenSound.play(0.8f);
+				sirenPlayed = true;
+
+			}
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars,
@@ -498,9 +505,11 @@ public class TrainingScreenOne implements Screen {
 		}
 		if (sirene == true && timerSecondWindow > 2
 				&& dialogueWindow.isVisibile() == false && finish == false) {
-			assetsManager.sirenSound.play();
+			if(victory) {
+				assetsManager.sirenSound.play(0.8f);
+			}
 			cloudManager.start();
-			finish = true;
+			finish = true;//
 		}
 
 	}
@@ -531,10 +540,6 @@ public class TrainingScreenOne implements Screen {
 				yellowSectionLeft.red();
 				yellowSectionUpLeft.red();
 				yellowSectionUpRight.red();
-				if(sirenPlayed == false) {
-					assetsManager.sirenSound.play();
-					sirenPlayed = true;
-				}
 			} else {
 				batch.setColor(1, 1, 1, 1);
 				laneManager.normal();
@@ -658,7 +663,7 @@ public class TrainingScreenOne implements Screen {
 		if (drawTime == true) {
 
 			timeLeftBar.render(batch, delta, minigameTimeLeft);
-			counterLeftBar.render(batch, delta, 29 - minigameCounter);
+			counterLeftBar.render(batch, delta, MAX_M - minigameCounter);
 
 			if (afterMinigameWindow == false) {
 				timeLeftBar.setVisibility(true);
