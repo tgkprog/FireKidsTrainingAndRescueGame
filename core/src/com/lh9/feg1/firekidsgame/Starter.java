@@ -19,6 +19,8 @@ import com.lh9.feg1.firekidsgame.gdxpay.PlatformResolver;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.screens.LogoScreen;
 
+import static com.lh9.feg1.firekidsgame.files.AssetsManager.prefix;
+
 public class Starter extends Game {
 
     static PlatformResolver m_platformResolver;
@@ -91,14 +93,10 @@ public class Starter extends Game {
 
 	void loadBasicTextures() {
 
-
-		String s = "12345";
-		System.out.println(s.charAt(0));
-
-		logo = new Texture("others/Pink-Engine-Front.png");
+		logo = new Texture(prefix + "others/Pink-Engine-Front.png");
 		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		logoSprite = new Sprite(logo);
-		loading = new Texture("texts/loading.png");
+		loading = new Texture(prefix + "texts/loading.png");
 		loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
 		loadingSprite = new Sprite(loading);
 	}

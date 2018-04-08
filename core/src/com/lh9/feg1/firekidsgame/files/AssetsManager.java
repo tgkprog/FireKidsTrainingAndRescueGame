@@ -14,6 +14,10 @@ import com.lh9.feg1.firekidsgame.utils.DataOrganizer;
 
 public class AssetsManager extends Thread {
 
+	// "android/assets/" for ubuntu
+	// "" for android
+	public static final String prefix = "";
+
 	public DataOrganizer dataOrganizer;
 
 	public Sound hitSound;
@@ -276,7 +280,7 @@ public class AssetsManager extends Thread {
 
 	void loadFonts() {
 		FreeTypeFontGenerator generator = new FreeTypeFontGenerator(
-				Gdx.files.internal("fonts/comic-andy.regular.ttf"));
+				Gdx.files.internal(prefix + "fonts/comic-andy.regular.ttf"));
 		// This font if from the internet
 		// Free for commercial use license
 		FreeTypeFontParameter parameter = new FreeTypeFontParameter();
@@ -295,63 +299,63 @@ public class AssetsManager extends Thread {
 
 	void loadParticles() {
 		stars = new ParticleEffect();
-		stars.load(Gdx.files.internal("particles/starsGoodYellow180"),
-				Gdx.files.internal("particles/"));
+		stars.load(Gdx.files.internal(prefix + "particles/starsGoodYellow180"),
+				Gdx.files.internal(prefix + "particles/"));
 		water = new ParticleEffect();
-		water.load(Gdx.files.internal("particles/water"),
-				Gdx.files.internal("particles/"));
+		water.load(Gdx.files.internal(prefix + "particles/water"),
+				Gdx.files.internal(prefix + "particles/"));
 		leaf = new ParticleEffect();
-		leaf.load(Gdx.files.internal("particles/leaf"),
-				Gdx.files.internal("particles/"));
+		leaf.load(Gdx.files.internal(prefix + "particles/leaf"),
+				Gdx.files.internal(prefix + "particles/"));
 		hit = new ParticleEffect();
-		hit.load(Gdx.files.internal("particles/hit"),
-				Gdx.files.internal("particles/"));
+		hit.load(Gdx.files.internal(prefix + "particles/hit"),
+				Gdx.files.internal(prefix + "particles/"));
 
 		running = new ParticleEffect();
-		running.load(Gdx.files.internal("particles/running"),
-				Gdx.files.internal("particles/"));
+		running.load(Gdx.files.internal(prefix + "particles/running"),
+				Gdx.files.internal(prefix + "particles/"));
 
 		truckEmissions = new ParticleEffect();
-		truckEmissions.load(Gdx.files.internal("particles/truckEmissions"),
-				Gdx.files.internal("particles/"));
+		truckEmissions.load(Gdx.files.internal(prefix + "particles/truckEmissions"),
+				Gdx.files.internal(prefix + "particles/"));
 		buttonEffect = new ParticleEffect();
-		buttonEffect.load(Gdx.files.internal("particles/buttonEffect"),
-				Gdx.files.internal("particles/"));
+		buttonEffect.load(Gdx.files.internal(prefix + "particles/buttonEffect"),
+				Gdx.files.internal(prefix + "particles/"));
 		buttonEffect.setPosition(730, 310);
 		buttonEffect.allowCompletion();
 		smoke = new ParticleEffect[12];
 		for (int a = 0; a < 12; a++) {
 			smoke[a] = new ParticleEffect();
-			smoke[a].load(Gdx.files.internal("particles/truckEmissions"),
-					Gdx.files.internal("particles/"));
+			smoke[a].load(Gdx.files.internal(prefix + "particles/truckEmissions"),
+					Gdx.files.internal(prefix + "particles/"));
 		}
 		fireSmoke = new ParticleEffect[6];
 		for (int a = 0; a < 6; a++) {
 			fireSmoke[a] = new ParticleEffect();
-			fireSmoke[a].load(Gdx.files.internal("particles/fireSmoke"),
-					Gdx.files.internal("particles/"));
+			fireSmoke[a].load(Gdx.files.internal(prefix + "particles/fireSmoke"),
+					Gdx.files.internal(prefix + "particles/"));
 			fireSmoke[a].start();
 		}
 	}
 
 	void loadTextures() {
-		barFilledBlue = new Texture("others/barFilledBlue.png");
-		dogsGirl = new Texture("others/dogsGirl.png");
-		barNotFilledBlue = new Texture("others/barNotFilledBlue.png");
-		oilButton = new Texture("buttons/buttonOil.png");
-		boltButton = new Texture("buttons/buttonBolt.png");
-		oil = new Texture("others/Oil.png");
-		bolt = new Texture("others/Bolt.png");
+		barFilledBlue = new Texture(prefix + "others/barFilledBlue.png");
+		dogsGirl = new Texture(prefix + "others/dogsGirl.png");
+		barNotFilledBlue = new Texture(prefix + "others/barNotFilledBlue.png");
+		oilButton = new Texture(prefix + "buttons/buttonOil.png");
+		boltButton = new Texture(prefix + "buttons/buttonBolt.png");
+		oil = new Texture(prefix + "others/Oil.png");
+		bolt = new Texture(prefix + "others/Bolt.png");
 
 		spritesheetBoyRunning = new Texture[31];
 		for (int a = 0; a < 11; a++) {
-			spritesheetBoyRunning[a] = new Texture("spritesheets/running_boy/"
+			spritesheetBoyRunning[a] = new Texture(prefix + "spritesheets/running_boy/"
 					+ (a + 1) + ".png");
 		}
 		spritesheetGirlRunning = new Texture[31];
 		for (int a = 0; a < 11; a++) {
 			spritesheetGirlRunning[a] = new Texture(
-					"spritesheets/running_girl/" + (a + 1) + ".png");
+					prefix + "spritesheets/running_girl/" + (a + 1) + ".png");
 		}
 
 		spritesheetBoyRunning[11] = spritesheetBoyRunning[0];
@@ -398,175 +402,175 @@ public class AssetsManager extends Thread {
 		spritesheetGirlRunning[29] = spritesheetGirlRunning[19];
 		spritesheetGirlRunning[30] = spritesheetGirlRunning[20];
 
-		darkScreen = new Texture("backgrounds/blackScreen.png");
-		arrowUp = new Texture("buttons/arrow-up.png");
+		darkScreen = new Texture(prefix + "backgrounds/blackScreen.png");
+		arrowUp = new Texture(prefix + "buttons/arrow-up.png");
 		fireStationComplete = new Texture(
-				"backgrounds/fire_station_complete.png");
-		arrowDown = new Texture("buttons/arrow-down.png");
-		runButton = new Texture("buttons/runButton.png");
-		runButtonLittle = new Texture("buttons/Button-2.png");
-		foot = new Texture("others/foot.png");
-		barrel = new Texture("others/Barrel.png");
-		truckBack = new Texture("others/truckBackOpen.png");
-		truckBackDoor = new Texture("others/truckBackDoor.png");
-		runButtonGreen = new Texture("buttons/Button-1.png");
-		settings = new Texture("buttons/settings.png");
-		pointer = new Texture("others/this.png");
-		// speedometer = new Texture("others/speedometer.png");
-		dialogueWindowBoy = new Texture("windows/dialog_frame_boy.png");
-		dialogueWindowGirl = new Texture("windows/dialog_frame_girl.png");
-		starButton = new Texture("buttons/starButton.png");
-		starButtonEmpty = new Texture("buttons/starButtonEmpty.png");
-		fireStation = new Texture("buttons/fireStation.png");
-		settingsText = new Texture("buttons/Settings-text.png");
-		authorsText = new Texture("buttons/Authors-text.png");
-		pause = new Texture("buttons/Pause.png");
-		switchButton = new Texture("buttons/Switch 3.png");
-		playButton = new Texture("buttons/Play-button.png");
-		retryButton = new Texture("buttons/Retry-button.png");
-		menu = new Texture("buttons/Menu-Button.png");
-		daniel = new Texture("texts/daniel.png");
-		nevena = new Texture("texts/nevena.png");
-		tushar = new Texture("texts/tushar.png");
-		noPrompts = new Texture("texts/No-prompts.png");
-		longButton = new Texture("buttons/greenButtonLong.png");
-		arrow = new Texture("others/arrow.png");
-		helmet1 = new Texture("others/helmet1.png");
-		helmet2 = new Texture("others/helmet2.png");
-		handwheelNoHand = new Texture("others/handwheelNoHand.png");
-		button = new Texture("buttons/greenButton.png");
-		catHappy = new Texture("spritesheets/cat/Cat-happy.png");
-		catSad = new Texture("spritesheets/cat/Cat-worried.png");
-		wheel = new Texture("others/wheel.png");
-		// fireBar = new Texture("others/fireBar.png");
-		bell = Gdx.audio.newSound(Gdx.files.internal("sounds/bell.mp3"));
-		click = Gdx.audio.newSound(Gdx.files.internal("sounds/click.mp3"));
-	
-		backgroundBoy = Gdx.audio.newMusic(Gdx.files.internal("sounds/backgroundBoy.mp3"));
-		backgroundGirl = Gdx.audio.newMusic(Gdx.files.internal("sounds/backgroundGirl.mp3"));
-		truckStartingUp = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_starting_up.mp3"));
-		truckDriving = Gdx.audio.newSound(Gdx.files.internal("sounds/truck_drive.mp3"));
-		skid = Gdx.audio.newSound(Gdx.files.internal("sounds/skid.mp3"));
-		crash = Gdx.audio.newSound(Gdx.files.internal("sounds/crash.mp3"));
-		hitSound = Gdx.audio.newSound(Gdx.files.internal("sounds/hit.mp3"));
-		fireHose = Gdx.audio.newSound(Gdx.files.internal("sounds/fire_hose.mp3"));
-		sirenSound = Gdx.audio.newSound(Gdx.files.internal("sounds/fire/emergency009.mp3"));
+				prefix + "backgrounds/fire_station_complete.png");
+		arrowDown = new Texture(prefix + "buttons/arrow-down.png");
+		runButton = new Texture(prefix + "buttons/runButton.png");
+		runButtonLittle = new Texture(prefix + "buttons/Button-2.png");
+		foot = new Texture(prefix + "others/foot.png");
+		barrel = new Texture(prefix + "others/Barrel.png");
+		truckBack = new Texture(prefix + "others/truckBackOpen.png");
+		truckBackDoor = new Texture(prefix + "others/truckBackDoor.png");
+		runButtonGreen = new Texture(prefix + "buttons/Button-1.png");
+		settings = new Texture(prefix + "buttons/settings.png");
+		pointer = new Texture(prefix + "others/this.png");
+		// speedometer = new Texture(prefix + "others/speedometer.png");
+		dialogueWindowBoy = new Texture(prefix + "windows/dialog_frame_boy.png");
+		dialogueWindowGirl = new Texture(prefix + "windows/dialog_frame_girl.png");
+		starButton = new Texture(prefix + "buttons/starButton.png");
+		starButtonEmpty = new Texture(prefix + "buttons/starButtonEmpty.png");
+		fireStation = new Texture(prefix + "buttons/fireStation.png");
+		settingsText = new Texture(prefix + "buttons/Settings-text.png");
+		authorsText = new Texture(prefix + "buttons/Authors-text.png");
+		pause = new Texture(prefix + "buttons/Pause.png");
+		switchButton = new Texture(prefix + "buttons/Switch 3.png");
+		playButton = new Texture(prefix + "buttons/Play-button.png");
+		retryButton = new Texture(prefix + "buttons/Retry-button.png");
+		menu = new Texture(prefix + "buttons/Menu-Button.png");
+		daniel = new Texture(prefix + "texts/daniel.png");
+		nevena = new Texture(prefix + "texts/nevena.png");
+		tushar = new Texture(prefix + "texts/tushar.png");
+		noPrompts = new Texture(prefix + "texts/No-prompts.png");
+		longButton = new Texture(prefix + "buttons/greenButtonLong.png");
+		arrow = new Texture(prefix + "others/arrow.png");
+		helmet1 = new Texture(prefix + "others/helmet1.png");
+		helmet2 = new Texture(prefix + "others/helmet2.png");
+		handwheelNoHand = new Texture(prefix + "others/handwheelNoHand.png");
+		button = new Texture(prefix + "buttons/greenButton.png");
+		catHappy = new Texture(prefix + "spritesheets/cat/Cat-happy.png");
+		catSad = new Texture(prefix + "spritesheets/cat/Cat-worried.png");
+		wheel = new Texture(prefix + "others/wheel.png");
+		// fireBar = new Texture(prefix + "others/fireBar.png");
+		bell = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/bell.mp3"));
+		click = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/click.mp3"));
+		sirenSound = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/fire/emergency009.mp3"));
+
+		backgroundBoy = Gdx.audio.newMusic(Gdx.files.internal(prefix + "sounds/backgroundBoy.mp3"));
+		backgroundGirl = Gdx.audio.newMusic(Gdx.files.internal(prefix + "sounds/backgroundGirl.mp3"));
+		truckStartingUp = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/truck_starting_up.mp3"));
+		truckDriving = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/truck_drive.mp3"));
+		skid = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/skid.mp3"));
+		crash = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/crash.mp3"));
+		hitSound = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/hit.mp3"));
+		fireHose = Gdx.audio.newSound(Gdx.files.internal(prefix + "sounds/fire_hose.mp3"));
+		
 		// girlHead = new Texture("girl/girlHead.png");
 		userInputBackground = new Texture[4];
 		for(int a =0;a<4;a++){
-			userInputBackground[a] = new Texture("backgrounds/userInputBackground/" + (a+1) + ".png");
+			userInputBackground[a] = new Texture(prefix + "backgrounds/userInputBackground/" + (a+1) + ".png");
 		}
-		basket = new Texture("spritesheets/basket.png");
-		roadPart = new Texture("backgrounds/roadPart.png");
-		voiceText = new Texture("texts/Voice-text.png");
-		vibrationsText = new Texture("texts/Vibrations-text.png");
-		textureFilteringText = new Texture("texts/Texture-filtering-text.png");
-		fpsText = new Texture("texts/Fps-text.png");
-		screenAwakeText = new Texture("texts/Screen-awake-text.png");
-		speedBar = new Texture("others/speedBar.png");
-		lane = new Texture("others/lane.png");
-		authors = new Texture("buttons/Authors-button.png");
+		basket = new Texture(prefix + "spritesheets/basket.png");
+		roadPart = new Texture(prefix + "backgrounds/roadPart.png");
+		voiceText = new Texture(prefix + "texts/Voice-text.png");
+		vibrationsText = new Texture(prefix + "texts/Vibrations-text.png");
+		textureFilteringText = new Texture(prefix + "texts/Texture-filtering-text.png");
+		fpsText = new Texture(prefix + "texts/Fps-text.png");
+		screenAwakeText = new Texture(prefix + "texts/Screen-awake-text.png");
+		speedBar = new Texture(prefix + "others/speedBar.png");
+		lane = new Texture(prefix + "others/lane.png");
+		authors = new Texture(prefix + "buttons/Authors-button.png");
 
-		carRed = new Texture("spritesheets/carRed.png");
-		carYellow = new Texture("spritesheets/carYellow.png");
-		carPink = new Texture("spritesheets/carPink.png");
-		carBlue = new Texture("spritesheets/carBlue.png");
-		carGreen = new Texture("spritesheets/carGreen.png");
+		carRed = new Texture(prefix + "spritesheets/carRed.png");
+		carYellow = new Texture(prefix + "spritesheets/carYellow.png");
+		carPink = new Texture(prefix + "spritesheets/carPink.png");
+		carBlue = new Texture(prefix + "spritesheets/carBlue.png");
+		carGreen = new Texture(prefix + "spritesheets/carGreen.png");
 
-		carRedButton = new Texture("buttons/carRedButton.png");
-		carYellowButton = new Texture("buttons/carYellowButton.png");
-		carPinkButton = new Texture("buttons/carPinkButton.png");
-		carBlueButton = new Texture("buttons/carBlueButton.png");
-		carGreenButton = new Texture("buttons/carGreenButton.png");
+		carRedButton = new Texture(prefix + "buttons/carRedButton.png");
+		carYellowButton = new Texture(prefix + "buttons/carYellowButton.png");
+		carPinkButton = new Texture(prefix + "buttons/carPinkButton.png");
+		carBlueButton = new Texture(prefix + "buttons/carBlueButton.png");
+		carGreenButton = new Texture(prefix + "buttons/carGreenButton.png");
 
-		elevatorButton = new Texture("buttons/elevator.png");
+		elevatorButton = new Texture(prefix + "buttons/elevator.png");
 		elevatorButton_desaturated = new Texture(
-				"buttons/elevator_desaturated.png");
+				prefix + "buttons/elevator_desaturated.png");
 
-		fireMiniature = new Texture("others/Fire3-1.png");
-		hoseHydrant = new Texture("others/hoseHydrant.png");
-		handTruckFront = new Texture("boy/handTruckFront.png");
-		truckLed = new Texture("others/truckLed.png");
-		lake = new Texture("backgrounds/Lake.png");
-		trainMiniature = new Texture("buttons/trainMiniature.png");
-		elevatorMiniature = new Texture("buttons/elevatorMiniature.png");
-		boyHeadBig = new Texture("boy/boyHeadBig.png");
-		girlHeadBig = new Texture("girl/girlHeadBig.png");
-		cockpitPart = new Texture("backgrounds/cockpitPart.png");
-		ledCockpit = new Texture("others/ledCockpit.png");
-		fireBig = new Texture("spritesheets/fireBig.png");
-		tree = new Texture("backgrounds/rescueCat/tree.png");
-		catMiniature = new Texture("buttons/catMiniature.png");
-		boyButton = new Texture("buttons/Boy-button.png");
-		girlButton = new Texture("buttons/Girl-button.png");
-		// damage = new Texture("others/damage.png");
-		peopleGround = new Texture("spritesheets/peopleGround.png");
-		peopleBuilding = new Texture("spritesheets/peopleBuilding.png");
-		barFilled = new Texture("others/barFilled.png");
-		train = new Texture("others/train.png");
-		grassFlowers = new Texture("backgrounds/grassFlowers.png");
-		star = new Texture("particles/star.png");
-		starSummaryDesaturated = new Texture(
-				"others/star_summary_desaturated.png");
-		starSummary = new Texture("others/star_summary.png");
-		barNotFilled = new Texture("others/barNotFilled.png");
-		yellowSectionUp = new Texture("buttons/ledRedSection3.png");
-		yellowSectionMiddle = new Texture("buttons/yellowSection1.png");
-		yellowSectionLeft = new Texture("buttons/yellowSection2.png");
-		boyTorso = new Texture("boy/boyTorso.png");
-		boyHeadBigBlonde = new Texture("boy/boyHeadBigBlonde.png");
-		// boyMainMenu = new Texture("boy/boyMainMenu.png");
-		girlMainMenu = new Texture("girl/girlMainMenu.png");
-		// boyMenuHand = new Texture("boy/boyMenuHand.png");
-		handSpritesheet = new Texture("others/spritesheetPress.png");
-		boyHeadCockpit = new Texture("boy/boyHeadCockpit.png");
-		girlHeadCockpit = new Texture("girl/girlHeadCockpit.png");
-		womanHappy = new Texture("backgrounds/elevator/womanHappy.png");
-		girlHandCockpit = new Texture("girl/handCockpit.png");
-		programmingText = new Texture("texts/Programming.png");
-		ground = new Texture("backgrounds/ground.png");
-		graphicsText = new Texture("texts/Graphics.png");
-		truckMiniature = new Texture("buttons/truckMiniature.png");
-		sign = new Texture("texts/Sign.png");
-		cog = new Texture("others/cog.png");
-		catFalling = new Texture("others/catFalling.png");
-		resetGame = new Texture("texts/Reset-game.png");
-		userScreenButton = new Texture("buttons/userScreenButton.png");
+		fireMiniature = new Texture(prefix + "others/Fire3-1.png");
+		hoseHydrant = new Texture(prefix + "others/hoseHydrant.png");
+		handTruckFront = new Texture(prefix + "boy/handTruckFront.png");
+		truckLed = new Texture(prefix + "others/truckLed.png");
+		lake = new Texture(prefix + "backgrounds/Lake.png");
+		trainMiniature = new Texture(prefix + "buttons/trainMiniature.png");
+		elevatorMiniature = new Texture(prefix + "buttons/elevatorMiniature.png");
+		boyHeadBig = new Texture(prefix + "boy/boyHeadBig.png");
+		girlHeadBig = new Texture(prefix + "girl/girlHeadBig.png");
+		cockpitPart = new Texture(prefix + "backgrounds/cockpitPart.png");
+		ledCockpit = new Texture(prefix + "others/ledCockpit.png");
+		fireBig = new Texture(prefix + "spritesheets/fireBig.png");
+		tree = new Texture(prefix + "backgrounds/rescueCat/tree.png");
+		catMiniature = new Texture(prefix + "buttons/catMiniature.png");
+		boyButton = new Texture(prefix + "buttons/Boy-button.png");
+		girlButton = new Texture(prefix + "buttons/Girl-button.png");
+		// damage = new Texture(prefix + "others/damage.png");
+		peopleGround = new Texture(prefix + "spritesheets/peopleGround.png");
+		peopleBuilding = new Texture(prefix + "spritesheets/peopleBuilding.png");
+		barFilled = new Texture(prefix + "others/barFilled.png");
+		train = new Texture(prefix + "others/train.png");
+		grassFlowers = new Texture(prefix + "backgrounds/grassFlowers.png");
+		star = new Texture(prefix + "particles/star.png");
+		starSummaryDesaturated = new Texture(prefix + "others/star_summary_desaturated.png");
+		starSummary = new Texture(prefix + "others/star_summary.png");
+		barNotFilled = new Texture(prefix + "others/barNotFilled.png");
+		yellowSectionUp = new Texture(prefix + "buttons/ledRedSection3.png");
+		yellowSectionMiddle = new Texture(prefix + "buttons/yellowSection1.png");
+		yellowSectionLeft = new Texture(prefix + "buttons/yellowSection2.png");
+		boyTorso = new Texture(prefix + "boy/boyTorso.png");
+		boyHeadBigBlonde = new Texture(prefix + "boy/boyHeadBigBlonde.png");
+		// boyMainMenu = new Texture(prefix + "boy/boyMainMenu.png");
+		girlMainMenu = new Texture(prefix + "girl/girlMainMenu.png");
+		// boyMenuHand = new Texture(prefix + "boy/boyMenuHand.png");
+		handSpritesheet = new Texture(prefix + "others/spritesheetPress.png");
+		boyHeadCockpit = new Texture(prefix + "boy/boyHeadCockpit.png");
+		girlHeadCockpit = new Texture(prefix + "girl/girlHeadCockpit.png");
+		womanHappy = new Texture(prefix + "backgrounds/elevator/womanHappy.png");
+		girlHandCockpit = new Texture(prefix + "girl/handCockpit.png");
+		programmingText = new Texture(prefix + "texts/Programming.png");
+		ground = new Texture(prefix + "backgrounds/ground.png");
+		graphicsText = new Texture(prefix + "texts/Graphics.png");
+		truckMiniature = new Texture(prefix + "buttons/truckMiniature.png");
+		sign = new Texture(prefix + "texts/Sign.png");
+		cog = new Texture(prefix + "others/cog.png");
+		catFalling = new Texture(prefix + "others/catFalling.png");
+		resetGame = new Texture(prefix + "texts/Reset-game.png");
+		userScreenButton = new Texture(prefix + "buttons/userScreenButton.png");
 		
-		userInformation = new Texture("texts/userInformation.png");
-		fireEngineGame = new Texture("texts/fireEngineGame.png");
-		email = new Texture("texts/email.png");
-		nick = new Texture("texts/nick.png");
-		facebook = new Texture("texts/facebook.png");
-		google = new Texture("texts/google.png");
-		twitter = new Texture("texts/twitter.png");
-		website = new Texture("texts/website.png");
-		infoFromServer = new Texture("texts/infoFromServer.png");
-		moreFromServer = new Texture("texts/moreFromServer.png");
-		name = new Texture("texts/name.png");
+		userInformation = new Texture(prefix + "texts/userInformation.png");
+		fireEngineGame = new Texture(prefix + "texts/fireEngineGame.png");
+		email = new Texture(prefix + "texts/email.png");
+		nick = new Texture(prefix + "texts/nick.png");
+		facebook = new Texture(prefix + "texts/facebook.png");
+		google = new Texture(prefix + "texts/google.png");
+		twitter = new Texture(prefix + "texts/twitter.png");
+		website = new Texture(prefix + "texts/website.png");
+		infoFromServer = new Texture(prefix + "texts/infoFromServer.png");
+		moreFromServer = new Texture(prefix + "texts/moreFromServer.png");
+		name = new Texture(prefix + "texts/name.png");
 		
 		
-		breakTheWallText = new Texture("texts/Break-the-wall.png");
-		eclipseFireText = new Texture("texts/Elipse-fire.png");
-		jumpText = new Texture("texts/Jump.png");
+		breakTheWallText = new Texture(prefix + "texts/Break-the-wall.png");
+		eclipseFireText = new Texture(prefix + "texts/Elipse-fire.png");
+		jumpText = new Texture(prefix + "texts/Jump.png");
 		wall = new Texture[3];
 		for (int a = 0; a < 3; a++) {
-			wall[a] = new Texture("others/wall/" + (a + 1) + ".png");
+			wall[a] = new Texture(prefix + "others/wall/" + (a + 1) + ".png");
 		}
-		rideTruckText = new Texture("texts/Ride-Truck.png");
+		rideTruckText = new Texture(prefix + "texts/Ride-Truck.png");
 
 		elevatorDoor = new Texture[2];
 
-		elevatorDoor[0] = new Texture("backgrounds/elevator/door1.png");
-		elevatorDoor[1] = new Texture("backgrounds/elevator/door2.png");
+		elevatorDoor[0] = new Texture(prefix + "backgrounds/elevator/door1.png");
+		elevatorDoor[1] = new Texture(prefix + "backgrounds/elevator/door2.png");
 
 		peopleSad = new Texture[4];
 		for (int a = 0; a < peopleSad.length; a++) {
-			peopleSad[a] = new Texture("people/sad/" + (a + 1) + ".png");
+			peopleSad[a] = new Texture(prefix + "people/sad/" + (a + 1) + ".png");
 		}
 		peopleHappy = new Texture[4];
 		for (int a = 0; a < peopleHappy.length; a++) {
-			peopleHappy[a] = new Texture("people/happy/" + (a + 1) + ".png");
+			peopleHappy[a] = new Texture(prefix + "people/happy/" + (a + 1) + ".png");
 		}
 
 		spritesheetGirlWeights = new Texture[3];
@@ -574,188 +578,188 @@ public class AssetsManager extends Thread {
 		spritesheetBoyElliptical = new Texture[7];
 		spritesheetBoyWeights = new Texture[3];
 		truckBlank = new Texture[1];
-		truckBlank[0] = new Texture("others/Train-basket-blank.png");
+		truckBlank[0] = new Texture(prefix + "others/Train-basket-blank.png");
 
-		grass = new Texture("backgrounds/grass.png");
+		grass = new Texture(prefix + "backgrounds/grass.png");
 
 		sky = new Texture[6];
-		sky[0] = new Texture("backgrounds/sky1.png");
-		sky[1] = new Texture("backgrounds/sky1reversed.png");
-		sky[2] = new Texture("backgrounds/sky2.png");
-		sky[3] = new Texture("backgrounds/sky2reversed.png");
-		sky[4] = new Texture("backgrounds/sky3.png");
-		sky[5] = new Texture("backgrounds/sky3reversed.png");
+		sky[0] = new Texture(prefix + "backgrounds/sky1.png");
+		sky[1] = new Texture(prefix + "backgrounds/sky1reversed.png");
+		sky[2] = new Texture(prefix + "backgrounds/sky2.png");
+		sky[3] = new Texture(prefix + "backgrounds/sky2reversed.png");
+		sky[4] = new Texture(prefix + "backgrounds/sky3.png");
+		sky[5] = new Texture(prefix + "backgrounds/sky3reversed.png");
 
 		truckNoBasket = new Texture[1];
-		truckNoBasket[0] = new Texture("spritesheets/Train-blank.png");
+		truckNoBasket[0] = new Texture(prefix + "spritesheets/Train-blank.png");
 
 		spritesheetGirlWeights[0] = new Texture(
-				"girl/fitnessBenchGirl/Fitness-bench-press-Girl-1.png");
+				prefix + "girl/fitnessBenchGirl/Fitness-bench-press-Girl-1.png");
 		spritesheetGirlWeights[1] = new Texture(
-				"girl/fitnessBenchGirl/Fitness-bench-press-Girl-2.png");
+				prefix + "girl/fitnessBenchGirl/Fitness-bench-press-Girl-2.png");
 		spritesheetGirlWeights[2] = new Texture(
-				"girl/fitnessBenchGirl/Fitness-bench-press-Girl-3.png");
+				prefix + "girl/fitnessBenchGirl/Fitness-bench-press-Girl-3.png");
 
 		spritesheetBoyWeights[0] = new Texture(
-				"boy/fitnessBenchBoy/Fitness-bench-press-boy-1.png");
+				prefix + "boy/fitnessBenchBoy/Fitness-bench-press-boy-1.png");
 		spritesheetBoyWeights[1] = new Texture(
-				"boy/fitnessBenchBoy/Fitness-bench-press-boy-2.png");
+				prefix + "boy/fitnessBenchBoy/Fitness-bench-press-boy-2.png");
 		spritesheetBoyWeights[2] = new Texture(
-				"boy/fitnessBenchBoy/Fitness-bench-press-boy-3.png");
+				prefix + "boy/fitnessBenchBoy/Fitness-bench-press-boy-3.png");
 
 		spritesheetGirlElliptical[0] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-1.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-1.png");
 		spritesheetGirlElliptical[1] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-2.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-2.png");
 		spritesheetGirlElliptical[2] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-3.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-3.png");
 		spritesheetGirlElliptical[3] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-4.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-4.png");
 		spritesheetGirlElliptical[4] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-5.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-5.png");
 		spritesheetGirlElliptical[5] = new Texture(
-				"girl/fitnessEllipticalGirl/Eliptical-Girl-6.png");
+				prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-6.png");
 			spritesheetGirlElliptical[6] = new Texture(
-					"girl/fitnessEllipticalGirl/Eliptical-Girl-7.png");
+					prefix + "girl/fitnessEllipticalGirl/Eliptical-Girl-7.png");
 
 		spritesheetBoyElliptical[0] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-1.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-1.png");
 		spritesheetBoyElliptical[1] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-2.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-2.png");
 		spritesheetBoyElliptical[2] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-3.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-3.png");
 		spritesheetBoyElliptical[3] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-4.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-4.png");
 		spritesheetBoyElliptical[4] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-5.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-5.png");
 		spritesheetBoyElliptical[5] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-6.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-6.png");
 		spritesheetBoyElliptical[6] = new Texture(
-				"boy/fitnessEllipticalBoy/Eliptical-7.png");
+				prefix + "boy/fitnessEllipticalBoy/Eliptical-7.png");
 
 
-		closeButton = new Texture("buttons/Close-button.png");
-		bar = new Texture("others/bar.png");
-		glass = new Texture("backgrounds/glass.png");
-		handwheelBig = new Texture("others/handwheelBig.png");
+		closeButton = new Texture(prefix + "buttons/Close-button.png");
+		bar = new Texture(prefix + "others/bar.png");
+		glass = new Texture(prefix + "backgrounds/glass.png");
+		handwheelBig = new Texture(prefix + "others/handwheelBig.png");
 
-		bigRoadRescue = new Texture("buttons/bigRoadRescue.png");
-		training = new Texture("buttons/training.png");
-		meetTheTrucks = new Texture("buttons/meetTheTrucks.png");
-		rescueBuilding = new Texture("buttons/rescueBuilding.png");
-		rescueCat = new Texture("buttons/rescueCat.png");
-		fitness = new Texture("buttons/fitness.png");
-		rescueTrain = new Texture("buttons/rescueTrain.png");
-		frameCollectibles = new Texture("windows/frame_collectibles.png");
-		frameCollectiblesLong = new Texture("windows/frame_collectibles_long.png");
+		bigRoadRescue = new Texture(prefix + "buttons/bigRoadRescue.png");
+		training = new Texture(prefix + "buttons/training.png");
+		meetTheTrucks = new Texture(prefix + "buttons/meetTheTrucks.png");
+		rescueBuilding = new Texture(prefix + "buttons/rescueBuilding.png");
+		rescueCat = new Texture(prefix + "buttons/rescueCat.png");
+		fitness = new Texture(prefix + "buttons/fitness.png");
+		rescueTrain = new Texture(prefix + "buttons/rescueTrain.png");
+		frameCollectibles = new Texture(prefix + "windows/frame_collectibles.png");
+		frameCollectiblesLong = new Texture(prefix + "windows/frame_collectibles_long.png");
 
 		bigRoadRescue_desaturated = new Texture(
-				"buttons/bigRoadRescue_desaturated.png");
-		training_desaturated = new Texture("buttons/training_desaturated.png");
+				prefix + "buttons/bigRoadRescue_desaturated.png");
+		training_desaturated = new Texture(prefix + "buttons/training_desaturated.png");
 		rescueBuilding_desaturated = new Texture(
-				"buttons/rescueBuilding_desaturated.png");
-		rescueCat_desaturated = new Texture("buttons/rescueCat_desaturated.png");
-		fitness_desaturated = new Texture("buttons/fitness_desaturated.png");
+				prefix + "buttons/rescueBuilding_desaturated.png");
+		rescueCat_desaturated = new Texture(prefix + "buttons/rescueCat_desaturated.png");
+		fitness_desaturated = new Texture(prefix + "buttons/fitness_desaturated.png");
 		rescueTrain_desaturated = new Texture(
-				"buttons/rescueTrain_desaturated.png");
+				prefix + "buttons/rescueTrain_desaturated.png");
 
 		truckFront = new Texture[5];
-		truckFront[0] = new Texture("backgrounds/truckFront1.png");
-		truckFront[1] = new Texture("backgrounds/truckFront2.png");
-		truckFront[2] = new Texture("backgrounds/truckFront3.png");
-		truckFront[3] = new Texture("backgrounds/truckFront4.png");
-		truckFront[4] = new Texture("backgrounds/truckFront5.png");
+		truckFront[0] = new Texture(prefix + "backgrounds/truckFront1.png");
+		truckFront[1] = new Texture(prefix + "backgrounds/truckFront2.png");
+		truckFront[2] = new Texture(prefix + "backgrounds/truckFront3.png");
+		truckFront[3] = new Texture(prefix + "backgrounds/truckFront4.png");
+		truckFront[4] = new Texture(prefix + "backgrounds/truckFront5.png");
 
 		rescueCatBackground = new Texture[4];
-		rescueCatBackground[0] = new Texture("backgrounds/rescueCat/1.png");
-		rescueCatBackground[1] = new Texture("backgrounds/rescueCat/2.png");
-		rescueCatBackground[2] = new Texture("backgrounds/rescueCat/3.png");
-		rescueCatBackground[3] = new Texture("backgrounds/rescueCat/4.png");
+		rescueCatBackground[0] = new Texture(prefix + "backgrounds/rescueCat/1.png");
+		rescueCatBackground[1] = new Texture(prefix + "backgrounds/rescueCat/2.png");
+		rescueCatBackground[2] = new Texture(prefix + "backgrounds/rescueCat/3.png");
+		rescueCatBackground[3] = new Texture(prefix + "backgrounds/rescueCat/4.png");
 
 		elevatorBackground = new Texture[4];
-		elevatorBackground[0] = new Texture("backgrounds/elevator/1.png");
-		elevatorBackground[1] = new Texture("backgrounds/elevator/2.png");
-		elevatorBackground[2] = new Texture("backgrounds/elevator/3.png");
-		elevatorBackground[3] = new Texture("backgrounds/elevator/4.png");
+		elevatorBackground[0] = new Texture(prefix + "backgrounds/elevator/1.png");
+		elevatorBackground[1] = new Texture(prefix + "backgrounds/elevator/2.png");
+		elevatorBackground[2] = new Texture(prefix + "backgrounds/elevator/3.png");
+		elevatorBackground[3] = new Texture(prefix + "backgrounds/elevator/4.png");
 
 		rescueMetro = new Texture[2];
-		rescueMetro[0] = new Texture("backgrounds/rescueMetro/1.png");
-		rescueMetro[1] = new Texture("backgrounds/rescueMetro/2.png");
+		rescueMetro[0] = new Texture(prefix + "backgrounds/rescueMetro/1.png");
+		rescueMetro[1] = new Texture(prefix + "backgrounds/rescueMetro/2.png");
 
 		buildings = new Texture[8];
 		for (int a = 0; a < buildings.length; a++)
-			buildings[a] = new Texture("buildings/" + (a + 1) + ".png");
+			buildings[a] = new Texture(prefix + "buildings/" + (a + 1) + ".png");
 
-		cloudyBackgroundClose = new Texture("backgrounds/rescueCat/close.png");
-		cloudyBackgroundFar = new Texture("backgrounds/rescueCat/far.png");
+		cloudyBackgroundClose = new Texture(prefix + "backgrounds/rescueCat/close.png");
+		cloudyBackgroundFar = new Texture(prefix + "backgrounds/rescueCat/far.png");
 
 		buzzer = new Texture[3];
-		buzzer[0] = new Texture("spritesheets/buzzer/Buzzer1.png");
-		buzzer[1] = new Texture("spritesheets/buzzer/Buzzer2.png");
-		buzzer[2] = new Texture("spritesheets/buzzer/Buzzer3.png");
+		buzzer[0] = new Texture(prefix + "spritesheets/buzzer/Buzzer1.png");
+		buzzer[1] = new Texture(prefix + "spritesheets/buzzer/Buzzer2.png");
+		buzzer[2] = new Texture(prefix + "spritesheets/buzzer/Buzzer3.png");
 
 		dogWorried = new Texture[2];
-		dogWorried[0] = new Texture("spritesheets/dog/worried1.png");
-		dogWorried[1] = new Texture("spritesheets/dog/worried2.png");
+		dogWorried[0] = new Texture(prefix + "spritesheets/dog/worried1.png");
+		dogWorried[1] = new Texture(prefix + "spritesheets/dog/worried2.png");
 
 		food = new Texture[8];
 		for (int a = 0; a < 8; a++)
-			food[a] = new Texture("food/" + a + ".png");
+			food[a] = new Texture(prefix + "food/" + a + ".png");
 
 		dogHappy = new Texture[2];
-		dogHappy[0] = new Texture("spritesheets/dog/happy1.png");
-		dogHappy[1] = new Texture("spritesheets/dog/happy2.png");
+		dogHappy[0] = new Texture(prefix + "spritesheets/dog/happy1.png");
+		dogHappy[1] = new Texture(prefix + "spritesheets/dog/happy2.png");
 
 		girlHammer = new Texture[2];
-		girlHammer[0] = new Texture("girl/hammer1.png");
-		girlHammer[1] = new Texture("girl/hammer2.png");
+		girlHammer[0] = new Texture(prefix + "girl/hammer1.png");
+		girlHammer[1] = new Texture(prefix + "girl/hammer2.png");
 
 		girlHammer_16_percent = new Texture[2];
-		girlHammer_16_percent[0] = new Texture("girl/hammer1_16_percent.png");
-		girlHammer_16_percent[1] = new Texture("girl/hammer2_16_percent.png");
+		girlHammer_16_percent[0] = new Texture(prefix + "girl/hammer1_16_percent.png");
+		girlHammer_16_percent[1] = new Texture(prefix + "girl/hammer2_16_percent.png");
 
 		boyHammer = new Texture[2];
-		boyHammer[0] = new Texture("boy/boy_hammer/1.png");
-		boyHammer[1] = new Texture("boy/boy_hammer/2.png");
+		boyHammer[0] = new Texture(prefix + "boy/boy_hammer/1.png");
+		boyHammer[1] = new Texture(prefix + "boy/boy_hammer/2.png");
 
 		boyHammer_16_percent = new Texture[2];
-		boyHammer_16_percent[0] = new Texture("boy/boy_hammer/1_16_percent.png");
-		boyHammer_16_percent[1] = new Texture("boy/boy_hammer/2_16_percent.png");
+		boyHammer_16_percent[0] = new Texture(prefix + "boy/boy_hammer/1_16_percent.png");
+		boyHammer_16_percent[1] = new Texture(prefix + "boy/boy_hammer/2_16_percent.png");
 
 		metroDoor = new Texture[5];
-		metroDoor[0] = new Texture("backgrounds/rescueMetro/metroDoor1.png");
-		metroDoor[1] = new Texture("backgrounds/rescueMetro/metroDoor2.png");
-		metroDoor[2] = new Texture("backgrounds/rescueMetro/metroDoor3.png");
+		metroDoor[0] = new Texture(prefix + "backgrounds/rescueMetro/metroDoor1.png");
+		metroDoor[1] = new Texture(prefix + "backgrounds/rescueMetro/metroDoor2.png");
+		metroDoor[2] = new Texture(prefix + "backgrounds/rescueMetro/metroDoor3.png");
 		metroDoor[3] = new Texture(
-				"backgrounds/rescueMetro/train_blank_window.png");
+				prefix + "backgrounds/rescueMetro/train_blank_window.png");
 		metroDoor[4] = new Texture(
-				"backgrounds/rescueMetro/train_doors_not_broken.png");
+				prefix + "backgrounds/rescueMetro/train_doors_not_broken.png");
 
 		bushes = new Texture[3];
-		bushes[0] = new Texture("backgrounds/bushes1.png");
-		bushes[1] = new Texture("backgrounds/bushes2.png");
-		bushes[2] = new Texture("backgrounds/Bushes-small.png");
+		bushes[0] = new Texture(prefix + "backgrounds/bushes1.png");
+		bushes[1] = new Texture(prefix + "backgrounds/bushes2.png");
+		bushes[2] = new Texture(prefix + "backgrounds/Bushes-small.png");
 
 		foodBackground = new Texture[4];
-		foodBackground[0] = new Texture("backgrounds/food_bk/1.png");
-		foodBackground[1] = new Texture("backgrounds/food_bk/2.png");
-		foodBackground[2] = new Texture("backgrounds/food_bk/3.png");
-		foodBackground[3] = new Texture("backgrounds/food_bk/4.png");
+		foodBackground[0] = new Texture(prefix + "backgrounds/food_bk/1.png");
+		foodBackground[1] = new Texture(prefix + "backgrounds/food_bk/2.png");
+		foodBackground[2] = new Texture(prefix + "backgrounds/food_bk/3.png");
+		foodBackground[3] = new Texture(prefix + "backgrounds/food_bk/4.png");
 
 		trees = new Texture[3];
-		trees[0] = new Texture("backgrounds/tree1.png");
-		trees[1] = new Texture("backgrounds/tree2.png");
-		trees[2] = new Texture("backgrounds/tree3.png");
+		trees[0] = new Texture(prefix + "backgrounds/tree1.png");
+		trees[1] = new Texture(prefix + "backgrounds/tree2.png");
+		trees[2] = new Texture(prefix + "backgrounds/tree3.png");
 
 		girlRunningSuit = new Texture[31];
 		for (int a = 0; a < 11; a++) {
-			girlRunningSuit[a] = new Texture("girl/running_suit/" + (a + 1)
+			girlRunningSuit[a] = new Texture(prefix + "girl/running_suit/" + (a + 1)
 					+ ".png");
 		}
 
 		boyRunningSuit = new Texture[31];
 		for (int a = 0; a < 11; a++) {
-			boyRunningSuit[10 - a] = new Texture("boy/running_suit/" + (a + 1)
+			boyRunningSuit[10 - a] = new Texture(prefix + "boy/running_suit/" + (a + 1)
 					+ ".png");
 		}
 
@@ -804,25 +808,25 @@ public class AssetsManager extends Thread {
 		girlRunningSuit[30] = girlRunningSuit[20];
 
 		boyWaving = new Texture[6];
-		boyWaving[0] = new Texture("boy/Boy-waving-1.png");
-		boyWaving[1] = new Texture("boy/Boy-waving-2.png");
-		boyWaving[2] = new Texture("boy/Boy-waving-3.png");
-		boyWaving[3] = new Texture("boy/Boy-waving-4.png");
-		boyWaving[4] = new Texture("boy/Boy-waving-5.png");
-		boyWaving[5] = new Texture("boy/Boy-waving-6.png");
+		boyWaving[0] = new Texture(prefix + "boy/Boy-waving-1.png");
+		boyWaving[1] = new Texture(prefix + "boy/Boy-waving-2.png");
+		boyWaving[2] = new Texture(prefix + "boy/Boy-waving-3.png");
+		boyWaving[3] = new Texture(prefix + "boy/Boy-waving-4.png");
+		boyWaving[4] = new Texture(prefix + "boy/Boy-waving-5.png");
+		boyWaving[5] = new Texture(prefix + "boy/Boy-waving-6.png");
 
 		girlHoseHydrant = new Texture[7];
-		girlHoseHydrant[0] = new Texture("girl/hoseHydrant/1.png");
-		girlHoseHydrant[1] = new Texture("girl/hoseHydrant/2.png");
-		girlHoseHydrant[2] = new Texture("girl/hoseHydrant/3.png");
-		girlHoseHydrant[3] = new Texture("girl/hoseHydrant/4.png");
-		girlHoseHydrant[4] = new Texture("girl/hoseHydrant/5.png");
-		girlHoseHydrant[5] = new Texture("girl/hoseHydrant/6.png");
-		girlHoseHydrant[6] = new Texture("girl/hoseHydrant/7.png");
+		girlHoseHydrant[0] = new Texture(prefix + "girl/hoseHydrant/1.png");
+		girlHoseHydrant[1] = new Texture(prefix + "girl/hoseHydrant/2.png");
+		girlHoseHydrant[2] = new Texture(prefix + "girl/hoseHydrant/3.png");
+		girlHoseHydrant[3] = new Texture(prefix + "girl/hoseHydrant/4.png");
+		girlHoseHydrant[4] = new Texture(prefix + "girl/hoseHydrant/5.png");
+		girlHoseHydrant[5] = new Texture(prefix + "girl/hoseHydrant/6.png");
+		girlHoseHydrant[6] = new Texture(prefix + "girl/hoseHydrant/7.png");
 
 		boyHoseHydrant = new Texture[7];
 		for (int a = 0; a < 7; a++)
-			boyHoseHydrant[a] = new Texture("boy/hose_hydrant/" + (a + 1)
+			boyHoseHydrant[a] = new Texture(prefix + "boy/hose_hydrant/" + (a + 1)
 					+ ".png");
 
 		girlHoseHydrantReversed = new Texture[7];
@@ -837,157 +841,157 @@ public class AssetsManager extends Thread {
 
 		trainBasketAnimation = new Texture[14];
 		trainBasketAnimation[0] = new Texture(
-				"spritesheets/trainBasket/Train-basket-1.png");
+				prefix + "spritesheets/trainBasket/Train-basket-1.png");
 		trainBasketAnimation[1] = new Texture(
-				"spritesheets/trainBasket/Train-basket-2.png");
+				prefix + "spritesheets/trainBasket/Train-basket-2.png");
 		trainBasketAnimation[2] = new Texture(
-				"spritesheets/trainBasket/Train-basket-3.png");
+				prefix + "spritesheets/trainBasket/Train-basket-3.png");
 		trainBasketAnimation[3] = new Texture(
-				"spritesheets/trainBasket/Train-basket-4.png");
+				prefix + "spritesheets/trainBasket/Train-basket-4.png");
 		trainBasketAnimation[4] = new Texture(
-				"spritesheets/trainBasket/Train-basket-5.png");
+				prefix + "spritesheets/trainBasket/Train-basket-5.png");
 		trainBasketAnimation[5] = new Texture(
-				"spritesheets/trainBasket/Train-basket-6.png");
+				prefix + "spritesheets/trainBasket/Train-basket-6.png");
 		trainBasketAnimation[6] = new Texture(
-				"spritesheets/trainBasket/Train-basket-7.png");
+				prefix + "spritesheets/trainBasket/Train-basket-7.png");
 		trainBasketAnimation[7] = new Texture(
-				"spritesheets/trainBasket/Train-basket-8.png");
+				prefix + "spritesheets/trainBasket/Train-basket-8.png");
 		trainBasketAnimation[8] = new Texture(
-				"spritesheets/trainBasket/Train-basket-9.png");
+				prefix + "spritesheets/trainBasket/Train-basket-9.png");
 		trainBasketAnimation[9] = new Texture(
-				"spritesheets/trainBasket/Train-basket-10.png");
+				prefix + "spritesheets/trainBasket/Train-basket-10.png");
 		trainBasketAnimation[10] = new Texture(
-				"spritesheets/trainBasket/Train-basket-11.png");
+				prefix + "spritesheets/trainBasket/Train-basket-11.png");
 		trainBasketAnimation[11] = new Texture(
-				"spritesheets/trainBasket/Train-basket-12.png");
+				prefix + "spritesheets/trainBasket/Train-basket-12.png");
 		trainBasketAnimation[12] = new Texture(
-				"spritesheets/trainBasket/Train-basket-13.png");
+				prefix + "spritesheets/trainBasket/Train-basket-13.png");
 		trainBasketAnimation[13] = new Texture(
-				"spritesheets/trainBasket/Train-basket-14.png");
+				prefix + "spritesheets/trainBasket/Train-basket-14.png");
 
 		trainBasketAnimationGirl = new Texture[14];
 		trainBasketAnimationGirl[0] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-1.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-1.png");
 		trainBasketAnimationGirl[1] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-2.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-2.png");
 		trainBasketAnimationGirl[2] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-3.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-3.png");
 		trainBasketAnimationGirl[3] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-4.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-4.png");
 		trainBasketAnimationGirl[4] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-5.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-5.png");
 		trainBasketAnimationGirl[5] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-6.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-6.png");
 		trainBasketAnimationGirl[6] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-7.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-7.png");
 		trainBasketAnimationGirl[7] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-8.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-8.png");
 		trainBasketAnimationGirl[8] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-9.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-9.png");
 		trainBasketAnimationGirl[9] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-10.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-10.png");
 		trainBasketAnimationGirl[10] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-11.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-11.png");
 		trainBasketAnimationGirl[11] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-12.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-12.png");
 		trainBasketAnimationGirl[12] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-13.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-13.png");
 		trainBasketAnimationGirl[13] = new Texture(
-				"spritesheets/trainBasketGirl/Train-basket-14.png");
+				prefix + "spritesheets/trainBasketGirl/Train-basket-14.png");
 
 
 		bigRoad = new Texture[24];
-		bigRoad[0] = new Texture("backgrounds/bigRoad/bigRoad1B.png");
-		bigRoad[1] = new Texture("backgrounds/bigRoad/bigRoad1A.png");
-		bigRoad[2] = new Texture("backgrounds/bigRoad/bigRoad2B.png");
-		bigRoad[3] = new Texture("backgrounds/bigRoad/bigRoad2A.png");
-		bigRoad[4] = new Texture("backgrounds/bigRoad/bigRoad3B.png");
-		bigRoad[5] = new Texture("backgrounds/bigRoad/bigRoad3A.png");
-		bigRoad[6] = new Texture("backgrounds/bigRoad/bigRoad4B.png");
-		bigRoad[7] = new Texture("backgrounds/bigRoad/bigRoad4A.png");
-		bigRoad[8] = new Texture("backgrounds/bigRoad/bigRoad5B.png");
-		bigRoad[9] = new Texture("backgrounds/bigRoad/bigRoad5A.png");
-		bigRoad[10] = new Texture("backgrounds/bigRoad/bigRoad6B.png");
-		bigRoad[11] = new Texture("backgrounds/bigRoad/bigRoad6A.png");
-		bigRoad[12] = new Texture("backgrounds/bigRoad/bigRoad7B.png");
-		bigRoad[13] = new Texture("backgrounds/bigRoad/bigRoad7A.png");
-		bigRoad[14] = new Texture("backgrounds/bigRoad/bigRoad8B.png");
-		bigRoad[15] = new Texture("backgrounds/bigRoad/bigRoad8A.png");
-		bigRoad[16] = new Texture("backgrounds/bigRoad/bigRoad9B.png");
-		bigRoad[17] = new Texture("backgrounds/bigRoad/bigRoad9A.png");
-		bigRoad[18] = new Texture("backgrounds/bigRoad/bigRoad10B.png");
-		bigRoad[19] = new Texture("backgrounds/bigRoad/bigRoad10A.png");
-		bigRoad[20] = new Texture("backgrounds/bigRoad/bigRoad11B.png");
-		bigRoad[21] = new Texture("backgrounds/bigRoad/bigRoad11A.png");
-		bigRoad[22] = new Texture("backgrounds/bigRoad/bigRoad12B.png");
-		bigRoad[23] = new Texture("backgrounds/bigRoad/bigRoad12A.png");
+		bigRoad[0] = new Texture(prefix + "backgrounds/bigRoad/bigRoad1B.png");
+		bigRoad[1] = new Texture(prefix + "backgrounds/bigRoad/bigRoad1A.png");
+		bigRoad[2] = new Texture(prefix + "backgrounds/bigRoad/bigRoad2B.png");
+		bigRoad[3] = new Texture(prefix + "backgrounds/bigRoad/bigRoad2A.png");
+		bigRoad[4] = new Texture(prefix + "backgrounds/bigRoad/bigRoad3B.png");
+		bigRoad[5] = new Texture(prefix + "backgrounds/bigRoad/bigRoad3A.png");
+		bigRoad[6] = new Texture(prefix + "backgrounds/bigRoad/bigRoad4B.png");
+		bigRoad[7] = new Texture(prefix + "backgrounds/bigRoad/bigRoad4A.png");
+		bigRoad[8] = new Texture(prefix + "backgrounds/bigRoad/bigRoad5B.png");
+		bigRoad[9] = new Texture(prefix + "backgrounds/bigRoad/bigRoad5A.png");
+		bigRoad[10] = new Texture(prefix + "backgrounds/bigRoad/bigRoad6B.png");
+		bigRoad[11] = new Texture(prefix + "backgrounds/bigRoad/bigRoad6A.png");
+		bigRoad[12] = new Texture(prefix + "backgrounds/bigRoad/bigRoad7B.png");
+		bigRoad[13] = new Texture(prefix + "backgrounds/bigRoad/bigRoad7A.png");
+		bigRoad[14] = new Texture(prefix + "backgrounds/bigRoad/bigRoad8B.png");
+		bigRoad[15] = new Texture(prefix + "backgrounds/bigRoad/bigRoad8A.png");
+		bigRoad[16] = new Texture(prefix + "backgrounds/bigRoad/bigRoad9B.png");
+		bigRoad[17] = new Texture(prefix + "backgrounds/bigRoad/bigRoad9A.png");
+		bigRoad[18] = new Texture(prefix + "backgrounds/bigRoad/bigRoad10B.png");
+		bigRoad[19] = new Texture(prefix + "backgrounds/bigRoad/bigRoad10A.png");
+		bigRoad[20] = new Texture(prefix + "backgrounds/bigRoad/bigRoad11B.png");
+		bigRoad[21] = new Texture(prefix + "backgrounds/bigRoad/bigRoad11A.png");
+		bigRoad[22] = new Texture(prefix + "backgrounds/bigRoad/bigRoad12B.png");
+		bigRoad[23] = new Texture(prefix + "backgrounds/bigRoad/bigRoad12A.png");
 
 		truckCockpit = new Texture[4];
 
-		truckCockpit[0] = new Texture("backgrounds/truckCockpit1.png");
-		truckCockpit[1] = new Texture("backgrounds/truckCockpit2.png");
-		truckCockpit[2] = new Texture("backgrounds/truckCockpit3.png");
-		truckCockpit[3] = new Texture("backgrounds/truckCockpit4.png");
+		truckCockpit[0] = new Texture(prefix + "backgrounds/truckCockpit1.png");
+		truckCockpit[1] = new Texture(prefix + "backgrounds/truckCockpit2.png");
+		truckCockpit[2] = new Texture(prefix + "backgrounds/truckCockpit3.png");
+		truckCockpit[3] = new Texture(prefix + "backgrounds/truckCockpit4.png");
 
 		road = new Texture[3];
 		
-		road[0] = new Texture("backgrounds/road.png");
-		road[1] = new Texture("backgrounds/road drive bg.png");
-		road[2] = new Texture("backgrounds/road drive bg reversed.png");
+		road[0] = new Texture(prefix + "backgrounds/road.png");
+		road[1] = new Texture(prefix + "backgrounds/road drive bg.png");
+		road[2] = new Texture(prefix + "backgrounds/road drive bg reversed.png");
 		
 		hoseAnimation = new Texture[15];
-		hoseAnimation[0] = new Texture("girl/hoseAnimation/1.png");
-		hoseAnimation[1] = new Texture("girl/hoseAnimation/2.png");
-		hoseAnimation[2] = new Texture("girl/hoseAnimation/3.png");
-		hoseAnimation[3] = new Texture("girl/hoseAnimation/4.png");
-		hoseAnimation[4] = new Texture("girl/hoseAnimation/5.png");
-		hoseAnimation[5] = new Texture("girl/hoseAnimation/6.png");
-		hoseAnimation[6] = new Texture("girl/hoseAnimation/7.png");
-		hoseAnimation[7] = new Texture("girl/hoseAnimation/8.png");
-		hoseAnimation[8] = new Texture("girl/hoseAnimation/9.png");
-		hoseAnimation[9] = new Texture("girl/hoseAnimation/10.png");
-		hoseAnimation[10] = new Texture("girl/hoseAnimation/11.png");
-		hoseAnimation[11] = new Texture("girl/hoseAnimation/12.png");
-		hoseAnimation[12] = new Texture("girl/hoseAnimation/13.png");
-		hoseAnimation[13] = new Texture("girl/hoseAnimation/14.png");
-		hoseAnimation[14] = new Texture("girl/hoseAnimation/15.png");
+		hoseAnimation[0] = new Texture(prefix + "girl/hoseAnimation/1.png");
+		hoseAnimation[1] = new Texture(prefix + "girl/hoseAnimation/2.png");
+		hoseAnimation[2] = new Texture(prefix + "girl/hoseAnimation/3.png");
+		hoseAnimation[3] = new Texture(prefix + "girl/hoseAnimation/4.png");
+		hoseAnimation[4] = new Texture(prefix + "girl/hoseAnimation/5.png");
+		hoseAnimation[5] = new Texture(prefix + "girl/hoseAnimation/6.png");
+		hoseAnimation[6] = new Texture(prefix + "girl/hoseAnimation/7.png");
+		hoseAnimation[7] = new Texture(prefix + "girl/hoseAnimation/8.png");
+		hoseAnimation[8] = new Texture(prefix + "girl/hoseAnimation/9.png");
+		hoseAnimation[9] = new Texture(prefix + "girl/hoseAnimation/10.png");
+		hoseAnimation[10] = new Texture(prefix + "girl/hoseAnimation/11.png");
+		hoseAnimation[11] = new Texture(prefix + "girl/hoseAnimation/12.png");
+		hoseAnimation[12] = new Texture(prefix + "girl/hoseAnimation/13.png");
+		hoseAnimation[13] = new Texture(prefix + "girl/hoseAnimation/14.png");
+		hoseAnimation[14] = new Texture(prefix + "girl/hoseAnimation/15.png");
 
 		fitnessBackground = new Texture[4];
-		fitnessBackground[0] = new Texture("backgrounds/fitness/fitness1.png");
-		fitnessBackground[1] = new Texture("backgrounds/fitness/fitness2.png");
-		fitnessBackground[2] = new Texture("backgrounds/fitness/fitness3.png");
-		fitnessBackground[3] = new Texture("backgrounds/fitness/fitness4.png");
+		fitnessBackground[0] = new Texture(prefix + "backgrounds/fitness/fitness1.png");
+		fitnessBackground[1] = new Texture(prefix + "backgrounds/fitness/fitness2.png");
+		fitnessBackground[2] = new Texture(prefix + "backgrounds/fitness/fitness3.png");
+		fitnessBackground[3] = new Texture(prefix + "backgrounds/fitness/fitness4.png");
 
 		fountainAnimation = new Texture[5];
 		fountainAnimation[0] = new Texture(
-				"spritesheets/fountainAnimation/1.png");
+				prefix + "spritesheets/fountainAnimation/1.png");
 		fountainAnimation[1] = new Texture(
-				"spritesheets/fountainAnimation/2.png");
+				prefix + "spritesheets/fountainAnimation/2.png");
 		fountainAnimation[2] = new Texture(
-				"spritesheets/fountainAnimation/3.png");
+				prefix + "spritesheets/fountainAnimation/3.png");
 		fountainAnimation[3] = new Texture(
-				"spritesheets/fountainAnimation/4.png");
+				prefix + "spritesheets/fountainAnimation/4.png");
 		fountainAnimation[4] = new Texture(
-				"spritesheets/fountainAnimation/5.png");
+				prefix + "spritesheets/fountainAnimation/5.png");
 
 		parkBackgrounds = new Texture[6];
-		parkBackgrounds[0] = new Texture("backgrounds/park1.png");
-		parkBackgrounds[1] = new Texture("backgrounds/park2.png");
-		parkBackgrounds[2] = new Texture("backgrounds/park3.png");
-		parkBackgrounds[3] = new Texture("backgrounds/park1reversed.png");
-		parkBackgrounds[4] = new Texture("backgrounds/park2reversed.png");
-		parkBackgrounds[5] = new Texture("backgrounds/park3reversed.png");
+		parkBackgrounds[0] = new Texture(prefix + "backgrounds/park1.png");
+		parkBackgrounds[1] = new Texture(prefix + "backgrounds/park2.png");
+		parkBackgrounds[2] = new Texture(prefix + "backgrounds/park3.png");
+		parkBackgrounds[3] = new Texture(prefix + "backgrounds/park1reversed.png");
+		parkBackgrounds[4] = new Texture(prefix + "backgrounds/park2reversed.png");
+		parkBackgrounds[5] = new Texture(prefix + "backgrounds/park3reversed.png");
 
 		clouds = new Texture[3];
-		clouds[0] = new Texture("others/cartoonCloud.png");
-		clouds[1] = new Texture("others/cartoonCloud.png");
-		clouds[2] = new Texture("others/cartoonCloud.png");
+		clouds[0] = new Texture(prefix + "others/cartoonCloud.png");
+		clouds[1] = new Texture(prefix + "others/cartoonCloud.png");
+		clouds[2] = new Texture(prefix + "others/cartoonCloud.png");
 
 		mainBackground = new Texture[4];
-		mainBackground[0] = new Texture("backgrounds/mainBackground1.png");
-		mainBackground[1] = new Texture("backgrounds/mainBackground2.png");
-		mainBackground[2] = new Texture("backgrounds/mainBackground3.png");
-		mainBackground[3] = new Texture("backgrounds/mainBackground4.png");
+		mainBackground[0] = new Texture(prefix + "backgrounds/mainBackground1.png");
+		mainBackground[1] = new Texture(prefix + "backgrounds/mainBackground2.png");
+		mainBackground[2] = new Texture(prefix + "backgrounds/mainBackground3.png");
+		mainBackground[3] = new Texture(prefix + "backgrounds/mainBackground4.png");
 
 	}
 
