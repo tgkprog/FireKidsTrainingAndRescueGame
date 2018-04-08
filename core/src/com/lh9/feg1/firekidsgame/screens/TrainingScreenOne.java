@@ -305,7 +305,7 @@ public class TrainingScreenOne implements Screen {
 		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
 		assetsManager.truckDriving.loop(0.25f);
-		assetsManager.sirenSound.play(0.3f);
+		//assetsManager.sirenSound.play(0.3f);
 	}
 
 	@Override
@@ -477,6 +477,11 @@ public class TrainingScreenOne implements Screen {
 		if (firstDialogueClicked == true) {
 			if (runButton.getSelection() == true && sirene == false) {
 				sirene = true;
+				if(sirenPlayed == false) {
+					assetsManager.sirenSound.play(0.8f);
+					sirenPlayed = true;
+
+				}
 			}
 		}
 		if (sirene == true) {
@@ -489,11 +494,7 @@ public class TrainingScreenOne implements Screen {
 			if (totalTimeSpent < 20)
 				goldenStars = 3;
 
-			if(sirenPlayed == false) {
-				assetsManager.sirenSound.play(0.8f);
-				sirenPlayed = true;
 
-			}
 			dialogueWindow.drawLevelSummary(assetsManager.cog,assetsManager.star,
 					assetsManager.starSummary,
 					assetsManager.starSummaryDesaturated, goldenStars,
