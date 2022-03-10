@@ -47,6 +47,7 @@ public class AssetsManager extends Thread {
 	public Texture closeButton;
 	public Texture[] road;
 	public Texture userScreenButton;
+	public Texture unlockGameButton;
 	public Texture resetGame;
 	public Texture catFalling;
 	public Texture cog;
@@ -536,6 +537,7 @@ public class AssetsManager extends Thread {
 		catFalling = new Texture(prefix + "others/catFalling.png");
 		resetGame = new Texture(prefix + "texts/Reset-game.png");
 		userScreenButton = new Texture(prefix + "buttons/userScreenButton.png");
+		unlockGameButton = new Texture(prefix+"buttons/unlockGameButton.png");
 		
 		userInformation = new Texture(prefix + "texts/userInformation.png");
 		fireEngineGame = new Texture(prefix + "texts/fireEngineGame.png");
@@ -1175,6 +1177,7 @@ public class AssetsManager extends Thread {
 		catFalling.setFilter(textureFilter, textureFilter);
 		resetGame.setFilter(textureFilter, textureFilter);
 		userScreenButton.setFilter(textureFilter, textureFilter);
+		unlockGameButton.setFilter(textureFilter, textureFilter);
 		catSad.setFilter(textureFilter, textureFilter);
 		dialogueWindowGirl.setFilter(textureFilter, textureFilter);
 		dialogueWindowBoy.setFilter(textureFilter, textureFilter);

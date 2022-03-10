@@ -11,7 +11,7 @@ public class IOSLauncher extends IOSApplication.Delegate {
     @Override
     protected IOSApplication createApplication() {
         IOSApplicationConfiguration config = new IOSApplicationConfiguration();
-        return new IOSApplication(new Starter(), config);
+        return new IOSApplication(new Starter(null), config);
     }
 
     public static void main(String[] argv) {

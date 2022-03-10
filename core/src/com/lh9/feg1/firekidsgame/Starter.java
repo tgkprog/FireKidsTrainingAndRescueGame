@@ -9,7 +9,6 @@ import com.badlogic.gdx.graphics.g2d.SpriteBatch;
 import com.badlogic.gdx.pay.Offer;
 import com.badlogic.gdx.pay.OfferType;
 import com.badlogic.gdx.pay.PurchaseManagerConfig;
-import com.badlogic.gdx.pay.PurchaseObserver;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lh9.feg1.firekidsgame.camera.Camera;
@@ -23,145 +22,150 @@ import static com.lh9.feg1.firekidsgame.files.AssetsManager.prefix;
 
 public class Starter extends Game {
 
-    static PlatformResolver m_platformResolver;
-
     // ----- app stores -------------------------
     public static final int APPSTORE_UNDEFINED = 0;
     public static final int APPSTORE_GOOGLE = 1;
     public static final int APPSTORE_OUYA = 2;
     public static final int APPSTORE_AMAZON = 3;
     public static final int APPSTORE_DESKTOP = 4;
-
     public static final int ISAPPSTORE = APPSTORE_GOOGLE;
-	public PurchaseManagerConfig purchaseManagerConfig;
-	public FEGPurchaseObserver fegPurchaseObserver = new FEGPurchaseObserver();
+    static PlatformResolver m_platformResolver;
+    final AdsController adsCont;
+    public PurchaseManagerConfig purchaseManagerConfig;
+    public FEGPurchaseObserver fegPurchaseObserver = new FEGPurchaseObserver();
+    Texture logo;
+    Texture loading;
+    Sprite logoSprite;
+    Sprite loadingSprite;
+    Camera camera;
+    OrthographicCamera guiCamera;
+    Viewport viewport;
+    Viewport guiViewport;
+    AssetsManager assetsManager;
+    SpriteBatch batch;
+    CloudManager cloudManager;
+    int collectedStars;
+    int cogs;
+    boolean[] screensPlayed;
 
-	Texture logo;
-	Texture loading;
-	Sprite logoSprite;
-	Sprite loadingSprite;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	Viewport viewport;
-	Viewport guiViewport;
-	AssetsManager assetsManager;
-	SpriteBatch batch;
-	CloudManager cloudManager;
+    public Starter(AdsController adsCont) {
 
-	int collectedStars;
-	int cogs;
-	boolean[] screensPlayed;
+        //
+        purchaseManagerConfig = new PurchaseManagerConfig();
+        purchaseManagerConfig.addOffer(new Offer().
+                setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
+        this.adsCont = adsCont;
 
-	public Starter(){
+        //
+    }
 
-		//
-		purchaseManagerConfig = new PurchaseManagerConfig();
-		purchaseManagerConfig.addOffer(new Offer().
-				setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
+    @Override
+    public void create() {
+        screensPlayed = new boolean[7];
 
-		//
-	}
+        cloudManager = new CloudManager();
+        assetsManager = new AssetsManager();
+        camera = new Camera(800, 480);
+        guiCamera = new OrthographicCamera(800, 480);
 
-	@Override
-	public void create() {
+        camera.position.x = 400;
+        camera.position.y = 240;
+        guiCamera.position.x = 400;
+        guiCamera.position.y = 240;
 
-		screensPlayed = new boolean[7];
+        batch = new SpriteBatch();
+        viewport = new FillViewport(480, 800, camera);
+        guiViewport = new FillViewport(480, 800, guiCamera);
 
-		cloudManager = new CloudManager();
-		assetsManager = new AssetsManager();
-		camera = new Camera(800, 480);
-		guiCamera = new OrthographicCamera(800, 480);
+        loadBasicTextures();
 
-		camera.position.x = 400;
-		camera.position.y = 240;
-		guiCamera.position.x = 400;
-		guiCamera.position.y = 240;
+        this.setScreen(new LogoScreen(this));
+    }
 
-		batch = new SpriteBatch();
-		viewport = new FillViewport(480, 800, camera);
-		guiViewport = new FillViewport(480, 800, guiCamera);
+    @Override
+    public void render() {
+        super.render();
+    }
 
-		loadBasicTextures();
+    void loadBasicTextures() {
 
-		this.setScreen(new LogoScreen(this));
-	}
+        logo = new Texture(prefix + "others/Pink-Engine-Front.png");
+        logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        logoSprite = new Sprite(logo);
+        loading = new Texture(prefix + "texts/loading.png");
+        loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
+        loadingSprite = new Sprite(loading);
+    }
 
-	@Override
-	public void render() {
-		super.render();
-	}
+    public AdsController getAdsCont() {
+        return adsCont;
+    }
 
-	void loadBasicTextures() {
+    public Camera getCamera() {
+        return camera;
+    }
 
-		logo = new Texture(prefix + "others/Pink-Engine-Front.png");
-		logo.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		logoSprite = new Sprite(logo);
-		loading = new Texture(prefix + "texts/loading.png");
-		loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
-		loadingSprite = new Sprite(loading);
-	}
+    public OrthographicCamera getGuiCamera() {
+        return guiCamera;
+    }
 
-	public Camera getCamera() {
-		return camera;
-	}
+    public SpriteBatch getBatch() {
+        return batch;
+    }
 
-	public OrthographicCamera getGuiCamera() {
-		return guiCamera;
-	}
+    public AssetsManager getAssetsManager() {
+        return assetsManager;
+    }
 
-	public SpriteBatch getBatch() {
-		return batch;
-	}
+    public Sprite getLogoSprite() {
+        return logoSprite;
+    }
 
-	public AssetsManager getAssetsManager() {
-		return assetsManager;
-	}
+    public Sprite getLoadingSprite() {
+        return loadingSprite;
+    }
 
-	public Sprite getLogoSprite() {
-		return logoSprite;
-	}
+    public CloudManager getCloudManager() {
+        return cloudManager;
+    }
 
-	public Sprite getLoadingSprite() {
-		return loadingSprite;
-	}
+    public boolean[] getScreensPlayed() {
+        return screensPlayed;
+    }
 
-	public CloudManager getCloudManager() {
-		return cloudManager;
-	}
+    public boolean getScreenPlayed(int id) {
+        return screensPlayed[id];
+    }
 
-	public boolean[] getScreensPlayed() {
-		return screensPlayed;
-	}
+    public void setScreenPlayed(int id) {
+        screensPlayed[id] = true;
+    }
 
-	public boolean getScreenPlayed(int id) {
-		return screensPlayed[id];
-	}
+    public void setScreenPlayed(boolean[] screensPlayed) {
+        this.screensPlayed = screensPlayed;
+    }
 
-	public void setScreenPlayed(int id) {
-		screensPlayed[id] = true;
-	}
-	public void setScreenPlayed(boolean[] screensPlayed) {
-		this.screensPlayed = screensPlayed;
-	}
+    public int getCollectedStars() {
+        return collectedStars;
+    }
 
-	public int getCollectedStars() {
-		return collectedStars;
-	}
+    public void setCollectedStars(int collectedStars) {
+        this.collectedStars = collectedStars;
+    }
 
-	public void setCollectedStars(int collectedStars) {
-		this.collectedStars = collectedStars;
-	}
-	public int getCogs(){
-		return cogs;
-	}
-	public void setCogs(int cogs){
-		this.cogs = cogs;
-	}
+    public int getCogs() {
+        return cogs;
+    }
+
+    public void setCogs(int cogs) {
+        this.cogs = cogs;
+    }
 
     public PlatformResolver getPlatformResolver() {
         return m_platformResolver;
     }
-    public static void setPlatformResolver (PlatformResolver platformResolver) {
+
+    public static void setPlatformResolver(PlatformResolver platformResolver) {
         m_platformResolver = platformResolver;
     }
 }

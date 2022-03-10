@@ -502,8 +502,8 @@ public class RescueCatScreen implements Screen {
 			if (buttonsAlpha > 0.5f)
 				buttonsAlpha = 0.5f;
 
-			up.setAlpha(buttonsAlpha);
-			down.setAlpha(buttonsAlpha);
+			up.setAlpha(1f);
+			down.setAlpha(1f);
 			runLeft.setAlpha(buttonsAlpha);
 			runRight.setAlpha(buttonsAlpha);
 

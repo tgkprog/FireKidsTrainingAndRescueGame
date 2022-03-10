@@ -247,10 +247,10 @@ public class DataOrganizer {
                 screensPlayed = gameStateSave.getScreensPlayed();
 
                 //for tests
-                screensPlayed[0] = true;
-                screensPlayed[1] = true;
-                screensPlayed[2] = true;
-                screensPlayed[3] = true;
+                //screensPlayed[0] = true;
+                //screensPlayed[1] = true;
+                //screensPlayed[2] = true;
+                //screensPlayed[3] = true;
                 //
 
                 fullVersionUnlocked = gameStateSave.isVullVersionUnlocked();

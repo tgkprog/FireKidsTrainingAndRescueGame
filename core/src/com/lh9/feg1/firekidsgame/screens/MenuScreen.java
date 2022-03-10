@@ -21,330 +21,333 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 
 public class MenuScreen implements Screen {
 
-	Arrow star;
-	Arrow cog;
-	Human buzzer;
-	FPSManager fpsManager;
-	DataOrganizer dataOrganizer;
-	Human boy;
-	CloudManager cloudManager;
-	Variables variables;
-	AssetsManager assetsManager;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	SpriteBatch batch;
-	InputInterpreter inputInterpreter;
-	Button meetTheTrucks;
-	Button fireStation;
-	Button settings;
-	Button authors;
-	Button gender;
-	Button userScreenButton;
-	Button[] starsCounterButtons;
-	Button[] levelButtons;
-	String collectedStarsInString;
-	String cogsInString;
-	Sprite frameCollectibles;
+    static public Starter game;
+    static int backGroundMusicWhich = 0;
+    Arrow star;
+    Arrow cog;
+    Human buzzer;
+    FPSManager fpsManager;
+    DataOrganizer dataOrganizer;
+    Human boy;
+    CloudManager cloudManager;
+    Variables variables;
+    AssetsManager assetsManager;
+    Camera camera;
+    OrthographicCamera guiCamera;
+    SpriteBatch batch;
+    InputInterpreter inputInterpreter;
+    Button meetTheTrucks;
+    Button fireStation;
+    Button settings;
+    Button authors;
+    Button gender;
+    Button unlockGameButton;
+    Button userScreenButton;
+    Button[] starsCounterButtons;
+    Button[] levelButtons;
+    String collectedStarsInString;
+    String cogsInString;
+    Sprite frameCollectibles;
+    long bellSoundID;
+    float positions = -1000;
+    float meetTheTrucksBlinkTimer;
+    float bellsVolume = 1;
+    boolean madeShakeScreen;
+    boolean startedBells;
 
-	long bellSoundID;
-	float positions = -1000;
-	float meetTheTrucksBlinkTimer;
-	float bellsVolume = 1;
-	boolean madeShakeScreen;
-	boolean startedBells;
+    public MenuScreen(final Starter gam) {
 
-	final Starter game;
-	static int backGroundMusicWhich = 0;
+        this.game = gam;
 
-	public MenuScreen(final Starter gam) {
+        dataOrganizer = new DataOrganizer();
+        dataOrganizer.loadData();
 
-		this.game = gam;
+        cloudManager = game.getCloudManager();
+        camera = game.getCamera();
+        guiCamera = game.getGuiCamera();
+        batch = game.getBatch();
+        assetsManager = game.getAssetsManager();
+        variables = new Variables();
 
-		dataOrganizer = new DataOrganizer();
-		dataOrganizer.loadData();
+        fireStation = new Button(700, 100, assetsManager.fireStation);
+        settings = new Button(180, 100, assetsManager.settings);
+        authors = new Button(100, 105, assetsManager.authors);
+        meetTheTrucks = new Button(25, -200, assetsManager.meetTheTrucks);
+        userScreenButton = new Button(720, 100, assetsManager.userScreenButton);
+        unlockGameButton = new Button(655, 110, assetsManager.unlockGameButton);
 
-		cloudManager = game.getCloudManager();
-		camera = game.getCamera();
-		guiCamera = game.getGuiCamera();
-		batch = game.getBatch();
-		assetsManager = game.getAssetsManager();
-		variables = new Variables();
+        if (dataOrganizer.getGender() == false)
+            gender = new Button(5, 105, assetsManager.boyButton);
+        else
+            gender = new Button(5, 105, assetsManager.girlButton);
 
-		fireStation = new Button(700, 100, assetsManager.fireStation);
-		settings = new Button(180, 100, assetsManager.settings);
-		authors = new Button(100, 105, assetsManager.authors);
-		meetTheTrucks = new Button(25, -200, assetsManager.meetTheTrucks);
-		userScreenButton = new Button(720, 100, assetsManager.userScreenButton);
+        settings.goUp(405);
+        authors.goUp(405);
+        gender.goUp(390);
+        userScreenButton.goUp(405);
+        unlockGameButton.goUp(405);
 
-		if (dataOrganizer.getGender() == false)
-			gender = new Button(5, 105, assetsManager.boyButton);
-		else
-			gender = new Button(5, 105, assetsManager.girlButton);
 
-		settings.goUp(405);
-		authors.goUp(405);
-		gender.goUp(390);
-		userScreenButton.goUp(405);
-		
-		
-		boy = new Human();
-		boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
-		boy.setMaxSpeed(0.25f);
-		boy.setAnimationOnly(true);
-		boy.setSpeed(3.5f);
+        boy = new Human();
+        boy.create(assetsManager.boyWaving, 1, 1, 6, 1550, 0);
+        boy.setMaxSpeed(0.25f);
+        boy.setAnimationOnly(true);
+        boy.setSpeed(3.5f);
 
-		buzzer = new Human();
-		buzzer.create(assetsManager.buzzer, 3, 1, 3, 1000, 450);
-		buzzer.setMaxSpeed(3f);
-		buzzer.setAnimationOnly(true);
+        buzzer = new Human();
+        buzzer.create(assetsManager.buzzer, 3, 1, 3, 1000, 450);
+        buzzer.setMaxSpeed(3f);
+        buzzer.setAnimationOnly(true);
 
-		levelButtons = new Button[7];
-		/*
-		 * starsCounterButtons = new Button[6]; starsCounterButtons[0] = new
-		 * Button(270, -150, assetsManager.starButton);
-		 * starsCounterButtons[0].goUp(420); for (int a = 1; a < 6; a++) {
-		 * starsCounterButtons[a] = new Button(270 + 45 * a, -200 - (a * 50),
-		 * assetsManager.starButtonEmpty); starsCounterButtons[a].goUp(420); }
-		 */
-		for (int a = 0; a < 7; a++) {
-			if (a == 0)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.fitness);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.fitness_desaturated);
-			if (a == 1)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.training);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.training_desaturated);
-			if (a == 2)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueBuilding);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueBuilding_desaturated);
-			if (a == 3)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueCat);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueCat_desaturated);
-			if (a == 4)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueTrain);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.rescueTrain_desaturated);
-			if (a == 5)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.elevatorButton);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.elevatorButton_desaturated);
-			if (a == 6)
-				if (game.getScreenPlayed(a) == true)
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.bigRoadRescue);
-				else
-					levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
-							assetsManager.bigRoadRescue_desaturated);
+        levelButtons = new Button[7];
+        /*
+         * starsCounterButtons = new Button[6]; starsCounterButtons[0] = new
+         * Button(270, -150, assetsManager.starButton);
+         * starsCounterButtons[0].goUp(420); for (int a = 1; a < 6; a++) {
+         * starsCounterButtons[a] = new Button(270 + 45 * a, -200 - (a * 50),
+         * assetsManager.starButtonEmpty); starsCounterButtons[a].goUp(420); }
+         */
+        for (int a = 0; a < 7; a++) {
+            if (a == 0)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.fitness);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.fitness_desaturated);
+            if (a == 1)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.training);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.training_desaturated);
+            if (a == 2)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueBuilding);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueBuilding_desaturated);
+            if (a == 3)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueCat);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueCat_desaturated);
+            if (a == 4)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueTrain);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.rescueTrain_desaturated);
+            if (a == 5)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.elevatorButton);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.elevatorButton_desaturated);
+            if (a == 6)
+                if (game.getScreenPlayed(a) == true)
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.bigRoadRescue);
+                else
+                    levelButtons[a] = new Button(120 + 95 * a, -200 - (a * 50),
+                            assetsManager.bigRoadRescue_desaturated);
 
-			levelButtons[a].goUp(0);
-		}
+            levelButtons[a].goUp(0);
+        }
 
-		inputInterpreter = new InputInterpreter();
-		inputInterpreter.setCameras(camera, guiCamera);
-		inputInterpreter.setMeetTheTrucks(meetTheTrucks);
-		inputInterpreter.setLevelButtons(levelButtons);
-		inputInterpreter.setCloudManager(cloudManager);
-		inputInterpreter.setFireStation(fireStation);
-		inputInterpreter.setSettings(settings);
-		inputInterpreter.setAuthors(authors);
-		inputInterpreter.setDataOrganizer(dataOrganizer);
-		inputInterpreter.setGenderButton(gender);
-		inputInterpreter.setScreensPlayed(game.getScreensPlayed());
-		inputInterpreter.setUserScreenButton(userScreenButton);
+        inputInterpreter = new InputInterpreter();
+        inputInterpreter.setCameras(camera, guiCamera);
+        inputInterpreter.setMeetTheTrucks(meetTheTrucks);
+        inputInterpreter.setLevelButtons(levelButtons);
+        inputInterpreter.setCloudManager(cloudManager);
+        inputInterpreter.setFireStation(fireStation);
+        inputInterpreter.setSettings(settings);
+        inputInterpreter.setAuthors(authors);
+        inputInterpreter.setDataOrganizer(dataOrganizer);
+        inputInterpreter.setGenderButton(gender);
+        inputInterpreter.setScreensPlayed(game.getScreensPlayed());
+        inputInterpreter.setUserScreenButton(userScreenButton);
+        inputInterpreter.setUnlockGameButton(unlockGameButton);
 
-		cloudManager.stop();
+        cloudManager.stop();
 
-		fireStation.goUp(825);
+        fireStation.goUp(825);
 
-		camera.reset();
+        camera.reset();
 
-		camera.position.x = 957;
-		camera.position.y = 575;
-		camera.zoom = 2.39f;
+        camera.position.x = 957;
+        camera.position.y = 575;
+        camera.zoom = 2.39f;
 
-		camera.zoom(2.39f, 100);
-		camera.moveX(957, 100, 100, 100);
-		camera.moveY(575, 100, 100, 100);
+        camera.zoom(2.39f, 100);
+        camera.moveX(957, 100, 100, 100);
+        camera.moveY(575, 100, 100, 100);
 
-		fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
+        fpsManager = new FPSManager(assetsManager.font, dataOrganizer.getFps());
 
-		if (game.getCollectedStars() == 0) {
-			game.setCollectedStars(dataOrganizer.getScore());
-		} else {
-			dataOrganizer.setScore(game.getCollectedStars());
-		}
-		if (game.getCogs() == 0) {
-			game.setCogs(dataOrganizer.getExperience());
-		} else {
-			dataOrganizer.setExperience(game.getCogs());
-		}
+        if (game.getCollectedStars() == 0) {
+            game.setCollectedStars(dataOrganizer.getScore());
+        } else {
+            dataOrganizer.setScore(game.getCollectedStars());
+        }
+        if (game.getCogs() == 0) {
+            game.setCogs(dataOrganizer.getExperience());
+        } else {
+            dataOrganizer.setExperience(game.getCogs());
+        }
 
-		frameCollectibles = new Sprite(assetsManager.frameCollectibles);
+        frameCollectibles = new Sprite(assetsManager.frameCollectibles);
 
-		collectedStarsInString = new String(Integer.toString(dataOrganizer
-				.getScore()));
-		cogsInString = new String(Integer.toString(dataOrganizer
-				.getExperience()));
+        collectedStarsInString = new String(Integer.toString(dataOrganizer
+                .getScore()));
+        cogsInString = new String(Integer.toString(dataOrganizer
+                .getExperience()));
 
-		int numberOfZerosToCompleteStarsString = 7 - collectedStarsInString
-				.length();
-		for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
-			collectedStarsInString = "0" + collectedStarsInString;
-		}
-		numberOfZerosToCompleteStarsString = 7 - cogsInString.length();
-		for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
-			cogsInString = "0" + cogsInString;
-		}
+        int numberOfZerosToCompleteStarsString = 7 - collectedStarsInString
+                .length();
+        for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
+            collectedStarsInString = "0" + collectedStarsInString;
+        }
+        numberOfZerosToCompleteStarsString = 7 - cogsInString.length();
+        for (int a = 0; a < numberOfZerosToCompleteStarsString; a++) {
+            cogsInString = "0" + cogsInString;
+        }
 
-		dataOrganizer.setScreensPlayed(game.getScreensPlayed());
-		dataOrganizer.saveData();
+        dataOrganizer.setScreensPlayed(game.getScreensPlayed());
+        dataOrganizer.saveData();
 
-		star = new Arrow(270, 415, assetsManager.star, -72, 60);
-		star.setAlpha(1);
-		star.setScale(1);
+        star = new Arrow(262, 415, assetsManager.star, -72, 60);
+        star.setAlpha(1);
+        star.setScale(1);
 
-		cog = new Arrow(480, 415, assetsManager.cog, -72, 60);
-		cog.setAlpha(1);
-		cog.setScale(1.2f);
-		
-		assetsManager.fontLittle.setColor(1,1,1,1);
-	}
+        cog = new Arrow(467, 415, assetsManager.cog, -72, 60);
+        cog.setAlpha(1);
+        cog.setScale(1.2f);
 
-	@Override
-	public void render(float delta) {
+        assetsManager.fontLittle.setColor(1, 1, 1, 1);
+    }
 
-		if (Gdx.graphics.getRawDeltaTime() > 0.05f
-				&& Gdx.graphics.getDeltaTime() > 0.05f)
-			delta = 0;
+    @Override
+    public void render(float delta) {
 
-		updateLogics(delta);
+        if (Gdx.graphics.getRawDeltaTime() > 0.05f
+                && Gdx.graphics.getDeltaTime() > 0.05f)
+            delta = 0;
 
-		camera.update(delta);
-		guiCamera.update();
+        updateLogics(delta);
 
-		Gdx.gl.glClearColor(1, 1f, 1f, 1);
-		Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
+        camera.update(delta);
+        guiCamera.update();
 
-		batch.setProjectionMatrix(camera.combined);
-		batch.begin();
+        Gdx.gl.glClearColor(1, 1f, 1f, 1);
+        Gdx.gl.glClear(GL20.GL_COLOR_BUFFER_BIT | GL20.GL_DEPTH_BUFFER_BIT);
 
-		drawBackground(delta);
-		drawTexts(delta);
-		drawCharacters(delta);
+        batch.setProjectionMatrix(camera.combined);
+        batch.begin();
 
-		batch.end();
-		batch.setProjectionMatrix(guiCamera.combined);
-		batch.begin();
+        drawBackground(delta);
+        drawTexts(delta);
+        drawCharacters(delta);
 
-		drawButtons(delta);
-		drawClouds(delta);
-		drawFps();
+        batch.end();
+        batch.setProjectionMatrix(guiCamera.combined);
+        batch.begin();
 
-		batch.end();
+        drawButtons(delta);
+        drawClouds(delta);
+        drawFps();
 
-		manageSelectingScreen();
+        batch.end();
 
-	}
+        manageSelectingScreen();
 
-	@Override
-	public void resize(int width, int height) {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void resize(int width, int height) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void show() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void show() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void hide() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void hide() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void pause() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void pause() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void resume() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void resume() {
+        // TODO Auto-generated method stub
 
-	@Override
-	public void dispose() {
-		// TODO Auto-generated method stub
+    }
 
-	}
+    @Override
+    public void dispose() {
+        // TODO Auto-generated method stub
 
-	void drawButtons(float delta) {
+    }
 
-		assetsManager.fontLittle.setColor(Color.WHITE);
-		assetsManager.fontLittle.draw(batch, collectedStarsInString, 330, 448);
-		assetsManager.fontLittle.draw(batch, cogsInString, 540, 448);
+    void drawButtons(float delta) {
 
-		star.render(batch, delta * 0.75f);
-		cog.render(batch, delta * 0.75f);
-		gender.render(batch, delta);
-		userScreenButton.render(batch, delta);
-		meetTheTrucks.render(batch, (float) delta);
-		settings.render(batch, delta);
-		authors.render(batch, delta);
-		for (int a = 0; a < 7; a++) {
-			levelButtons[a].render(batch, (float) delta);
-		}
-	}
+        assetsManager.fontLittle.setColor(Color.WHITE);
+        assetsManager.fontLittle.draw(batch, collectedStarsInString, 325, 448);
+        assetsManager.fontLittle.draw(batch, cogsInString, 520, 448);
 
-	void updateLogics(double delta) {
+        star.render(batch, delta * 0.75f);
+        cog.render(batch, delta * 0.75f);
+        gender.render(batch, delta);
+        userScreenButton.render(batch, delta);
+        unlockGameButton.render(batch, delta);
+        meetTheTrucks.render(batch, (float) delta);
+        settings.render(batch, delta);
+        authors.render(batch, delta);
+        for (int a = 0; a < 7; a++) {
+            levelButtons[a].render(batch, (float) delta);
+        }
+    }
 
-		if(game.getScreensPlayed()[0] == false)
-		meetTheTrucksBlinkTimer += delta;
-		if(meetTheTrucksBlinkTimer > 0.5f){
-			meetTheTrucksBlinkTimer = 0;
-			meetTheTrucks.blink();
-		}
-		
-		if (positions < 0) {
-			positions += delta * 100 + Math.abs(positions) * 0.025f;
-		}
-		if (positions > 0) {
-			positions = 0;
-		}
-		if(assetsManager.backgroundGirl.isPlaying() == false && assetsManager.backgroundBoy.isPlaying() == false ) {
-			if (backGroundMusicWhich == 0) {
-				backGroundMusicWhich = 1;
-				assetsManager.backgroundGirl.play();
-			} else {
-				backGroundMusicWhich = 0;
-				assetsManager.backgroundBoy.play();
-			}
-		}
+    void updateLogics(double delta) {
+
+        if (game.getScreensPlayed()[0] == false)
+            meetTheTrucksBlinkTimer += delta;
+        if (meetTheTrucksBlinkTimer > 0.5f) {
+            meetTheTrucksBlinkTimer = 0;
+            meetTheTrucks.blink();
+        }
+
+        if (positions < 0) {
+            positions += delta * 100 + Math.abs(positions) * 0.025f;
+        }
+        if (positions > 0) {
+            positions = 0;
+        }
+        if (assetsManager.backgroundGirl.isPlaying() == false && assetsManager.backgroundBoy.isPlaying() == false) {
+            if (backGroundMusicWhich == 0) {
+                backGroundMusicWhich = 1;
+                assetsManager.backgroundGirl.play();
+            } else {
+                backGroundMusicWhich = 0;
+                assetsManager.backgroundBoy.play();
+            }
+        }
 		/*
 		if (assetsManager.backgroundPlayed == false) {
 			if (dataOrganizer.getGender() == false) {
@@ -357,164 +360,186 @@ public class MenuScreen implements Screen {
 			}
 			assetsManager.backgroundPlayed = true;
 		}*/
-		if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
-			gender.setTexture(assetsManager.boyButton);
-			dataOrganizer.setGender(false);
-		}
-		if (dataOrganizer.getGender() == true && gender.getSelection() == true) {
-			gender.setTexture(assetsManager.girlButton);
-			dataOrganizer.setGender(true);
-		}
+        if (dataOrganizer.getGender() == false && gender.getSelection() == true) {
+            gender.setTexture(assetsManager.boyButton);
+            dataOrganizer.setGender(false);
+        }
+        if (dataOrganizer.getGender() == true && gender.getSelection() == true) {
+            gender.setTexture(assetsManager.girlButton);
+            dataOrganizer.setGender(true);
+        }
 
-		if (fireStation.notMoving() == true && madeShakeScreen == false) {
-			madeShakeScreen = true;
-			fireStation.blink();
-			// camera.shakeScreen();
-			// Not needed
-		}
-	}
+        if (fireStation.notMoving() == true && madeShakeScreen == false) {
+            madeShakeScreen = true;
+            fireStation.blink();
+            // camera.shakeScreen();
+            // Not needed
+        }
+    }
 
-	void manageSelectingScreen() {
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMEET_THE_TRUCKS()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new MeetTheTrucksScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName().equals(Variables.USER_INPUT_SCREEN)) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new UserInputScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName().equals(Variables.UNLOCK_GAME_SCREEN)) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new UnlockGameScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getELEVATOR_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new PreElevatorScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getCAT_RESCUE_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new PreRescueCatScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getAUTHORS_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new AuthorsScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getSETTINGS_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new SettingsScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getBIG_ROAD_RESCUE_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new BigRoadRescueScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getRESCUE_METRO_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new PreRescueMetroScreen(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTRAINING_SCREEN_TWO()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new TrainingScreenTwo(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getTRAINING_SCREEN_ONE()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new TrainingScreenOne(game));
-			}
-		}
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getFITNESS_SCREEN_ONE()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.saveData();
-				game.setScreen(new FitnessScreenOne(game));
-			}
-		}
-	}
+    void manageSelectingScreen() {
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getMEET_THE_TRUCKS()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                //loading add
+                //game.getAdsCont().showOrLoadInterstitial();
+                game.setScreen(new MeetTheTrucksScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName().equals(Variables.USER_INPUT_SCREEN)) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new UserInputScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName().equals(Variables.UNLOCK_GAME_SCREEN)) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new UnlockGameScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getELEVATOR_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                //loading add
+                if (!dataOrganizer.isFullVersionUnlocked())
+                    game.getAdsCont().showInterstitial();
 
-	void drawCharacters(float delta) {
-		batch.draw(assetsManager.girlMainMenu, 0, positions);
-		boy.setPosition(1550, (int) positions);
-		boy.render(batch, delta);
-		boy.setSpeed(2.5f);
-		batch.draw(assetsManager.helmet1, 5, 715 + Math.abs(positions));
-		batch.draw(assetsManager.helmet2, 1700, 715 + Math.abs(positions));
-	}
+                dataOrganizer.saveData();
+                game.setScreen(new PreElevatorScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getCAT_RESCUE_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new PreRescueCatScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getAUTHORS_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new AuthorsScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getSETTINGS_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new SettingsScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getBIG_ROAD_RESCUE_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                //loading add after every 50secs
+                if (!dataOrganizer.isFullVersionUnlocked())
+                    game.getAdsCont().setRunEvery50sec(true);
 
-	void drawBackground(float delta) {
-		batch.draw(assetsManager.mainBackground[0], 0, 576);
-		batch.draw(assetsManager.mainBackground[1], 960, 576);
-		batch.draw(assetsManager.mainBackground[2], 0, 0);
-		batch.draw(assetsManager.mainBackground[3], 960, 0);
+                dataOrganizer.saveData();
+                game.setScreen(new BigRoadRescueScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getRESCUE_METRO_SCREEN()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                //loading add
+                if (!dataOrganizer.isFullVersionUnlocked())
+                    game.getAdsCont().showInterstitial();
 
-		buzzer.setPosition(875, 400);
-		buzzer.render(batch, delta);
-		buzzer.setPosition(1410, 400);
-		buzzer.render(batch, delta);
+                dataOrganizer.saveData();
+                game.setScreen(new PreRescueMetroScreen(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getTRAINING_SCREEN_TWO()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                //show add
+                if (!dataOrganizer.isFullVersionUnlocked())
+                    game.getAdsCont().showInterstitial();
 
-		if (inputInterpreter.getSelectedScreenName() != "No button clicked") {
-			buzzer.setSpeed(10f);
-			if (startedBells == false) {
-				assetsManager.click.play();
-				bellSoundID = assetsManager.bell.play();
-				startedBells = true;
-			}
-		}
-		if (positions < 0)
-			buzzer.setSpeed(0f);
+                dataOrganizer.saveData();
+                game.setScreen(new TrainingScreenTwo(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getTRAINING_SCREEN_ONE()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                dataOrganizer.saveData();
+                game.setScreen(new TrainingScreenOne(game));
+            }
+        }
+        if (inputInterpreter.getSelectedScreenName() == variables
+                .getFITNESS_SCREEN_ONE()) {
+            if (cloudManager.getAllScalesEqualOne() == true) {
+                //show add
+                if (!dataOrganizer.isFullVersionUnlocked())
+                    game.getAdsCont().showInterstitial();
 
-		if (startedBells == true) {
-			assetsManager.bell.setVolume(bellSoundID, bellsVolume);
-			if (bellsVolume > 0)
-				bellsVolume -= delta * 0.55f;
-			if (bellsVolume < 0)
-				bellsVolume = 0;
-		}
+                dataOrganizer.saveData();
+                game.setScreen(new FitnessScreenOne(game));
+            }
+        }
+    }
 
-		frameCollectibles.setScale(3, 3);
-		frameCollectibles.setPosition(800, 1030);
-		frameCollectibles.draw(batch);
-		frameCollectibles.setPosition(1300, 1030);
-		frameCollectibles.draw(batch);
+    void drawCharacters(float delta) {
+        batch.draw(assetsManager.girlMainMenu, 0, positions);
+        boy.setPosition(1550, (int) positions);
+        boy.render(batch, delta);
+        boy.setSpeed(2.5f);
+        batch.draw(assetsManager.helmet1, 5, 715 + Math.abs(positions));
+        batch.draw(assetsManager.helmet2, 1700, 715 + Math.abs(positions));
+    }
 
-	}
+    void drawBackground(float delta) {
+        batch.draw(assetsManager.mainBackground[0], 0, 576);
+        batch.draw(assetsManager.mainBackground[1], 960, 576);
+        batch.draw(assetsManager.mainBackground[2], 0, 0);
+        batch.draw(assetsManager.mainBackground[3], 960, 0);
 
-	void drawTexts(float delta) {
-		fireStation.render(batch, delta);
-	}
+        buzzer.setPosition(875, 400);
+        buzzer.render(batch, delta);
+        buzzer.setPosition(1410, 400);
+        buzzer.render(batch, delta);
 
-	void drawClouds(float delta) {
-		cloudManager.render(batch, delta);
-	}
+        if (inputInterpreter.getSelectedScreenName() != "No button clicked") {
+            buzzer.setSpeed(10f);
+            if (startedBells == false) {
+                assetsManager.click.play();
+                bellSoundID = assetsManager.bell.play();
+                startedBells = true;
+            }
+        }
+        if (positions < 0)
+            buzzer.setSpeed(0f);
 
-	void drawFps() {
-		fpsManager.render(batch);
-	}
+        if (startedBells == true) {
+            assetsManager.bell.setVolume(bellSoundID, bellsVolume);
+            if (bellsVolume > 0)
+                bellsVolume -= delta * 0.55f;
+            if (bellsVolume < 0)
+                bellsVolume = 0;
+        }
+
+        frameCollectibles.setScale(3, 3);
+        frameCollectibles.setPosition(785, 1030);
+        frameCollectibles.draw(batch);
+        frameCollectibles.setPosition(1260, 1030);
+        frameCollectibles.draw(batch);
+
+    }
+
+    void drawTexts(float delta) {
+        fireStation.render(batch, delta);
+    }
+
+    void drawClouds(float delta) {
+        cloudManager.render(batch, delta);
+    }
+
+    void drawFps() {
+        fpsManager.render(batch);
+    }
 }

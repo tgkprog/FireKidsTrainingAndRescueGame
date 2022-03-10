@@ -316,7 +316,7 @@ public class UnlockGameScreen implements Screen {
                 game.fegPurchaseObserver.clear();
             }
 
-            if (failed == false)
+            if (failed)
                 textUnlockedSuccessfully.render(batch, delta);
             else
                 textUnlockingFailed.render(batch, delta);

@@ -17,828 +17,848 @@ import com.lh9.feg1.firekidsgame.utils.Variables;
 import com.lh9.feg1.firekidsgame.windows.Dialogue;
 import com.lh9.feg1.firekidsgame.windows.MenuWindow;
 
+import static com.lh9.feg1.firekidsgame.screens.MenuScreen.game;
+
 public class InputInterpreter implements GestureListener {
 
-	Button generalPurposeButton;
-	
-	MyTextInputListener textInputListener;
-	int selectedUserInputID = -1;
-	Button[] userInputButtons;
-	AssetsManager assetsManager;
-	boolean[] screensPlayed;
-	String selectedScreen = "No button clicked";
-	Button webButton;
-	Button jump;
-	Button gender;
-	Button[] hitboxes;
-	Button userScreenButton;
-	DataOrganizer dataOrganizer;
-	MenuWindow menuWindow;
-	Button[] settingsButtons;
-	Button retryButton;
-	Button playButton;
-	Human controlledHuman;
-	Truck controlledTruck;
-	CloudManager cloudManager;
-	Dialogue dialogueWindow;
-	Camera camera;
-	OrthographicCamera guiCamera;
-	Button authors;
-	Button up;
-	Button down;
-	Button menu;
-	Button settings;
-	Button fireStation;
-	Button pause;
-	Button meetTheTrucks;
-	Button levelButtons[];
-	Button runButton;
-	Button runButtonSecond;
-	Button yellowSectionMiddle;
-	Button yellowSectionLeft;
-	Button yellowSectionUpLeft;
-	Button yellowSectionUpRight;
-	Button eclipseFire;
-	Variables variables = new Variables();
-	Vector3 xyzTap = new Vector3();
-	String message = "No data yet";
+    Button generalPurposeButton;
 
-	boolean wasPannedBefore;
-	boolean assetsLoaded;
-	boolean initialCameraMovements;
-	boolean touched;
-	boolean panned;
-	boolean touchedDown;
-	boolean justStoppedPanning;
-	boolean zoomDeltaChanged;
+    MyTextInputListener textInputListener;
+    int selectedUserInputID = -1;
+    Button[] userInputButtons;
+    AssetsManager assetsManager;
+    boolean[] screensPlayed;
+    String selectedScreen = "No button clicked";
+    Button webButton;
+    Button jump;
+    Button gender;
+    Button[] hitboxes;
+    Button userScreenButton;
+    Button unlockGameButton;
+    DataOrganizer dataOrganizer;
+    MenuWindow menuWindow;
+    Button[] settingsButtons;
+    Button retryButton;
+    Button playButton;
+    Human controlledHuman;
+    Truck controlledTruck;
+    CloudManager cloudManager;
+    Dialogue dialogueWindow;
+    Camera camera;
+    OrthographicCamera guiCamera;
+    Button authors;
+    Button up;
+    Button down;
+    Button menu;
+    Button settings;
+    Button fireStation;
+    Button pause;
+    Button meetTheTrucks;
+    Button levelButtons[];
+    Button runButton;
+    Button runButtonSecond;
+    Button yellowSectionMiddle;
+    Button yellowSectionLeft;
+    Button yellowSectionUpLeft;
+    Button yellowSectionUpRight;
+    Button eclipseFire;
+    Variables variables = new Variables();
+    Vector3 xyzTap = new Vector3();
+    String message = "No data yet";
 
-	double initialPanX;
-	double initialPanY;
-	double tapX;
-	double tapY;
-	double panX = 0;
-	double panY = 0;
-	double touchDownX = 0;
-	double touchDownY = 0;
-	double zoomDelta;
+    boolean wasPannedBefore;
+    boolean assetsLoaded;
+    boolean initialCameraMovements;
+    boolean touched;
+    boolean panned;
+    boolean touchedDown;
+    boolean justStoppedPanning;
+    boolean zoomDeltaChanged;
 
-	public double getZoomDelta() {
-		if (zoomDeltaChanged == true) {
-			zoomDeltaChanged = false;
-			return zoomDelta / 100;
-		} else
-			return 0;
-	}
+    double initialPanX;
+    double initialPanY;
+    double tapX;
+    double tapY;
+    double panX = 0;
+    double panY = 0;
+    double touchDownX = 0;
+    double touchDownY = 0;
+    double zoomDelta;
 
-	public double getPanX() {
-		return panX;
-	}
+    public InputInterpreter() {
+        Gdx.input.setInputProcessor(new GestureDetector(this));
+    }
 
-	public double getPanY() {
-		return panY;
-	}
+    public double getZoomDelta() {
+        if (zoomDeltaChanged == true) {
+            zoomDeltaChanged = false;
+            return zoomDelta / 100;
+        } else
+            return 0;
+    }
 
-	public boolean getPanned() {
-		return panned;
-	}
+    public double getPanX() {
+        return panX;
+    }
 
-	public double getTouchDownX() {
-		return touchDownX;
-	}
+    public double getPanY() {
+        return panY;
+    }
 
-	public double getTouchDownY() {
-		return touchDownY;
-	}
+    public boolean getPanned() {
+        return panned;
+    }
 
-	public boolean getTouchDown() {
-		if (touchedDown == true) {
-			touchedDown = false;
-			return true;
-		} else
-			return false;
-	}
+    public double getTouchDownX() {
+        return touchDownX;
+    }
 
-	@Override
-	public boolean touchDown(float x, float y, int pointer, int button) {
-		// TODO Auto-generated method stub
-		touchedDown = true;
-		touchDownX = x;
-		touchDownY = y;
+    public double getTouchDownY() {
+        return touchDownY;
+    }
 
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("touchDown");
+    public boolean getTouchDown() {
+        if (touchedDown == true) {
+            touchedDown = false;
+            return true;
+        } else
+            return false;
+    }
 
-		Vector3 vec = new Vector3();
-		vec.x = x;
-		vec.y = y;
+    @Override
+    public boolean touchDown(float x, float y, int pointer, int button) {
+        // TODO Auto-generated method stub
+        touchedDown = true;
+        touchDownX = x;
+        touchDownY = y;
 
-		tapX = x;
-		tapY = y;
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("touchDown");
 
-		guiCamera.unproject(vec);
-		manageButtonsCollisions(vec.x, vec.y);
-		manageDialogues(x, y);
+        Vector3 vec = new Vector3();
+        vec.x = x;
+        vec.y = y;
 
-		vec = new Vector3();
-		vec.x = x;
-		vec.y = y;
-		camera.unproject(vec);
+        tapX = x;
+        tapY = y;
 
-		manageNonGuiCollisions(vec.x, vec.y);
+        guiCamera.unproject(vec);
+        manageButtonsCollisions(vec.x, vec.y);
+        manageDialogues(x, y);
 
-		return false;
-	}
+        vec = new Vector3();
+        vec.x = x;
+        vec.y = y;
+        camera.unproject(vec);
 
-	@Override
-	public boolean tap(float x, float y, int count, int button) {
-		// TODO Auto-generated method stub
+        manageNonGuiCollisions(vec.x, vec.y);
 
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("tap");
-		touched = true;
+        return false;
+    }
 
-		return false;
-	}
+    @Override
+    public boolean tap(float x, float y, int count, int button) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public boolean longPress(float x, float y) {
-		// TODO Auto-generated method stub
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("longPress");
-		return false;
-	}
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("tap");
+        touched = true;
 
-	@Override
-	public boolean fling(float velocityX, float velocityY, int button) {
-		if (Math.abs(velocityX) > Math.abs(velocityY) && assetsLoaded == true) {
-			if (velocityX > 0) {
+        return false;
+    }
 
-			} else if (velocityX < 0) {
+    @Override
+    public boolean longPress(float x, float y) {
+        // TODO Auto-generated method stub
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("longPress");
+        return false;
+    }
 
-			} else {
-				// Do nothing.
-			}
-		} else {
+    @Override
+    public boolean fling(float velocityX, float velocityY, int button) {
+        if (Math.abs(velocityX) > Math.abs(velocityY) && assetsLoaded == true) {
+            if (velocityX > 0) {
 
-			// Ignore the input, because we don't care about up/down swipes.
-		}
-		return true;
-	}
+            } else if (velocityX < 0) {
 
-	@Override
-	public boolean pan(float x, float y, float deltaX, float deltaY) {
-		// TODO Auto-generated method stub
-		panned = true;
-		panX = x;
-		panY = y;
+            } else {
+                // Do nothing.
+            }
+        } else {
 
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("pan");
+            // Ignore the input, because we don't care about up/down swipes.
+        }
+        return true;
+    }
 
-		return false;
-	}
+    @Override
+    public boolean pan(float x, float y, float deltaX, float deltaY) {
+        // TODO Auto-generated method stub
+        panned = true;
+        panX = x;
+        panY = y;
 
-	@Override
-	public boolean panStop(float x, float y, int pointer, int button) {
-		// TODO Auto-generated method stub
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("pan");
 
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("panStop");
-		panned = false;
-		justStoppedPanning = true;
+        return false;
+    }
 
-		return false;
-	}
+    @Override
+    public boolean panStop(float x, float y, int pointer, int button) {
+        // TODO Auto-generated method stub
 
-	@Override
-	public boolean zoom(float initialDistance, float distance) {
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("panStop");
+        panned = false;
+        justStoppedPanning = true;
 
-		if (variables.getDEBUG_MODE() == true) {
-			System.out.println("zoom");
+        return false;
+    }
 
-			System.out.println("initialDistance: " + initialDistance
-					+ "distance: " + distance);
-			message = "initialDistance: " + initialDistance + "distance: "
-					+ distance;
-		}
-		if (initialDistance > distance)
-			zoomDelta = initialDistance / distance;
-		else if (initialDistance < distance)
-			zoomDelta = distance / initialDistance;
-		if (distance > initialDistance) {
-			zoomDelta *= (-1);
-		}
-		zoomDeltaChanged = true;
+    @Override
+    public boolean zoom(float initialDistance, float distance) {
 
-		return false;
-	}
+        if (variables.getDEBUG_MODE() == true) {
+            System.out.println("zoom");
 
-	@Override
-	public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
-			Vector2 pointer1, Vector2 pointer2) {
-		// TODO Auto-generated method stub
+            System.out.println("initialDistance: " + initialDistance
+                    + "distance: " + distance);
+            message = "initialDistance: " + initialDistance + "distance: "
+                    + distance;
+        }
+        if (initialDistance > distance)
+            zoomDelta = initialDistance / distance;
+        else if (initialDistance < distance)
+            zoomDelta = distance / initialDistance;
+        if (distance > initialDistance) {
+            zoomDelta *= (-1);
+        }
+        zoomDeltaChanged = true;
 
-		if (variables.getDEBUG_MODE() == true)
-			System.out.println("pinch");
-		return false;
-	}
+        return false;
+    }
 
-	public InputInterpreter() {
-		Gdx.input.setInputProcessor(new GestureDetector(this));
-	}
+    @Override
+    public boolean pinch(Vector2 initialPointer1, Vector2 initialPointer2,
+                         Vector2 pointer1, Vector2 pointer2) {
+        // TODO Auto-generated method stub
 
-	public Vector3 getLastTouchPosition() {
-		touched = false;
-		xyzTap.x = (float) tapX;
-		xyzTap.y = (float) tapY;
-		return xyzTap;
-	}
+        if (variables.getDEBUG_MODE() == true)
+            System.out.println("pinch");
+        return false;
+    }
 
-	public boolean justStoppedPanning() {
-		if (justStoppedPanning == true) {
-			justStoppedPanning = false;
-			return true;
-		} else
-			return false;
+    public Vector3 getLastTouchPosition() {
+        touched = false;
+        xyzTap.x = (float) tapX;
+        xyzTap.y = (float) tapY;
+        return xyzTap;
+    }
 
-	}
+    public boolean justStoppedPanning() {
+        if (justStoppedPanning == true) {
+            justStoppedPanning = false;
+            return true;
+        } else
+            return false;
 
-	void manageButtonsCollisions(double x, double y) {
-		if (cloudManager.getAllScalesEqualZero() == true) {
-			if (gender != null) {
-				if (gender.checkCollision((int) x, (int) y) == true) {
-					gender.blink();
-					dataOrganizer.setGender(!dataOrganizer.getGender());
-				}
-			}
+    }
 
-			if (userInputButtons != null) {
+    void manageButtonsCollisions(double x, double y) {
+        if (cloudManager.getAllScalesEqualZero() == true) {
+            if (gender != null) {
+                if (gender.checkCollision((int) x, (int) y) == true) {
+                    gender.blink();
+                    dataOrganizer.setGender(!dataOrganizer.getGender());
+                }
+            }
 
-				if(userInputButtons[userInputButtons.length-1].checkCollision((int)x, (int)y) == true){
-					userInputButtons[userInputButtons.length-1].blink();
-				}
-				
-				boolean anyCollision = false;
-				for (int a = 0; a < userInputButtons.length - 1; a++) {
-					if (userInputButtons[a].checkCollision((int) x, (int) y) == true) {
-						textInputListener.start();
-						userInputButtons[a].blink();
-						for (int b = 0; b < userInputButtons.length; b++) {
-							userInputButtons[b].normal();
-						}
-						userInputButtons[a].red();
-						anyCollision = true;
-						selectedUserInputID = a;
-					}
-				}
-				if (anyCollision == false) {
-				//	selectedUserInputID = -1;
-					for (int b = 0; b < userInputButtons.length; b++) {
-						userInputButtons[b].normal();
-					}
-				}
-			}
-			if (generalPurposeButton != null) {
-				if (generalPurposeButton.checkCollision((int) x, (int) y) == true) {
-					generalPurposeButton.blink();
-			
-				}
-			}
-			if (userScreenButton != null) {
-				if (userScreenButton.checkCollision((int) x, (int) y) == true) {
-					userScreenButton.blink();
-					cloudManager.start();
-					selectedScreen = Variables.USER_INPUT_SCREEN;
-				}
-			}
-			if (settingsButtons != null) {
-				if (settingsButtons[0].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[0].blink();
-					dataOrganizer.setFps(!dataOrganizer.getFps());
-				}
-				if (settingsButtons[1].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[1].blink();
-					dataOrganizer.setTextureFiltering(!dataOrganizer
-							.getTextureFiltering());
-				}
-				if (settingsButtons[2].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[2].blink();
-					dataOrganizer.setVoice(!dataOrganizer.getVoice());
-				}
-				if (settingsButtons[3].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[3].blink();
-					dataOrganizer.setVibrations(!dataOrganizer.getVibrations());
-				}
-				if (settingsButtons[4].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[4].blink();
-					dataOrganizer.setScreenAwake(!dataOrganizer
-							.getScreenAwake());
-				}
-				if (settingsButtons[5].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[5].blink();
-					dataOrganizer.setPrompts(!dataOrganizer.getPrompts());
-				}
-				if (settingsButtons[6].checkCollision((int) x, (int) y) == true) {
-					settingsButtons[6].blink();
-					dataOrganizer.resetGameState();
-				}
+            if (userInputButtons != null) {
 
-			}
-			if (webButton != null) {
-				if (webButton.checkCollision((int) x, (int) y) == true) {
-					webButtonAction();
-				}
-			}
-			if (retryButton != null) {
-				if (retryButton.checkCollision((int) x, (int) y) == true) {
-					retryButton.blink();
-					selectedScreen = menuWindow.getScreen();
-					cloudManager.start();
-				}
-			}
-			if (playButton != null) {
-				if (playButton.checkCollision((int) x, (int) y) == true) {
-					playButton.blink();
-					menuWindow.hide();
-				}
-			}
-			if (settings != null) {
-				if (settings.checkCollision((int) x, (int) y) == true) {
-					settings.blink();
-					selectedScreen = variables.getSETTINGS_SCREEN();
-					cloudManager.start();
-				}
-			}
-			if (authors != null) {
-				if (authors.checkCollision((int) x, (int) y) == true) {
-					authors.blink();
-					selectedScreen = variables.getAUTHORS_SCREEN();
-					cloudManager.start();
-				}
-			}
-			if (menu != null) {
-				if (menu.checkCollision((int) x, (int) y) == true) {
-					menu.blink();
-					selectedScreen = variables.getMENU_SCREEN();
-					cloudManager.start();
-				}
-			}
+                if (userInputButtons[userInputButtons.length - 1].checkCollision((int) x, (int) y) == true) {
+                    userInputButtons[userInputButtons.length - 1].blink();
+                }
 
-			if (yellowSectionUpRight != null) {
+                boolean anyCollision = false;
+                for (int a = 0; a < userInputButtons.length - 1; a++) {
+                    if (userInputButtons[a].checkCollision((int) x, (int) y) == true) {
+                        textInputListener.start();
+                        userInputButtons[a].blink();
+                        for (int b = 0; b < userInputButtons.length; b++) {
+                            userInputButtons[b].normal();
+                        }
+                        userInputButtons[a].red();
+                        anyCollision = true;
+                        selectedUserInputID = a;
+                    }
+                }
+                if (anyCollision == false) {
+                    //	selectedUserInputID = -1;
+                    for (int b = 0; b < userInputButtons.length; b++) {
+                        userInputButtons[b].normal();
+                    }
+                }
+            }
+            if (generalPurposeButton != null) {
+                if (generalPurposeButton.checkCollision((int) x, (int) y) == true) {
+                    generalPurposeButton.blink();
 
-				if (yellowSectionMiddle.checkCollision((int) x, (int) y) == true) {
-					yellowSectionMiddle.blink();
-					assetsManager.click.play();
-				}
-				if (yellowSectionLeft.checkCollision((int) x, (int) y) == true) {
-					assetsManager.click.play();
-					yellowSectionLeft.blink();
-				}
-				if (yellowSectionUpLeft.checkCollision((int) x, (int) y) == true) {
-					assetsManager.click.play();
-					yellowSectionUpLeft.blink();
-				}
-				if (yellowSectionUpRight.checkCollision((int) x, (int) y) == true) {
-					assetsManager.click.play();
-					yellowSectionUpRight.blink();
-				}
+                }
+            }
+            if (userScreenButton != null) {
+                if (userScreenButton.checkCollision((int) x, (int) y) == true) {
+                    userScreenButton.blink();
+                    cloudManager.start();
+                    selectedScreen = Variables.USER_INPUT_SCREEN;
+                }
+            }
+            if (unlockGameButton != null) {
+                if (unlockGameButton.checkCollision((int) x, (int) y) == true) {
+                    if (dataOrganizer.isFullVersionUnlocked() == false){
+                        unlockGameButton.blink();
+                        selectedScreen = Variables.UNLOCK_GAME_SCREEN;
+                        cloudManager.start();
+                    }else
+                        game.getAdsCont().toastMessage("Already unlocked");
 
-			}
+                }
+            }
+            if (settingsButtons != null) {
+                if (settingsButtons[0].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[0].blink();
+                    dataOrganizer.setFps(!dataOrganizer.getFps());
+                }
+                if (settingsButtons[1].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[1].blink();
+                    dataOrganizer.setTextureFiltering(!dataOrganizer
+                            .getTextureFiltering());
+                }
+                if (settingsButtons[2].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[2].blink();
+                    dataOrganizer.setVoice(!dataOrganizer.getVoice());
+                }
+                if (settingsButtons[3].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[3].blink();
+                    dataOrganizer.setVibrations(!dataOrganizer.getVibrations());
+                }
+                if (settingsButtons[4].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[4].blink();
+                    dataOrganizer.setScreenAwake(!dataOrganizer
+                            .getScreenAwake());
+                }
+                if (settingsButtons[5].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[5].blink();
+                    dataOrganizer.setPrompts(!dataOrganizer.getPrompts());
+                }
+                if (settingsButtons[6].checkCollision((int) x, (int) y) == true) {
+                    settingsButtons[6].blink();
+                    dataOrganizer.resetGameState();
+                }
 
-			if (up != null) {
-				if (up.checkCollision((int) x, (int) y) == true) {
-					upAction();
-				}
-			}
-			if (down != null) {
-				if (down.checkCollision((int) x, (int) y) == true) {
-					downAction();
-				}
-			}
+            }
+            if (webButton != null) {
+                if (webButton.checkCollision((int) x, (int) y) == true) {
+                    webButtonAction();
+                }
+            }
+            if (retryButton != null) {
+                if (retryButton.checkCollision((int) x, (int) y) == true) {
+                    retryButton.blink();
+                    selectedScreen = menuWindow.getScreen();
+                    cloudManager.start();
+                }
+            }
+            if (playButton != null) {
+                if (playButton.checkCollision((int) x, (int) y) == true) {
+                    playButton.blink();
+                    menuWindow.hide();
+                }
+            }
+            if (settings != null) {
+                if (settings.checkCollision((int) x, (int) y) == true) {
+                    settings.blink();
+                    selectedScreen = variables.getSETTINGS_SCREEN();
+                    cloudManager.start();
+                }
+            }
+            if (authors != null) {
+                if (authors.checkCollision((int) x, (int) y) == true) {
+                    authors.blink();
+                    selectedScreen = variables.getAUTHORS_SCREEN();
+                    cloudManager.start();
+                }
+            }
+            if (menu != null) {
+                if (menu.checkCollision((int) x, (int) y) == true) {
+                    menu.blink();
+                    selectedScreen = variables.getMENU_SCREEN();
+                    cloudManager.start();
+                }
+            }
 
-			if (runButton != null)
-				if (runButton.checkCollision((int) x, (int) y) == true) {
-					runButtonAction();
-				}
+            if (yellowSectionUpRight != null) {
 
-			if (jump != null)
-				if (jump.checkCollision((int) x, (int) y) == true) {
-					jumpAction();
-				}
+                if (yellowSectionMiddle.checkCollision((int) x, (int) y) == true) {
+                    yellowSectionMiddle.blink();
+                    assetsManager.click.play();
+                }
+                if (yellowSectionLeft.checkCollision((int) x, (int) y) == true) {
+                    assetsManager.click.play();
+                    yellowSectionLeft.blink();
+                }
+                if (yellowSectionUpLeft.checkCollision((int) x, (int) y) == true) {
+                    assetsManager.click.play();
+                    yellowSectionUpLeft.blink();
+                }
+                if (yellowSectionUpRight.checkCollision((int) x, (int) y) == true) {
+                    assetsManager.click.play();
+                    yellowSectionUpRight.blink();
+                }
 
-			if (runButtonSecond != null)
-				if (runButtonSecond.checkCollision((int) x, (int) y) == true) {
-					runButtonSecondAction();
-				}
+            }
 
-			if (pause != null)
-				if (pause.checkCollision((int) x, (int) y) == true) {
-					pauseAction();
+            if (up != null) {
+                if (up.checkCollision((int) x, (int) y) == true) {
+                    upAction();
+                }
+            }
+            if (down != null) {
+                if (down.checkCollision((int) x, (int) y) == true) {
+                    downAction();
+                }
+            }
 
-				}
-			if (meetTheTrucks != null) {
-				if (fireStation.checkCollision((int) x, (int) y) == true) {
-					fireStation.blink();
-				}
-				if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
-					meetTheTrucks.blink();
-					selectedScreen = variables.getMEET_THE_TRUCKS();
-					cloudManager.start();
-				}
+            if (runButton != null)
+                if (runButton.checkCollision((int) x, (int) y) == true) {
+                    runButtonAction();
+                }
 
-				for (int a = 0; a < 7; a++) {
-					if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
-						levelButtons[a].blink();
+            if (jump != null)
+                if (jump.checkCollision((int) x, (int) y) == true) {
+                    jumpAction();
+                }
 
-						if(a >= 3 && screensPlayed[a] == true && dataOrganizer.isFullVersionUnlocked() == false){
+            if (runButtonSecond != null)
+                if (runButtonSecond.checkCollision((int) x, (int) y) == true) {
+                    runButtonSecondAction();
+                }
+
+            if (pause != null)
+                if (pause.checkCollision((int) x, (int) y) == true) {
+                    pauseAction();
+
+                }
+            if (meetTheTrucks != null) {
+                if (fireStation.checkCollision((int) x, (int) y) == true) {
+                    fireStation.blink();
+                }
+                if (meetTheTrucks.checkCollision((int) x, (int) y) == true) {
+                    meetTheTrucks.blink();
+                    selectedScreen = variables.getMEET_THE_TRUCKS();
+                    cloudManager.start();
+                }
+
+                for (int a = 0; a < 7; a++) {
+                    if (levelButtons[a].checkCollision((int) x, (int) y) == true) {
+                        levelButtons[a].blink();
+
+						/*if(a >= 3 && screensPlayed[a] == true && dataOrganizer.isFullVersionUnlocked() == false){
 							selectedScreen = Variables.UNLOCK_GAME_SCREEN;
 							cloudManager.start();	
 							break;
-						}
-						
-						if (a == 0 && screensPlayed[a] == true) {
-							selectedScreen = variables.getFITNESS_SCREEN_ONE();
-							cloudManager.start();
-						}
-						if (a == 1 && screensPlayed[a] == true) {
-							selectedScreen = variables.getTRAINING_SCREEN_ONE();
-							cloudManager.start();
-						}
-						if (a == 2 && screensPlayed[a] == true) {
-							selectedScreen = variables.getTRAINING_SCREEN_TWO();
-							cloudManager.start();
-						}
-						if (a == 3 && screensPlayed[a] == true) {
-							selectedScreen = variables.getCAT_RESCUE_SCREEN();
-							cloudManager.start();
-						}
-						if (a == 4 && screensPlayed[a] == true) {
-							selectedScreen = variables.getRESCUE_METRO_SCREEN();
-							cloudManager.start();
-						}
-						if (a == 5 && screensPlayed[a] == true) {
-							selectedScreen = variables.getELEVATOR_SCREEN();
-							cloudManager.start();
-						}
-						if (a == 6 && screensPlayed[a] == true) {
-							selectedScreen = variables
-									.getBIG_ROAD_RESCUE_SCREEN();
-							cloudManager.start();
-						}
-					}
-				}
+						}*/
 
-			}
-		}
-	}
+                        if (a == 0 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getFITNESS_SCREEN_ONE();
+                            cloudManager.start();
+                        }
+                        if (a == 1 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getTRAINING_SCREEN_ONE();
+                            cloudManager.start();
+                        }
+                        if (a == 2 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getTRAINING_SCREEN_TWO();
+                            cloudManager.start();
+                        }
+                        if (a == 3 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getCAT_RESCUE_SCREEN();
+                            cloudManager.start();
+                        }
+                        if (a == 4 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getRESCUE_METRO_SCREEN();
+                            cloudManager.start();
+                        }
+                        if (a == 5 && screensPlayed[a] == true) {
+                            selectedScreen = variables.getELEVATOR_SCREEN();
+                            cloudManager.start();
+                        }
+                        if (a == 6 && screensPlayed[a] == true) {
+                            selectedScreen = variables
+                                    .getBIG_ROAD_RESCUE_SCREEN();
+                            cloudManager.start();
+                        }
+                    }
+                }
 
-	public void setMenuWindow(MenuWindow menuWindow) {
-		this.menuWindow = menuWindow;
-		this.retryButton = menuWindow.getRetry();
-		this.playButton = menuWindow.getPlay();
-		this.menu = menuWindow.getMenu();
-	}
+            }
+        }
+    }
 
-	public void setLevelButtons(Button[] levelButtons) {
-		this.levelButtons = levelButtons;
-	}
+    public void setMenuWindow(MenuWindow menuWindow) {
+        this.menuWindow = menuWindow;
+        this.retryButton = menuWindow.getRetry();
+        this.playButton = menuWindow.getPlay();
+        this.menu = menuWindow.getMenu();
+    }
 
-	public void setMeetTheTrucks(Button meetTheTrucks) {
-		this.meetTheTrucks = meetTheTrucks;
-	}
+    public void setLevelButtons(Button[] levelButtons) {
+        this.levelButtons = levelButtons;
+    }
 
-	public void setCameras(Camera camera, OrthographicCamera guiCamera) {
-		this.camera = camera;
-		this.guiCamera = guiCamera;
-	}
+    public void setMeetTheTrucks(Button meetTheTrucks) {
+        this.meetTheTrucks = meetTheTrucks;
+    }
 
-	public void setCloudManager(CloudManager cloudManager) {
-		this.cloudManager = cloudManager;
-	}
+    public void setCameras(Camera camera, OrthographicCamera guiCamera) {
+        this.camera = camera;
+        this.guiCamera = guiCamera;
+    }
 
-	public void setPauseButton(Button pause) {
-		this.pause = pause;
-	}
+    public void setCloudManager(CloudManager cloudManager) {
+        this.cloudManager = cloudManager;
+    }
 
-	public String getSelectedScreenName() {
-		return selectedScreen;
-	}
+    public void setPauseButton(Button pause) {
+        this.pause = pause;
+    }
 
-	@Override
-	public void pinchStop() {
-		// TODO Auto-generated method stub
+    public String getSelectedScreenName() {
+        return selectedScreen;
+    }
 
-	}
+    @Override
+    public void pinchStop() {
+        // TODO Auto-generated method stub
 
-	public void setTextInputListener(MyTextInputListener textInputListener) {
-		this.textInputListener = textInputListener;
-	}
+    }
 
-	public void setFireStation(Button fireStation) {
-		this.fireStation = fireStation;
-	}
+    public void setTextInputListener(MyTextInputListener textInputListener) {
+        this.textInputListener = textInputListener;
+    }
 
-	public void setDialogueWindow(Dialogue dialogueWindow) {
-		this.dialogueWindow = dialogueWindow;
-	}
+    public void setFireStation(Button fireStation) {
+        this.fireStation = fireStation;
+    }
 
-	void manageDialogues(float x, float y) {
-		if (dialogueWindow != null)
-			if (dialogueWindow.isVisibile() == true) {
-				dialogueWindow.hide();
-			}
-	}
+    public void setDialogueWindow(Dialogue dialogueWindow) {
+        this.dialogueWindow = dialogueWindow;
+    }
 
-	public void setRunButton(Button runButton) {
-		this.runButton = runButton;
-	}
+    void manageDialogues(float x, float y) {
+        if (dialogueWindow != null)
+            if (dialogueWindow.isVisibile() == true) {
+                dialogueWindow.hide();
+            }
+    }
 
-	public void setEclipseFire(Button eclipseFire) {
-		this.eclipseFire = eclipseFire;
-	}
+    public void setRunButton(Button runButton) {
+        this.runButton = runButton;
+    }
 
-	public void setSettings(Button settings) {
-		this.settings = settings;
-	}
+    public void setEclipseFire(Button eclipseFire) {
+        this.eclipseFire = eclipseFire;
+    }
 
-	public void setGeneralPurposeButton(Button generalPurposeButton){
-		this.generalPurposeButton = generalPurposeButton;
-	}
-	
-	public void setAuthors(Button authors) {
-		this.authors = authors;
-	}
+    public void setSettings(Button settings) {
+        this.settings = settings;
+    }
 
-	public void setRunButtonSecond(Button runButtonSecond) {
-		this.runButtonSecond = runButtonSecond;
-	}
+    public void setGeneralPurposeButton(Button generalPurposeButton) {
+        this.generalPurposeButton = generalPurposeButton;
+    }
 
-	public void setControlledHuman(Human controlledHuman) {
-		this.controlledHuman = controlledHuman;
-	}
+    public void setAuthors(Button authors) {
+        this.authors = authors;
+    }
 
-	public void setMenu(Button menu) {
-		this.menu = menu;
-	}
+    public void setRunButtonSecond(Button runButtonSecond) {
+        this.runButtonSecond = runButtonSecond;
+    }
 
-	public void setJump(Button jump) {
-		this.jump = jump;
-	}
+    public void setControlledHuman(Human controlledHuman) {
+        this.controlledHuman = controlledHuman;
+    }
 
-	public void setControlledTruck(Truck controlledTruck) {
-		this.controlledTruck = controlledTruck;
-	}
+    public void setMenu(Button menu) {
+        this.menu = menu;
+    }
 
-	public void loadUp(Button up) {
-		this.up = up;
-	}
+    public void setJump(Button jump) {
+        this.jump = jump;
+    }
 
-	public void loadDown(Button down) {
-		this.down = down;
-	}
+    public void setControlledTruck(Truck controlledTruck) {
+        this.controlledTruck = controlledTruck;
+    }
 
-	public void setGenderButton(Button gender) {
-		this.gender = gender;
-	}
+    public void loadUp(Button up) {
+        this.up = up;
+    }
 
-	public void setHitboxes(Button[] hitboxes) {
-		this.hitboxes = hitboxes;
-	}
+    public void loadDown(Button down) {
+        this.down = down;
+    }
 
-	public void setSettingsButtons(Button fps, Button textureFiltering,
-			Button voice, Button vibrations, Button screenAwake,
-			Button noPrompts, Button resetGame, DataOrganizer dataOrganizer) {
-		settingsButtons = new Button[7];
-		settingsButtons[0] = fps;
-		settingsButtons[1] = textureFiltering;
-		settingsButtons[2] = voice;
-		settingsButtons[3] = vibrations;
-		settingsButtons[4] = screenAwake;
-		settingsButtons[5] = noPrompts;
-		settingsButtons[6] = resetGame;
+    public void setGenderButton(Button gender) {
+        this.gender = gender;
+    }
 
-		this.dataOrganizer = dataOrganizer;
-	}
+    public void setHitboxes(Button[] hitboxes) {
+        this.hitboxes = hitboxes;
+    }
 
-	public void setDataOrganizer(DataOrganizer dataOrganizer) {
-		this.dataOrganizer = dataOrganizer;
-	}
+    public void setSettingsButtons(Button fps, Button textureFiltering,
+                                   Button voice, Button vibrations, Button screenAwake,
+                                   Button noPrompts, Button resetGame, DataOrganizer dataOrganizer) {
+        settingsButtons = new Button[7];
+        settingsButtons[0] = fps;
+        settingsButtons[1] = textureFiltering;
+        settingsButtons[2] = voice;
+        settingsButtons[3] = vibrations;
+        settingsButtons[4] = screenAwake;
+        settingsButtons[5] = noPrompts;
+        settingsButtons[6] = resetGame;
 
-	public void setYellowSectionButtons(Button yellowSectionMiddle,
-			Button yellowSectionLeft, Button yellowSectionUpLeft,
-			Button yellowSectionUpRight) {
-		this.yellowSectionMiddle = yellowSectionMiddle;
-		this.yellowSectionLeft = yellowSectionLeft;
-		this.yellowSectionUpLeft = yellowSectionUpLeft;
-		this.yellowSectionUpRight = yellowSectionUpRight;
-	}
+        this.dataOrganizer = dataOrganizer;
+    }
 
-	public void setScreensPlayed(boolean screensPlayed[]) {
-		this.screensPlayed = screensPlayed;
-	}
+    public void setDataOrganizer(DataOrganizer dataOrganizer) {
+        this.dataOrganizer = dataOrganizer;
+    }
 
-	public void setUserScreenButton(Button userScreenButton) {
-		this.userScreenButton = userScreenButton;
-	}
+    public void setYellowSectionButtons(Button yellowSectionMiddle,
+                                        Button yellowSectionLeft, Button yellowSectionUpLeft,
+                                        Button yellowSectionUpRight) {
+        this.yellowSectionMiddle = yellowSectionMiddle;
+        this.yellowSectionLeft = yellowSectionLeft;
+        this.yellowSectionUpLeft = yellowSectionUpLeft;
+        this.yellowSectionUpRight = yellowSectionUpRight;
+    }
 
-	void manageNonGuiCollisions(float x, float y) {
+    public void setScreensPlayed(boolean screensPlayed[]) {
+        this.screensPlayed = screensPlayed;
+    }
 
-		if (eclipseFire != null)
-			if (eclipseFire.checkCollision((int) x, (int) y) == true) {
-				eclipseFireAction();
-			}
+    public void setUserScreenButton(Button userScreenButton) {
+        this.userScreenButton = userScreenButton;
+    }
 
-		if (hitboxes != null) {
-			for (int a = 0; a < hitboxes.length; a++) {
-				if (hitboxes[a].checkCollision((int) x, (int) y) == true) {
-					hitboxes[a].blink();
-				}
-			}
-		}
-	}
+    public void setUnlockGameButton(Button unlockGameButton) {
+        this.unlockGameButton = unlockGameButton;
+    }
 
-	public void checkKeyboardInput() {
-		if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
-			if (dialogueWindow != null && dialogueWindow.isVisibile() == true)
-				dialogueWindow.hide();
-		}
+    void manageNonGuiCollisions(float x, float y) {
 
-		if (Gdx.input.isKeyJustPressed(Keys.SPACE))
-			eclipseFireAction();
-		if (Gdx.input.isKeyJustPressed(Keys.ESCAPE))
-			pauseAction();
-		if (Gdx.input.isKeyJustPressed(Keys.UP)) {
-			upAction();
-			jumpAction();
-		}
-		if (Gdx.input.isKeyJustPressed(Keys.DOWN))
-			downAction();
-		if (runButton != null && runButtonSecond == null)
-			if (Gdx.input.isKeyJustPressed(Keys.RIGHT)
-					|| Gdx.input.isKeyJustPressed(Keys.LEFT))
-				runButtonAction();
-		if (runButton == null && runButtonSecond != null)
-			if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
-				runButtonSecondAction();
-		if (runButton != null && runButtonSecond != null) {
-			if (Gdx.input.isKeyJustPressed(Keys.LEFT))
-				runButtonAction();
-			if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
-				runButtonSecondAction();
-		}
+        if (eclipseFire != null)
+            if (eclipseFire.checkCollision((int) x, (int) y) == true) {
+                eclipseFireAction();
+            }
 
-	}
+        if (hitboxes != null) {
+            for (int a = 0; a < hitboxes.length; a++) {
+                if (hitboxes[a].checkCollision((int) x, (int) y) == true) {
+                    hitboxes[a].blink();
+                }
+            }
+        }
+    }
 
-	public void setUserInputButtons(Button[] userInputButtons) {
-		this.userInputButtons = userInputButtons;
-	}
+    public void checkKeyboardInput() {
+        if (Gdx.input.isKeyJustPressed(Keys.ANY_KEY)) {
+            if (dialogueWindow != null && dialogueWindow.isVisibile() == true)
+                dialogueWindow.hide();
+        }
 
-	public int getUserInputID() {
-		return selectedUserInputID;
-	}
+        if (Gdx.input.isKeyJustPressed(Keys.SPACE))
+            eclipseFireAction();
+        if (Gdx.input.isKeyJustPressed(Keys.ESCAPE))
+            pauseAction();
+        if (Gdx.input.isKeyJustPressed(Keys.UP)) {
+            upAction();
+            jumpAction();
+        }
+        if (Gdx.input.isKeyJustPressed(Keys.DOWN))
+            downAction();
+        if (runButton != null && runButtonSecond == null)
+            if (Gdx.input.isKeyJustPressed(Keys.RIGHT)
+                    || Gdx.input.isKeyJustPressed(Keys.LEFT))
+                runButtonAction();
+        if (runButton == null && runButtonSecond != null)
+            if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
+                runButtonSecondAction();
+        if (runButton != null && runButtonSecond != null) {
+            if (Gdx.input.isKeyJustPressed(Keys.LEFT))
+                runButtonAction();
+            if (Gdx.input.isKeyJustPressed(Keys.RIGHT))
+                runButtonSecondAction();
+        }
 
-	
-	public void setWebButton(Button webButton) {
-		this.webButton = webButton;
-	}
+    }
 
-	void eclipseFireAction() {
-		if (eclipseFire != null
-				&& eclipseFire.isBlockedFromInteraction() == false)
-			eclipseFire.blink();
-	}
+    public void setUserInputButtons(Button[] userInputButtons) {
+        this.userInputButtons = userInputButtons;
+    }
 
-	void pauseAction() {
-		if (menuWindow != null && menuWindow.isVisibile() == true
-				&& dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false) {
-			pause.blink();
-			menuWindow.hide();
-		}
-		if (menuWindow != null && menuWindow.isVisibile() == false
-				&& dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false) {
-			pause.blink();
-			menuWindow.popUp();
-		}
-	}
+    public int getUserInputID() {
+        return selectedUserInputID;
+    }
 
-	void webButtonAction() {
-		if (webButton != null && webButton.isBlockedFromInteraction() == false) {
-			webButton.blink();
-			Gdx.net.openURI(Variables.MR_TUSHAR_WEBSITE);
-		}
-	}
 
-	void upAction() {
-		if (up != null && up.isBlockedFromInteraction() == false) {
-			up.blink();
-			if (controlledTruck != null)
-				controlledTruck.upLane();
-		}
-	}
+    public void setWebButton(Button webButton) {
+        this.webButton = webButton;
+    }
 
-	void downAction() {
-		if (down != null && dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false
-				&& down.isBlockedFromInteraction() == false) {
-			down.blink();
-			if (controlledTruck != null)
-				controlledTruck.downLane();
-		}
-	}
+    void eclipseFireAction() {
+        if (eclipseFire != null
+                && eclipseFire.isBlockedFromInteraction() == false)
+            eclipseFire.blink();
+    }
 
-	void runButtonAction() {
-		if (runButton != null && dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false
-				&& runButton.isBlockedFromInteraction() == false) {
-			runButton.blink();
+    void pauseAction() {
+        if (menuWindow != null && menuWindow.isVisibile() == true
+                && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false) {
+            pause.blink();
+            menuWindow.hide();
+        }
+        if (menuWindow != null && menuWindow.isVisibile() == false
+                && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false) {
+            pause.blink();
+            menuWindow.popUp();
+        }
+    }
 
-			if (controlledHuman != null)
-				controlledHuman.move();
+    void webButtonAction() {
+        if (webButton != null && webButton.isBlockedFromInteraction() == false) {
+            webButton.blink();
+            Gdx.net.openURI(Variables.MR_TUSHAR_WEBSITE);
+        }
+    }
 
-			if (camera.zoom == 3.0f)
-				camera.zoom(2.96f, 3);
-			if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
-				camera.zoom(3.0f, 3);
+    void upAction() {
+        if (up != null && up.isBlockedFromInteraction() == false) {
+            up.blink();
+            if (controlledTruck != null)
+                controlledTruck.upLane();
+        }
+    }
 
-			if (camera.zoom == 0.98f)
-				camera.zoom(0.96f, 1);
-			if (camera.zoom <= 0.96f)
-				camera.zoom(0.98f, 1);
+    void downAction() {
+        if (down != null && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false
+                && down.isBlockedFromInteraction() == false) {
+            down.blink();
+            if (controlledTruck != null)
+                controlledTruck.downLane();
+        }
+    }
 
-			if (runButton.dontRespond == true) {
-				camera.zoom(0.98f, 1);
-			}
+    void runButtonAction() {
+        if (runButton != null && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false
+                && runButton.isBlockedFromInteraction() == false) {
+            runButton.blink();
 
-		}
-	}
+            if (controlledHuman != null)
+                controlledHuman.move();
 
-	void jumpAction() {
-		if (jump != null && dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false
-				&& jump.isBlockedFromInteraction() == false) {
-			jump.blink();
-			if (controlledHuman.getAccelerationJump() == -10
-					&& controlledHuman.getY() == 35)
-				controlledHuman.setAccelerationJump(13);
-		}
-	}
+            if (camera.zoom == 3.0f)
+                camera.zoom(2.96f, 3);
+            if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+                camera.zoom(3.0f, 3);
 
-	void runButtonSecondAction() {
-		if (runButtonSecond != null && dialogueWindow != null
-				&& dialogueWindow.isVisibile() == false
-				&& runButtonSecond.isBlockedFromInteraction() == false) {
-			runButtonSecond.blink();
-			if (controlledHuman != null)
-				controlledHuman.moveReverse();
+            if (camera.zoom == 0.98f)
+                camera.zoom(0.96f, 1);
+            if (camera.zoom <= 0.96f)
+                camera.zoom(0.98f, 1);
 
-			if (camera.zoom == 3.0f)
-				camera.zoom(2.96f, 3);
-			if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
-				camera.zoom(3.0f, 3);
+            if (runButton.dontRespond == true) {
+                camera.zoom(0.98f, 1);
+            }
 
-			if (camera.zoom == 0.98f)
-				camera.zoom(0.96f, 1);
-			if (camera.zoom <= 0.96f)
-				camera.zoom(0.98f, 1);
+        }
+    }
 
-			if (runButtonSecond.dontRespond == true) {
-				camera.zoom(0.98f, 1);
-			}
-		}
-	}
+    void jumpAction() {
+        if (jump != null && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false
+                && jump.isBlockedFromInteraction() == false) {
+            jump.blink();
+            if (controlledHuman.getAccelerationJump() == -10
+                    && controlledHuman.getY() == 35)
+                controlledHuman.setAccelerationJump(13);
+        }
+    }
 
-	public void setAssetsManager(AssetsManager assetsManager) {
-		this.assetsManager = assetsManager;
-	}
+    void runButtonSecondAction() {
+        if (runButtonSecond != null && dialogueWindow != null
+                && dialogueWindow.isVisibile() == false
+                && runButtonSecond.isBlockedFromInteraction() == false) {
+            runButtonSecond.blink();
+            if (controlledHuman != null)
+                controlledHuman.moveReverse();
+
+            if (camera.zoom == 3.0f)
+                camera.zoom(2.96f, 3);
+            if (camera.zoom <= 2.96f && camera.zoom >= 2.9f)
+                camera.zoom(3.0f, 3);
+
+            if (camera.zoom == 0.98f)
+                camera.zoom(0.96f, 1);
+            if (camera.zoom <= 0.96f)
+                camera.zoom(0.98f, 1);
+
+            if (runButtonSecond.dontRespond == true) {
+                camera.zoom(0.98f, 1);
+            }
+        }
+    }
+
+    public void setAssetsManager(AssetsManager assetsManager) {
+        this.assetsManager = assetsManager;
+    }
+
+
 }
 /*
  * touchDown: A user touches the screen.
- * 
+ *
  * longPress: A user touches the screen for some time.
- * 
+ *
  * tap: A user touches the screen and lifts the finger again. The finger must
  * not move outside a specified square area around the initial touch position
  * for a tap to be registered. Multiple consecutive taps will be detected if the
  * user performs taps within a specified time interval.
- * 
+ *
  * pan: A user drags a finger across the screen. The detector will report the
  * current touch coordinates as well as the delta between the current and
  * previous touch positions. Useful to implement camera panning in 2D.
- * 
+ *
  * panStop: Called when no longer panning.
- * 
+ *
  * fling: A user dragged the finger across the screen, then lifted it. Useful to
  * implement swipe gestures.
- * 
+ *
  * zoom: A user places two fingers on the screen and moves them together/apart.
  * The detector will report both the initial and current distance between
  * fingers in pixels. Useful to implement camera zooming.
- * 
+ *
  * pinch: Similar to zoom. The detector will report the initial and current
  * finger positions instead of the distance. Useful to implement camera zooming
  * and more sophisticated gestures such as rotation.
- * 
+ *
  * From: https://github.com/libgdx/libgdx/wiki/Gesture-detection
  */
