@@ -316,13 +316,12 @@ public class InputInterpreter implements GestureListener {
             }
             if (unlockGameButton != null) {
                 if (unlockGameButton.checkCollision((int) x, (int) y) == true) {
-                    if (dataOrganizer.isFullVersionUnlocked() == false){
+                    /*if (dataOrganizer.isFullVersionUnlocked() == false){
                         unlockGameButton.blink();
                         selectedScreen = Variables.UNLOCK_GAME_SCREEN;
                         cloudManager.start();
                     }else
-                        game.getAdsCont().toastMessage("Already unlocked");
-
+                        game.getAdsCont().toastMessage("Already unlocked");*/
                 }
             }
             if (settingsButtons != null) {

@@ -108,7 +108,7 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
                 @Override
                 public void onAdFailedToLoad(@NonNull @NotNull LoadAdError loadAdError) {
                     // Handle the error
-                    Log.e(TAG, "onAdFailedToLoad = "+loadAdError.getMessage());
+                    Log.e(TAG, "onAdFailedToLoad = " + loadAdError.getMessage());
                     interstitialAd = null;
                 }
             });
@@ -159,6 +159,11 @@ public class AndroidLauncher extends AndroidApplication implements AdsController
 
     @Override
     public void toastMessage(String message) {
-        Toast.makeText(this, message, Toast.LENGTH_LONG).show();
+        runOnUiThread(new Runnable() {
+            @Override
+            public void run() {
+                Toast.makeText(AndroidLauncher.this, message, Toast.LENGTH_LONG).show();
+            }
+        });
     }
 }
