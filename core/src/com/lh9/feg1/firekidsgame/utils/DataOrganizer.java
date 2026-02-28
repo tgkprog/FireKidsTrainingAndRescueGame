@@ -74,7 +74,11 @@ public class DataOrganizer {
         experience = 0;
 
         for (int a = 0; a < 7; a++) {
-            userInputScreenValues[a] = "click to type";
+            if (a == 1 || a == 6) {
+                userInputScreenValues[a] = "";
+            } else {
+                userInputScreenValues[a] = "click to type";
+            }
         }
 
         GameStateSave model = new GameStateSave();

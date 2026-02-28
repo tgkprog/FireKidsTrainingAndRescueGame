@@ -68,6 +68,17 @@ nb-configuration.xml
 gradle-app.setting
 build/
 
+# Build output directories
+android/build/
+android/release/
+core/build/
+desktop/build/
+ios/build/
+
+# Temporary files
+d
+l.txt
+
 ## OS Specific
 .DS_Store
 Thumbs.db

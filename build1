@@ -1,0 +1,105 @@
+#!/bin/bash
+# Build script for FireKidsGame Android with version bump
+# Usage: ./build1 [1|2|3] [release|debug]
+#   1 = patch (increase versionCode +1, versionName x.y.Z+1)
+#   2 = minor (increase versionCode +1, versionName x.Y+1.0)
+#   3 = major (increase versionCode +1, versionName X+1.0.0)
+#   Optional: add 'd' anywhere in params for debug build (default: release)
+
+set -e
+
+BUILD_FILE="android/build.gradle"
+BUILD_TYPE="release"
+
+# Parse arguments
+VERSION_TYPE="${1:-1}"
+if [[ "$1" == *"d"* ]] || [[ "$2" == *"d"* ]]; then
+    BUILD_TYPE="debug"
+fi
+
+# Extract current version
+CURRENT_CODE=$(grep "versionCode" "$BUILD_FILE" | grep -oP '\d+')
+CURRENT_NAME=$(grep "versionName" "$BUILD_FILE" | grep -oP '"\K[^"]+')
+
+echo "Current version: versionCode=$CURRENT_CODE versionName=$CURRENT_NAME"
+
+# Parse version name (format: major.minor or major.minor.patch)
+IFS='.' read -ra VERSION_PARTS <<< "$CURRENT_NAME"
+MAJOR="${VERSION_PARTS[0]:-1}"
+MINOR="${VERSION_PARTS[1]:-0}"
+PATCH="${VERSION_PARTS[2]:-0}"
+
+# Calculate new versions
+NEW_CODE=$((CURRENT_CODE + 1))
+
+case "$VERSION_TYPE" in
+    1)
+        # Patch version
+        NEW_PATCH=$((PATCH + 1))
+        NEW_NAME="$MAJOR.$MINOR.$NEW_PATCH"
+        echo "Bumping patch version..."
+        ;;
+    2)
+        # Minor version
+        NEW_MINOR=$((MINOR + 1))
+        NEW_NAME="$MAJOR.$NEW_MINOR"
+        echo "Bumping minor version..."
+        ;;
+    3)
+        # Major version
+        NEW_MAJOR=$((MAJOR + 1))
+        NEW_NAME="$NEW_MAJOR.0"
+        echo "Bumping major version..."
+        ;;
+    *)
+        echo "Invalid version type. Use 1 (patch), 2 (minor), or 3 (major)"
+        exit 1
+        ;;
+esac
+
+echo "New version: versionCode=$NEW_CODE versionName=$NEW_NAME"
+
+# Update build.gradle
+sed -i "s/versionCode $CURRENT_CODE/versionCode $NEW_CODE/" "$BUILD_FILE"
+sed -i "s/versionName \"$CURRENT_NAME\"/versionName \"$NEW_NAME\"/" "$BUILD_FILE"
+
+echo "✅ Version updated in $BUILD_FILE"
+echo ""
+
+# Build APK
+if [ "$BUILD_TYPE" == "debug" ]; then
+    echo "📦 Building Debug APK..."
+    ./gradlew android:assembleDebug --no-daemon
+    
+    if [ $? -eq 0 ]; then
+        echo ""
+        echo "✅ Debug build successful!"
+        ls -lh android/build/outputs/apk/debug/android-debug.apk
+    else
+        echo "❌ Debug build failed"
+        exit 1
+    fi
+else
+    echo "📦 Building Release APK..."
+    ./gradlew android:assembleRelease --no-daemon
+    
+    if [ $? -eq 0 ]; then
+        echo ""
+        echo "✅ Release build successful!"
+        ls -lh android/build/outputs/apk/release/android-release.apk
+        
+        # Verify signature
+        if jarsigner -verify android/build/outputs/apk/release/android-release.apk > /dev/null 2>&1; then
+            echo "✅ APK signature verified"
+        fi
+    else
+        echo "❌ Release build failed"
+        exit 1
+    fi
+fi
+
+echo ""
+echo "==================================="
+echo "Version: $NEW_NAME (code $NEW_CODE)"
+echo "Build type: $BUILD_TYPE"
+echo "==================================="

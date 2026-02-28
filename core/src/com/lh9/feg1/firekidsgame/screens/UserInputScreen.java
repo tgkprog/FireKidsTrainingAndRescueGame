@@ -30,25 +30,12 @@ public class UserInputScreen implements Screen {
 
 	Button textFireEngineGame;
 	Button textUserInformation;
-	Button textEmail;
-	Button textNick;
-	Button textFacebook;
-	Button textGoogle;
-	Button textTwitter;
-	Button textWebsite;
 	Button textName;
-	Button textInfoFromServer;
-	Button textMoreFromServer;
+	Button textWhatYouWantToBe;
 
-	Button email;
-	Button nick;
-	Button facebook;
-	Button google;
-	Button twitter;
-	Button website;
 	Button name;
-	Button infoFromServer;
-	Button moreFromServer;
+	Button whatYouWantToBe;
+	Button saveButton;
 
 	Button[] inputButtons;
 
@@ -91,6 +78,8 @@ public class UserInputScreen implements Screen {
 		menu.goUp(395);
 		closeButton = new Button(15, -50, assetsManager.closeButton);
 		closeButton.goUp(395);
+		saveButton = new Button(365, -50, assetsManager.runButtonGreen);
+		saveButton.goUp(395);
 
 		inputInterpreter = new InputInterpreter();
 		inputInterpreter.setCameras(camera, guiCamera);
@@ -138,52 +127,21 @@ public class UserInputScreen implements Screen {
 		}
 
 		textFireEngineGame = new Button(265, -100, assetsManager.fireEngineGame);
-		textUserInformation = new Button(300, -135,
-				assetsManager.userInformation);
+		textUserInformation = new Button(300, -135, assetsManager.userInformation);
 		textFireEngineGame.goUp(440);
 		textUserInformation.goUp(400);
 
-		textEmail = new Button(10, -100, assetsManager.email);
-		textNick = new Button(10, -130, assetsManager.nick);
-		textFacebook = new Button(10, -160, assetsManager.facebook);
-		textGoogle = new Button(10, -190, assetsManager.google);
-		textTwitter = new Button(10, -220, assetsManager.twitter);
-		textWebsite = new Button(10, -250, assetsManager.website);
-		textName = new Button(10, -280, assetsManager.name);
-		textInfoFromServer = new Button(10, -310, assetsManager.infoFromServer);
-		textMoreFromServer = new Button(10, -340, assetsManager.moreFromServer);
+		textName = new Button(10, -100, assetsManager.name);
+		textWhatYouWantToBe = new Button(10, -160, assetsManager.name);
+		
+		textName.goUp(300);
+		textWhatYouWantToBe.goUp(240);
 
-		textEmail.goUp(350);
-		textNick.goUp(310);
-		textFacebook.goUp(280 - 10 * 1);
-		textGoogle.goUp(250 - 10 * 2);
-		textTwitter.goUp(220 - 10 * 3);
-		textWebsite.goUp(190 - 10 * 4);
-		textName.goUp(160 - 10 * 5);
-		textInfoFromServer.goUp(130 - 10 * 6);
-		textMoreFromServer.goUp(100 - 10 * 7);
+		name = new Button(270, -100, assetsManager.frameCollectiblesLong);
+		whatYouWantToBe = new Button(270, -160, assetsManager.frameCollectiblesLong);
 
-		email = new Button(270, -100, assetsManager.frameCollectiblesLong);
-		nick = new Button(270, -130, assetsManager.frameCollectiblesLong);
-		facebook = new Button(270, -160, assetsManager.frameCollectiblesLong);
-		google = new Button(270, -190, assetsManager.frameCollectiblesLong);
-		twitter = new Button(270, -220, assetsManager.frameCollectiblesLong);
-		website = new Button(270, -250, assetsManager.frameCollectiblesLong);
-		name = new Button(270, -280, assetsManager.frameCollectiblesLong);
-		infoFromServer = new Button(270, -310,
-				assetsManager.frameCollectiblesLong);
-		moreFromServer = new Button(270, -340,
-				assetsManager.frameCollectiblesLong);
-
-		email.goUp(350 - 1);
-		nick.goUp(310 - 2);
-		facebook.goUp(280 - 3 - 10 * 1);
-		google.goUp(250 - 4 - 10 * 2);
-		twitter.goUp(220 - 5 - 10 * 3);
-		website.goUp(190 - 6 - 10 * 4);
-		name.goUp(160 - 7 - 10 * 5);
-		infoFromServer.goUp(130 - 8 - 10 * 6);
-		moreFromServer.goUp(100 - 9 - 10 * 7);
+		name.goUp(300);
+		whatYouWantToBe.goUp(240);
 
 		cars = new ArrayList<Car>();
 		for (int a = 0; a < 4; a++) {
@@ -191,21 +149,33 @@ public class UserInputScreen implements Screen {
 		}
 
 		userInput = new String[7];
-		for (int a = 0; a < 7; a++) {
-			userInput[a] = dataOrganizer.getUserInputScreenValues()[a];
+		String[] savedValues = dataOrganizer.getUserInputScreenValues();
+		if (savedValues != null && savedValues.length >= 7) {
+			for (int a = 0; a < 7; a++) {
+				userInput[a] = savedValues[a];
+				if (userInput[a] == null) {
+					userInput[a] = "";
+				}
+			}
+		} else {
+			for (int a = 0; a < 7; a++) {
+				userInput[a] = "";
+			}
+		}
+		
+		if (userInput[6].equals("click to type")) {
+			userInput[6] = "";
+		}
+		if (userInput[1].equals("click to type")) {
+			userInput[1] = "";
 		}
 		
 		assetsManager.fontLittle.setColor(1, 1, 1, 0);
 
-		Button[] inputButtons = new Button[8];
-		inputButtons[0] = email;
-		inputButtons[1] = nick;
-		inputButtons[2] = facebook;
-		inputButtons[3] = google;
-		inputButtons[4] = twitter;
-		inputButtons[5] = website;
-		inputButtons[6] = name;
-		inputButtons[7] = closeButton;
+		Button[] inputButtons = new Button[3];
+		inputButtons[0] = name;
+		inputButtons[1] = whatYouWantToBe;
+		inputButtons[2] = saveButton;
 		inputInterpreter.setUserInputButtons(inputButtons);
 		inputInterpreter.setTextInputListener(textInputListener);
 	}
@@ -294,38 +264,36 @@ public class UserInputScreen implements Screen {
 	void drawButtons(float delta) {
 		menu.render(batch, delta);
 		closeButton.render(batch, delta);
-
+		saveButton.render(batch, delta);
 	}
 
 	void drawTexts(float delta) {
 		textFireEngineGame.render(batch, delta);
 		textUserInformation.render(batch, delta);
-		textEmail.render(batch, delta);
-		textNick.render(batch, delta);
-		textFacebook.render(batch, delta);
-		textGoogle.render(batch, delta);
-		textTwitter.render(batch, delta);
-		textWebsite.render(batch, delta);
 		textName.render(batch, delta);
-		textInfoFromServer.render(batch, delta);
-		textMoreFromServer.render(batch, delta);
 
-		email.render(batch, delta);
-		nick.render(batch, delta);
-		facebook.render(batch, delta);
-		google.render(batch, delta);
-		twitter.render(batch, delta);
-		website.render(batch, delta);
 		name.render(batch, delta);
-		infoFromServer.render(batch, delta);
-		moreFromServer.render(batch, delta);
+		whatYouWantToBe.render(batch, delta);
 
-		for (int a = 0; a < userInput.length; a++) {
-			assetsManager.fontLittle.draw(batch, userInput[a], 280,
-					378 - a * 41);
-		}
-		assetsManager.fontLittle.draw(batch, "no info", 280, 92);
-		assetsManager.fontLittle.draw(batch, "no info", 280, 50);
+		assetsManager.fontLittle.draw(batch, userInput[6], 280, 328);
+		assetsManager.fontLittle.draw(batch, "Goals", 10, 268);
+		assetsManager.fontLittle.draw(batch, userInput[1], 280, 268);
+		
+		assetsManager.font.getData().setScale(0.35f);
+		
+		assetsManager.font.setColor(0.1f, 0.1f, 0.3f, 0.1f);
+		assetsManager.font.draw(batch, "I will write what I want to on my diary.", 12, 198);
+		assetsManager.font.draw(batch, "Study, eat well and exercise to reach my goals", 12, 168);
+		assetsManager.font.draw(batch, "* we do not store your information anywhere except", 12, 128);
+		assetsManager.font.draw(batch, "  on your phone, its not sent to any server", 12, 98);
+		
+		assetsManager.font.setColor(1f, 1f, 1f, 1f);
+		assetsManager.font.draw(batch, "I will write what I want to on my diary.", 10, 200);
+		assetsManager.font.draw(batch, "Study, eat well and exercise to reach my goals", 10, 170);
+		assetsManager.font.draw(batch, "* we do not store your information anywhere except", 10, 130);
+		assetsManager.font.draw(batch, "  on your phone, its not sent to any server", 10, 100);
+		
+		assetsManager.font.getData().setScale(1f);
 	}
 
 	void updateLogics(double delta) {
@@ -336,19 +304,25 @@ public class UserInputScreen implements Screen {
 		}
 		
 		if (closeButton.getSelection() == true) {
-
-			textInputListener = new MyTextInputListener();
-			inputInterpreter.setTextInputListener(textInputListener);
-
-			for (int a = 0; a < 7; a++) {
-				userInput[a] = new String("click to type");
-			}
+			assetsManager.click.play();
+			menu.blink();
 		}
 
-		if (inputInterpreter.getUserInputID() != -1) {
+		if (inputInterpreter.getUserInputID() == 0) {
 			if (textInputListener.getInput() != "")
-				userInput[inputInterpreter.getUserInputID()] = textInputListener
-						.getInput();
+				userInput[6] = textInputListener.getInput();
+		}
+		
+		if (inputInterpreter.getUserInputID() == 1) {
+			if (textInputListener.getInput() != "")
+				userInput[1] = textInputListener.getInput();
+		}
+		
+		if (inputInterpreter.getUserInputID() == 2) {
+			assetsManager.click.play();
+			dataOrganizer.setUserInputScreenValues(userInput);
+			dataOrganizer.saveData();
+			menu.blink();
 		}
 
 		fontAlpha += 1.1 * delta;
@@ -387,11 +361,8 @@ public class UserInputScreen implements Screen {
 	}
 
 	void manageSelectingScreen() {
-		if (inputInterpreter.getSelectedScreenName() == variables
-				.getMENU_SCREEN()) {
+		if (inputInterpreter.getSelectedScreenName() == variables.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				dataOrganizer.setUserInputScreenValues(userInput);
-				dataOrganizer.saveData();
 				game.setScreen(new MenuScreen(game));
 			}
 		}

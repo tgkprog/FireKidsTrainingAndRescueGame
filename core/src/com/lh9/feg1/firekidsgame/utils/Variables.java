@@ -1,7 +1,7 @@
 package com.lh9.feg1.firekidsgame.utils;
 import com.badlogic.gdx.math.Vector2;
 public class Variables {
-	static final public String VERSION = "Version 1.32";
+	static final public String VERSION = "Version 1.33";
 	
 	static final public String MR_TUSHAR_WEBSITE = "http://lh9.in/feg/about/";
 	

@@ -1,6 +1,7 @@
 android {
-    buildToolsVersion "32.0.0"
-    compileSdkVersion 32
+    buildToolsVersion "35.0.0"
+    compileSdkVersion 35
+    namespace 'com.lh9.feg1.firekidsgame'
     sourceSets {
         main {
             manifest.srcFile 'AndroidManifest.xml'
@@ -14,23 +15,37 @@ android {
     }
     packagingOptions {
         exclude 'META-INF/robovm/ios/robovm.xml'
+        jniLibs {
+            useLegacyPackaging = false
+        }
     }
     defaultConfig {
         applicationId "com.lh9.feg1.firekidsgame"
-        minSdkVersion 16
-        targetSdkVersion 32
-        versionCode 35
-        versionName "35"
+        minSdkVersion 23
+        targetSdkVersion 35
+        versionCode 48
+        versionName "1.46.2"
     }
+    
+    signingConfigs {
+        release {
+            storeFile file("/data/rme1/private/s2n/2016/tk2.jks")
+            storePassword "let-in-8"
+            keyAlias "sel2in"
+            keyPassword "let-in-8"
+        }
+    }
+    
     buildTypes {
         release {
             minifyEnabled true
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
+            signingConfig signingConfigs.release
         }
     }
     compileOptions {
-        sourceCompatibility JavaVersion.VERSION_1_8
-        targetCompatibility JavaVersion.VERSION_1_8
+        sourceCompatibility JavaVersion.VERSION_11
+        targetCompatibility JavaVersion.VERSION_11
     }
 }
 
@@ -90,10 +105,6 @@ task run(type: Exec) {
 
     def adb = path + "/platform-tools/adb"
     commandLine "$adb", 'shell', 'am', 'start', '-n', 'com.lh9.feg1.firekidsgame/com.lh9.feg1.firekidsgame.AndroidLauncher'
-}
-
-dependencies {
-    implementation 'org.jetbrains:annotations-java5:15.0'
 }
 
 eclipse.project.name = appName + "-android"
