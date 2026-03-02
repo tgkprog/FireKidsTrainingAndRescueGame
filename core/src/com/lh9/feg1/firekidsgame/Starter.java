@@ -30,7 +30,6 @@ public class Starter extends Game {
     public static final int APPSTORE_DESKTOP = 4;
     public static final int ISAPPSTORE = APPSTORE_GOOGLE;
     static PlatformResolver m_platformResolver;
-    final AdsController adsCont;
     public PurchaseManagerConfig purchaseManagerConfig;
     public FEGPurchaseObserver fegPurchaseObserver = new FEGPurchaseObserver();
     Texture logo;
@@ -48,13 +47,12 @@ public class Starter extends Game {
     int cogs;
     boolean[] screensPlayed;
 
-    public Starter(AdsController adsCont) {
+    public Starter() {
 
         //
         purchaseManagerConfig = new PurchaseManagerConfig();
         purchaseManagerConfig.addOffer(new Offer().
                 setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
-        this.adsCont = adsCont;
 
         //
     }
@@ -95,10 +93,6 @@ public class Starter extends Game {
         loading = new Texture(prefix + "texts/loading.png");
         loading.setFilter(TextureFilter.Linear, TextureFilter.Linear);
         loadingSprite = new Sprite(loading);
-    }
-
-    public AdsController getAdsCont() {
-        return adsCont;
     }
 
     public Camera getCamera() {

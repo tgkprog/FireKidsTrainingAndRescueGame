@@ -77,7 +77,6 @@ project(":android") {
         natives "com.badlogicgames.gdx:gdx-freetype-platform:$gdxVersion:natives-x86_64"
         api "com.badlogicgames.gdxpay:gdx-pay-android:$gdxPayVersion"
         api "com.badlogicgames.gdxpay:gdx-pay-android-googleplay:${gdxPayVersion}@aar"
-        api 'com.google.android.gms:play-services-ads:25.0.0'
     }
 }
 

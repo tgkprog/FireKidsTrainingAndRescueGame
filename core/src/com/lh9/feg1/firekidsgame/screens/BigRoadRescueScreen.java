@@ -866,8 +866,6 @@ public class BigRoadRescueScreen implements Screen {
 	void manageSelectingScreen() {
 		if (cloudManager.getAllScalesEqualOne() == true
 				&& lastWindowPopUp == true) {
-			//disable runEvery50sec
-			game.getAdsCont().setRunEvery50sec(false);
 
 			game.setCollectedStars(starsCollected + starsAll);
 			game.setScreenPlayed(7);
@@ -876,8 +874,6 @@ public class BigRoadRescueScreen implements Screen {
 		}
 
 		if (cloudManager.getAllScalesEqualOne() == true && goMenu == true) {
-			//disable runEvery50sec
-			game.getAdsCont().setRunEvery50sec(false);
 
 			assetsManager.truckDriving.stop();
 			game.setCollectedStars(starsCollected + starsAll);
@@ -888,8 +884,6 @@ public class BigRoadRescueScreen implements Screen {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
 			if (cloudManager.getAllScalesEqualOne() == true) {
-				//disable runEvery50sec
-				game.getAdsCont().setRunEvery50sec(false);
 
 				assetsManager.truckDriving.stop();
 				game.setCollectedStars(starsCollected + starsAll);

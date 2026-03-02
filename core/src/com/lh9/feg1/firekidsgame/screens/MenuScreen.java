@@ -402,10 +402,6 @@ public class MenuScreen implements Screen {
         if (inputInterpreter.getSelectedScreenName() == variables
                 .getELEVATOR_SCREEN()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
-                //loading add
-                if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().showInterstitial();
-
                 dataOrganizer.saveData();
                 game.setScreen(new PreElevatorScreen(game));
             }
@@ -434,10 +430,6 @@ public class MenuScreen implements Screen {
         if (inputInterpreter.getSelectedScreenName() == variables
                 .getBIG_ROAD_RESCUE_SCREEN()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
-                //loading add after every 50secs
-                if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().setRunEvery50sec(true);
-
                 dataOrganizer.saveData();
                 game.setScreen(new BigRoadRescueScreen(game));
             }
@@ -445,10 +437,6 @@ public class MenuScreen implements Screen {
         if (inputInterpreter.getSelectedScreenName() == variables
                 .getRESCUE_METRO_SCREEN()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
-                //loading add
-                if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().showInterstitial();
-
                 dataOrganizer.saveData();
                 game.setScreen(new PreRescueMetroScreen(game));
             }
@@ -456,10 +444,6 @@ public class MenuScreen implements Screen {
         if (inputInterpreter.getSelectedScreenName() == variables
                 .getTRAINING_SCREEN_TWO()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
-                //show add
-                if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().showInterstitial();
-
                 dataOrganizer.saveData();
                 game.setScreen(new TrainingScreenTwo(game));
             }
@@ -474,10 +458,6 @@ public class MenuScreen implements Screen {
         if (inputInterpreter.getSelectedScreenName() == variables
                 .getFITNESS_SCREEN_ONE()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
-                //show add
-                if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().showInterstitial();
-
                 dataOrganizer.saveData();
                 game.setScreen(new FitnessScreenOne(game));
             }

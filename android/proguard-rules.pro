@@ -27,10 +27,6 @@
 -dontwarn com.badlogic.gdx.jnigen.BuildTarget*
 -dontwarn com.badlogic.gdx.graphics.g2d.freetype.FreetypeBuild
 
-# Google Ads SDK - ignore missing Android 14+ media classes
--dontwarn android.media.LoudnessCodecController
--dontwarn android.media.LoudnessCodecController$OnLoudnessCodecUpdateListener
-
 # Keep game classes from being obfuscated/removed
 -keep class com.lh9.feg1.firekidsgame.** { *; }
 -keepclassmembers class com.lh9.feg1.firekidsgame.** { *; }

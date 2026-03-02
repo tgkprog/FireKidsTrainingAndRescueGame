@@ -8,7 +8,7 @@ import com.lh9.feg1.firekidsgame.desktop.gdxpay.DesktopResolver;
 public class DesktopLauncher {
     public static void main(String[] arg) {
 
-        Starter feg = new Starter(null);
+        Starter feg = new Starter();
 
         LwjglApplicationConfiguration config = new LwjglApplicationConfiguration();
         LwjglApplication lwjglApplication = new LwjglApplication(feg, config);
