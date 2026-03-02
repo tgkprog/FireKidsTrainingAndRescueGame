@@ -532,9 +532,6 @@ public class FitnessScreenOne implements Screen {
         if (cloudManager.getAllScalesEqualOne() == true && exit == true) {
             game.setCollectedStars(starsCollected + starsAll);
             if (victory == true) {
-                //show add
-                /*if (!dataOrganizer.isFullVersionUnlocked())
-                    game.getAdsCont().showInterstitial();*/
                 game.setScreen(new FitnessScreenTwo(game));
             } else
                 game.setScreen(new FitnessScreenOne(game));

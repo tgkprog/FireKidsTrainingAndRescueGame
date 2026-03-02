@@ -382,8 +382,6 @@ public class MenuScreen implements Screen {
                 .getMEET_THE_TRUCKS()) {
             if (cloudManager.getAllScalesEqualOne() == true) {
                 dataOrganizer.saveData();
-                //loading add
-                //game.getAdsCont().showOrLoadInterstitial();
                 game.setScreen(new MeetTheTrucksScreen(game));
             }
         }

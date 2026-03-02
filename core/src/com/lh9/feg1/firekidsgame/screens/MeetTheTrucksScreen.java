@@ -1218,9 +1218,7 @@ public class MeetTheTrucksScreen implements Screen {
 	void manageSelectingScreen() {
 		if (inputInterpreter.getSelectedScreenName() == variables
 				.getMENU_SCREEN()) {
-			if (cloudManager.getAllScalesEqualOne() == true) {
-				//loading add
-				//game.getAdsCont().showOrLoadInterstitial();
+				if (cloudManager.getAllScalesEqualOne() == true) {
 				assetsManager.hit.scaleEffect(3f);
 				camera.reset();
 				game.setCollectedStars(starsCollected + starsAll);

@@ -33,14 +33,13 @@ CURRENT CONFIGURATION (as of 2026-02-28):
 -----------------------
 - libGDX 1.13.0+ has native 16KB support
 - useLegacyPackaging = false configured
-- AD_ID permission added for Android 13+
+ - 16KB page size property declared in manifest
 - 16KB page size property declared in manifest
 
 PLAY STORE REQUIREMENTS:
 ------------------------
 - Must target API 35+
 - Must support 16KB page sizes (Android 15+)
-- Must declare AD_ID permission for advertising
 - versionCode must be higher than last uploaded version
 
 DO NOT:
