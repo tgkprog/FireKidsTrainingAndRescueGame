@@ -6,15 +6,10 @@ import com.badlogic.gdx.graphics.Texture;
 import com.badlogic.gdx.graphics.Texture.TextureFilter;
 import com.badlogic.gdx.graphics.g2d.Sprite;
 import com.badlogic.gdx.graphics.g2d.SpriteBatch;
-import com.badlogic.gdx.pay.Offer;
-import com.badlogic.gdx.pay.OfferType;
-import com.badlogic.gdx.pay.PurchaseManagerConfig;
 import com.badlogic.gdx.utils.viewport.FillViewport;
 import com.badlogic.gdx.utils.viewport.Viewport;
 import com.lh9.feg1.firekidsgame.camera.Camera;
 import com.lh9.feg1.firekidsgame.files.AssetsManager;
-import com.lh9.feg1.firekidsgame.gdxpay.FEGPurchaseObserver;
-import com.lh9.feg1.firekidsgame.gdxpay.PlatformResolver;
 import com.lh9.feg1.firekidsgame.graphics.CloudManager;
 import com.lh9.feg1.firekidsgame.screens.LogoScreen;
 
@@ -29,9 +24,6 @@ public class Starter extends Game {
     public static final int APPSTORE_AMAZON = 3;
     public static final int APPSTORE_DESKTOP = 4;
     public static final int ISAPPSTORE = APPSTORE_GOOGLE;
-    static PlatformResolver m_platformResolver;
-    public PurchaseManagerConfig purchaseManagerConfig;
-    public FEGPurchaseObserver fegPurchaseObserver = new FEGPurchaseObserver();
     Texture logo;
     Texture loading;
     Sprite logoSprite;
@@ -48,13 +40,6 @@ public class Starter extends Game {
     boolean[] screensPlayed;
 
     public Starter() {
-
-        //
-        purchaseManagerConfig = new PurchaseManagerConfig();
-        purchaseManagerConfig.addOffer(new Offer().
-                setType(OfferType.ENTITLEMENT).setIdentifier(FEGPurchaseObserver.FEG_PRODUCT_ID_FULL_VERSION));
-
-        //
     }
 
     @Override
@@ -153,13 +138,5 @@ public class Starter extends Game {
 
     public void setCogs(int cogs) {
         this.cogs = cogs;
-    }
-
-    public PlatformResolver getPlatformResolver() {
-        return m_platformResolver;
-    }
-
-    public static void setPlatformResolver(PlatformResolver platformResolver) {
-        m_platformResolver = platformResolver;
     }
 }

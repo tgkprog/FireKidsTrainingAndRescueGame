@@ -4,7 +4,6 @@ import android.os.Bundle;
 
 import com.badlogic.gdx.backends.android.AndroidApplication;
 import com.badlogic.gdx.backends.android.AndroidApplicationConfiguration;
-import com.lh9.feg1.firekidsgame.gdxpay.AndroidResolver;
 
 public class AndroidLauncher extends AndroidApplication {
 
@@ -15,10 +14,5 @@ public class AndroidLauncher extends AndroidApplication {
         super.onCreate(savedInstanceState);
         AndroidApplicationConfiguration config = new AndroidApplicationConfiguration();
         initialize(feg, config);
-
-        //===== detect operating system and Configure platform dependent code ==========================
-        if (Starter.ISAPPSTORE == Starter.APPSTORE_GOOGLE) {
-            Starter.setPlatformResolver(new AndroidResolver(feg, this));
-        }
     }
 }

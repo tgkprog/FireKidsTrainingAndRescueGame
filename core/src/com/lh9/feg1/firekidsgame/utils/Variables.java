@@ -1,16 +1,16 @@
 package com.lh9.feg1.firekidsgame.utils;
 import com.badlogic.gdx.math.Vector2;
 public class Variables {
-	static final public String VERSION = "Version 1.33";
+	static final public String VERSION = "Version 1.34";
 	
-	static final public String MR_TUSHAR_WEBSITE = "http://lh9.in/feg/about/";
+	static final public String MR_TUSHAR_WEBSITE = "https://sel2in.com/";
 	
 	static final public String[] MEET_THE_TRUCKS_POP_UP_1 = {"Run through the","training ground and", "complete training!"};
 	static final public String[] FOODS_POP_UP_1 = {"Pick healthy","food to become a", "strong firefighter!"};
 	static final public String[] FITNESS_SCREEN_ONE_POP_UP_1 = {"Race through the","park faster than","your partner!"};
-	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","faster than your", "partner!"};
-	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish exercises","faster than your", "partner!"};
-	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"Driving a heavy", "fire truck is ","not easy!"};
+	static final public String[] FITNESS_SCREEN_TWO_POP_UP_1 = {"Finish exercises","sooner, than your", "partner!"};
+	static final public String[] FITNESS_SCREEN_THREE_POP_UP_1 = {"Finish exercises","faster, than your", "partner!"};
+	static final public String[] TRAINING_SCREEN_ONE_POP_UP_1 = {"Driving a heavy", "fire truck, is ","not easy!"};
 	static final public String[] TRAINING_SCREEN_ONE_POP_UP_2 = {"Click buttons indicated", "by the red arrow to", "run the truck!"};
 	static final public String[] TRAINING_SCREEN_ONE_POP_UP_3 = {"Good! Now click", " the red button to", "turn on the siren!"};
 	static final public String[] TRAINING_SCREEN_TWO_POP_UP_1 = {"Drive the truck","to the building","on fire!"};

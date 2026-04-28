@@ -41,7 +41,6 @@ public class MenuScreen implements Screen {
     Button settings;
     Button authors;
     Button gender;
-    Button unlockGameButton;
     Button userScreenButton;
     Button[] starsCounterButtons;
     Button[] levelButtons;
@@ -74,7 +73,6 @@ public class MenuScreen implements Screen {
         authors = new Button(100, 105, assetsManager.authors);
         meetTheTrucks = new Button(25, -200, assetsManager.meetTheTrucks);
         userScreenButton = new Button(720, 100, assetsManager.userScreenButton);
-        unlockGameButton = new Button(655, 110, assetsManager.unlockGameButton);
 
         if (dataOrganizer.getGender() == false)
             gender = new Button(5, 105, assetsManager.boyButton);
@@ -85,7 +83,6 @@ public class MenuScreen implements Screen {
         authors.goUp(405);
         gender.goUp(390);
         userScreenButton.goUp(405);
-        unlockGameButton.goUp(405);
 
 
         boy = new Human();
@@ -173,7 +170,6 @@ public class MenuScreen implements Screen {
         inputInterpreter.setGenderButton(gender);
         inputInterpreter.setScreensPlayed(game.getScreensPlayed());
         inputInterpreter.setUserScreenButton(userScreenButton);
-        inputInterpreter.setUnlockGameButton(unlockGameButton);
 
         cloudManager.stop();
 
@@ -315,7 +311,6 @@ public class MenuScreen implements Screen {
         cog.render(batch, delta * 0.75f);
         gender.render(batch, delta);
         userScreenButton.render(batch, delta);
-        unlockGameButton.render(batch, delta);
         meetTheTrucks.render(batch, (float) delta);
         settings.render(batch, delta);
         authors.render(batch, delta);
@@ -389,12 +384,6 @@ public class MenuScreen implements Screen {
             if (cloudManager.getAllScalesEqualOne() == true) {
                 dataOrganizer.saveData();
                 game.setScreen(new UserInputScreen(game));
-            }
-        }
-        if (inputInterpreter.getSelectedScreenName().equals(Variables.UNLOCK_GAME_SCREEN)) {
-            if (cloudManager.getAllScalesEqualOne() == true) {
-                dataOrganizer.saveData();
-                game.setScreen(new UnlockGameScreen(game));
             }
         }
         if (inputInterpreter.getSelectedScreenName() == variables

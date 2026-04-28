@@ -1,6 +1,6 @@
 android {
-    buildToolsVersion "35.0.0"
-    compileSdkVersion 35
+    buildToolsVersion "36.0.0"
+    compileSdkVersion 36
     namespace 'com.lh9.feg1.firekidsgame'
     sourceSets {
         main {
@@ -21,10 +21,10 @@ android {
     }
     defaultConfig {
         applicationId "com.lh9.feg1.firekidsgame"
-        minSdkVersion 23
-        targetSdkVersion 35
-        versionCode 48
-        versionName "1.46.2"
+        minSdkVersion 29
+        targetSdkVersion 36
+        versionCode 56
+        versionName "1.46.9"
     }
     
     signingConfigs {

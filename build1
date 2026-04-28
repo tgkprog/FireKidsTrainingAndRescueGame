@@ -1,20 +1,36 @@
 #!/bin/bash
 # Build script for FireKidsGame Android with version bump
-# Usage: ./build1 [1|2|3] [release|debug]
+# Usage: ./build1 [1|2|3] [release|debug] [a|p]
 #   1 = patch (increase versionCode +1, versionName x.y.Z+1)
 #   2 = minor (increase versionCode +1, versionName x.Y+1.0)
 #   3 = major (increase versionCode +1, versionName X+1.0.0)
-#   Optional: add 'd' anywhere in params for debug build (default: release)
+#   Optional:
+#     'd' anywhere in params for debug build (default: release)
+#     'a' for AAB (Android App Bundle) build
+#     'p' for APK build (default)
 
 set -e
 
 BUILD_FILE="android/build.gradle"
 BUILD_TYPE="release"
+PACKAGE_TYPE="apk"
 
 # Parse arguments
-VERSION_TYPE="${1:-1}"
-if [[ "$1" == *"d"* ]] || [[ "$2" == *"d"* ]]; then
+VERSION_TYPE="1"
+for arg in "$@"; do
+    if [[ "$arg" =~ ^[123]$ ]]; then
+        VERSION_TYPE="$arg"
+    fi
+done
+
+if [[ "$*" == *"d"* ]]; then
     BUILD_TYPE="debug"
+fi
+if [[ "$*" == *"a"* ]]; then
+    PACKAGE_TYPE="aab"
+fi
+if [[ "$*" == *"p"* ]]; then
+    PACKAGE_TYPE="apk"
 fi
 
 # Extract current version
@@ -66,40 +82,57 @@ sed -i "s/versionName \"$CURRENT_NAME\"/versionName \"$NEW_NAME\"/" "$BUILD_FILE
 echo "✅ Version updated in $BUILD_FILE"
 echo ""
 
-# Build APK
-if [ "$BUILD_TYPE" == "debug" ]; then
-    echo "📦 Building Debug APK..."
-    ./gradlew android:assembleDebug --no-daemon
-    
-    if [ $? -eq 0 ]; then
+# Build APK or AAB
+TASK_PREFIX="assemble"
+FILE_EXT="apk"
+OUT_DIR="apk"
+if [ "$PACKAGE_TYPE" == "aab" ]; then
+    TASK_PREFIX="bundle"
+    FILE_EXT="aab"
+    OUT_DIR="bundle"
+fi
+
+echo "📦 Building $BUILD_TYPE $PACKAGE_TYPE..."
+./gradlew android:${TASK_PREFIX}${BUILD_TYPE^} --no-daemon
+
+if [ $? -eq 0 ]; then
+    echo ""
+    echo "✅ $BUILD_TYPE build successful!"
+    RESULT_FILE="android/build/outputs/$OUT_DIR/$BUILD_TYPE/android-$BUILD_TYPE.$FILE_EXT"
+    if [ ! -f "$RESULT_FILE" ]; then
+        echo "⚠️  Build finished but output file not found at $RESULT_FILE"
+        # Search for it
+        echo "Searching for build output..."
+        FOUND_FILE=$(find android/build/outputs/$OUT_DIR -name "*.$FILE_EXT" | head -n 1)
+        if [ -n "$FOUND_FILE" ]; then
+            RESULT_FILE="$FOUND_FILE"
+        fi
+    fi
+
+    if [ -f "$RESULT_FILE" ]; then
         echo ""
-        echo "✅ Debug build successful!"
-        ls -lh android/build/outputs/apk/debug/android-debug.apk
+        ls -al "$RESULT_FILE"
+        
+        # Verify signature for release
+        if [ "$BUILD_TYPE" == "release" ] && [ "$FILE_EXT" == "apk" ]; then
+            if jarsigner -verify "$RESULT_FILE" > /dev/null 2>&1; then
+                echo "✅ APK signature verified"
+            fi
+        fi
     else
-        echo "❌ Debug build failed"
+        echo "❌ Build output file not found"
         exit 1
     fi
 else
-    echo "📦 Building Release APK..."
-    ./gradlew android:assembleRelease --no-daemon
-    
-    if [ $? -eq 0 ]; then
-        echo ""
-        echo "✅ Release build successful!"
-        ls -lh android/build/outputs/apk/release/android-release.apk
-        
-        # Verify signature
-        if jarsigner -verify android/build/outputs/apk/release/android-release.apk > /dev/null 2>&1; then
-            echo "✅ APK signature verified"
-        fi
-    else
-        echo "❌ Release build failed"
-        exit 1
-    fi
+    echo "❌ $BUILD_TYPE build failed"
+    exit 1
 fi
 
-echo ""
 echo "==================================="
 echo "Version: $NEW_NAME (code $NEW_CODE)"
 echo "Build type: $BUILD_TYPE"
+echo "Package type: $PACKAGE_TYPE"
+if [ "$FILE_EXT" == "apk" ]; then
+    echo "To install: adb install -r $RESULT_FILE"
+fi
 echo "==================================="
